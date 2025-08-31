@@ -3,7 +3,8 @@
 ## Introducción
 maGNUx nace como una propuesta de evolución del kernel tradicional, inspirado en Linux, pero orientado hacia un modelo **managed** que permita el aislamiento seguro de procesos, la coherencia integral del sistema y la segmentación conceptual de la memoria.  
 
-El objetivo de maGNUx es ofrecer un entorno donde la interacción del usuario y de las capas internas del sistema se organice en tres segmentos bien definidos, gestionados por un agente central denominado **Trilobytes**.
+El objetivo de maGNUx es ofrecer un entorno donde la interacción del usuario y de las capas internas del sistema se organice. Desde el arranque, se levanta un agente del sistema denominado Paleolito, que mapea todo el hardware central en un tronco de nodos, en el que a todo su conjunto lo instancia en memoria dentro de la clase maquina como root-maquina (heredamos codigo del kernel de Linux más puro). En el segundo segmento, se levantan las comunicaciones internas denominadas en su conjunto como host: Se cargan drivers, se levantan las comunicaciones de red basicas y se habilita un interprete ad hoc de C/C++ en modo compilador a tiempo real (es un modulo, que está configurado para entender el lenguaje C/C++, pero bien se puede acomodar a RUST) y se reconoce el rol de ROOT-MAQUINA, ROOT-COMM y ROOT-ADMIN. Por último, en la capa administrativa, es en donde Trilobytes adquiere su importancia, pues es un agente de sistema en tres segmentos bien definidos, gestionados por un agente que lateraliza la dinamica del sistema, denominado **Trilobytes**.
+El agente de sistema Trilobytes es el unico con los permisos suficientes como para pasearse por los segmentos de memoria, por el contrario, Paleolito es el agente de sistema que verifica que los accesos tienen las credenciales.
 
 ---
 
@@ -15,9 +16,11 @@ La memoria en maGNUx se organiza en tres espacios diferenciados:
 
 2. **Segmento Comm**  
    Espacio intermedio que actúa como bus de comunicación y sincronización entre el nivel máquina y el nivel administrativo.  
+   - Reconoce hardware conectado a los buses PCIe, NVME, GPUs, NPUs, APUs, Ethernet, etc que se acopla en modo de expansión relativo al mapeo hecho por Paleolito
    - Gestiona permisos.  
    - Filtra interacciones entre periferia y procesos.  
    - Mantiene coherencia en la comunicación.
+   - En los procesoso de mantenimiento, el proceso de arranque se puede abstraer a este nivel, ofreciendo el tipico prompt / con el especial significado de que no estas en un entorno BASH sino que estas en un entorno de programacion C/C++ o RUST. el propio prompt / es el objeto instanciado de la clase maquina definido por paleolito como ghost o sombra del host. El funcionamiento es el mismo al de un framework en programación, pudiendo solicitar el compilado en codigo objeto de las instrucciones que se han necesitado para añadir, mantener, mejorar o cambiar aspectos del funcionamiento del siguiente segmento. Es un área de medio-bajo nivel que permite la programación ad hoc o de toda la vida, con la ventaja que tienes a Paleolito monitorizando la estabilidad del sistema y de lo que haces.
 
 3. **Segmento Admin**  
    Espacio reservado para la ejecución de órdenes del usuario en modo privilegiado.  
@@ -39,7 +42,7 @@ Sus funciones clave son:
 
 ---
 
-## Kernel Managed
+## Kernel Managed: Paleolito
 El **kernel managed** de maGNUx parte de la base del código de Linux, pero reestructurado para:  
 - Segmentar la memoria en **máquina/comm/admin**.  
 - Introducir una capa de gestión centralizada por **Trilobytes**.  
