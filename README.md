@@ -37,7 +37,7 @@ La memoria en maGNUx se organiza en tres espacios diferenciados:
 Sus funciones clave son:  
 - Asegurar coherencia integral del sistema.  
 - Validar interacciones de los dispositivos de entrada/salida con el kernel.  
-- Gestionar el sandbox de periféricos antes de permitir su integración real en el sistema.  
+- Gestionar el sandbox de periféricos evaluando lo positivo de su integración real en el sistema.  
 - Servir como base para que el `bash` emerja como entorno coherente en el nivel `/root-admin>`.
 
 ---
