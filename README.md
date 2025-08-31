@@ -43,10 +43,11 @@ Sus funciones clave son:
 ---
 
 ## Kernel Managed: Paleolito
-El **kernel managed** de maGNUx parte de la base del código de Linux, pero reestructurado para:  
+El **Paleolito** de maGNUx parte de la base del código de Linux, pero reestructurado para:  
 - Segmentar la memoria en **máquina/comm/admin**.  
-- Introducir una capa de gestión centralizada por **Trilobytes**.  
-- Ofrecer al usuario un entorno familiar (similar a Linux), pero con un **aislamiento seguro del kernel** y mayor control de la interacción entre hardware, procesos y privilegios.
+- Introducir un protocolo de capa de gestión centralizada usado por **Trilobytes**.
+- Instanciar sandboxes de periféricos antes de permitir su integración real en el sistema.  
+- Ofrecer al usuario un entorno familiar (puro GNU Linux en capa root-admin) pero dinamizado por el managed o Paleolito-Trilobytes, que es el **aislamiento seguro del kernel** y mayor control de la interacción entre hardware, procesos y privilegios: Permite la ejecución del kernel en memoria separada de las ejecuciones de las apps, que se ejecutan en la capa root-admin.
 
 ---
 
