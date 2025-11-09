@@ -1,55 +1,42 @@
-# Manifiesto de maGNUx
+# Manifiesto de MaKGNUux (Managed's Kernel GNU LinuX)
+En este manifiesto, se trata de declarar la filosofia Linux, como un giro tangencial a la filosofia Unix.
 
 ## Introducción
-maGNUx nace como una propuesta de evolución del kernel tradicional, inspirado en Linux, pero orientado hacia un modelo **managed** que permita el aislamiento seguro de procesos, la coherencia integral del sistema y la segmentación conceptual de la memoria.  
+maGNUx hereda la filosofia Unix pero la acota a la realidad:
+Son programas minimos, especializados, que hacen una cosa y la hacen bien, y que se conectan entre sí mediante protocolos definidos por la comunidad que mantiene la distro, usando para ello la memoria swap, que quedara montada como un disco ram, en la que solo, en el cierre del sistema, volcara su contenido al sistema anclado en SAM configurado como vinculo de almacenamiento. Los flujos en este protocolo, pueden ser de texto o no, para formar sistemas más complejos y flexibles, promoviendo la simplicidad, la modularidad y la reutilización del código.
+Las colas que se generan en dichas comunicaciones, son referenciadas en el disco ram/swap y rescatadas en cada arranque del Sistema de Almacenamiento Masivo (SAM) montado como particion swap, la cual solo interviene en el arranque y en el cierre de sistema.
+Las modificaciones que se acometeran sobre el kernel de Linux para que sea coherente en su propia filosofia, y trazable hacia el punto de giro con la filosofia Unix (trazable hacia su punto de origen), esta basada en un kernel con las minimas modificaciones posibles, pero necesarias para que cumpla con estos objetivos:
 
-El objetivo de maGNUx es ofrecer un entorno donde la interacción del usuario y de las capas internas del sistema se organice. Desde el arranque, se levanta un agente del sistema denominado Paleolito, que mapea todo el hardware central en un tronco de nodos, en el que a todo su conjunto lo instancia en memoria dentro de la clase maquina como root-maquina (heredamos codigo del kernel de Linux más puro). En el segundo segmento, se levantan las comunicaciones internas denominadas en su conjunto como host: Se cargan drivers, se levantan las comunicaciones de red basicas y se habilita un interprete ad hoc de C/C++ en modo compilador a tiempo real (es un modulo, que está configurado para entender el lenguaje C/C++, pero bien se puede acomodar a RUST) y se reconoce el rol de ROOT-MAQUINA, ROOT-COMM y ROOT-ADMIN. Por último, en la capa administrativa, es en donde Trilobytes adquiere su importancia, pues es un agente de sistema en tres segmentos bien definidos, gestionados por un agente que lateraliza la dinamica del sistema, denominado **Trilobytes**.
-El agente de sistema Trilobytes es el unico con los permisos suficientes como para pasearse por los segmentos de memoria, por el contrario, Paleolito es el agente de sistema que verifica que los accesos tienen las credenciales.
+### Proceso de reconocimiento de unidades de trabajo (capa PRUT):
+Cuando abordamos el concepto de unidad de trabajo, se hace enfrentando a la CPU como actor principal del trabajo, ya que sin ella, no hay trabajo de sistema posible. Desde este punto, dotamos al kernel de capacidad de entender que procesos estan sometidos a su capa ROOT y cuales no. Hasta que el kernel no este completamente levantado, solo entendera si el proceso tiene privilegios ROOT o no, denegando lo que no este privilegiado a ese nivel. Para eso, el kernel en su primer estrato, forma esta capa compuesta por tres fundamentos logicos:
 
----
+#### 1.- La CPU - RAM como fundamento 0:
+Puede parecer una tonteria, pero la gestion de la memoria RAM por el procesador, debe ser lo mas limipa, de cara al procesador. Para ello, los privilegios del kernel sobre la RAM son absolutos, y la demanda de trabajo por parte del kernel hacia la CPU es de prioridad insubordinable, cuando el canal de accion parte en origen con las credenciales adecuadas.
 
-## Segmentación de la memoria
-La memoria en maGNUx se organiza en tres espacios diferenciados:
+#### 2.- La CPU - SAMs como fundamento 1:
+La gestion de los sistemas de almacenamiento masivo, debe ser segmentada conforme a puntos de montaje, dando prioridad al aislamiento por segmento y la seguridad en cada acceso segmentado.
 
-1. **Segmento Máquina**  
-   Contiene los procesos básicos de la clase máquina, encargados de la ejecución fundamental y la interacción con el hardware.
-
-2. **Segmento Comm**  
-   Espacio intermedio que actúa como bus de comunicación y sincronización entre el nivel máquina y el nivel administrativo.  
+#### 3.- La CPU - COMM como fundamento 2:
+Lo que se entiende como COMM a este nivel, es la capacidad del kernel de conectar con el centro oficial de actualizaciones del kernel, para legitimar el estado actualizado del mismo, y verificar que no se ha violado la integridad conforme a lo que quedo firmado en la instalacion y las ultimas actualizaciones. Para ello, se usan normativas estandarizadas con IEEE 802.3, PCI / PCIe, PXE, IEEE 802.11 a/b/g/n/ac/ax (Wi-Fi 6), USB / PCIe / M.2 interfaces, USB-IF.
+Se crea un espacio intermedio que actúa como bus de comunicación y sincronización entre el nivel máquina y el nivel administrativo.  
    - Reconoce hardware conectado a los buses PCIe, NVME, GPUs, NPUs, APUs, Ethernet, etc que se acopla en modo de expansión relativo al mapeo hecho por Paleolito
    - Gestiona permisos.  
    - Filtra interacciones entre periferia y procesos.  
    - Mantiene coherencia en la comunicación.
-   - En los procesoso de mantenimiento, el proceso de arranque se puede abstraer a este nivel, ofreciendo el tipico prompt / con el especial significado de que no estas en un entorno BASH sino que estas en un entorno de programacion C/C++ o RUST. el propio prompt / es el objeto instanciado de la clase maquina definido por paleolito como ghost o sombra del host. El funcionamiento es el mismo al de un framework en programación, pudiendo solicitar el compilado en codigo objeto de las instrucciones que se han necesitado para añadir, mantener, mejorar o cambiar aspectos del funcionamiento del siguiente segmento. Es un área de medio-bajo nivel que permite la programación ad hoc o de toda la vida, con la ventaja que tienes a Paleolito monitorizando la estabilidad del sistema y de lo que haces.
 
-3. **Segmento Admin**  
-   Espacio reservado para la ejecución de órdenes del usuario en modo privilegiado.  
-   Desde aquí emerge el prompt especial:  
-   ```
-   /root-admin>
-   ```  
-   En este entorno, el usuario percibe un **bash Linux completo**, donde comandos como `ls` muestran el árbol de directorios que representan los nodos de los cuales depende la máquina.
 
----
+### Proceso de anclaje raiz segmentados (capa PARS):
+Con los fundamentos anterioremente levantados, ahora se procede a instanciar el hardware con servicios a la escucha, atendiendo peticiones de nivel maquina o root.
+(proponer ejemplos)
 
-## Rol de Trilobytes
-**Trilobytes** actúa como el **gateway del sistema**, integrando y orquestando los tres segmentos de memoria.  
-Sus funciones clave son:  
-- Asegurar coherencia integral del sistema.  
-- Validar interacciones de los dispositivos de entrada/salida con el kernel.  
-- Gestionar el sandbox de periféricos evaluando lo positivo de su integración real en el sistema.  
-- Servir como base para que el `bash` emerja como entorno coherente en el nivel `/root-admin>`.
+#### Levantando los servicios BLEND:
+Un servicio BLEND o servicio mezcla, es aquel que combina un acceso direco al hardware sin restricciones, obedeciendo a un protocolo de comunicacion que al ser atendido por por este servicio, ordena a la parte del hardware que ejecute la orden que le ha entrado. Los servicios BLEND estan definidos por la coherencia del hardware y los drivers que lo permiten.
 
----
+#### Levantando los demonios admin:
+(rellenar por IA conforme a lo hablado)
 
-## Kernel Managed: Paleolito
-El **Paleolito** de maGNUx parte de la base del código de Linux, pero reestructurado para:  
-- Segmentar la memoria en **máquina/comm/admin**.  
-- Introducir un protocolo de capa de gestión centralizada usado por **Trilobytes**.
-- Instanciar sandboxes de periféricos antes de permitir su integración real en el sistema.  
-- Ofrecer al usuario un entorno familiar (puro GNU Linux en capa root-admin) pero dinamizado por el managed o Paleolito-Trilobytes, que es el **aislamiento seguro del kernel** y mayor control de la interacción entre hardware, procesos y privilegios: Permite la ejecución del kernel en memoria separada de las ejecuciones de las apps, que se ejecutan en la capa root-admin.
-
----
+#### Levantando el host user:
+(rellenar por IA conforme a lo hablado)
 
 ## Filosofía de maGNUx
 maGNUx se fundamenta en:  
