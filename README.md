@@ -1,10 +1,13 @@
 # Manifiesto de MaKGNUux (Managed's Kernel GNU LinuX)
 En este manifiesto, se trata de declarar la filosofia Linux, como un giro tangencial a la filosofia Unix.
 Aprendemos de este pasado, que la fuerza está en las piezas simples conectadas por interfaces simples.
-maGNUx mantiene eso, pero define diferentes capas de comunicacion:
-1.- Comunicacion operativa.
-2.- Comunicacion de seguridad o no trivial.
-3.- Comunicacion administrativa o trivial.
+maGNUx mantiene eso, pero define diferentes capas de comunicacion, dando una identidad propia a maGNUx en relacion a Linux:
+## Identidad centrada en procesadores con arquitectura CISC x86_64
+La razon de este acotamiento tecnico, es no trivial, por razones historicas, al reconocer que el juego de instrucciones de este tipo de procesadores, es el resumen historico de lo que el usuario final en el hogar o en la oficina, ha necesitado para resolver sus necesidades de automatizacion de la informacion. maGNUx entiende que, estos procesasdores son ideales para la robotica del hogar o domotica, sea esta expresada en forma de hardware de proposito especifico o de proposito general. Para poder usar las ventajas de estos juegos de instrucciones en enta arquitectura, se reconoce la necesidad de gobernar al procesador central a traves de una NPU, la cual, necesita ser modulada por procesos imperaticos adecuadamente segmentados en las siguientes tres capas bien definidas:
+
+### 1.- Comunicacion operativa.
+### 2.- Comunicacion de seguridad o no trivial.
+### 3.- Comunicacion administrativa o trivial.
 
 Cada capa, esta protocolizada por la propia distro.
 Las comunicaciones operativas, usan una zona de intercambio en RAM/swap montada como disco de trabajo.
