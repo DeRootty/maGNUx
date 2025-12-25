@@ -4,7 +4,7 @@ En este manifiesto, se trata de declarar la filosofía Linux, como un giro tange
 
 ## Identidad centrada en procesadores con arquitectura CISC x86_64
 
-La razón de este acotamiento técnico, es no trivial, por razones históricas, al reconocer que el juego de instrucciones de este tipo de procesadores, es el resumen histórico de lo que el usuario final en el hogar o en la oficina, ha necesitado para resolver sus necesidades de automatización de la información. maGNUx entiende que, estos procesadores son ideales para la robótica del hogar o domótica, sea esta expresada en forma de hardware de propósito específico o de propósito general. Para poder usar las ventajas de estos juegos de instrucciones en esta arquitectura, se reconoce la necesidad de gobernar al procesador central a través de una NPU, la cual, necesita ser modulada por procesos imperativos adecuadamente segmentados en las siguientes tres capas bien definidas:
+La razón de este acotamiento técnico, es no trivial, por razones históricas, al reconocer que el juego de instrucciones de este tipo de procesadores, es el resumen histórico de lo que el usuario final en el hogar o en la oficina, ha necesitado para resolver sus necesidades de automatización de la información. maGNUx entiende que, estos procesadores son ideales para la robótica del hogar o domótica de propósito general. Para poder usar las ventajas de estos juegos de instrucciones en este vector de ingenieria, se reconoce la necesidad de gobernar al procesador central a través de una NPU, la cual, necesita ser modulada por procesos imperativos adecuadamente segmentados en las siguientes tres capas bien definidas:
 
 * 1.- Comunicación operativa.
 * 2.- Comunicación de seguridad o no trivial.
@@ -28,9 +28,10 @@ Documentación clásica de Unix philosophy (Bell Labs).
 maGNUx hereda la filosofía Unix pero la acota a la realidad, mediante una arquitectura estratificada: Son programas mínimos, especializados, que hacen una cosa y la hacen bien, y que se conectan entre sí mediante protocolos definidos por la comunidad que mantiene la distro. Prioriza y globaliza su compatibilidad con el hardware, buscando su mejor rendimiento, frente a la modularidad teórica de Unix, sin que esto suponga una ruptura con su filosofía.
 
 maGNUx arranca por estratos, no por una secuencia que se descarta. Cada estrato queda vivo y sostiene al siguiente.
-Estrato ROOT (máquina / kernel): privilegio absoluto, levanta los fundamentos de CPU, RAM, SAM y COMM.
-Estrato ADMIN: orquesta, aplica políticas, vigila coherencia y habla con /loadD.
-Estrato USER: ofrece el entorno que el usuario reconoce como “un Linux normal” (shell, servicios de usuario, /home).
+
+* Estrato ROOT (máquina / kernel): privilegio absoluto, levanta los fundamentos de CPU, RAM, SAM y COMM.
+* Estrato COMM: orquesta, aplica políticas, vigila coherencia y habla con /loadD.
+* Estrato ADMIN: ofrece el entorno que el usuario reconoce como “un Linux normal” (shell, servicios de usuario, /home); pero no es un usuario normal.
 
 La clave es que el estrato ROOT no desaparece: sigue siendo el suelo de confianza.
 
@@ -68,7 +69,9 @@ Con los fundamentos anteriormente levantados, ahora se procede a instanciar el h
 Un servicio BLEND o servicio mezcla, es aquel que combina un acceso directo al hardware sin restricciones, obedeciendo a un protocolo de comunicación que al ser atendido por por este servicio, ordena a la parte del hardware que ejecute la orden que le ha entrado. Los servicios BLEND están definidos por la coherencia del hardware y los drivers que lo permiten.
 
 Con esto, hemos terminado de levantar el kernel propiamente dicho.
-Con todo lo anterior, ahora el kernel puede gestionar el área administrativa y de usuario por segmentos.
+Con todo lo anterior, ahora el kernel puede gestionar el área administrativa y comunicaciones, por segmentos, dejando al usuario subordinado a un admin. 
+
+Para entender el impacto de esto: Todo usuario, necesita un admin que le reconozca de confianza, todo admin necesita de una firma que sea reconocida por ROOT, todo ROOT necesita una coheremcia proxy y otra remota, para poder actualizarse.
 
 ### Levantando los demonios admin:
 (rellenar por IA conforme a lo hablado)
