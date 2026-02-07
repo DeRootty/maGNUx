@@ -1,14 +1,28 @@
 # Manifiesto de MaKGNUux (Managed's Kernel GNU LinuX)
 
-En este manifiesto, se trata de declarar la filosofía Linux, como un giro tangencial a la filosofía Unix. Aprendemos de este pasado, que la fuerza está en las piezas simples conectadas por interfaces simples. maGNUx mantiene eso, pero define diferentes capas de comunicación, dando una identidad propia a maGNUx en relación a Linux:
+En este manifiesto, se trata de declarar la filosofía Linux, como un giro tangencial a la filosofía Unix. Aprendemos de este pasado, que la fuerza está en las piezas simples conectadas por interfaces simples. maGNUx, es un linux con filosofia propia, necesaria para transmitir el legado, pero entendiendo que, la parte imperativa inherente a los fundamentos desde los que emerge, necesitan de los fundamentos declarativos desde los que funcionan las IAs. Si bien el uno no depende del otro, hacerlo sin una reestructuración de la arquitectura que permite ser levantado, es una gran vulnerabilidad sin posibilidad de evitar su colapso:
 
 ## Identidad centrada en procesadores con arquitectura CISC x86_64
+Definir un orden de capas de comunicación, dando una identidad propia a maGNUx en relación a Linux:
 
-La razón de este acotamiento técnico, es no trivial, por razones históricas, al reconocer que el juego de instrucciones de este tipo de procesadores, es el resumen histórico de lo que el usuario final en el hogar o en la oficina, ha necesitado para resolver sus necesidades de automatización de la información. maGNUx entiende que, estos procesadores son ideales para la robótica del hogar o domótica de propósito general. Para poder usar las ventajas de estos juegos de instrucciones en este vector de ingenieria, se reconoce la necesidad de gobernar al procesador central a través de una NPU, la cual, necesita ser modulada por procesos imperativos adecuadamente segmentados en las siguientes tres capas bien definidas:
+El kernel necesita conectar con un servicio que he llamado xGNUpeD. No es un SystemD, debido a que este último se despliega después de que el kernel haya adoptado la identidad distributiva otorgada por xGNUpeD.
+
+Identidad distributiva. Identidad comunitaria de distribución.
+Identidad conmutativa. Identidad con capacidad de filtrar y asegurar su identidad de forma directa e inversa en relación a un sistema GNU Linux tradicional. Para poder suplantarlo, hay que usar la fuerza, no se puede suplantar desde su naturaleza.
+Identidad asociativa. El usuario final podrá expresarse con total libertad, pudiendo asociar su capacidad creativa y productiva, a la comunidad que le da soporte, con integridad y coherencia a la hora de conmutador a un sistema GNU Linux tradicional.
+Identidad comunicativa: Toda instalación de sistema, tendrá una matricula de registro que le dotará de libertad, con capacidad de sertrazadoy auditado en lo relativo al funcionamiento del sistema.
+
+Estas cuatro propiedades otorgadas por xGNUpeD se deben cumplir en relación a su herencia y proyectando hacia su superficie identificativa. Cuanto mayor sea la linea temporal sobre la que basamos la identidad, mayor es la superficie en identificación sumando dificultad en la suplantación.
+
+La razón de este acotamiento técnico, es no trivial, por razones históricas, al reconocer que el juego de instrucciones de este tipo de procesadores, es el resumen histórico de lo que el usuario final en el hogar o en la oficina, ha necesitado para resolver sus necesidades de automatización de la información. maGNUx entiende que, estos procesadores son ideales para la robótica del hogar o domótica de propósito general, integrando a la NPU en un contexto bastante robusto. Para poder usar las ventajas de estos juegos de instrucciones en este vector de ingenieria, se reconoce la necesidad de gobernar al procesador central a través de una NPU, la cual, necesita ser modulada por procesos imperativos adecuadamente segmentados en las siguientes tres capas bien definidas:
+
+## compatibilidad por herencia
 
 * 1.- Comunicación operativa.
 * 2.- Comunicación de seguridad o no trivial.
 * 3.- Comunicación administrativa o trivial.
+
+Con estas tres propiedades aseguramos la integridad en los procesos identificación, que en lugar de reducirse a un inicio de sesión, se amplian, ofreciendo una mayor superficie de confianza.
 
 Cada capa, está protocolizada por la propia distro.
 Las comunicaciones operativas, usan una zona de intercambio en RAM/swap montada como disco de trabajo.
@@ -25,7 +39,7 @@ Documentación clásica de Unix philosophy (Bell Labs).
 
 ## Introducción
 
-maGNUx hereda la filosofía Unix pero la acota a la realidad, mediante una arquitectura estratificada: Son programas mínimos, especializados, que hacen una cosa y la hacen bien, y que se conectan entre sí mediante protocolos definidos por la comunidad que mantiene la distro. Prioriza y globaliza su compatibilidad con el hardware, buscando su mejor rendimiento, frente a la modularidad teórica de Unix, sin que esto suponga una ruptura con su filosofía.
+maGNUx hereda la filosofía Unix pero la acota a la realidad, mediante una arquitectura estratificada: Son programas mínimos, especializados, que hacen una cosa y la hacen bien, y que se conectan entre sí mediante protocolos definidos por las directrices marcadas en xGNUpeD. Prioriza y globaliza su compatibilidad con el hardware, buscando su mejor rendimiento, frente a la modularidad teórica de Unix, sin que esto suponga una ruptura con su filosofía.
 
 maGNUx arranca por estratos, no por una secuencia que se descarta. Cada estrato queda vivo y sostiene al siguiente.
 
