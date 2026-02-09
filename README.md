@@ -1,9 +1,17 @@
 # Manifiesto de MaKGNUux (Managed's Kernel GNU LinuX)
 
-En este manifiesto, se trata de declarar la filosofía Linux, como un giro tangencial a la filosofía Unix. Aprendemos de este pasado, que la fuerza está en las piezas simples conectadas por interfaces simples. maGNUx, es un linux con filosofia propia, necesaria para transmitir el legado, pero entendiendo que, la parte imperativa inherente a los fundamentos desde los que emerge, necesitan de los fundamentos declarativos desde los que funcionan las IAs. Si bien el uno no depende del otro, hacerlo sin una reestructuración de la arquitectura que permite ser levantado, es una gran vulnerabilidad sin posibilidad de evitar su colapso:
+En este manifiesto, se trata de declarar la filosofía Linux, como un giro tangencial a la filosofía Unix. Aprendemos de este pasado, que la fuerza está en las piezas simples conectadas por interfaces simples. maGNUx, es un linux con filosofia propia, necesaria para transmitir el legado, pero entendiendo que, la parte imperativa inherente a los fundamentos desde los que emerge, necesitan de los fundamentos declarativos desde los que funcionan las IAs. Si bien el uno no depende del otro, hacerlo sin una reestructuración de la arquitectura que permite ser levantado, es una gran vulnerabilidad sin posibilidad de evitar su colapso.
+Levantar maGNUx requiere de la definicion de primitivas o formas base con las que se construiran los grafos de traza, que permiten al sistema ser auditado.
+En maGNUx se entiende al Root como la entidad formada por cuatro dominios. Si no se tiene autoridad en los 4 dominios, no hay formacion de Root. Un dominio se caracteriza por una serie de servicios y el conjunto de todos los servicios y su dominio, definen al Root. Por lo tanto, Root comienza su levantamiento en el momento que se incia el primer servicio operativo, por muy primitivo que sea, o por muy abstraido que llegue a ser su carga:
+
+* Servicios primitivos (Dominio directo insubordinable. Acceso directo a los recursos).
+* Servicios de comunicacion LAN - INET (Dominio directo subordinado. Abstraccion a nivel estandares hardware).
+* Servicios administrativos (Dominio indirecto insubordinable. Abstraccion a nivel drivers. Se define el host).
+* Servicios de usuario (Dominio indirecto subordinado. Abstraccion a nivel virtualizado directo: El usuario accede en forma de VM a los recursos, tipo Guest).
+
 
 ## Identidad centrada en procesadores con arquitectura CISC x86_64
-Definir un orden de capas de comunicación, dando una identidad propia a maGNUx en relación a Linux:
+Definir un orden de capas primitivas de comunicación, dando una identidad propia a maGNUx en relación a Linux:
 
 El kernel necesita conectar con un servicio que he llamado xGNUpeD. No es un SystemD, debido a que este último se despliega después de que el kernel haya adoptado la identidad distributiva otorgada por xGNUpeD.
 
@@ -19,6 +27,7 @@ La razón de este acotamiento técnico, es no trivial, por razones históricas, 
 ## compatibilidad por herencia
 
 * 1.- Comunicación operativa.
+  ** Los servicios
 * 2.- Comunicación de seguridad o no trivial.
 * 3.- Comunicación administrativa o trivial.
 
