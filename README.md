@@ -2,7 +2,7 @@
 
 En este manifiesto trata de declarar la filosofía Linux, como un giro tangencial a la filosofía Unix. 
 ## Lo que aprendemos
-La fuerza está en las "piezas" u "objetos" con objetivos bien claros y definidos, sin complegides innecesarias, que están, conectadas por interfaces simples y bien documentadas. 
+La fuerza está en las "piezas" u "objetos" con objetivos bien claros y definidos, sin complegidades innecesarias, que están, conectadas por interfaces simples, bien documentadas y sin ofuscaciones. 
 ### maGNUx: Ser y no Ser.
 Lo que sí es, un linux con filosofia emergente que le dota de una dinamica con identidad propia, necesaria para transmitir el legado, pero entendiendo que, la parte imperativa inherente a los fundamentos desde los que emerge, lo hace compatible y conn la misma inercia de seguridad (o al menos en potencia) necesarias para establecer los fundamentos declarativos desde los que funcionan las IAs. Si bien el uno no depende del otro, hacerlo sin una reestructuración de la arquitectura que permite ser levantado, es una gran vulnerabilidad sin posibilidad de evitar su colapso.
 Levantar maGNUx requiere de la definicion de primitivas o formas base con las que se construiran los grafos de traza, que permiten al sistema ser auditado.
