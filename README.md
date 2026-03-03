@@ -1,10 +1,10 @@
 # Manifiesto de MaKGNUux (Managed's Kernel GNU LinuX)
 
-En este manifiesto, se trata de declarar la filosofía Linux, como un giro tangencial a la filosofía Unix. 
-## Lo que aorendemos
+En este manifiesto trata de declarar la filosofía Linux, como un giro tangencial a la filosofía Unix. 
+## Lo que aprendemos
 La fuerza está en las "piezas" u "objetos" con objetivos bien claros y definidos, sin complegides innecesarias, que están, conectadas por interfaces simples y bien documentadas. 
 ### maGNUx: Ser y no Ser.
-Lo que sí es, un linux con filosofia propia, necesaria para transmitir el legado, pero entendiendo que, la parte imperativa inherente a los fundamentos desde los que emerge, necesitan de los fundamentos declarativos desde los que funcionan las IAs. Si bien el uno no depende del otro, hacerlo sin una reestructuración de la arquitectura que permite ser levantado, es una gran vulnerabilidad sin posibilidad de evitar su colapso.
+Lo que sí es, un linux con filosofia emergente que le dota de una dinamica con identidad propia, necesaria para transmitir el legado, pero entendiendo que, la parte imperativa inherente a los fundamentos desde los que emerge, lo hace compatible y conn la misma inercia de seguridad (o al menos en potencia) necesarias para establecer los fundamentos declarativos desde los que funcionan las IAs. Si bien el uno no depende del otro, hacerlo sin una reestructuración de la arquitectura que permite ser levantado, es una gran vulnerabilidad sin posibilidad de evitar su colapso.
 Levantar maGNUx requiere de la definicion de primitivas o formas base con las que se construiran los grafos de traza, que permiten al sistema ser auditado.
 En maGNUx se entiende al Root como la entidad formada por cuatro dominios. Si no se tiene autoridad en los 4 dominios, no hay formacion de Root. Un dominio se caracteriza por una serie de servicios y el conjunto de todos los servicios y su dominio, definen al Root. Por lo tanto, Root comienza su levantamiento en el momento que se incia el primer servicio operativo, por muy primitivo que sea, o por muy abstraido que llegue a ser su carga:
 
