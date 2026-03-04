@@ -1,8 +1,9 @@
 # Manifiesto de MaKGNUux (Managed's Kernel GNU LinuX)
-
-En este manifiesto trata de declarar la filosofía Linux, como un giro tangencial a la filosofía Unix. 
+En este manifiesto trata de declarar la filosofía Linux, como un giro tangencial a la filosofía Unix.
+ 
 ## Lo que aprendemos
-La fuerza está en las "piezas" u "objetos" con objetivos bien claros y definidos, sin complegidades innecesarias, que están, conectadas por interfaces simples, bien documentadas y sin ofuscaciones. 
+La fuerza está en las "piezas" u "objetos" con objetivos bien claros y definidos, sin complegidades innecesarias, que están, conectadas por interfaces simples, bien documentadas y sin ofuscaciones.
+ 
 ### maGNUx: Ser y no Ser.
 Lo que sí es, un linux con filosofia emergente que le dota de una dinamica con identidad propia, necesaria para transmitir el legado, pero entendiendo que, la parte imperativa inherente a los fundamentos desde los que emerge, lo hace compatible y conn la misma inercia de seguridad (o al menos en potencia) necesarias para establecer los fundamentos declarativos desde los que funcionan las IAs. Si bien el uno no depende del otro, hacerlo sin una reestructuración de la arquitectura que permite ser levantado, es una gran vulnerabilidad sin posibilidad de evitar su colapso.
 Levantar maGNUx requiere de la definicion de primitivas o formas base con las que se construiran los grafos de traza, que permiten al sistema ser auditado.
@@ -12,7 +13,6 @@ En maGNUx se entiende al Root como la entidad formada por cuatro dominios. Si no
 * Servicios de comunicacion LAN - INET (Dominio directo subordinado. Abstraccion a nivel estandares hardware).
 * Servicios administrativos (Dominio indirecto insubordinable. Abstraccion a nivel drivers. Se define el host).
 * Servicios de usuario (Dominio indirecto subordinado. Abstraccion a nivel virtualizado directo: El usuario accede en forma de VM a los recursos, tipo Guest).
-
 
 ## Identidad centrada en procesadores con arquitectura CISC x86_64
 Definir un orden de capas primitivas de comunicación, dando una identidad propia a maGNUx en relación a Linux:
