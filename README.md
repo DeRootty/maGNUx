@@ -1,35 +1,47 @@
-# Manifiesto de MaKGNUux (Managed's Kernel GNU LinuX)
+ # Manifiesto de MaKGNUux (Managed's Kernel GNU LinuX)
 En este manifiesto trata de declarar la filosofía Linux, como un giro tangencial a la filosofía Unix.
  
 ## Lo que aprendemos
 La fuerza está en las "piezas" u "objetos" con objetivos bien claros y definidos, sin complegidades innecesarias, que están, conectadas por interfaces simples, bien documentadas y sin ofuscaciones.
  
 ### maGNUx: Ser y no Ser.
-Lo que sí es, un linux con filosofia emergente que le dota de una dinámica con identidad propia, necesaria para tratar a Linux como lo que es, un núcleo con dinámicas imperativas inherentes a los fundamentos del hardware desde los que emerge, suministrando un dialogo que lo hace compatible y con la misma inercia de seguridad (o al menos en potencia) necesarias para establecer negociaciones declarativos desde los que funcionan las IAs. Si bien el uno no depende del otro, hacerlo sin una reestructuración de la arquitectura que permite ser levantado, al tiempo de redactar este documento, expone al kernel a una gran vulnerabilidad sin posibilidad de evitar su colapso.
-Levantar maGNUx requiere de la definicion de primitivas o formas base con las que se construirán los grafos de traza, que permiten al sistema ser auditado.
+* lo que sí es, un punto de rotacion como eje donde la informacion y su forma de ser tratada tiene como eje el mismo corazón de linux.
+* lo que no es, 
 
-En maGNUx se entiende al Root como la entidad formada por cuatro dominios. Si no se tiene autoridad en los 4 dominios, no hay formacion de Root. Un dominio se caracteriza por una serie de servicios y el conjunto de todos los servicios y su dominio, definen al Root. Por lo tanto, Root comienza su levantamiento en el momento que se incia el primer servicio operativo, por muy primitivo que sea, o por muy abstraido que llegue a ser su carga:
+#### Lo que sí es
+n linux con filosofia emergente: initramfs carga un sistema puro linux, en su esenciamas original, pero con autoridad root sobre el hardware, que le dota de una dinámica con identidad propia, necesaria para tratar a Linux como lo que es, un núcleo con dinámicas imperativas inherentes a los fundamentos del hardware desde los que emerge, suministrando un dialogo que lo hace compatible y con la misma inercia de seguridad (o al menos en potencia) necesarias para establecer negociaciones declarativos desde los que funcionan las IAs.
+
+Y es en este punto, donde se diferencia de lo hasta ahora visto: Si bien el init ramfs no crea dependencia sobre el resultado final de cara al usuario, o en otras paralabras, Linux no pretende ni desea crear una compatibilidad GNU, la carga final crea un entorno operativo de vcara al usuario final, sobre la que queda claro que Linux no depente de maGNUx. Si no se aborda una reestructuración de la arquitectura que permite ser levantado, al tiempo de redactar este documento, expone al kernel a una gran vulnerabilidad sin posibilidad de evitar su colapso.
+Levantar maGNUx requiere de la definicion de un initramfs (primitivas) o formas base con las que se construirán los grafos de traza, que permiten al sistema ser auditado.
+
+#### Lo que no es
+En maGNUx se entiende al Root como la entidad formada por cuatro dominios. Si no se tiene autoridad en los 4 dominios, no hay formacion de Root. Un dominio se caracteriza por una serie de servicos y el conjunto de todos los servicios y su dominio, definen al Root. Por lo tanto, Root comienza su levantamiento en el momento que se incia el primer servicio operativo, por muy primitivo que sea, o por muy abstraido que llegue a ser su carga:
 
 * Servicios primitivos (Dominio directo insubordinable. Acceso directo a los recursos).
 * Servicios de comunicacion LAN - INET (Dominio directo subordinado. Abstraccion a nivel estandares hardware).
 * Servicios administrativos (Dominio indirecto insubordinable. Abstraccion a nivel drivers. Se define el host).
 * Servicios de usuario (Dominio indirecto subordinado. Abstraccion a nivel virtualizado directo: El usuario accede en forma de VM a los recursos, tipo Guest).
 
-## Identidad centrada en procesadores con arquitectura CISC x86_64
-Definir un orden de capas primitivas de comunicación, dando una identidad propia a maGNUx en relación a Linux:
+## El antes y el después
+Antes Linux era Linux en su initramfs y en su inicio mediante linuz.bin lo mismo, el mismo kernel, pero con un contexto diferente. Despúes de aplicar las definicones de maGNUx, deja de ser eso, para ser un fundamento base que dota de operativida a otras entidades lógicas que son actores con privilegios en areas donde root arrasaria, pero con estos nuevos actores instanciados en areas de visibilidad estratificadas a su ontologia informativa.
 
-El kernel necesita conectar con un servicio que he llamado xGNUpeD. No es un SystemD, debido a que este último se despliega después de que el kernel haya adoptado la identidad distributiva otorgada por xGNUpeD.
+## La identidad e maGNUx - procesadores CISC x86_64
+Definir a initramfs con un orden de capas primitivas de comunicación, para poder delegar una identidad propia a maGNUx en relación a Linux (residente en ese initramfs):
 
+El kernel cargado en initramfs, necesita conectar con un servicio que he llamado xGNUpeD. No es un SystemD, debido a que este último se despliega después de que el kernel haya adoptado la identidad distributiva otorgada por xGNUpeD.
+
+Así pues, el initramfs necesita dejar definidos los siguientes conceptos:
 * Identidad distributiva. Identidad comunitaria de distribución.
 * Identidad conmutativa. Identidad con capacidad de filtrar y asegurar su identidad de forma directa e inversa en relación a un sistema GNU Linux tradicional. Para poder suplantarlo, hay que usar la fuerza, no se puede suplantar desde su naturaleza.
 * Identidad asociativa. El usuario final podrá expresarse con total libertad, pudiendo asociar su capacidad creativa y productiva, a la comunidad que le da soporte, con integridad y coherencia a la hora de conmutador a un sistema GNU Linux tradicional.
 * Identidad comunicativa: Toda instalación de sistema, tendrá una matricula de registro que le dotará de libertad, con capacidad de sertrazadoy auditado en lo relativo al funcionamiento del sistema.
 
+## xGNUpeD: el puente hacia la identidad inteligente
 Estas cuatro propiedades otorgadas por xGNUpeD se deben cumplir en relación a su herencia y proyectando hacia su superficie identificativa. Cuanto mayor sea la linea temporal sobre la que basamos la identidad, mayor es la superficie en identificación sumando dificultad en la suplantación.
 
 La razón de este acotamiento técnico, es no trivial, por razones históricas, al reconocer que el juego de instrucciones de este tipo de procesadores, es el resumen histórico de lo que el usuario final en el hogar o en la oficina, ha necesitado para resolver sus necesidades de automatización de la información. maGNUx entiende que, estos procesadores son ideales para la robótica del hogar o domótica de propósito general, integrando a la NPU en un contexto bastante robusto. Para poder usar las ventajas de estos juegos de instrucciones en este vector de ingenieria, se reconoce la necesidad de gobernar al procesador central a través de una NPU, la cual, necesita ser modulada por procesos imperativos adecuadamente segmentados en las siguientes tres capas bien definidas:
 
-## compatibilidad por herencia
+### compatibilidad por herencia
 
 * 1.- Comunicación operativa.
   ** Los servicios
@@ -51,17 +63,19 @@ Documentación clásica de Unix philosophy (Bell Labs).
 
 ---
 
-## Introducción
+## Introducción dura
+Desde este punto en adelante, se tratará de ir enfocando sin ambigüedades filosoficas, pero con foco epistemologico, la volución de lo anteriormente dicho.
+Se hace evidente a estas alturas de la declaración de intenciones, que maGNUx hereda la filosofía Unix pero la acota a la realidad mediante una arquitectura estratificada: Son programas mínimos, especializados, que hacen una cosa y la hacen bien, y que se conectan entre sí mediante protocolos definidos por las directrices marcadas en xGNUpeD. Prioriza y globaliza su compatibilidad con el hardware, buscando su mejor rendimiento, frente a la modularidad teórica de Unix, sin que esto suponga una ruptura con su filosofía.
 
-maGNUx hereda la filosofía Unix pero la acota a la realidad, mediante una arquitectura estratificada: Son programas mínimos, especializados, que hacen una cosa y la hacen bien, y que se conectan entre sí mediante protocolos definidos por las directrices marcadas en xGNUpeD. Prioriza y globaliza su compatibilidad con el hardware, buscando su mejor rendimiento, frente a la modularidad teórica de Unix, sin que esto suponga una ruptura con su filosofía.
-
+### Inicio de maGNUx
 maGNUx arranca por estratos, no por una secuencia que se descarta. Cada estrato queda vivo y sostiene al siguiente.
 
-* Estrato ROOT (máquina / kernel): privilegio absoluto, levanta los fundamentos de CPU, RAM, SAM y COMM.
-* Estrato COMM: orquesta, aplica políticas, vigila coherencia y habla con /loadD.
-* Estrato ADMIN: ofrece el entorno que el usuario reconoce como “un Linux normal” (shell, servicios de usuario, /home); pero no es un usuario normal.
+initramfs se encarga de:
+* Estrato ROOT (máquina / kernel): privilegio absoluto, levanta los fundamentos de CPU, RAM, SAM y COMM. (Desplegado por initramfs y persistente)
+* Estrato COMM: orquesta, aplica políticas, vigila coherencia y habla con /loadD. (Desplegado por initramfs y persistente)
+* Estrato ADMIN: ofrece el entorno que el usuario reconoce como “un Linux normal” (shell, servicios de usuario, /home); pero no es un usuario normal. (Desplegado por initramfs y persistente)
 
-La clave es que el estrato ROOT no desaparece: sigue siendo el suelo de confianza.
+La clave es que el estrato ROOT no desaparece (initramfs no se volatiliza): sigue siendo el suelo de confianza.
 
 Cuando abordamos el concepto de unidad de trabajo, se hace enfrentando a la CPU como actor principal del trabajo, ya que sin ella, no hay trabajo de sistema posible. Desde este punto, dotamos al kernel de capacidad de entender que procesos están sometidos a su capa ROOT y cuáles no. Hasta que el kernel no esté completamente levantado, solo entenderá si el proceso tiene privilegios ROOT o no, denegando lo que no esté privilegiado a ese nivel.
 
