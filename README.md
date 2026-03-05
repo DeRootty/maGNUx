@@ -1,5 +1,17 @@
  # Manifiesto de MaKGNUux (Managed's Kernel GNU LinuX)
 En este manifiesto trata de declarar la filosofía Linux, como un giro tangencial a la filosofía Unix.
+
+Esta lectura puede parecerte filosóficamente interesante, arquitectónicamente provocador y técnicamente incompleto.
+El tiempo que le dedico a estudiar este tema, pretende madurar:
+1️⃣ la separación del control de la operación
+2️⃣ dotar de identidad estructural al sistema.
+
+Traataré de desarrollar la respuesta a: ¿Puede un sistema operativo tener gobierno interno explícito?
+
+Desde un punto de vista epistemologico, se tratará de resolver tres problemas reales:
+* 1 - complejidad histórica de Linux
+* 2 - Linux evolucionó sin arquitectura global.
+* 3 - El manifiesto intenta reordenarlo estructuralmente.
  
 ## Lo que aprendemos
 La fuerza está en las "piezas" u "objetos" con objetivos bien claros y definidos, sin complegidades innecesarias, que están, conectadas por interfaces simples, bien documentadas y sin ofuscaciones.
