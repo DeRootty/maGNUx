@@ -3,8 +3,8 @@ En este manifiesto trata de declarar la filosofía Linux, como un giro tangencia
 
 Esta lectura puede parecerte filosóficamente interesante, arquitectónicamente provocador y técnicamente incompleto.
 El tiempo que le dedico a estudiar este tema, pretende madurar:
-1️⃣ la separación del control de la operación
-2️⃣ dotar de identidad estructural al sistema.
+* 1️⃣ la separación del control de la operación
+* 2️⃣ dotar de identidad estructural al sistema.
 
 Traataré de desarrollar la respuesta a: ¿Puede un sistema operativo tener gobierno interno explícito?
 
