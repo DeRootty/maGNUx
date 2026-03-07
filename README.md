@@ -15,8 +15,14 @@ Desde un punto de vista epistemologico, se tratará de resolver tres problemas r
  
 ## Lo que aprendemos
 La fuerza está en las "piezas" u "objetos" con objetivos bien claros y definidos, sin complegidades innecesarias, que están, conectadas por interfaces simples, bien documentadas y sin ofuscaciones.
+
+### El trabajo de un hormiguero, el esfuerzo de una hormiga.
+De la misma forma que, una sola hormiga no tiene idea de la ingenieria general de como emergen las propiedades de su hormiguero, porque no es consciente de la colaboracion entera de la colonia (se rije por señales bioquimicas), en Linux sucee algo similar (se rije por politicas de sistema y registros de volución sistémica), con el planteamieto de la filosofia Unix, cada colaborador se ha centrado en un objetivo simple y sencillo pero integrable y escalable, de tal forma que, se pueda usar, debidamente documentado, como pieza útil dentro de un sistema POSIX.
+
+### El guirigai montado en un sistema tipo "hormiguero" (con todos mis respetos a Pablo Motos)
+La naturaleza no entiende de lineas rectas, entiende de rutas de bajo consumo y matrices de posibilidades integrables en áreas de minimo esfuerzo. De la misma forma, los sistemas privativos, son verdaderas lineas rectas, pero los sistemas libres son verdaderas rutas de bajo consumo. El equilibrio reside en encontrar el verdadero punto medio, para que los límites del área informativa no se disipe en pura entropía, o esfuerzos en la nada, como calentar el vacio sin un objetivo concreto ni documentado (porque con la física actual, hasta calentar el vacio puede ser un descubrimiento innovador, si se tiene un posutlado y teoria que pronostiquen resultados matemáticamente demostrables). Así es que o se tiene un postulado a elevaaar a teoría, o me oarece a mi, que las líneas rectas estan por converger en su extincion (a mi muy pesar por los dispositivos Apple).
  
-### maGNUx: Ser y no Ser.
+### maGNUx: Ser y no Ser, el área de minima acción materializada.
 * lo que sí es, un punto de rotacion como eje donde la informacion y su forma de ser tratada tiene como eje el mismo corazón de linux.
 * lo que no es, 
 
