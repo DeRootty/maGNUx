@@ -3,15 +3,17 @@ En este manifiesto trata de declarar la filosofía Linux, como un giro tangencia
 
 Esta lectura puede parecerte filosóficamente interesante, arquitectónicamente provocador y técnicamente incompleto.
 El tiempo que le dedico a estudiar este tema, pretende madurar:
-* 1️⃣ la separación del control de la operación
-* 2️⃣ dotar de identidad estructural al sistema.
+* 1️⃣ Separación de: control vs operación.
+* 2️⃣ Dotar de identidad estructural al sistema.
 
-Traataré de desarrollar la respuesta a: ¿Puede un sistema operativo tener gobierno interno explícito?
+Traataré de desarrollar la respuesta a: 
+* ¿Puede un sistema operativo tener gobierno interno explícito?
+* ¿Se puede hacer una declaración teorica y esperar una arquitectura emergente de dinámica de "hormiguero"?
 
 Desde un punto de vista epistemologico, se tratará de resolver tres problemas reales:
 * 1 - complejidad histórica de Linux
-* 2 - Linux evolucionó sin arquitectura global.
-* 3 - El manifiesto intenta reordenarlo estructuralmente.
+* 2 - Linux evolucionó sin arquitectura global (cual "hormiguero").
+* 3 - El manifiesto intenta reordenarlo estructuralmente (entenderlo y abstraerlo).
  
 ## Lo que aprendemos
 La fuerza está en las "piezas" u "objetos" con objetivos bien claros y definidos, sin complegidades innecesarias, que están, conectadas por interfaces simples, bien documentadas y sin ofuscaciones.
@@ -20,13 +22,16 @@ La fuerza está en las "piezas" u "objetos" con objetivos bien claros y definido
 De la misma forma que, una sola hormiga no tiene idea de la ingenieria general de como emergen las propiedades de su hormiguero, porque no es consciente de la colaboracion entera de la colonia (se rije por señales bioquimicas), en Linux sucee algo similar (se rije por politicas de sistema y registros de volución sistémica), con el planteamieto de la filosofia Unix, cada colaborador se ha centrado en un objetivo simple y sencillo pero integrable y escalable, de tal forma que, se pueda usar, debidamente documentado, como pieza útil dentro de un sistema POSIX.
 
 ### El guirigai montado en un sistema tipo "hormiguero" (con todos mis respetos a Pablo Motos)
-La naturaleza no entiende de lineas rectas, entiende de rutas de bajo consumo y matrices de posibilidades integrables en áreas de minimo esfuerzo. De la misma forma, los sistemas privativos, son verdaderas lineas rectas, pero los sistemas libres son verdaderas rutas de bajo consumo. El equilibrio reside en encontrar el verdadero punto medio, para que los límites del área informativa no se disipe en pura entropía, o esfuerzos en la nada, como calentar el vacio sin un objetivo concreto ni documentado (porque con la física actual, hasta calentar el vacio puede ser un descubrimiento innovador, si se tiene un posutlado y teoria que pronostiquen resultados matemáticamente demostrables). Así es que o se tiene un postulado a elevaaar a teoría, o me oarece a mi, que las líneas rectas estan por converger en su extincion (a mi muy pesar por los dispositivos Apple).
+La naturaleza no entiende de lineas rectas, entiende de rutas de bajo consumo y matrices de posibilidades integrables en las que emergen áreas de minimo esfuerzo (en donde la identidad juega el papel de base y la confidencialidad el papel de punto dinamico de interacción). De la misma forma, los sistemas privativos, son verdaderas lineas rectas, pero los sistemas libres son verdaderas rutas de bajo consumo. El equilibrio reside en encontrar el verdadero punto medio, para que los límites del área informativa no se disipe en pura entropía, o esfuerzos en la nada, como calentar el vacio sin un objetivo concreto ni documentado (porque con la física actual, hasta calentar el vacio puede ser un descubrimiento innovador, si se tiene un posutlado y teoria que pronostiquen resultados matemáticamente demostrables). Así es que o se tiene un postulado a elevaaar a teoría, o me oarece a mi, que las líneas rectas estan por converger en su extincion (a mi muy pesar por los dispositivos Apple).
  
 ### maGNUx: Ser y no Ser, el área de minima acción materializada.
-Una minima acción para el control y otra minima accion para la operacion.
-Se entiende control, como el sometimiento del hardware a una autoridad máxima, y esta la hemos definido como root.
-Se entiende como acción la materialización de cara al usuario o a la entidad solicitante de servicio, en forma de resultado útil y significativo, de tal modo, que no es necesaria una nueva iteración entre el area de control y la de acción. A esta entidad la hemos denominado Administrador.
-Se entiende como sistema de evaluación de autoridad emergente, el proceso que comunica ambas areas y suministra un criterio, a esta autoridad la hemos denominado como AdComm.
+* Una minima acción para el control y otra minima accion para la operacion.
+** Un sistema para gobernarlos a todos.
+
+* Se entiende control, como el sometimiento del hardware a una autoridad máxima, y esta la hemos definido como root.
+* Se entiende como protección la capacidad de evaluación de la autoridad que ha emergido del proceso que comunica ambas areas y suministra un criterio. A la autoridad materializada la hemos denominado como AdComm.
+* Se entiende como acción la materialización de cara al usuario o a la entidad solicitante de servicio, en forma de resultado útil y significativo, de tal modo, que no es necesaria una nueva iteración entre el area de control y la de acción. A esta entidad la hemos denominado Administrador, y tomara la forma .
+Se entiende como sistema de 
 
 * lo que sí es, un punto de rotacion como eje donde la informacion y su forma de ser tratada tiene como eje el mismo corazón de linux.
 * lo que no es, 
