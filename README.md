@@ -1,4 +1,4 @@
- # Manifiesto de MaKGNUux (Managed's Kernel GNU LinuX)
+# Manifiesto de MaKGNUux (Managed's Kernel GNU LinuX)
 En este manifiesto trata de declarar la filosofía Linux, como un giro tangencial a la filosofía Unix.
 
 Esta lectura puede parecerte filosóficamente interesante, arquitectónicamente provocador y técnicamente incompleto.
@@ -23,6 +23,11 @@ De la misma forma que, una sola hormiga no tiene idea de la ingenieria general d
 La naturaleza no entiende de lineas rectas, entiende de rutas de bajo consumo y matrices de posibilidades integrables en áreas de minimo esfuerzo. De la misma forma, los sistemas privativos, son verdaderas lineas rectas, pero los sistemas libres son verdaderas rutas de bajo consumo. El equilibrio reside en encontrar el verdadero punto medio, para que los límites del área informativa no se disipe en pura entropía, o esfuerzos en la nada, como calentar el vacio sin un objetivo concreto ni documentado (porque con la física actual, hasta calentar el vacio puede ser un descubrimiento innovador, si se tiene un posutlado y teoria que pronostiquen resultados matemáticamente demostrables). Así es que o se tiene un postulado a elevaaar a teoría, o me oarece a mi, que las líneas rectas estan por converger en su extincion (a mi muy pesar por los dispositivos Apple).
  
 ### maGNUx: Ser y no Ser, el área de minima acción materializada.
+Una minima acción para el control y otra minima accion para la operacion.
+Se entiende control, como el sometimiento del hardware a una autoridad máxima, y esta la hemos definido como root.
+Se entiende como acción la materialización de cara al usuario o a la entidad solicitante de servicio, en forma de resultado útil y significativo, de tal modo, que no es necesaria una nueva iteración entre el area de control y la de acción. A esta entidad la hemos denominado Administrador.
+Se entiende como sistema de evaluación de autoridad emergente, el proceso que comunica ambas areas y suministra un criterio, a esta autoridad la hemos denominado como AdComm.
+
 * lo que sí es, un punto de rotacion como eje donde la informacion y su forma de ser tratada tiene como eje el mismo corazón de linux.
 * lo que no es, 
 
