@@ -12,8 +12,8 @@ Traataré de desarrollar la respuesta a:
 
 Desde un punto de vista epistemologico, se tratará de resolver tres problemas reales:
 * 1 - complejidad histórica de Linux
-* 2 - El objeto actual que define el kernel de Linux, converge en una version actual que no contempla una arquitectura de sistema global (cual "hormiguero").
-* 3 - El manifiesto intenta reordenarlo estructuralmente (entenderlo y abstraerlo).
+* 2 - El "objeto" actual que define el kernel de Linux, converge en una version que no contempla una arquitectura de sistema global (cual "hormiguero"), pero que deja bien definido los "aposentos reales de la reina".
+* 3 - El manifiesto intenta crear caminos bien definidos que dotan de estructura a las dierferentes "galerias" creadas por la comunidad (las hormigas obreras, que tratamos de entenderlo y abstraerlo).
  
 ## Lo que aprendemos
 La fuerza está en las "piezas" u "objetos" con objetivos bien claros y definidos, sin complegidades innecesarias, que están, conectadas por interfaces simples, bien documentadas y sin ofuscaciones.
