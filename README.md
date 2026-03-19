@@ -1,7 +1,7 @@
 # Manifiesto de MaKGNUux (Managed's Kernel GNU LinuX)
 En este manifiesto trata de declarar la filosofía Linux, como un giro tangencial a la filosofía Unix.
 
-Esta lectura puede parecerte filosóficamente interesante, arquitectónicamente provocador y técnicamente incompleto.
+Esta lectura puede parecerte filosóficamente interesante, arquitectónicamente provocadora y técnicamente incompleto.
 El tiempo que le dedico a estudiar este tema, pretende madurar:
 * 1️⃣ Separación de: control vs operación.
 * 2️⃣ Dotar de identidad estructural al sistema.
@@ -21,7 +21,7 @@ La fuerza está en las "piezas" u "objetos" con objetivos bien claros y definido
 ### El trabajo de un hormiguero, el esfuerzo de una hormiga.
 De la misma forma que, una sola hormiga no tiene idea de la ingenieria general de como emergen las propiedades de su hormiguero, porque no es consciente de la colaboracion entera de la colonia (se rije por señales bioquimicas), en Linux sucee algo similar (se rije por politicas de sistema y registros de volución sistémica), con el planteamieto de la filosofia Unix, cada colaborador se ha centrado en un objetivo simple y sencillo pero integrable y escalable, de tal forma que, se pueda usar, debidamente documentado, como pieza útil dentro de un sistema POSIX.
 
-### El guirigai montado en un sistema tipo "hormiguero" (con todos mis respetos a Pablo Motos)
+### El guirigai montado en un sistema tipo "hormiguero".
 La naturaleza no entiende de lineas rectas, entiende de rutas de bajo consumo y matrices de posibilidades integrables en las que emergen áreas de minimo esfuerzo (en donde la identidad juega el papel de base y la confidencialidad el papel de punto dinamico de interacción). De la misma forma, los sistemas privativos, son verdaderas lineas rectas, pero los sistemas libres son verdaderas rutas de bajo consumo. El equilibrio reside en encontrar el verdadero punto medio, para que los límites del área informativa no se disipe en pura entropía, o esfuerzos en la nada, como calentar el vacio sin un objetivo concreto ni documentado (porque con la física actual, hasta calentar el vacio puede ser un descubrimiento innovador, si se tiene un posutlado y teoria que pronostiquen resultados matemáticamente demostrables). Así es que o se tiene un postulado a elevaaar a teoría, o me oarece a mi, que las líneas rectas estan por converger en su extincion (a mi muy pesar por los dispositivos Apple).
  
 ### maGNUx: Ser y no Ser, el área de minima acción materializada.
@@ -33,11 +33,11 @@ La naturaleza no entiende de lineas rectas, entiende de rutas de bajo consumo y 
 * Se entiende como acción la materialización de cara al usuario o a la entidad solicitante de servicio, en forma de resultado útil y significativo, de tal modo, que no es necesaria una nueva iteración entre el area de control y la de acción. A esta entidad la hemos denominado Administrador, y tomara la forma .
 Se entiende como sistema de 
 
-* lo que sí es, un punto de rotacion como eje donde la informacion y su forma de ser tratada tiene como eje el mismo corazón de linux.
-* lo que no es, 
+* lo que sí es: Un grupo de tareas que habilitan servicios útiles entre el hardware, el software, las entidades emergentes y las identidades con autoridad relativa y/o absoluta, un punto de rotacion de varios ejes donde la informacion y su forma de ser tratada tiene como eje el mismo corazón de linux.
+* lo que no es: Una lista secuencial de instrucciones que dejan en abierto el uso del hardware. 
 
 #### Lo que sí es
-n linux con filosofia emergente: initramfs carga un sistema puro linux, en su esenciamas original, pero con autoridad root sobre el hardware, que le dota de una dinámica con identidad propia, necesaria para tratar a Linux como lo que es, un núcleo con dinámicas imperativas inherentes a los fundamentos del hardware desde los que emerge, suministrando un dialogo que lo hace compatible y con la misma inercia de seguridad (o al menos en potencia) necesarias para establecer negociaciones declarativos desde los que funcionan las IAs.
+El kernel Linux con filosofia emergente: initramfs carga un sistema puro linux, en su esenciamas original, pero con autoridad root sobre el hardware, que le dota de una dinámica con identidad propia, necesaria para tratar a Linux como lo que es, un núcleo con dinámicas imperativas inherentes a los fundamentos del hardware desde los que emerge, suministrando un dialogo que lo hace compatible y con la misma inercia de seguridad (o al menos en potencia) necesarias para establecer negociaciones declarativos desde los que funcionan las IAs.
 
 Y es en este punto, donde se diferencia de lo hasta ahora visto: Si bien el init ramfs no crea dependencia sobre el resultado final de cara al usuario, o en otras paralabras, Linux no pretende ni desea crear una compatibilidad GNU, la carga final crea un entorno operativo de vcara al usuario final, sobre la que queda claro que Linux no depente de maGNUx. Si no se aborda una reestructuración de la arquitectura que permite ser levantado, al tiempo de redactar este documento, expone al kernel a una gran vulnerabilidad sin posibilidad de evitar su colapso.
 Levantar maGNUx requiere de la definicion de un initramfs (primitivas) o formas base con las que se construirán los grafos de traza, que permiten al sistema ser auditado.
