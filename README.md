@@ -55,8 +55,8 @@ maGNUx no es un sistema operativo, es un conjunto de normas que dan suelo a una 
 
 * Servicios primitivos (Dominio directo insubordinable. Acceso directo a los recursos).
 * Servicios de comunicacion LAN - INET (Dominio directo subordinado. Abstraccion a nivel estandares hardware).
-* Servicios administrativos (Dominio indirecto insubordinable. Abstraccion a nivel drivers. Se define el host).
-* Servicios de usuario (Dominio indirecto subordinado. Abstraccion a nivel virtualizado directo: El usuario accede en forma de VM a los recursos, tipo Guest).
+* Servicios administrativos (Dominio indirecto insubordinable. Abstraccion a nivel drivers. Se carga SystemD y queda establecido el host).
+* Servicios de usuario (Dominio indirecto subordinado. Abstraccion a nivel virtualizado directo: El usuario accede en forma de VM a los recursos, tipo Guest (no tiene privilegios directos sobre los drivers ni sobre los servicios que gestionan las colas y prioridades. Mediante las herramientas de SystemD pudiera realizar tareas administrativas)).
 
 ## El antes y el después
 -------------------------------------
