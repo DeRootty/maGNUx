@@ -48,7 +48,10 @@ Y es en este punto, donde se diferencia de lo hasta ahora visto: Si bien el init
 Levantar maGNUx requiere de la definicion de un initramfs (primitivas) o formas base con las que se construirán los grafos de traza, que permiten al sistema ser auditado.
 
 #### Lo que no es
-En maGNUx se entiende al Root como la entidad formada por cuatro dominios. Si no se tiene autoridad en los 4 dominios, no hay formacion de Root. Un dominio se caracteriza por una serie de servicos y el conjunto de todos los servicios y su dominio, definen al Root. Por lo tanto, Root comienza su levantamiento en el momento que se incia el primer servicio operativo, por muy primitivo que sea, o por muy abstraido que llegue a ser su carga:
+maGNUx no es un sistema operativo, es un conjunto de normas que dan suelo a una estandarización de como abordar la creacion de una distribucion, tal como si fuese una receta de cocina, con la confianza de que nos abre camino para que el kernel se autogobierne. En este punto, entendemos la diferencia entre kernel core y kernel comm. Con esta diferencia, ya sabemos que maGNUx no es el Linux tradicional. Debido a esta dualidad, se entiende al Root como la entidad formada por cuatro dominios. Si no se tiene autoridad en los 4 dominios, no hay formacion de Root. 
+
+
+- Se entiende dominio a las caracteristicas definidas por una serie de servicos y el conjunto de todos los servicios y su dominio, definen al Root. Por lo tanto, Root comienza su levantamiento en el momento que se incia el primer servicio operativo, por muy primitivo que sea, o por muy abstraido que llegue a ser su carga:
 
 * Servicios primitivos (Dominio directo insubordinable. Acceso directo a los recursos).
 * Servicios de comunicacion LAN - INET (Dominio directo subordinado. Abstraccion a nivel estandares hardware).
