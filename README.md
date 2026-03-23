@@ -69,9 +69,11 @@ Desde esa constatación parte maGNUx.
 * No para negar Linux.
 * No para reemplazar Linux.
 * No para despreciar la función histórica de piezas como init, systemd, dbus, namespaces, cgroups o las múltiples capas del userspace contemporáneo.
+* Si para contextualizar el userspace dentro de la coherencia de un sistema que opera tanto de forma imperativa como declarativa.
 
-Sino para afirmar que, por debajo de todo ello, empieza a hacerse visible una exigencia nueva: el sistema operativo ya no puede entenderse únicamente como kernel más userland; debe empezar a pensarse como identidad, gobierno, persistencia, comunicación y operación integradas en una arquitectura artificiosamente inteligente de sí misma.
-Ese es el punto de giro de maGNUx.
+Sino para afirmar que, todo adecuadamente contextualizado, permite clarear y hacer visible una exigencia nueva: el sistema operativo ya no puede entenderse únicamente como kernel más userland; debe empezar a pensarse como identidad, gobierno, persistencia, comunicación y operación integradas en una arquitectura artificiosamente inteligente de sí misma.
+
+Este es el punto de giro de maGNUx.
 
 I. initramfs: Linux como suelo, no como obstáculo
 maGNUx no pretende destruir Linux porque Linux constituye hoy el único suelo real sobre el que puede pensarse esta transición. El proyecto no se formula como un “nuevo sistema operativo” en el sentido clásico, sino como una arquitectura transicional apoyada sobre Linux puro, capaz de usar lo que ya existe para anticipar lo que todavía falta.
