@@ -71,7 +71,7 @@ Desde esa constatación parte maGNUx.
 * No para despreciar la función histórica de piezas como init, systemd, dbus, namespaces, cgroups o las múltiples capas del userspace contemporáneo.
 * Si para contextualizar el userspace dentro de la coherencia de un sistema que opera tanto de forma imperativa como declarativa.
 
-Sino para afirmar que, todo adecuadamente contextualizado, permite clarear y hacer visible una exigencia nueva: el sistema operativo ya no puede entenderse únicamente como kernel más userland; debe empezar a pensarse como identidad, gobierno, persistencia, comunicación y operación integradas en una arquitectura artificiosamente inteligente de sí misma.
+Con todo lo anteerior, afirmar que, en el contexto adecuado, nos podemos permitir clarear y hacer visible una exigencia nueva: el sistema operativo ya no puede entenderse únicamente como kernel más userland; debe empezar a pensarse como identidad, gobierno, persistencia, comunicación y operación integradas en una arquitectura artificiosamente inteligente de sí misma.
 
 Este es el punto de giro de maGNUx.
 
