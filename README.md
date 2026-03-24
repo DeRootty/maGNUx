@@ -6,7 +6,7 @@ El tiempo que le dedico a estudiar este tema, pretende madurar:
 * 1️⃣ Separación de: control vs operación.
 * 2️⃣ Dotar de identidad estructural al sistema.
 
-Traataré de desarrollar la respuesta a: 
+Traataré de desarrollar la respuesta a:
 * ¿Puede un sistema operativo tener gobierno interno explícito?
 * ¿Se puede hacer una declaración teorica y esperar una arquitectura emergente de dinámica de "hormiguero"?
 
@@ -64,6 +64,8 @@ maGNUx no es un sistema operativo, es un conjunto de normas que dan suelo a una 
 * Servicios de comunicacion LAN - INET (Dominio directo subordinado. Abstraccion a nivel estandares hardware).
 * Servicios administrativos (Dominio indirecto insubordinable. Abstraccion a nivel drivers. Se carga SystemD y queda establecido el host).
 * Servicios de usuario (Dominio indirecto subordinado. Abstraccion a nivel virtualizado directo: El usuario accede en forma de VM a los recursos, tipo Guest (no tiene privilegios directos sobre los drivers ni sobre los servicios que gestionan las colas y prioridades. Mediante las herramientas de SystemD pudiera realizar tareas administrativas)).
+
+* Antes Linux arrancaba iniciando initramfs y luego lanzando el kernel, ahora initramfs se pretende persistente con identidad root, denominado kernel maquina, y acto seguido se lanza el keernel system.
 
 ### El impass de la inercia de las comunidades: 
 Su fuerza no procede de una pureza geométrica original, sino de una capacidad casi biológica para absorber complejidad, crecer por capas, adaptarse a nuevas necesidades y sobrevivir a cambios que habrían fracturado otros sistemas. Esa misma fortaleza, sin embargo, ha dejado al descubierto un límite: la complejidad emergente no equivale necesariamente a soberanía estructural. Un sistema puede funcionar, escalar, extenderse y seguir careciendo de una ontología explícita de gobierno.
