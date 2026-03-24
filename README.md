@@ -31,32 +31,25 @@ Por otro lado, en el area admin (actualmente difusa y cargada en el userspace) t
  
 ### maGNUx: Ser y no Ser, el área de minima acción materializada.
 * Una minima acción para el control y otra minima accion para la operacion.
-** Un sistema para gobernarlos a todos.
-
 * Se entiende control, como el sometimiento del hardware a una autoridad máxima, y esta la hemos definido como root.
 * Se entiende como protección la capacidad de evaluación de la autoridad que ha emergido del proceso que comunica ambas areas y suministra un criterio. A la autoridad materializada la hemos denominado como AdComm.
 * Se entiende como acción la materialización de cara al usuario o a la entidad solicitante de servicio, en forma de resultado útil y significativo, de tal modo, que no es necesaria una nueva iteración entre el area de control y la de acción. A esta entidad la hemos denominado Administrador, y tomara la forma .
 Se entiende como sistema de 
-
 * lo que sí es: Un grupo de tareas que habilitan servicios útiles entre el hardware, el software, las entidades emergentes y las identidades con autoridad relativa y/o absoluta, un punto de rotacion de varios ejes donde la informacion y su forma de ser tratada tiene como eje el mismo corazón de linux.
 * lo que no es: Una lista secuencial de instrucciones que dejan en abierto el uso del hardware. 
 
-#### Lo que sí es
+#### Un sistema para gobernarlos a todos.
+En este punto, mi pregunta es: ¿Podrá la filosofía Unix servir para reutilizar el software usado en levantar las actuales distros de Linux, pero hacerlo de forma que conecten con las adaptaciones qye se necesiten para cumplir con el manifiesto propuesto por maGNUx?
+¿Cuanto de original habrá que aportar? ¿Las versiones actuales, podrán actualizarse sin que pierdan la esencia de sus versiones anteriores?
 
+#### Lo que sí es razonable esperar
 
 Y es en este punto, donde se diferencia de lo hasta ahora visto: Si bien el init ramfs no crea dependencia sobre el resultado final de cara al usuario, o en otras paralabras, Linux no pretende ni desea crear una compatibilidad GNU, la carga final crea un entorno operativo de vcara al usuario final, sobre la que queda claro que Linux no depente de maGNUx. Si no se aborda una reestructuración de la arquitectura que permite ser levantado, al tiempo de redactar este documento, expone al kernel a una gran vulnerabilidad sin posibilidad de evitar su colapso.
 Levantar maGNUx requiere de la definicion de un initramfs (primitivas) o formas base con las que se construirán los grafos de traza, que permiten al sistema ser auditado.
 
-#### Lo que no es
+#### Lo que no es razonable esperar
 maGNUx no es un sistema operativo, es un conjunto de normas que dan suelo a una estandarización de como abordar la creacion de una distribucion, tal como si fuese una receta de cocina, con la confianza de que nos abre camino para que el kernel se autogobierne. En este punto, entendemos la diferencia entre kernel core y kernel comm. Con esta diferencia, ya sabemos que maGNUx no es el Linux tradicional. Debido a esta dualidad, se entiende al Root como la entidad formada por cuatro dominios. Si no se tiene autoridad en los 4 dominios, no hay formacion de Root. 
 
-
-- Se entiende dominio a las caracteristicas definidas por una serie de servicos y el conjunto de todos los servicios y su dominio, definen al Root. Por lo tanto, Root comienza su levantamiento en el momento que se incia el primer servicio operativo, por muy primitivo que sea, o por muy abstraido que llegue a ser su carga:
-
-* Servicios primitivos (Dominio directo insubordinable. Acceso directo a los recursos).
-* Servicios de comunicacion LAN - INET (Dominio directo subordinado. Abstraccion a nivel estandares hardware).
-* Servicios administrativos (Dominio indirecto insubordinable. Abstraccion a nivel drivers. Se carga SystemD y queda establecido el host).
-* Servicios de usuario (Dominio indirecto subordinado. Abstraccion a nivel virtualizado directo: El usuario accede en forma de VM a los recursos, tipo Guest (no tiene privilegios directos sobre los drivers ni sobre los servicios que gestionan las colas y prioridades. Mediante las herramientas de SystemD pudiera realizar tareas administrativas)).
 
 ## El antes y el después
 -------------------------------------
@@ -64,6 +57,13 @@ maGNUx no es un sistema operativo, es un conjunto de normas que dan suelo a una 
 * maGNUx no nace para sustituir Linux.
 * maGNUx nace porque Linux, siendo suficientemente potente para sostener el presente, no basta por sí solo para expresar con claridad la arquitectura del porvenir.
 * Linux ha demostrado una fertilidad histórica extraordinaria. 
+
+- Se entiende dominio a las caracteristicas definidas por una serie de servicos y el conjunto de todos los servicios y su dominio, definen al Root. Por lo tanto, Root comienza su levantamiento en el momento que se incia el primer servicio operativo, por muy primitivo que sea, o por muy abstraido que llegue a ser su carga:
+
+* Servicios primitivos (Dominio directo insubordinable. Acceso directo a los recursos).
+* Servicios de comunicacion LAN - INET (Dominio directo subordinado. Abstraccion a nivel estandares hardware).
+* Servicios administrativos (Dominio indirecto insubordinable. Abstraccion a nivel drivers. Se carga SystemD y queda establecido el host).
+* Servicios de usuario (Dominio indirecto subordinado. Abstraccion a nivel virtualizado directo: El usuario accede en forma de VM a los recursos, tipo Guest (no tiene privilegios directos sobre los drivers ni sobre los servicios que gestionan las colas y prioridades. Mediante las herramientas de SystemD pudiera realizar tareas administrativas)).
 
 ### El impass de la inercia de las comunidades: 
 Su fuerza no procede de una pureza geométrica original, sino de una capacidad casi biológica para absorber complejidad, crecer por capas, adaptarse a nuevas necesidades y sobrevivir a cambios que habrían fracturado otros sistemas. Esa misma fortaleza, sin embargo, ha dejado al descubierto un límite: la complejidad emergente no equivale necesariamente a soberanía estructural. Un sistema puede funcionar, escalar, extenderse y seguir careciendo de una ontología explícita de gobierno.
