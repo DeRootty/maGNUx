@@ -47,18 +47,25 @@ En este punto, mi pregunta es: ¿Podrá la filosofía Unix servir para reutiliza
 Y es en este punto, donde se diferencia de lo hasta ahora visto: Si bien el init ramfs no crea dependencia sobre el resultado final de cara al usuario, o en otras paralabras, Linux no pretende ni desea crear una compatibilidad GNU, la carga final crea un entorno operativo de vcara al usuario final, sobre la que queda claro que Linux no depente de maGNUx. Si no se aborda una reestructuración de la arquitectura que permite ser levantado, al tiempo de redactar este documento, expone al kernel a una gran vulnerabilidad sin posibilidad de evitar su colapso.
 Levantar maGNUx requiere de la definicion de un initramfs (primitivas) o formas base con las que se construirán los grafos de traza, que permiten al sistema ser auditado.
 
-#### Lo que no es razonable esperar
-maGNUx no es un sistema operativo, es un conjunto de normas que dan suelo a una estandarización de como abordar la creacion de una distribucion, tal como si fuese una receta de cocina, con la confianza de que nos abre camino para que el kernel se autogobierne. En este punto, entendemos la diferencia entre kernel core y kernel comm. Con esta diferencia, ya sabemos que maGNUx no es el Linux tradicional. Debido a esta dualidad, se entiende al Root como la entidad formada por cuatro dominios. Si no se tiene autoridad en los 4 dominios, no hay formacion de Root. 
+Se propone un regimen de compatibilidad inspirado en POSIX, que dotará de integración en las partes contributivas por la comunidad, en los estratos pensados para este manifiesto:
+* Estandánres de todos los modulos que pretendan tenerse en cuenta:
+* Capa maPOSIXd00 para la carga del kernel core en el initramfs.
+* Capa maPOSIXd01 para la carga del kernel runtime en el area comm.
+* Capa de abstracción Dernel, es como un kernel, con la misma filosofía, pero orientado al software que cualquier usuario acreditado pueda pretender para el host.
+* Capa maPOSIXd02 para la carga del dernel core en el area admin.
 
+#### Lo que no es razonable esperar
+maGNUx no es un sistema operativo, es un conjunto de normas que dan suelo a una estandarización de como abordar la creacion de una distribucion, tal como si fuese una receta de cocina, con la confianza de que nos abre camino para que el kernel se autogobierne en una dinamica integrada con la IA. En este punto, entendemos la diferencia entre kernel core y kernel comm. Con esta diferencia, ya sabemos que maGNUx no es el Linux tradicional. Debido a esta dualidad, se entiende al Root como la entidad formada por cuatro dominios. Si no se tiene autoridad en los 4 dominios, no hay formacion de Root. 
 
 ## El antes y el después
--------------------------------------
 
 * maGNUx no nace para sustituir Linux.
 * maGNUx nace porque Linux, siendo suficientemente potente para sostener el presente, no basta por sí solo para expresar con claridad la arquitectura del porvenir.
 * Linux ha demostrado una fertilidad histórica extraordinaria. 
 
 - Se entiende dominio a las caracteristicas definidas por una serie de servicos y el conjunto de todos los servicios y su dominio, definen al Root. Por lo tanto, Root comienza su levantamiento en el momento que se incia el primer servicio operativo, por muy primitivo que sea, o por muy abstraido que llegue a ser su carga:
+
+### Los cuatro dominios de root.
 
 * Servicios primitivos (Dominio directo insubordinable. Acceso directo a los recursos).
 * Servicios de comunicacion LAN - INET (Dominio directo subordinado. Abstraccion a nivel estandares hardware).
