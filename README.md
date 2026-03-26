@@ -72,6 +72,11 @@ maGNUx no es un sistema operativo, es un conjunto de normas que dan suelo a una 
 * Servicios administrativos (Dominio indirecto insubordinable. Abstraccion a nivel drivers. Se carga SystemD y queda establecido el host).
 * Servicios de usuario (Dominio indirecto subordinado. Abstraccion a nivel virtualizado directo: El usuario accede en forma de VM a los recursos, tipo Guest (no tiene privilegios directos sobre los drivers ni sobre los servicios que gestionan las colas y prioridades. Mediante las herramientas de SystemD pudiera realizar tareas administrativas)).
 
+- Directo insubordinable: Acceso directo al hardware, para ello se requiere una consulta directa a una funcion del firmware, que liste todo el hardware susceptible de estar a la escucha. Por ejemplo, tenemos el servicio de audio, que en el hardware se hace peticion a una direccion hex: h:FF23-241D-3E4A-B88C de tal forma que, seguidamente se debe hablar el idioma del controlador primario del firmware, para indicarle al hardware que hacer, o lo que es lo mismo, es como si en un motor de combustion interna movieramos a mano el volante motor, para poner todo el bloque el posiscion de inicio o encendido o cambiarle la correa de distribución.
+- Directo subordinado: Acceso directo a la memoria donde estan ya los drivers cargados, pues el lanzador de driver ha localizado el enlace directo insubordinable al que llamar y poder lanzar el blob o el bin adecuado (se requieren permisos comm acreditados).
+- Indirecto insubordinable: gestion de colas en peticiones y evaluacion de prioridades que gestionan el trafico al driver. Puro trabajo administrativo (se requieren permisos admin acreditados).
+- Indirecto subordinado: gestion de paquetes de aplicaciones completas, en la solicitud de instalacion, ejecucion y desinstalacion de los mismos. Gestion de permisos a archivos de usuario generados por sofware de terceros (se requiere soberania de cuenta de usuario).
+
 * Antes Linux arrancaba iniciando initramfs y luego lanzando el kernel, ahora initramfs se pretende persistente con identidad root, denominado kernel maquina, y acto seguido se lanza el keernel system.
 
 ### El impass de la inercia de las comunidades: 
