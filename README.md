@@ -24,7 +24,7 @@ De la misma forma que, una sola hormiga no tiene idea de la ingenieria general d
 ### El guirigai montado en un sistema tipo "hormiguero".
 La naturaleza no entiende de lineas rectas, entiende de rutas de bajo consumo y matrices de posibilidades integrables en las que emergen áreas de minimo esfuerzo (en donde la identidad juega el papel de base y la confidencialidad el papel de punto dinamico de interacción). 
 
-####Teoria de juegos aplicada al código libre:
+#### Teoria de juegos aplicada al código libre:
 Toda hormiga hace hormigueros distribuidos bajo tierra y el sistema funciona, de la misma forma, sea que contribuyas a las galerias de tu propio hormiguero o sea que existan otras hormigas que quieran entender el sistema colaborativo para mejorar los suyos propios respectivos, lo cierto es que, cuando dos hormigueros entran en conflicto, lo decisivo no va de la mano de como sea el propio hormiguero, sino de las comunicaciones bioquimicas y feromónicas emitidas por cada individuo y de la reina.
 Por lo tanto, es de beneficio táctico que toda hormiga entienda que su instinto la permitira crear galerias que se integraran en la naturaleza de su comunidad, y sin grandes invenciones ni magia iluminativa, sabrá como hacer bien su trabajo, aportando a su hormiguero, porque la seguridad no esta en la ingenieria ni en la arquitectura, sino en las comunicaciones.
 
