@@ -50,6 +50,11 @@ La identidad del host, se definen entre dos areas y media:
 #### la identidad Guest
 Actualmente tenemos a SystemD que parchea la inestabilidad de un sistema de arquitectura de madeja de galerias de hormiguero con un punto o nexo de cruce, aliviando los xploits y las subsiguientes escaladas de privilegios asociados a ellos.
 Por otro lado, en el area admin (actualmente difusa y cargada en el userspace) teníamos a los servicios X11 y actualmente a Wayland, que hace lo propio en el entorno gráfico, dotanto de entidad a cada ventana gestionada en el entorno gráfico.
+
+La identidad del guest emerge de los resultados obtenidos a través de:
+* Dernel guest
+* Logon service
+* Login sesion
  
 ### maGNUx: Ser y no Ser, el área de minima acción materializada.
 En maGNUx separamos identidad de la maquina conceptualizada como Host (o el tipo de "coche" que circula), de la identidad del conductor o entidad organica definida como Guest, que lleva al Host a interaccionar con servicios pensados para trafico orgánico.
