@@ -5,6 +5,8 @@ Esta lectura puede parecerte filosóficamente interesante, arquitectónicamente 
 El tiempo que le dedico a estudiar este tema, pretende madurar:
 * 1️⃣ Separación de: control vs operación.
 * 2️⃣ Dotar de identidad estructural al sistema.
+* * Control orgánico (Dernel)
+* * Control sistémico (Kernel)
 
 Traataré de desarrollar la respuesta a:
 * ¿Puede un sistema operativo tener gobierno interno explícito?
