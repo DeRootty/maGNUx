@@ -9,6 +9,11 @@ El tiempo que le dedico a estudiar este tema, pretende madurar:
 * 2️⃣ Dotar de identidad estructural al sistema.
 * * Control orgánico (Dernel run time + Dernel guest = Dernel user land )
 * * Control sistémico (Kernel hard + kernel run time = kernel host)
+* 3️⃣ Dotar de ejes dimensionales que marquen un limite o area a la actividad
+* * Eje quien soy (control del user land)
+* * Eje donde estoy (control del host)
+* * Eje de donde vengo (control de la dimanima host - guest)
+* Se integraran en el area de actividad denominada Kommu services (IPC, Dbus, parte del actual sistemd que delegará actividad)
 
 Traataré de desarrollar la respuesta a:
 * ¿Puede un sistema operativo tener gobierno interno explícito?
@@ -38,9 +43,9 @@ De la misma forma, los sistemas privativos, son verdaderas lineas rectas, sin ga
 El quiebro monumental a la filosofía tradicional Unix, lo puso SystemD, el cual viene a solucionar uno de los caballos de batalla de un sistema con arquitectura de madeja de galerias de hormiguero. Tras el inicio del sistema, levantar el user space suponia una obra de ingenieria bastantante idealizada y poco aterrizada en la realidad. Las arquitecturas que dotan de coherencia al hardware CISC x86 sea de 64 o 32 bits, eran una verdadera pesadilla. Por un lado debian lidiar con las colas fifo, lifo, filo y lilo, que se encargaban de gestionar el registro de arranque, por otro lado, los xploits de seguridad que se heredan con la sinergia a la hora de hacer funcionar la arquitectura planteada del hardware con el modo de arrancar del software y, por todo esto, se vino a la luz SystemD, que de un plumazo dio una hoja de ruta por la cual avanzar, a costa de romper la pureza Unix. SystemD es una linea recta que alcanza una manera de abrir vias de trabajo para ir afrontando las inclemencias del malware y poder ir parchenando los xploits con un exito razonable para infraestructuras criticas.
 
 La identidad del host, se definen entre dos areas y media:
-* KernelG
-* KommIO
-* DernelG
+* Kernel host
+* Kommu services
+* Dernel run time
 
 #### la identidad Guest
 Actualmente tenemos a SystemD que parchea la inestabilidad de un sistema de arquitectura de madeja de galerias de hormiguero con un punto o nexo de cruce, aliviando los xploits y las subsiguientes escaladas de privilegios asociados a ellos.
