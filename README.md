@@ -4,15 +4,17 @@ En este manifiesto trata de declarar la filosofía Linux, como un giro tangencia
 Esta lectura puede parecerte filosóficamente interesante, arquitectónicamente provocadora y técnicamente incompleta.
 El tiempo que le dedico a estudiar este tema, pretende madurar:
 * 1️⃣ Separación de: control vs operación.
+* * Identidades especificas destinadas al control (hroot + croot + droot = root)
+* * Identidades especificas destinadas a la operacion (sadmin + uadmin + aadmin = admin)
 * 2️⃣ Dotar de identidad estructural al sistema.
-* * Control orgánico (Dernel)
-* * Control sistémico (Kernel)
+* * Control orgánico (Dernel run time + Dernel guest = Dernel user land )
+* * Control sistémico (Kernel hard + kernel run time = kernel host)
 
 Traataré de desarrollar la respuesta a:
 * ¿Puede un sistema operativo tener gobierno interno explícito?
-* ¿Se puede hacer una declaración teorica y esperar una arquitectura emergente de dinámica de "hormiguero"?
+* ¿Se puede hacer una declaración teórica y esperar una arquitectura emergente de dinámica de "hormiguero"?
 
-Desde un punto de vista epistemologico, se tratará de resolver tres problemas reales:
+Desde un punto de vista epistemológico, se tratará de resolver tres problemas reales:
 * 1 - complejidad histórica de Linux
 * 2 - El "objeto" actual que define el kernel de Linux, converge en una version que no contempla una arquitectura de sistema global (cual "hormiguero"), pero que deja bien definido los "aposentos reales de la reina".
 * 3 - El manifiesto intenta crear caminos bien definidos que dotan de estructura a las dierferentes "galerias" creadas por la comunidad (las hormigas obreras, que tratamos de entenderlo y abstraerlo).
