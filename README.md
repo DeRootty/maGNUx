@@ -12,7 +12,7 @@ El tiempo que le dedico a estudiar este tema, pretende madurar:
 * 3️⃣ Dotar de ejes dimensionales que marquen un limite o area a la actividad
 * * Eje quien soy (control del user land)
 * * Eje donde estoy (control del host)
-* * Eje de donde vengo (control de la dimanima host - guest)
+* * Eje de donde vengo (control de la dimanica host - guest)
 * Se integraran en el area de actividad denominada Kommu services (IPC, Dbus, parte del actual sistemd que delegará actividad)
 
 Traataré de desarrollar la respuesta a:
