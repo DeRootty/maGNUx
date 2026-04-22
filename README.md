@@ -1,7 +1,7 @@
 # Manifiesto de MaKGNUux (Managed's Kernel GNU LinuX)
 En este manifiesto trata de declarar la filosofía Linux, como un giro tangencial a la filosofía Unix.
 
-Lo que motiva este manifiesto de ideas, es la seguridad ante un futuro sistema operativo con IA sistémica. Actualmente, ningún sistema operativo la incluye, y el caso mas relevante de desastre, al intentarlo, es Microsoft. El hardware aún no está preparado para soportar software con IA sistemica, y se necesitan hacks en el software de arranque para poder soportar una seguridad mínima en el arranque y levantamiento del sistema.
+Lo que motiva este manifiesto de ideas, es la seguridad ante un futuro sistema operativo con IA sistémica. Actualmente, ningún sistema operativo la incluye, y el caso mas relevante de desastre, al intentarlo, es Microsoft. El hardware aún no está preparado para soportar software con IA sistemica, y se necesitan hacks en el software de arranque para poder soportar una seguridad mínima en el arranque y levantamiento del sistema. Estos hacks no son excluyentes, sino necesarios aunque el hardware esté debidamente conceptualizado en arquitectura, para dar soporte sistémico a la IA.
 
 Esta lectura puede parecerte filosóficamente interesante, arquitectónicamente provocadora y técnicamente incompleta.
 El tiempo que le dedico a estudiar este tema, pretende madurar:
