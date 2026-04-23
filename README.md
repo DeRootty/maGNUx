@@ -26,6 +26,8 @@ Desde un punto de vista epistemológico, se tratará de resolver tres problemas 
 * 2 - El "objeto" actual que define el kernel de Linux, converge en una version que no contempla una arquitectura de sistema global (cual "hormiguero"), pero que deja bien definido los "aposentos reales de la reina".
 * 3 - El manifiesto intenta crear caminos bien definidos que dotan de estructura a las dierferentes "galerias" creadas por la comunidad (las hormigas obreras, que tratamos de entenderlo y abstraerlo).
 
+La herramienta usada para resolver los problemas de seguridad que causa una IA sistémica, será la arquitectura CISC x86_64 por su naturaleza en la inicializacion del hardware, desconozco si existe otra arquitectura similar, pero en este caso, sería el equivalente del corazón de una IA sistémica.
+
 # Un poco de abstraccion, para entender el motivo de la inspiración:
 ## Lo que aprendemos
 La fuerza está en las "piezas" u "objetos" con objetivos bien claros y definidos, sin complegidades innecesarias, que están, conectadas por interfaces simples, bien documentadas y sin ofuscaciones.
