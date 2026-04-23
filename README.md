@@ -45,6 +45,24 @@ De la misma forma, los sistemas privativos, son verdaderas lineas rectas, sin ga
 #### La identidad: del silogismo a lo material - El Host
 ¿Como una hormiga entiende cual es su hormiguero? De la misma forma ¿Como se puede recrear la decisión de un servicio, demonio o programa, los límites de su objetivo algoritmico? ¿Es la ruptura con la filosofía tradicional Unix, iniciado por SystemD, la solución? La arquitetucta de Linux, yo la llamo "de madeja de galerias de hormiguero". Tras el inicio del sistema, levantar el user space suponia una obra de ingenieria bastantante idealizada y poco aterrizada en la realidad. Las arquitecturas que dotan de coherencia al hardware CISC x86 sea de 64 o 32 bits, eran una verdadera pesadilla, en relacion al hardware y su potencia. Por un lado debian lidiar con las colas fifo, lifo, filo y lilo, que se encargaban de gestionar el registro de arranque, por otro lado, los xploits de seguridad que se heredan con la sinergia a la hora de hacer funcionar la arquitectura planteada del hardware con el modo de arrancar del software y, por todo esto, se vino a la luz SystemD, que de un plumazo dio una hoja de ruta por la cual avanzar, a costa de romper la pureza Unix. SystemD es una linea recta que alcanza una manera de abrir vias de trabajo para ir afrontando las inclemencias del malware y poder ir parchenando los xploits con un exito razonable para infraestructuras criticas.
 
+### maGNUx: Ser y no Ser, el área de minima acción materializada en la arquitectura CISC X86_64.
+En maGNUx separamos identidad de la maquina conceptualizada como Host (o el tipo de "coche" que circula), de la identidad del conductor o entidad organica definida como Guest, que lleva al Host a interaccionar con servicios pensados para trafico orgánico.
+
+#### El bootloader
+Toma el control del estado bootstrap, su objetivo es cargar de manera temprana el demonio ACPI, instanciar cuantos nucleos estan en modo bajo consuo y dotarles de una puerta de llamada o invocacion. Aun no se han ejecutado los procesos INIT IPI. En otras palabras, debe cargar un pseudosistema operativo de 16 bits, permitiendo una interfaz de comunicación con el demonio que discrimina si al otro lado de su puerta, hay hardware físico real. No desaparecerá mientras el computador esté encendido.
+
+#### El kernel 
+* host:
+La parte de reconocimeinto de host, lanza los procesos INIT IPI y los esclaviza a la identidad host: Solo pueden recibir instrucciones de aquellos demonios levantados por el bootloader. En esta etapa, el kernel carga en memoria demonios que gestionan el modo de funcionamiento de los nucleos, de modo heredado a modo real, de modo real a modo largo. Dicho demonio los deja a la escucha y a la espera.
+* Run time:
+La parte de reconocimiento del ciclo turin, inicia solicitudes, balancea la carga y adjudica tareas.
+
+y asegurarse de que solo accede a sus recursos el kernel. Para ello, en esta etapa temprana, solo el kernel que haya sido instalado en la maquina cuando la maquina carecia de sistema operativo, podrá acceder a los recursos ACPI. Por ejemplo, quedara registrado en la direccion h
+
+El bootloader define el chasis, el kernel debería otorgarle un número y matricular a la máquina, dotándola de una identidad de Host.
+
+#### El dernel
+El dernel debería dar licencia operativa sobre el host al guest.
 Los scripts en bash requieren tiempos de ejecucion bastante lentos, y en ocasiones producen idle en el procesador. En esa época, un idle era hackeable: una ventana para crear una interrupcion de solicitud, y si dicha intromision abarcaba el tiempo natural de idle planteado por el sistema, al administrador le pasaba completamente desapercibido, salvo si era capaz de balancear el consumo del procesador principal, o encontraba versiones de otros complementos que, haciendo lo mismo, dentro de la cadena de arranque del procesador, no le producián idle.
 
 SystemD mantiene al procesador principal atareado, sin tiempos para respirar, pero en maGNUx, se propone una alternativa: Definir un host temprano y volutivo, que vaya ganando areas de dominio mientras el arranque acaba por hacer disponible todo el hardware. Un arranque de este estilo, seria virtualmente invulnerable a los idle, debido a que para que un proceso se ejecute, las directrices tempranas del levantamiento del host, detectaran si es una pieza critica para continuar con el levantamiento del host, o sencillamente no aporta nada. Si no aporta, es un xploit, pero si por el contrario, aporta, entonces es un proceso válido.
@@ -63,10 +81,7 @@ La identidad del guest emerge de los resultados obtenidos a través de:
 * Logon service
 * Login sesion
  
-### maGNUx: Ser y no Ser, el área de minima acción materializada.
-En maGNUx separamos identidad de la maquina conceptualizada como Host (o el tipo de "coche" que circula), de la identidad del conductor o entidad organica definida como Guest, que lleva al Host a interaccionar con servicios pensados para trafico orgánico.
-El kernel debería matricular a la máquina que está dándole una identidad de Host. 
-El dernel debería dar licencia operativa sobre el host al guest.
+
 
 * Una minima acción para el control y otra minima accion para la operacion.
 * Se entiende control, como el sometimiento del hardware a una autoridad máxima, y esta la hemos definido como root.
