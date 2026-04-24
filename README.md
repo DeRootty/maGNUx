@@ -32,6 +32,7 @@ Desde un punto de vista epistemológico, se tratará de resolver tres problemas 
 * 3 - El manifiesto intenta crear caminos bien definidos que dotan de estructura a las dierferentes "galerias" creadas por la comunidad (las hormigas obreras, que tratamos de entenderlo y abstraerlo).
 
 La herramienta usada para resolver los problemas de seguridad que causa una IA sistémica, será la arquitectura CISC x86_64 por su naturaleza en la inicializacion del hardware, desconozco si existe otra arquitectura similar, pero en este caso, sería el equivalente del corazón de una IA sistémica.
+En otro orden de situacion, a un nivel de usuario, postulare a KDE Plasma para un fork que, tratara de enfocar su plasticidad adaptativa, para dar un camino ontologico a una version LLM, la cual etiquetare como KSIA Plasma (KDE SIMPLY IA) en una version adaptada de escritorio. Para ello me empapare en como funciona KDE de la misma forma que he tenido que empaparme como funciona Linux y su entorno operativo GNU. En resumen a esto ultimo: Tratare de justificar mediante un argumento ontologico, la necesidad de hacer un fork a KDE Plasma, para adaptarlo a la dinamica de una IA sistemica.
 
 # 2. Hipótesis central
 
