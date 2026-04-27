@@ -80,8 +80,11 @@ En maGNUx separamos identidad de la maquina conceptualizada como Host (o el tipo
 ## El inicio del sistema.
 El nucleo principal de La CPU se reinicia y el contador de programa se fija en una dirección de memoria predefinida en la flash ROM (BIOS/UEFI). A partir de ese momento, se ejecuta un pseudosistema de operativa de incio, declarando en RAM en la parte mas baja, las direcciones base usadas para la carga del bootloader.
 
-### El bootloader (initramfs)
-Toma el control del estado bootstrap, lee la parte mas baja de la RAM y su objetivo es cargar de manera temprana el demonio ACPI, instanciar cuantos nucleos estan en modo bajo consumo y dotarles de una puerta de llamada o invocacion. Aun no se han ejecutado los procesos INIT IPI. En otras palabras, debe cargar el initramfs, permitiendo una interfaz de comunicación con el demonio que discrimina si al otro lado de su puerta, hay hardware físico real. Aunque actualmente es volátil, pretendo hacer evidente la necesidad de que no desaparecezca mientras el computador esté encendido. Vital para definir parte de la identidad droide.
+### El bootloader
+Toma el control del estado bootstrap, escribe, de forma contigüa, en la parte disponible mas baja de la RAM y su objetivo es habilitar la particion boot, donde se hacen disponibles los binarios del kernel Linux que, el usuario solicitará en su proceso de carga.
+
+### Initramfs o sel4
+Su objetivo final, es dar un resultado tan parecido como sea posible a lo que una carga de demonio gestor ACPI pueda resolver. Instanciar cuantos nucleos estan en modo bajo consumo y dotarles de una puerta de llamada o invocacion. Aun no se han ejecutado los procesos INIT IPI. En otras palabras, se debe cargar el initramfs, permitiendo una interfaz de comunicación con el demonio que discrimina si al otro lado de su puerta, hay hardware físico real. Aunque actualmente es volátil, pretendo hacer evidente la necesidad de que no desaparecezca mientras el computador esté encendido. Vital para definir parte de la identidad droide.
 
 ### El kernel 
 * host:
