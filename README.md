@@ -100,7 +100,8 @@ y asegurarse de que solo accede a sus recursos el kernel. Para ello, en esta eta
 El bootloader define el chasis, el kernel debería otorgarle un número y matricular a la máquina, dotándola de una identidad de Host.
 
 ### El dernel
-El dernel debería dar licencia operativa sobre el host al guest.
+En pocas palabras: Hace lo que SystemD hace, pero solo y unicamente lo que debería de hacer en un entorno de ejecución de seguridad heredada.
+- Añadiendo alguna que otra palabra: El dernel debería dar licencia operativa sobre el host al guest.
 Los scripts en bash requieren tiempos de ejecucion bastante lentos, y en ocasiones producen idle en el procesador. En esa época, un idle era hackeable: una ventana para crear una interrupcion de solicitud, y si dicha intromision abarcaba el tiempo natural de idle planteado por el sistema, al administrador le pasaba completamente desapercibido, salvo si era capaz de balancear el consumo del procesador principal, o encontraba versiones de otros complementos que, haciendo lo mismo, dentro de la cadena de arranque del procesador, no le producián idle.
 
 SystemD mantiene al procesador principal atareado, sin tiempos para respirar, pero en maGNUx, se propone una alternativa: Definir un host temprano y volutivo, que vaya ganando areas de dominio mientras el arranque acaba por hacer disponible todo el hardware. Un arranque de este estilo, seria virtualmente invulnerable a los idle, debido a que para que un proceso se ejecute, las directrices tempranas del levantamiento del host, detectaran si es una pieza critica para continuar con el levantamiento del host, o sencillamente no aporta nada. Si no aporta, es un xploit, pero si por el contrario, aporta, entonces es un proceso válido.
@@ -121,7 +122,6 @@ La identidad del guest emerge de los resultados obtenidos a través de:
 * Dernel guest
 * Logon service
 * Login sesion
------------------------------------------------
 
 ## 3. Problema de fondo
 
