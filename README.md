@@ -7,6 +7,8 @@ Este manifiesto no presenta un sistema terminado. Presenta una **ontología de s
 
 Actualmente, ningún sistema operativo incluye IA sistémica (ni siquiera Kali Linux), y el caso mas relevante de desastre, al intentarlo, es Microsoft. El hardware aún no está preparado para soportar software con IA sistemica, y se necesitan hacks en el software de arranque para poder soportar una seguridad mínima en el arranque y levantamiento del sistema. Estos hacks no son excluyentes, sino necesarios aunque el hardware esté debidamente conceptualizado en arquitectura, para dar soporte sistémico a la IA.
 
+A este nivel, tenemos dos caminos a recorrer: Usar el propio initramfs de linux como autoridad temprana o disponer un sistema operativo de bajo nivel como pueda ser sel4 para el arranque autoridad temprana, quedando siempre Linux en el area de sistemica operativa.
+
 Por todo lo anterior, Puede que esta lectura te parecezca filosóficamente interesante, arquitectónicamente provocadora y técnicamente incompleta.
 
 El tiempo que le dedico a estudiar este tema, pretende madurar:
