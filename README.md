@@ -237,12 +237,13 @@ Sin identidad del arranque, no hay verdadera soberanía del sistema.
 ---
 
 ## 10. xGNUpeD: la capa de identidad
+En pocas palabras: Si no existieran las comunidades Linux, esto no sería necesario.
 
-La función de identidad estructural aparece insinuada en **xGNUpeD**.
+La función de identidad estructural aparece insinuada en **xGNUpeD**: Asocia la maquina a la distribución Linux instalada y a la versión de kernel, permitiendo al Dernel articular autoridad sobre los usuarios.
 
-xGNUpeD no debe entenderse como un nuevo `init`, ni como un clon de `systemd`, ni como una simple base de datos de arranque. Su sentido más profundo es ser una **capa de identidad, legitimación y continuidad**, capaz de dar forma al sistema antes de que este se despliegue como espacio operativo ordinario.
+xGNUpeD no debe entenderse como un nuevo `init`, pues es la finalizacion de la carga del kernel como tal. Si el kernel tuviera una longitud, este acabaría justo aquí. Lo pudieramos llamar el driver del sistema. Hace tareas que, ahora mismo realiza `systemd` y que suponen en la actualidad, un potencial fallo de sistema. Establece el lenguaje base con el que el Dernel se comunicará con el kernel, de forma universal. Es el driver del sistema, pudendo salir nuevas versiones actualizadas a virtud de la comunidad que se encargue de dotar de coherencia a la seguridad sistemica.
 
-En esta formulación, xGNUpeD proyecta cuatro propiedades de identidad:
+En esta formulación, xGNUpeD proyecta cuatro propiedades en la comunicacion con el kernel, que dota al dernel de una identidad emergente:
 
 - **Identidad distributiva**: relación del sistema con su comunidad o distribución.
 - **Identidad conmutativa**: capacidad del sistema para filtrar, asegurar y distinguir su propia naturaleza frente a otras formas de despliegue compatibles.
@@ -254,6 +255,8 @@ Estas propiedades no describen todavía una implementación cerrada. Describen u
 ---
 
 ## 11. Trilobytes: coherencia integral
+En pocas palabras: Hereda tareas que hasta ahora hace SystemD, pero enmarcándolas en un contexto con una filosofía Unix más enfocada.
+Su sentido más profundo es ser una **capa de integración de la identidad, legitimación y continuidad**, capaz de dar forma al login del usuario, antes de que este se despliegue como espacio operativo ordinario.
 
 Toda arquitectura declarativa real necesita una instancia que no solo observe, sino que también verifique, compare, decida y, llegado el caso, niegue.
 
@@ -267,7 +270,9 @@ Más allá del nombre, Trilobytes expresa la necesidad de un principio de **cohe
 - estado efectivo;
 - y materialidad del sistema.
 
-La misión de Trilobytes sería garantizar la veracidad estructural: que lo que el sistema declara ser, lo que debe ser y lo que efectivamente ejecuta no diverjan de forma ilegítima.
+La misión de Trilobytes sería garantizar la veracidad estructural: que lo que el sistema declara ser, lo que debe ser y lo que efectivamente ejecuta no diverjan de forma ilegítima. Como se hace evidente, se carga en el proceso de login en el sistema.
+
+Si tuvieramos que dibujar conceptualmente estos conceptos, serían como tramos en donde el primero de todos es xGNUpeD, el segundo tramo es el Dernel y el tercer tramo es Trilobytes.
 
 ---
 
