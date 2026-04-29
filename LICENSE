@@ -1,0 +1,73 @@
+Repository License Policy
+=========================
+
+Unless otherwise stated in an individual file by an SPDX license identifier or an explicit license notice, all content stored in this repository is licensed under the GNU General Public License version 2 only.
+
+SPDX-License-Identifier: GPL-2.0-only
+
+Scope
+-----
+
+This default license policy applies to all material committed to this repository, including but not limited to:
+
+- source code;
+- build scripts;
+- configuration files;
+- manifests;
+- hardware descriptions;
+- declarative policies;
+- design notes;
+- technical documentation;
+- diagrams represented as text;
+- examples and test material.
+
+Per-file license notices
+------------------------
+
+A file may declare a different license only if it contains an explicit SPDX license identifier or another clear license notice in that file.
+
+For example:
+
+    SPDX-License-Identifier: GPL-2.0-only
+
+or:
+
+    SPDX-License-Identifier: MIT
+
+or:
+
+    SPDX-License-Identifier: BSD-2-Clause
+
+If a file does not contain such a notice, the repository default applies:
+
+    GPL-2.0-only
+
+Recommended source header
+-------------------------
+
+For source files governed by the repository default, use:
+
+    // SPDX-License-Identifier: GPL-2.0-only
+
+For shell scripts, Python files, YAML files, manifests, or declarative policy files, use the comment syntax appropriate for the file type, for example:
+
+    # SPDX-License-Identifier: GPL-2.0-only
+
+Kernel-style syscall boundary note
+----------------------------------
+
+If this repository later contains kernel-like code that exposes a syscall boundary intended to follow the Linux kernel licensing convention, the affected files may explicitly use:
+
+    SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note
+
+This exception is not applied automatically. It applies only to files that explicitly declare it.
+
+License text
+------------
+
+The full text of the GNU General Public License version 2 should be included in this repository, conventionally in one of the following locations:
+
+    COPYING
+    LICENSES/preferred/GPL-2.0
+
+This repository policy is intended to define the default licensing rule for repository contents. It is not a substitute for the full GPL-2.0 license text.
