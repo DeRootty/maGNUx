@@ -1,2 +1,2 @@
 Sistemas Operativos con soberania enraizada
-* [maGNUx.MD](Ir a documento principal)
+* [Ir a documento principal](maGNUx.MD)
