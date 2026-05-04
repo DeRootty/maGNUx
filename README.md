@@ -41,11 +41,11 @@ Desde un punto de vista epistemológico, se tratará de resolver tres problemas 
 * 3 - El manifiesto intenta crear caminos bien definidos que dotan de estructura a las dierferentes "galerias" creadas por la comunidad (las hormigas obreras, que tratamos de entenderlo y abstraerlo).
 
 - HERRAMIENTAS POSTULADAS: El objetivo es, estabilizar una IA sistémica basada en NPU.
-- > Arquitectura CISC x86_64 por su naturaleza en la inicializacion del hardware.
-  > Arranque temprano: initramfs, seL4 o Hurd.
-  > Sistema de cifrado para proteccion de la identidad y enraizado soberano: Se pretende plantear la emulacion de TPM mediante initramfs. En el caso de seL4 o Hurd, se basaran en el hardware TPM o derivados.
-  > Terminal texto basada en TTY compatible con la soberania identitaria.
-  > Terminal grafica o escritorio remoto compatible con la soberania identitaria, basado en KDE Plasma y denominado de forma temporal como KSIA: KDE Simply IA.
+- > - Arquitectura CISC x86_64 por su naturaleza en la inicializacion del hardware.
+  > - Arranque temprano: initramfs, seL4 o Hurd.
+  > - Sistema de cifrado para proteccion de la identidad y enraizado soberano: Se pretende plantear la emulacion de TPM mediante initramfs. En el caso de seL4 o Hurd, se basaran en el hardware TPM o derivados.
+  > - Terminal texto basada en TTY compatible con la soberania identitaria.
+  > - Terminal grafica o escritorio remoto compatible con la soberania identitaria, basado en KDE Plasma y denominado de forma temporal como KSIA: KDE Simply IA.
 
 Desconozco si existe otra arquitectura similar, pero en este caso, las herramientas que postulo como canidatas a un arranque temprano, sería el equivalente al sistena nervioso y la arquitectura principal, el equivalente al corazon de una IA sistémica.
 
