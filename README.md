@@ -1,10 +1,10 @@
-<<<<<<< HEAD
-=======
-Sistemas Operativos con soberania enraizada
-* [Ir a documento principal](maGNUx.md)
->>>>>>> 341a4e329aeb23d482233d45122efb460b060e07
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 341a4e329aeb23d482233d45122efb460b060e07
+# Sistemas Operativos con soberania enraizada
+* Analisis postulares
+* - [Postulado de OpenRC](OpenRC.MD)
+  - [Postulado de Hurd](Hurd.MD)
+  - [Postulado de SystemD](SystemD.MD)
+  - [Postulado de sysVinit](sysVinit.MD)
+  - [Postulado de inicio nativo con initID.MD](initID.MD)
+  - [Postulado de initramfs](initramfs.MD)
+  - [Postulado de seL4](seL4.MD) 
+* [Soberanía maGNUx](maGNUx.md)
