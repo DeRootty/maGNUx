@@ -1,5 +1,5 @@
 # 1. Manifiesto de MaKGNUux (Managed's Kernel GNU LinuX)
-- ADVERTENCIA: Sin darme cuenta, este documento, en su filosofía, se opone a la autoriad de la UE en relación al concepto de identidad digital. Por lo que el motivo original que justifica esta deriva filosofica, queda posiblemente vetado por intereses políticos, los cuales, barruntan ser resistivos a la hora de avanzar tecnologicamente hacia un ecosistema tecnologico basado en la soberania digital, pues no hay otro destino que, promover la IA en los propios dispositivos electronicos de consumo, de forma local y sistémica.
+- ADVERTENCIA: Las diferencias ontologicas entre lo que la UE entienden por identidad digital y lo que aqui se desarrolla para la identidad soberana del hardware, pueden crear incompatibilidades con lo dispuesto, a dia de hoy, por la UE.
 - DEFINICIONES PREVIAS: Debido a que este contenido describe una arquitectura de soberania enraizada, dicha peculiaridad necesita de definiciones para enfocar la ontologia que se sigue. 
 - - 1. I.A. sistémica: A diferencia de las I.A.s por servicio, la I.A. sistémica no se "programa" mediante LLMs, muy por el contrario, es la interfaz que permite hablar directamente con el procesador central en un lenguaje frontera, que no es ni ensamblador ni maquina, es un lenguaje de medio nivel. 
 - - 2. Lenguaje de medio nivel: Lenguajes orientados a procesos, como el lenguage C. 
@@ -40,8 +40,24 @@ Desde un punto de vista epistemológico, se tratará de resolver tres problemas 
 * 2 - El "objeto" actual que define el kernel de Linux, converge en una version que no contempla una arquitectura de sistema global (cual "hormiguero"), pero que deja bien definido los "aposentos reales de la reina".
 * 3 - El manifiesto intenta crear caminos bien definidos que dotan de estructura a las dierferentes "galerias" creadas por la comunidad (las hormigas obreras, que tratamos de entenderlo y abstraerlo).
 
-La herramienta usada para resolver los problemas de seguridad que causa una IA sistémica, será la arquitectura CISC x86_64 por su naturaleza en la inicializacion del hardware, desconozco si existe otra arquitectura similar, pero en este caso, sería el equivalente del corazón de una IA sistémica.
-En otro orden de situacion, a un nivel de usuario, postulare a KDE Plasma para un fork que, tratara de enfocar su plasticidad adaptativa, para dar un camino ontologico a una version LLM, la cual etiquetare como KSIA Plasma (KDE SIMPLY IA) en una version adaptada de escritorio. Para ello me empapare en como funciona KDE de la misma forma que he tenido que empaparme como funciona Linux y su entorno operativo GNU. En resumen a esto ultimo: Tratare de justificar mediante un argumento ontologico, la necesidad de hacer un fork a KDE Plasma, para adaptarlo a la dinamica de una IA sistemica.
+- HERRAMIENTAS POSTULADAS: El objetivo es, estabilizar una IA sistémica basada en NPU.
+- > Arquitectura CISC x86_64 por su naturaleza en la inicializacion del hardware.
+  > Arranque temprano: initramfs, seL4 o Hurd.
+  > Sistema de cifrado para proteccion de la identidad y enraizado soberano: Se pretende plantear la emulacion de TPM mediante initramfs. En el caso de seL4 o Hurd, se basaran en el hardware TPM o derivados.
+  > Terminal texto basada en TTY compatible con la soberania identitaria.
+  > Terminal grafica o escritorio remoto compatible con la soberania identitaria, basado en KDE Plasma y denominado de forma temporal como KSIA: KDE Simply IA.
+
+Desconozco si existe otra arquitectura similar, pero en este caso, las herramientas que postulo como canidatas a un arranque temprano, sería el equivalente al sistena nervioso y la arquitectura principal, el equivalente al corazon de una IA sistémica.
+
+- LINEA DE INVESTIGACION:
+- - Kernel Linux
+  - seL4
+  - Hurd
+  - KDE Plasma
+  - SystemD
+  - OpenRC
+  
+Con las herramientas postuladas y la investigacion en marcha, tratare de llegar al objetivo de entender si hay justificacion para un fork completo en la publicacion de una metadistro unica en su genero.
 
 # 2. Hipótesis central
 
