@@ -51,8 +51,11 @@ Desconozco si existe otra arquitectura similar, pero en este caso, las herramien
 
 - LINEA DE INVESTIGACION:
 - - Kernel Linux
-  - seL4
-  - Hurd
+  - > Arranque temprano
+  - > - initramfs: Como base emulatiba TPM orientada a computacion de escritorio
+  - > - seL4: Como base soberana TPM orientada a droides
+  - > - Hurd: Como base soberana universal TPM orientada a servidores
+    > - **initID**: Como base soberana sistemica por defecto capaz de integrar lo anterior (hipotetico)
   - KDE Plasma
   - SystemD
   - OpenRC
