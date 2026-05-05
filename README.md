@@ -15,3 +15,5 @@
   - 2.7.- [Postulado de seL4](seL4.MD) 
 * 3.- [Soberanía maGNUx](maGNUx.md)
 * 4.- [otras soberanias por agregar](collab.md)
+## A) Introduccion
+{! intro.md !}
