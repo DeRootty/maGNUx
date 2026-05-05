@@ -1,3 +1,4 @@
 > [inicio](README.md)
 
-# Soberania del sistema
+# Soberania sistemica
+* No es lo mismo soberania del sistema que soberania sistemica.
