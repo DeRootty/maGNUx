@@ -1,21 +1,4 @@
 # 1. Manifiesto de MaKGNUux (Managed's Kernel GNU LinuX)
-- ADVERTENCIA: Las diferencias ontologicas entre lo que la UE entienden por identidad digital y lo que aqui se desarrolla para la identidad soberana del hardware, pueden crear incompatibilidades con lo dispuesto, a dia de hoy, por la UE.
-- DEFINICIONES PREVIAS: Debido a que este contenido describe una arquitectura de soberania enraizada, dicha peculiaridad necesita de definiciones para enfocar la ontologia que se sigue. 
-- - 1. I.A. sistémica: A diferencia de las I.A.s por servicio, la I.A. sistémica no se "programa" mediante LLMs, muy por el contrario, es la interfaz que permite hablar directamente con el procesador central en un lenguaje frontera, que no es ni ensamblador ni maquina, es un lenguaje de medio nivel. 
-- - 2. Lenguaje de medio nivel: Lenguajes orientados a procesos, como el lenguage C. 
-- - 3. Soberanía inteligente por host: Hardware especulado y futuro necesario para crear un subsistema capaz de almacenar pesos de entrenamiento, lanzar programas en C para que la IA directamente los compile al lenguaje ensamblador y maquine el balanceado de las cargas del procesador central. En pocas palabras, seria el subsistema que una NPU necesita como driver para poderse comunicar soberanamente con la CPU.
-
-- ENTRANDO EN MATERIA:
-En este manifiesto trata de declarar la filosofía Linux, como un giro tangencial a la filosofía Unix. Formular con claridad una necesidad que Linux, por sí solo, todavía no expresa de forma estructural: la diferencia entre **gobernar el sistema** y **operarlo**. El sistema que mas se aproxima a esto, es SeL4, pero si bien, este sistema se orienta a drones, este planteamiento de Linux, quiere definir los Droides, la diferencia es clara: Un dron puede o no, ser operado en remoto, un droide requiere siempre supervisón humana. Ejemplos: Solo se me ocurren desde la ciencia ficción: R2D2 como asistente en navegacion de los pilotos en ala X. Eso es un Droide, mientras que un dron, sería lo mismo, pero sin necesidad de supervisión humana.
-
-La motivación del manifiesto es la seguridad y la coherencia de un sistema operativo preparado para integrar, en el futuro, formas de decisión más complejas, incluidas lógicas declarativas, automatización avanzada e inteligencia artificial sistémica. Hoy, ni el hardware de propósito general ni la arquitectura clásica del arranque ofrecen una base suficiente para esa integración con soberanía estructural completa. Por ello, maGNUx plantea una transición: apoyarse en Linux como suelo real, mientras se definen nuevas capas de identidad, gobierno, comunicación y operación.
-
-Este manifiesto no presenta un sistema terminado. Presenta una **ontología de sistema**, una arquitectura seguridad mínima en el arranque y levantamiento del sistema. Estos hacks no son excluyentes, sino necesarios aunque el hardware esté debidamente conceptualizado en arquitectura, para dar soporte sistémico a la IA.
-
-A este nivel, tenemos dos caminos a recorrer: Usar el propio initramfs de linux como autoridad temprana o disponer un sistema operativo de bajo nivel como pueda ser sel4 para el arranque autoridad temprana, quedando siempre Linux en el area de sistemica operativa.
-
-Por todo lo anterior, Puede que esta lectura te parecezca filosóficamente interesante, arquitectónicamente provocadora y técnicamente incompleta.
-
 El tiempo que le dedico a estudiar este tema, pretende madurar:
 * 1️⃣ Separación de: control vs operación.
 * * Identidades especificas destinadas al control (hroot + croot + droot = root)
