@@ -1,11 +1,16 @@
-# Sistemas Operativos con soberania enraizada
-> Rooted sovereignty operating systems (en ingles, que parece que queda mas cool)
-* Analisis postulares
-* - [Postulado de OpenRC](OpenRC.MD)
-  - [Postulado de Hurd](Hurd.MD)
-  - [Postulado de SystemD](SystemD.MD)
-  - [Postulado de sysVinit](sysVinit.MD)
-  - [Postulado de inicio nativo con initID.MD](initID.MD)
-  - [Postulado de initramfs](initramfs.MD)
-  - [Postulado de seL4](seL4.MD) 
-* [Soberanía maGNUx](maGNUx.md)
+# Sistemas Operativos GPL con soberania enraizada
+> GPL Operating Systems with Rooted Sovereignty (en ingles, que parece que queda mas cool)
+* A.- [Introduccion](intro.md)
+* A.a.- [Ecosistema GNU](GNUpeD.md)
+* 1.- [Soberania sistemica](sysKing.md)
+* 1.1.- [Entidades sistematizadas](sysEntity.md)
+* 2.- Analisis postulares
+* - 2.1.- [Postulado de OpenRC](OpenRC.MD)
+  - 2.2.- [Postulado de Hurd](Hurd.MD)
+  - 2.3.- [Postulado de SystemD](SystemD.MD)
+  - 2.4.- [Postulado de sysVinit](sysVinit.MD)
+  - 2.5.- [Postulado de inicio nativo con initID.MD](initID.MD)
+  - 2.6.- [Postulado de initramfs](initramfs.MD)
+  - 2.7.- [Postulado de seL4](seL4.MD) 
+* 3.- [Soberanía maGNUx](maGNUx.md)
+* 4.- [otras soberanias por agregar](collab.md)
