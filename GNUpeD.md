@@ -1,3 +1,5 @@
+> [inicio](README.md)
+
 # Un poco de abstraccion, para entender la dinamica linuxera en comunidad:
 La fuerza está en las "piezas" u "objetos" con objetivos bien claros y definidos, sin complegidades innecesarias, que están, conectadas por interfaces simples, bien documentadas y sin ofuscaciones.
 
