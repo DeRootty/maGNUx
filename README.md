@@ -4,7 +4,8 @@
 * A.a.- [Ecosistema GNU](GNUpeD.md)
 * 1.- [Soberania sistemica](sysKing.md)
 * 1.1.- [Entidades sistematizadas](sysEntity.md)
-* 2.- Analisis postulares
+* 2.- [Arranque temprano](initSoonrise.md)
+* 2.1 [Analisis postulares](investigacion.md)
 * - 2.1.- [Postulado de OpenRC](OpenRC.MD)
   - 2.2.- [Postulado de Hurd](Hurd.MD)
   - 2.3.- [Postulado de SystemD](SystemD.MD)
