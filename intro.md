@@ -22,3 +22,5 @@ Este manifiesto no presenta un sistema terminado. Presenta una **ontología de s
 A este nivel, tenemos tres caminos a recorrer: Usar el propio initramfs de linux como autoridad temprana, disponer un sistema operativo de bajo nivel como pueda ser sel4 o investigar sistemas microkernel de proposito general, como pueda ser Hurd, para adaptarlos a un arranque con autoridad temprana, quedando siempre Linux en el area de sistemica operativa.
 
 Por todo lo anterior, Puede que esta lectura te parecezca filosóficamente interesante, arquitectónicamente provocadora y técnicamente incompleta.
+
+> [inicio](README.md)
