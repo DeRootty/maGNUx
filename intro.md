@@ -1,3 +1,6 @@
+> [inicio](README.md)
+
+#Introduccion
 - ADVERTENCIA: Las diferencias ontologicas entre lo que la UE entienden por identidad digital y lo que aqui se desarrolla para la identidad soberana del hardware, pueden crear incompatibilidades con lo dispuesto, a dia de hoy, por la UE.
 - DEFINICIONES PREVIAS: Debido a que este contenido describe una arquitectura de soberania enraizada, dicha peculiaridad necesita de definiciones para enfocar la ontologia que se sigue. 
 - - 1. I.A. sistémica: A diferencia de las I.A.s por servicio, la I.A. sistémica no se "programa" mediante LLMs, muy por el contrario, es la interfaz que permite hablar directamente con el procesador central en un lenguaje frontera, que no es ni ensamblador ni maquina, es un lenguaje de medio nivel. 
