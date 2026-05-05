@@ -212,4 +212,6 @@ Sé quién puede tocarlo.
 Sé en qué estado está.
 Y sé cómo he llegado hasta aquí.
 ```
+*** El sistema esta kernelizado, o lo quer es lo mismo, preparado para lanzar el kernel ***
+
 > [Inicio](README.md)
