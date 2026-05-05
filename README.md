@@ -10,7 +10,7 @@
   - 2.2.- [Postulado de Hurd](Hurd.MD)
   - 2.3.- [Postulado de SystemD](SystemD.MD)
   - 2.4.- [Postulado de sysVinit](sysVinit.MD)
-  - 2.5.- [Postulado de inicio nativo con initID.MD](initID.MD)
+  - 2.5.- [Postulado de inicio nativo con init ID](initID.MD)
   - 2.6.- [Postulado de initramfs](initramfs.MD)
   - 2.7.- [Postulado de seL4](seL4.MD) 
 * 3.- [Soberanía maGNUx](maGNUx.md)
