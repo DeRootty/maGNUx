@@ -7,7 +7,7 @@
 * 2.- [Arranque temprano](initSoonrise.md)
 * 2.1 [Analisis postulares](research.md)
 * - 2.1.- [Postulado de OpenRC](OpenRC.md)
-  - 2.2.- [Postulado de Hurd](Hurd.md)
+  - 2.2.- [Postulado de Hurd](Hurd.MD)
   - 2.3.- [Postulado de SystemD](SystemD.md)
   - 2.4.- [Postulado de sysVinit](sysVinit.md)
   - 2.5.- [Postulado de inicio nativo con init ID](initID.md)
