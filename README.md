@@ -1,4 +1,5 @@
 # Sistemas Operativos con soberania enraizada
+> Rooted sovereignty operating systems (en ingles, que parece que queda mas cool)
 * Analisis postulares
 * - [Postulado de OpenRC](OpenRC.MD)
   - [Postulado de Hurd](Hurd.MD)
