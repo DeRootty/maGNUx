@@ -1,3 +1,4 @@
+> [Inicio](README.md)
 # 1. Manifiesto de MaKGNUux (Managed's Kernel GNU LinuX)
 El tiempo que le dedico a estudiar este tema, pretende madurar:
 * 1️⃣ Separación de: control vs operación.
