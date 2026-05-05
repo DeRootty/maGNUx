@@ -1,3 +1,3 @@
 > [inicio](README.md)
 
-# Entidad del sistema
+# Entidades sistematizadas
