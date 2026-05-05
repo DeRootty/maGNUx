@@ -6,22 +6,24 @@ Durante el arranque temprano de un sistema, antes de que existan drivers complet
 
 **¿Qué hardware físico existe realmente, dónde responde y bajo qué condiciones puede ser usado?**
 
-En esta fase, el sistema aún no dispone de una estructura operativa madura. No existe todavía una capa completa de drivers, no hay una gestión avanzada de dispositivos y muchas de las garantías habituales del sistema operativo aún no están disponibles. Sin embargo, el hardware ya puede estar presente, declarar recursos, responder a rangos de memoria concretos, generar interrupciones o aparecer descrito mediante mecanismos proporcionados por el firmware o la plataforma.
+En esta fase, el sistema aún no dispone de una estructura operativa madura. No existe todavía una capa completa de drivers, no hay una gestión avanzada de dispositivos y muchas de las garantías habituales del sistema operativo aún no están disponibles. Sin embargo, dentro de la dinamica de arranque estructurada, ya tenemos el host definido, que no es mas que una lista descriptiva pasiva del hardware que ya esta presente. VMKZ asocia el host a una declaracion de recursos, establece unas minimas garantias de respuesta a rangos de memoria concretos, genera interrupciones y accede a la relacion de lo que aparece descrito mediante mecanismos proporcionados por el firmware o la plataforma.
 
 El **VMKZ** nace para representar esa fase.
 
-VMKZ puede definirse como el **mapa temprano de zonas vivas de memoria asociadas a hardware real**. Su función es registrar, durante el levantamiento inicial del sistema, qué regiones de memoria, interrupciones y recursos físicos corresponden a dispositivos existentes, declarados o verificados. Al mismo tiempo, actúa como una capa mínima de arbitraje: un semáforo primitivo que controla qué componente del sistema puede tocar cada recurso mientras todavía no existe una infraestructura completa de drivers.
+VMKZ puede definirse como el **mapa temprano de zonas vivas de memoria asociadas a hardware real**. Su función es registrar, durante el levantamiento inicial del sistema, qué regiones de memoria, interrupciones y recursos físicos corresponden a dispositivos existentes, declarados o verificados. Al mismo tiempo, actúa como una capa mínima de arbitraje: un semáforo primitivo que controla qué componente del sistema puede tocar cada recurso mientras todavía no existe una infraestructura completa de drivers. Hace uso del kommu para la firma verificada en el destino definido en la fuente de obtencion de la licencia del sistema.
 
 En otras palabras, VMKZ no es un driver. Tampoco es un sustituto del kernel ni del sistema de gestión de dispositivos. Es una capa previa de conocimiento, registro y control.
 
 Su propósito es permitir que el sistema sepa:
 
 ```text
+Obtengo licencia de garantia de host.
 Este hardware existe.
 Responde en esta zona de memoria.
 Puede generar interrupciones en este vector o línea.
 Su estado actual es conocido.
 Nadie debe escribir aquí sin reservar antes el recurso.
+Estas directrices quedan al servicio de las siguientes etapas del levantamiento del sistema.
 ```
 
 ## Función dentro del arranque temprano
@@ -87,7 +89,7 @@ VMKZ, en cambio, solo responde a preguntas previas:
 ¿En qué fase se encuentra?
 ```
 
-Cuando el driver se carga, puede reclamar formalmente el recurso. En ese momento, VMKZ puede transferir el control o actualizar el estado del recurso:
+Cuando el driver se carga, puede reclamar formalmente el recurso. En ese momento, VMKZ puede transferir el control (caso de compatibilidad de sistema operativo tradicional) o, actualizar el estado del recurso si asi compete o denegar el uso del mismo:
 
 ```text
 Estado anterior: detectado, pre-driver, libre
