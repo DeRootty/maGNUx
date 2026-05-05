@@ -1,3 +1,5 @@
+> [Inicio](README.md)
+
 # VMKZ: Mapa Vivo de Kernelización de Zonas
 
 Durante el arranque temprano de un sistema, antes de que existan drivers completos, servicios de usuario, procesos de escucha avanzados o abstracciones de alto nivel, el sistema necesita responder una pregunta elemental:
@@ -208,3 +210,4 @@ Sé quién puede tocarlo.
 Sé en qué estado está.
 Y sé cómo he llegado hasta aquí.
 ```
+> [Inicio](README.md)
