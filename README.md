@@ -37,6 +37,7 @@
 * 3.2.- [Guest: Soberania delegada](hostroot.md)
 * 3.3.- [Tinetsys: Sistema de comunicaciones avanzado](kommu.md)
 * 3.4.- [Levantamiento del VMDZ](VMDZ.md)
+* 3.4.1.- [Declaracion de un contrato de administracion de sistema](contratcAdmin.md)
 * 4.- [El dernel: la expresion soberana de la identidad comunicativa](dernelZaltID.md)
 * 4.1.- [ZaltID como dernel modelo de maGNUx](maGNUx.md)
 * 4.1.1.- [Trilobytes: El delimitador administrativo que da coherencia a la identidad distributiva](trilobytes.md)
