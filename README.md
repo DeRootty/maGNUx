@@ -1,5 +1,6 @@
 # Sistemas Operativos GPL con soberania enraizada
 > GPL Operating Systems with Rooted Sovereignty (en ingles, que parece que queda mas cool)
+>  **Nota:** El contenido principal, por temas de desarrollo de documentacion, se encuentra en el punto 4.1)
 * A.- [Introduccion](intro.md)
 * A.a.- [Ecosistema GNU](GNUpeD.md)
 * 1.- [Soberania sistemica](sysKing.md)
