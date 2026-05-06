@@ -34,7 +34,7 @@
 * 3.1.3.3.- [Identidad conmutativa](disruPed.md)
 * 3.1.3.4.- [Identidad comunicativa](kommu.md)
 * 3.1.4.- [Levantamiento de la identidad distributiva](distro.md)
-* 3.2.- [Guest: Soberania delegada](hostroot.md)
+* 3.2.- [Guest: Soberania delegada](guestroot.md)
 * 3.3.- [Tinetsys: Sistema de comunicaciones avanzado](kommu.md)
 * 3.4.- [Levantamiento del VMDZ](VMDZ.md)
 * 3.4.1.- [Declaracion de un contrato de administracion de sistema](contratcAdmin.md)
