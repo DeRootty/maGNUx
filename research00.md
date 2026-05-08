@@ -591,33 +591,33 @@ Total de símbolos: **21402**
 
 | Bloque | Archivo | Símbolos |
 |---|---|---:|
-| 0-9 | [CONFIG-0-9.md](CONFIG-0-9.md) | 69 |
-| A | [CONFIG-A.md](CONFIG-A.md) | 1667 |
-| B | [CONFIG-B.md](CONFIG-B.md) | 588 |
-| C | [CONFIG-C.md](CONFIG-C.md) | 1934 |
-| D | [CONFIG-D.md](CONFIG-D.md) | 1361 |
-| E | [CONFIG-E.md](CONFIG-E.md) | 323 |
-| F | [CONFIG-F.md](CONFIG-F.md) | 623 |
-| G | [CONFIG-G.md](CONFIG-G.md) | 451 |
-| H | [CONFIG-H.md](CONFIG-H.md) | 685 |
-| I | [CONFIG-I.md](CONFIG-I.md) | 1252 |
-| J | [CONFIG-J.md](CONFIG-J.md) | 82 |
-| K | [CONFIG-K.md](CONFIG-K.md) | 286 |
-| L | [CONFIG-L.md](CONFIG-L.md) | 395 |
-| M | [CONFIG-M.md](CONFIG-M.md) | 1631 |
-| N | [CONFIG-N.md](CONFIG-N.md) | 941 |
-| O | [CONFIG-O.md](CONFIG-O.md) | 190 |
-| P | [CONFIG-P.md](CONFIG-P.md) | 1724 |
-| Q | [CONFIG-Q.md](CONFIG-Q.md) | 166 |
-| R | [CONFIG-R.md](CONFIG-R.md) | 1040 |
-| S | [CONFIG-S.md](CONFIG-S.md) | 3429 |
-| T | [CONFIG-T.md](CONFIG-T.md) | 667 |
-| U | [CONFIG-U.md](CONFIG-U.md) | 705 |
-| V | [CONFIG-V.md](CONFIG-V.md) | 594 |
-| W | [CONFIG-W.md](CONFIG-W.md) | 160 |
-| X | [CONFIG-X.md](CONFIG-X.md) | 353 |
-| Y | [CONFIG-Y.md](CONFIG-Y.md) | 14 |
-| Z | [CONFIG-Z.md](CONFIG-Z.md) | 72 |
+| 0-9 | [CONFIG-0-9.md](kernel/config_0-9.md) | 69 |
+| A | [CONFIG-A.md](kernel/config_A.md) | 1667 |
+| B | [CONFIG-B.md](kernel/config_B.md) | 588 |
+| C | [CONFIG-C.md](kernel/config_C.md) | 1934 |
+| D | [CONFIG-D.md](kernel/config_D.md) | 1361 |
+| E | [CONFIG-E.md](kernel/config_E.md) | 323 |
+| F | [CONFIG-F.md](kernel/CONFIG-F.md) | 623 |
+| G | [CONFIG-G.md](kernel/CONFIG-G.md) | 451 |
+| H | [CONFIG-H.md](kernel/CONFIG-H.md) | 685 |
+| I | [CONFIG-I.md](kernel/CONFIG-I.md) | 1252 |
+| J | [CONFIG-J.md](kernel/CONFIG-J.md) | 82 |
+| K | [CONFIG-K.md](kernel/CONFIG-K.md) | 286 |
+| L | [CONFIG-L.md](kernel/CONFIG-L.md) | 395 |
+| M | [CONFIG-M.md](kernel/CONFIG-M.md) | 1631 |
+| N | [CONFIG-N.md](kernel/CONFIG-N.md) | 941 |
+| O | [CONFIG-O.md](kernel/CONFIG-O.md) | 190 |
+| P | [CONFIG-P.md](kernel/CONFIG-P.md) | 1724 |
+| Q | [CONFIG-Q.md](kernel/CONFIG-Q.md) | 166 |
+| R | [CONFIG-R.md](kernel/CONFIG-R.md) | 1040 |
+| S | [CONFIG-S.md](kernel/CONFIG-S.md) | 3429 |
+| T | [CONFIG-T.md](kernel/CONFIG-T.md) | 667 |
+| U | [CONFIG-U.md](kernel/CONFIG-U.md) | 705 |
+| V | [CONFIG-V.md](kernel/CONFIG-V.md) | 594 |
+| W | [CONFIG-W.md](kernel/CONFIG-W.md) | 160 |
+| X | [CONFIG-X.md](kernel/CONFIG-X.md) | 353 |
+| Y | [CONFIG-Y.md](kernel/CONFIG-Y.md) | 14 |
+| Z | [CONFIG-Z.md](kernel/CONFIG-Z.md) | 72 |
 
 ## Uso recomendado
 
