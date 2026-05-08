@@ -9,6 +9,9 @@
 
 * Fuente: [ANSI C / ISO C](https://www.iso.org/es/contents/data/standard/08/20/82075.html?utm_source=chatgpt.com)
 
+[WG14 N3220 — Working Draft, C2y / cercano a C23](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n3220.pdf)
+> La propia página de proyectos de WG14 lista C23 = ISO/IEC 9899:2024 y señala N3220, 2024-02-22 como “similar draft”
+
 ---
 
 ## 1. Norma de referencia
