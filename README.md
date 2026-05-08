@@ -70,7 +70,7 @@ Este repositorio no debe leerse como una simple colección de notas, sino como u
 
 | Código | Documento | Función |
 |---|---|---|
-| 3.1.1 | [Levantamiento de sistema tradicional](research.md) | Sitúa los modelos clásicos de init y gestión de servicios. |
+| 3.1.1 | [Levantamiento de sistema tradicional](research00.md) | Sitúa los modelos clásicos de init y gestión de servicios. |
 | 3.1.1.1 | [Postulado de OpenRC](OpenRC.MD) | Analiza OpenRC como init modular y dependencial. |
 | 3.1.1.2 | [Postulado de sysVinit](sysVinit.md) | Analiza el init clásico basado en runlevels. |
 | 3.1.1.3 | [Postulado de runit](runit.md) | Analiza runit como init/supervisor mínimo. |
