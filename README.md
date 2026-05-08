@@ -10,6 +10,7 @@ Aqui podrás ver deplegadas las [instrucciones en ASM](intelASMx86_64.md) de la 
 * 1.- [Soberania sistemica](sysKing.md)
 * 1.1.- [Entidades sistematizadas](sysEntity.md)
 * 1.2.- [Hardware presente vs Hardware futuro](lookingfor.md)
+* 1.3.- [Estandar ISO C23](ISOC23.md)
 * 2.- [Arranque temprano](initSoonrise.md)
 * 2.1.- [Protosistema raiz](systemProt.md)
 * 2.1.1.- [Postulado de Hurd](Hurd.MD)
