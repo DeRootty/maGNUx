@@ -1,3 +1,5 @@
+> [Atras](../research00.md)
+
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque G
 
 Total de símbolos en este bloque: **451**
@@ -457,3 +459,5 @@ Total de símbolos en este bloque: **451**
 | 449 | `CONFIG_GX6605S_TIMER` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 450 | `CONFIG_GXP_TIMER` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 451 | `CONFIG_GXP_WATCHDOG` | Watchdog o temporizador de supervisión para reiniciar/recuperar el sistema ante bloqueo. |
+
+> [Atras](../research00.md)
