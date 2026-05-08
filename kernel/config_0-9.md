@@ -1,3 +1,5 @@
+> [Atras](../research00.md)
+
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque 0-9
 
 Total de símbolos en este bloque: **69**
