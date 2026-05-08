@@ -1,3 +1,5 @@
+> [Atras](../research00.md)
+
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque I
 
 Total de símbolos en este bloque: **1252**
@@ -1258,3 +1260,5 @@ Total de símbolos en este bloque: **1252**
 | 1250 | `CONFIG_IXP4XX_TIMER` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 1251 | `CONFIG_IXP4XX_WATCHDOG` | Watchdog o temporizador de supervisión para reiniciar/recuperar el sistema ante bloqueo. |
 | 1252 | `CONFIG_if` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
+
+> [Atras](../research00.md)
