@@ -7,6 +7,8 @@
 > Propósito: ofrecer un equivalente conceptual a un listado de mnemónicos ISA, pero aplicado al lenguaje C.
 > En C no existen “mnemónicos” como en ensamblador; lo equivalente son sus **palabras clave**, **operadores**, **directivas de preprocesador**, **cabeceras estándar**, **tipos**, **macros** y **funciones de biblioteca estándar**.
 
+* Fuente: [ANSI C / ISO C](https://www.iso.org/es/contents/data/standard/08/20/82075.html?utm_source=chatgpt.com)
+
 ---
 
 ## 1. Norma de referencia
