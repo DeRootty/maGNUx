@@ -1,3 +1,5 @@
+> [Atras](../research00.md)
+
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque L
 
 Total de símbolos en este bloque: **395**
@@ -401,3 +403,5 @@ Total de símbolos en este bloque: **395**
 | 393 | `CONFIG_LZ4_DECOMPRESS` | Compresión/descompresión o algoritmo asociado. |
 | 394 | `CONFIG_LZO_COMPRESS` | Compresión/descompresión o algoritmo asociado. |
 | 395 | `CONFIG_LZO_DECOMPRESS` | Compresión/descompresión o algoritmo asociado. |
+
+> [Atras](../research00.md)
