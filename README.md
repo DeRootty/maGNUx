@@ -1,6 +1,9 @@
 # Sistemas Operativos GPL con soberania enraizada
 > GPL Operating Systems with Rooted Sovereignty (en ingles, que parece que queda mas cool)
 >  **Nota:** El contenido principal, por temas de desarrollo de documentacion, se encuentra en el punto 4.1. Antecedentes: [Notas sobre el autor](notasAut.md).
+Por temas de licencias, la arquitectura demostrada en este desarrollo de soberanía sistémica, sera en base a RISC-V.
+Aqui podrás ver deplegadas las [instrucciones en ASM](intelASMx86_64.md) de la arquitectura X86_64 publicadas por intel.
+
 ## Tabla de contenidos 
 * A.- [Introduccion](intro.md)
 * A.a.- [Ecosistema GNU](GNUpeD.md)
