@@ -1,3 +1,5 @@
+> [Atras](../research00.md)
+
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque F
 
 Total de símbolos en este bloque: **623**
@@ -629,3 +631,5 @@ Total de símbolos en este bloque: **623**
 | 621 | `CONFIG_FXOS8700` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 622 | `CONFIG_FXOS8700_I2C` | Dispositivo, controlador o helper del bus I2C. |
 | 623 | `CONFIG_FXOS8700_SPI` | Dispositivo, controlador o helper del bus SPI. |
+
+> [Atras](../research00.md)
