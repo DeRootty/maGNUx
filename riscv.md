@@ -1,7 +1,9 @@
+>[Inicio](README.md)
+
 # Mnemónicos RISC-V ISA
 Listado de mnemónicos RISC-V organizado por base y extensiones. Incluye instrucciones reales del ISA; no pretende enumerar todas las pseudo-instrucciones del ensamblador GNU/LLVM, porque esas no son instrucciones de máquina sino alias del ensamblador.
 
-Fuentes oficiales: RISC-V Unprivileged ISA Specification y RISC-V Privileged ISA Specification, publicados en la RISC-V Ratified Specifications Library.
+Fuentes oficiales: [RISC-V Unprivileged ISA Specification y RISC-V Privileged ISA Specification, publicados en la RISC-V Ratified Specifications Library](https://docs.riscv.org/reference/isa/v20240411/unpriv/intro.html).
 
 ## Tabla
 | Extensión | Mnemónico | Descripción breve | Referencia oficial |
