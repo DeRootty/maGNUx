@@ -1,5 +1,6 @@
+>[Inicio](README.md)
 # Referencia de instrucciones ASM x86/x86-64 en el Intel SDM
-Fuente: **Intel® 64 and IA-32 Architectures Software Developer’s Manual, Combined Volumes**, Order Number **325462-091US**, March 2026.
+*Fuente: [**Intel® 64 and IA-32 Architectures Software Developer’s Manual, Combined Volumes**, Order Number **325462-091US**, March 2026.](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html?utm_source=chatgpt.com)
 
 Este documento recoge las entradas oficiales del índice de la **Instruction Set Reference** del PDF subido. La columna **Página PDF** usa la numeración absoluta del propio archivo PDF. La columna **Página manual** conserva la referencia interna impresa por Intel, por ejemplo `Vol. 2A 3-1`.
 
