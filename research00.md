@@ -592,11 +592,11 @@ Total de símbolos: **21402**
 | Bloque | Archivo | Símbolos |
 |---|---|---:|
 | 0-9 | [CONFIG-0-9.md](kernel/config_0-9.md) | 69 |
-| A | [CONFIG-A.md](kernel/config_A.md) | 1667 |
-| B | [CONFIG-B.md](kernel/config_B.md) | 588 |
-| C | [CONFIG-C.md](kernel/config_C.md) | 1934 |
-| D | [CONFIG-D.md](kernel/config_D.md) | 1361 |
-| E | [CONFIG-E.md](kernel/config_E.md) | 323 |
+| A | [CONFIG-A.md](kernel/config_a.md) | 1667 |
+| B | [CONFIG-B.md](kernel/config_b.md) | 588 |
+| C | [CONFIG-C.md](kernel/config_c.md) | 1934 |
+| D | [CONFIG-D.md](kernel/config_d.md) | 1361 |
+| E | [CONFIG-E.md](kernel/config_e.md) | 323 |
 | F | [CONFIG-F.md](kernel/CONFIG-F.md) | 623 |
 | G | [CONFIG-G.md](kernel/CONFIG-G.md) | 451 |
 | H | [CONFIG-H.md](kernel/CONFIG-H.md) | 685 |
