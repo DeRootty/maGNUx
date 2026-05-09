@@ -24,6 +24,8 @@ Este repositorio no debe leerse como una simple colección de notas, sino como u
 
 > **Lectura recomendada:** si es la primera vez que llegas al proyecto, empieza por la sección **[Mapa conceptual rápido](#mapa-conceptual-rápido)** y después salta a **[4.1. ZaltID como dernel modelo de maGNUx](maGNUx.md)**.
 
+> **Navegación del repositorio:** el criterio de navegación jerárquica está definido en [NAVIGATION.md](NAVIGATION.md).
+
 ---
 
 ## Tabla de contenidos
@@ -166,7 +168,7 @@ Para estudiar la arquitectura desde el arranque:
 3. [Postulado de seL4](seL4.MD)
 4. [Postulado de Hurd](Hurd.MD)
 5. [Carga del kernel](kernelLoad.md)
-6. [Levantamiento de sistema tradicional](research.md)
+6. [Levantamiento de sistema tradicional](research00.md)
 7. [Postulado de SystemD](SystemD.MD)
 8. [Arranque soberano con xGNUpeD](xGNUpeD.md)
 
