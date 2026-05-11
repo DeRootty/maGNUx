@@ -1,4 +1,4 @@
-> [Atras](../research00.md)
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
 
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque B
 
@@ -597,4 +597,7 @@ Total de símbolos en este bloque: **588**
 | 587 | `CONFIG_BXT_WC_PMIC_OPREGION` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 588 | `CONFIG_BYTCRC_PMIC_OPREGION` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 
-> [Atras](../research00.md)
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

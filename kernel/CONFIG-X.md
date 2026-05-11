@@ -1,3 +1,5 @@
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
+
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque X
 
 Total de símbolos en este bloque: **353**
@@ -359,3 +361,7 @@ Total de símbolos en este bloque: **353**
 | 351 | `CONFIG_XZ_DEC_SPARC` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 352 | `CONFIG_XZ_DEC_TEST` | Prueba interna, selftest o validación de subsistema/driver. |
 | 353 | `CONFIG_XZ_DEC_X86` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

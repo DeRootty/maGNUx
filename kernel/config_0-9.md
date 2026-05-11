@@ -1,4 +1,4 @@
-> [Atras](../research00.md)
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
 
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque 0-9
 
@@ -77,3 +77,7 @@ Total de símbolos en este bloque: **69**
 | 67 | `CONFIG_9P_FSCACHE` | Sistema/protocolo 9P, usado también para compartir ficheros en virtualización. |
 | 68 | `CONFIG_9P_FS_POSIX_ACL` | Sistema/protocolo 9P, usado también para compartir ficheros en virtualización. |
 | 69 | `CONFIG_9P_FS_SECURITY` | Sistema/protocolo 9P, usado también para compartir ficheros en virtualización. |
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

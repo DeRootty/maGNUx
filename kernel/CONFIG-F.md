@@ -1,4 +1,4 @@
-> [Atras](../research00.md)
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
 
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque F
 
@@ -632,4 +632,7 @@ Total de símbolos en este bloque: **623**
 | 622 | `CONFIG_FXOS8700_I2C` | Dispositivo, controlador o helper del bus I2C. |
 | 623 | `CONFIG_FXOS8700_SPI` | Dispositivo, controlador o helper del bus SPI. |
 
-> [Atras](../research00.md)
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

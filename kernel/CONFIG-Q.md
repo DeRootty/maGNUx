@@ -1,3 +1,5 @@
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
+
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque Q
 
 Total de símbolos en este bloque: **166**
@@ -172,3 +174,7 @@ Total de símbolos en este bloque: **166**
 | 164 | `CONFIG_QUOTA_DEBUG` | Depuración, trazas o exposición de datos de diagnóstico. |
 | 165 | `CONFIG_QUOTA_NETLINK_INTERFACE` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 166 | `CONFIG_QUOTA_TREE` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

@@ -1,4 +1,4 @@
-> [Atras](../research00.md)
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
 
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque M
 
@@ -1640,4 +1640,7 @@ Total de símbolos en este bloque: **1631**
 | 1630 | `CONFIG_MYRI10GE` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 1631 | `CONFIG_MYRI10GE_DCA` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 
-> [Atras](../research00.md)
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

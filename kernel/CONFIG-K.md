@@ -1,4 +1,4 @@
-> [Atras](../research00.md)
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
 
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque K
 
@@ -295,4 +295,7 @@ Total de símbolos en este bloque: **286**
 | 285 | `CONFIG_KXSD9_I2C` | Dispositivo, controlador o helper del bus I2C. |
 | 286 | `CONFIG_KXSD9_SPI` | Dispositivo, controlador o helper del bus SPI. |
 
-> [Atras](../research00.md)
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

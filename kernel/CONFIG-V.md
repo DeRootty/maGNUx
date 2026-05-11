@@ -1,3 +1,5 @@
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
+
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque V
 
 Total de símbolos en este bloque: **594**
@@ -600,3 +602,7 @@ Total de símbolos en este bloque: **594**
 | 592 | `CONFIG_VXFS_FS` | Sistema de ficheros o funcionalidad asociada al VFS. |
 | 593 | `CONFIG_VXLAN` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 594 | `CONFIG_VZ89X` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

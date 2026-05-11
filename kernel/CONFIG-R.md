@@ -1,3 +1,5 @@
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
+
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque R
 
 Total de símbolos en este bloque: **1040**
@@ -1046,3 +1048,7 @@ Total de símbolos en este bloque: **1040**
 | 1038 | `CONFIG_RZ_DMAC` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 1039 | `CONFIG_RZ_MTU3` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 1040 | `CONFIG_RZ_MTU3_CNT` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
