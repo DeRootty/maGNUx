@@ -24,7 +24,7 @@ Este repositorio no debe leerse como una simple colección de notas, sino como u
 
 > **Lectura recomendada:** si es la primera vez que llegas al proyecto, empieza por la sección **[Mapa conceptual rápido](#mapa-conceptual-rápido)** y después salta a **[4.1. ZaltID como dernel modelo de maGNUx](maGNUx.md)**.
 
-> **Navegación del repositorio:** el criterio de navegación jerárquica está definido en [NAVIGATION.md](NAVIGATION.md).
+> El criterio de navegación jerárquica está definido en [**Navegación del repositorio**](NAVIGATION.md).
 
 ---
 
