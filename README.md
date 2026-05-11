@@ -19,7 +19,7 @@ Este repositorio no debe leerse como una simple colección de notas, sino como u
 1. **Fundamento filosófico y jurídico-técnico**: soberanía, GNU, GPL, C23 y arquitectura abierta.
 2. **Arranque temprano**: protosistema raíz, initramfs, Hurd, seL4 e init_ID.
 3. **Carga del kernel**: Linux como modelo práctico, inits tradicionales, systemd y transición hacia xGNUpeD.
-4. **Identidad y comunicación**: host, guest, Kommu, Tinetsys, VMKZ y VMDZ.
+4. **Operativa bajo confianza cero**: manifiesto maGNUx, Tinetsys, Guest, VMDZ, TPM y paso de VMKZ a VMDZ.
 5. **Dernel / ZaltID**: núcleo conceptual de maGNUx como propuesta de soberanía comunicativa.
 
 > **Lectura recomendada:** si es la primera vez que llegas al proyecto, empieza por la sección **[Mapa conceptual rápido](#mapa-conceptual-rápido)** y después salta a **[4.1. ZaltID como dernel modelo de maGNUx](maGNUx.md)**.
@@ -104,10 +104,12 @@ Este repositorio no debe leerse como una simple colección de notas, sino como u
 
 | Código | Documento | Función |
 |---|---|---|
-| 3.2 | [Guest: Soberanía delegada](guestroot.md) | Sitúa al usuario/guest como plano delegado de operación. |
-| 3.3 | [Tinetsys: Sistema de comunicaciones avanzado](tinetsys.md) | Propone comunicación avanzada más allá del arranque temprano. |
-| 3.4 | [Levantamiento del VMDZ](VMDZ.md) | Describe el levantamiento del plano delegado/guest. |
-| 3.4.1 | [Declaración de un contrato de administración de sistema](contractAdmin.md) | Formaliza condiciones de validez para administración. |
+| 3.2 | [La filosofía desde la que emerge el sistema en su operativa: Manifiesto maGNUx](maGNUx.md) | Cómo redactar un contrato de sistema basado en la confianza cero. |
+| 3.2.1 | [Tinetsys: Sistema de comunicaciones avanzado](tinetsys.md) | Propone comunicación avanzada más allá del arranque temprano, a puerta cerrada. |
+| 3.2.2 | [Guest: Soberanía delegada](guestroot.md) | Propone una capa administrativa como plano delegado de operación a puerta cerrada. |
+| 3.3 | [El principio de simetría: Motor VMDZ](VMDZ.md) | Describe el giro del plano delegado/guest o puesta en marcha del motor a puerta cerrada. |
+| 3.3.1 | [Principio de compatibilidad: hardware de cifrado](contractAdmin.md) | Describe el papel del TPM. |
+| 3.3.2 | [Bypass VMKZ a VMDZ](bypassKZDZ.md) | Administración del TPM o hardware de cifrado: desde su estado temprano a su estado avanzado. |
 
 ### 4. Dernel, ZaltID y maGNUx
 
@@ -140,7 +142,7 @@ Este repositorio no debe leerse como una simple colección de notas, sino como u
 | **Kernel** | ¿Cómo se expresa la raíz al cargar Linux? | [Carga del kernel](kernelLoad.md), [Linux como kernel modelo](kernelLinux.md) |
 | **Inits tradicionales** | ¿Qué modelos actuales existen para levantar el sistema? | [OpenRC](OpenRC.MD), [sysVinit](sysVinit.md), [runit](runit.md), [dinit](dinit.md), [SystemD](SystemD.MD) |
 | **xGNUpeD** | ¿Cómo se propone gestionar identidad soberana en el levantamiento raíz? | [xGNUpeD](xGNUpeD.md), [Identidad distributiva](distroID.md), [Identidad comunicativa](kommuID.md) |
-| **Guest** | ¿Cómo se delega operación al usuario o entidad orgánica? | [Guest](guestroot.md), [Tinetsys](tinetsys.md), [VMDZ](VMDZ.md), [Contrato Admin](contractAdmin.md) |
+| **Operativa cerrada / confianza cero** | ¿Cómo emerge la operativa del sistema bajo contrato, cierre y delegación controlada? | [Manifiesto maGNUx](maGNUx.md), [Tinetsys](tinetsys.md), [Guest](guestroot.md), [VMDZ](VMDZ.md), [Hardware de cifrado](contractAdmin.md), [Bypass VMKZ a VMDZ](bypassKZDZ.md) |
 | **Dernel / ZaltID** | ¿Cuál es el núcleo conceptual de maGNUx? | [Dernel](dernelZaltID.md), [ZaltID / maGNUx](maGNUx.md) |
 | **Login orgánico** | ¿Cómo se legitima la actividad humana u orgánica? | [Trilobytes](trilobytes.md), [Logon](logon.md), [Login](login.md) |
 
@@ -171,6 +173,12 @@ Para estudiar la arquitectura desde el arranque:
 6. [Levantamiento de sistema tradicional](research00.md)
 7. [Postulado de SystemD](SystemD.MD)
 8. [Arranque soberano con xGNUpeD](xGNUpeD.md)
+9. [Manifiesto maGNUx: operativa bajo confianza cero](maGNUx.md)
+10. [Tinetsys](tinetsys.md)
+11. [Guest: Soberanía delegada](guestroot.md)
+12. [Motor VMDZ](VMDZ.md)
+13. [Hardware de cifrado / TPM](contractAdmin.md)
+14. [Bypass VMKZ a VMDZ](bypassKZDZ.md)
 
 ### Ruta filosófica
 
@@ -180,9 +188,11 @@ Para leer maGNUx como manifiesto conceptual:
 2. [Soberanía sistémica](sysKing.md)
 3. [Entidades sistematizadas](sysEntity.md)
 4. [Host: Soberanía enraizada](hostroot.md)
-5. [Guest: Soberanía delegada](guestroot.md)
-6. [El dernel](dernelZaltID.md)
-7. [ZaltID como dernel modelo de maGNUx](maGNUx.md)
+5. [Manifiesto maGNUx: confianza cero y contrato de sistema](maGNUx.md)
+6. [Guest: Soberanía delegada](guestroot.md)
+7. [El principio de simetría: Motor VMDZ](VMDZ.md)
+8. [El dernel](dernelZaltID.md)
+9. [ZaltID como dernel modelo de maGNUx](maGNUx.md)
 
 ---
 
@@ -191,11 +201,13 @@ Para leer maGNUx como manifiesto conceptual:
 | Término | Lectura sugerida |
 |---|---|
 | **Host** | Identidad de la máquina como entidad material y soberana. |
-| **Guest** | Entidad orgánica o usuaria a la que se delega operación. |
+| **Guest** | Plano administrativo delegado que opera a puerta cerrada bajo condiciones de contrato. |
 | **Kommu** | Comunicación temprana y coherencia inicial del sistema. |
-| **Tinetsys** | Comunicación avanzada en el plano operativo/delegado. |
+| **Tinetsys** | Comunicación avanzada en el plano operativo cerrado/delegado. |
 | **VMKZ** | Levantamiento del plano raíz/host. |
-| **VMDZ** | Levantamiento del plano delegado/guest. |
+| **VMDZ** | Motor del plano delegado/guest: giro operativo desde la simetría y la administración cerrada. |
+| **TPM / hardware de cifrado** | Base material de compatibilidad criptográfica para sostener confianza cero y administración delegada. |
+| **Bypass VMKZ a VMDZ** | Paso administrativo del hardware de cifrado desde estado temprano a estado avanzado. |
 | **xGNUpeD** | Capa propuesta para identidad sistémica en el levantamiento raíz. |
 | **Dernel** | Capa conceptual que hereda parte del papel coordinador del init, pero bajo una teoría de identidad comunicativa. |
 | **ZaltID** | Modelo central del dernel dentro de maGNUx. |
