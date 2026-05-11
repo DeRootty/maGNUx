@@ -1,3 +1,5 @@
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
+
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque Z
 
 Total de símbolos en este bloque: **72**
@@ -78,3 +80,7 @@ Total de símbolos en este bloque: **72**
 | 70 | `CONFIG_ZYNQMP_IPI_MBOX` | Mailbox/interprocesador: comunicación entre CPU, firmware o coprocesadores. |
 | 71 | `CONFIG_ZYNQMP_PM_DOMAINS` | Gestión de energía, dominios de potencia o suspensión. |
 | 72 | `CONFIG_ZYNQMP_POWER` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

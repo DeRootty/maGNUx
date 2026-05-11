@@ -1,4 +1,4 @@
-> [Atras](../research00.md)
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
 
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque L
 
@@ -404,4 +404,7 @@ Total de símbolos en este bloque: **395**
 | 394 | `CONFIG_LZO_COMPRESS` | Compresión/descompresión o algoritmo asociado. |
 | 395 | `CONFIG_LZO_DECOMPRESS` | Compresión/descompresión o algoritmo asociado. |
 
-> [Atras](../research00.md)
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

@@ -1,4 +1,4 @@
-> [Atras](../research00.md)
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
 
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque J
 
@@ -91,4 +91,7 @@ Total de símbolos en este bloque: **82**
 | 81 | `CONFIG_JZ4780_CI20` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 82 | `CONFIG_JZ4780_NEMC` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 
-> [Atras](../research00.md)
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

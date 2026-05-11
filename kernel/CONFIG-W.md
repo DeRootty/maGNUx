@@ -1,3 +1,5 @@
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
+
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque W
 
 Total de símbolos en este bloque: **160**
@@ -166,3 +168,7 @@ Total de símbolos en este bloque: **160**
 | 158 | `CONFIG_WWAN_DEBUGFS` | Depuración, trazas o exposición de datos de diagnóstico. |
 | 159 | `CONFIG_WWAN_HWSIM` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 160 | `CONFIG_WW_MUTEX_SELFTEST` | Prueba interna, selftest o validación de subsistema/driver. |
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

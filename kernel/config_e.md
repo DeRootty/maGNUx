@@ -1,4 +1,4 @@
-> [Atras](../research00.md)
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
 
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque E
 
@@ -332,4 +332,7 @@ Total de símbolos en este bloque: **323**
 | 322 | `CONFIG_EZCHIP_NPS_MANAGEMENT_ENET` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 323 | `CONFIG_EZX_PCAP` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 
-> [Atras](../research00.md)
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

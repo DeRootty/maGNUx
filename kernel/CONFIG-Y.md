@@ -1,3 +1,5 @@
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
+
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque Y
 
 Total de símbolos en este bloque: **14**
@@ -20,3 +22,7 @@ Total de símbolos en este bloque: **14**
 | 12 | `CONFIG_YOGABOOK` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 13 | `CONFIG_YOSEMITE` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 14 | `CONFIG_YT2_1380` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

@@ -1,3 +1,5 @@
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
+
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque P
 
 Total de símbolos en este bloque: **1724**
@@ -1730,3 +1732,7 @@ Total de símbolos en este bloque: **1724**
 | 1722 | `CONFIG_PXA_SHARPSL_DETECT_MACH_ID` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 1723 | `CONFIG_PXA_SHARP_Cxx00` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 1724 | `CONFIG_PXA_SSP` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

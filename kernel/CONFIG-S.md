@@ -1,3 +1,5 @@
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
+
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque S
 
 Total de símbolos en este bloque: **3429**
@@ -3435,3 +3437,7 @@ Total de símbolos en este bloque: **3429**
 | 3427 | `CONFIG_SYS_SUPPORTS_ZBOOT_UART16550` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 3428 | `CONFIG_SYS_SUPPORTS_ZBOOT_UART_PROM` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 3429 | `CONFIG_select` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

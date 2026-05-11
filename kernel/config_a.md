@@ -1,4 +1,4 @@
-> [Atras](../research00.md)
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
 
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque A
 
@@ -1676,4 +1676,7 @@ Total de símbolos en este bloque: **1667**
 | 1666 | `CONFIG_AXS101` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 1667 | `CONFIG_AXS103` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 
-> [Atras](../research00.md)
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

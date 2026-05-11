@@ -1,3 +1,5 @@
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
+
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque N
 
 Total de símbolos en este bloque: **941**
@@ -947,3 +949,7 @@ Total de símbolos en este bloque: **941**
 | 939 | `CONFIG_NXP_TJA11XX_PHY` | Red, driver de red, PHY o funcionalidad de comunicaciones. |
 | 940 | `CONFIG_N_GSM` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 941 | `CONFIG_N_HDLC` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

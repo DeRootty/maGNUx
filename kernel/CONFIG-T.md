@@ -1,3 +1,5 @@
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
+
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque T
 
 Total de símbolos en este bloque: **667**
@@ -673,3 +675,7 @@ Total de símbolos en este bloque: **667**
 | 665 | `CONFIG_TYPEC_WCOVE` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 666 | `CONFIG_TYPEC_WUSB3801` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 667 | `CONFIG_TYPHOON` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

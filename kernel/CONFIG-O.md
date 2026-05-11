@@ -1,3 +1,5 @@
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
+
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque O
 
 Total de símbolos en este bloque: **190**
@@ -196,3 +198,7 @@ Total de símbolos en este bloque: **190**
 | 188 | `CONFIG_OWL_TIMER` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 189 | `CONFIG_OXP_EC` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 190 | `CONFIG_option` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

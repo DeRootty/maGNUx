@@ -1,4 +1,4 @@
-> [Atras](../research00.md)
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
 
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque H
 
@@ -694,4 +694,7 @@ Total de símbolos en este bloque: **685**
 | 684 | `CONFIG_HZ_FIXED` | Frecuencia de ticks del kernel o temporización del scheduler. |
 | 685 | `CONFIG_HZ_PERIODIC` | Frecuencia de ticks del kernel o temporización del scheduler. |
 
-> [Atras](../research00.md)
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

@@ -1,3 +1,5 @@
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)
+
 # Linux 6.18.25 — símbolos `CONFIG_*` — bloque U
 
 Total de símbolos en este bloque: **705**
@@ -711,3 +713,7 @@ Total de símbolos en este bloque: **705**
 | 703 | `CONFIG_UX500_SOC_DB8500` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 704 | `CONFIG_UX500_SOC_ID` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
 | 705 | `CONFIG_U_SERIAL_CONSOLE` | Símbolo de configuración del kernel; su función exacta depende del Kconfig/driver donde esté definido. |
+
+---
+
+> [⬆ Subir al índice CONFIG_*](README.md) · [🏠 Inicio](../README.md)

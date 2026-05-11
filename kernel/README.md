@@ -49,7 +49,6 @@ Cada archivo de este directorio debería comenzar y terminar con:
 Actualmente algunos bloques usan solo:
 
 ```md
-> [Atras](../research00.md)
 ```
 
 Eso permite volver al documento padre, pero no ofrece acceso directo al inicio del repositorio. La corrección segura recomendada es sustituirlo por:
