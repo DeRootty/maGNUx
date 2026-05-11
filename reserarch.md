@@ -1,3 +1,0 @@
-> [inicio](README.md)
-
-# Investigaciones
