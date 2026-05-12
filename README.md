@@ -45,6 +45,7 @@ Este repositorio no debe leerse como una simple colección de notas, sino como u
 | 1.1 | [Entidades sistematizadas](sysEntity.md) | Ordena las entidades que intervienen en la arquitectura. |
 | 1.2 | [Hardware presente vs Hardware futuro](lookingfor.md) | Contrasta lo disponible hoy con el hardware necesario para madurar la propuesta. |
 | 1.3 | [Estándar C23: ISO/IEC 9899:2024](ISOC23.md) | Sitúa C como lenguaje de medio nivel para articular código sistémico. |
+| 1.4 | [Cómo condicionar las capacidades del Kernel](kernelConfigCaps.md) | Explica cómo los `CONFIG_*` condicionan la compilación del kernel y qué capacidades quedan expuestas en runtime. |
 
 ### 2. Arranque temprano
 
