@@ -1,4 +1,4 @@
-> [⬆ Subir a Levantamiento de sistema tradicional](research00.md) · [🏠 Inicio](README.md)
+> [⬆ Subir a Levantamiento de sistema tradicional](../research00.md) · [🏠 Inicio](../README.md)
 
 # Dependencias de `systemd` respecto al kernel Linux
 
@@ -328,4 +328,4 @@ La comparación esperada será interesante porque OpenRC tiende a tener menos ac
 
 ---
 
-> [⬆ Subir a Levantamiento de sistema tradicional](research00.md) · [🏠 Inicio](README.md)
+> [⬆ Subir a Levantamiento de sistema tradicional](../research00.md) · [🏠 Inicio](../README.md)
