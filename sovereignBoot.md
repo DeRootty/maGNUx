@@ -1,14 +1,50 @@
 > [⬆ Subir al índice principal](README.md) · [🏠 Inicio](README.md)
 
-# Del hardware vivo a la utilidad sistémica
+# Arranque soberano: del hardware vivo a la utilidad sistémica
 
-> Kernelización, cerraduras, xGNUpeD y dernelización en el modo soberano de maGNUx.
+> Punto **1.5 — Arranque soberano**. Kernelización, cerraduras, xGNUpeD y dernelización en el modo soberano de maGNUx.
 
-Este documento define una pieza conceptual central dentro de maGNUx: la relación entre arranque temprano, kernel, cerraduras, xGNUpeD, identidades soberanas y dernelización del software.
+Este documento define una pieza conceptual central dentro de maGNUx: la relación entre arranque temprano, kernel, cerraduras, xGNUpeD, identidades soberanas, soberanía de nodos y mallas, y dernelización del software.
 
 La idea principal es que el sistema no debe entenderse únicamente como una secuencia técnica de arranque, sino como una cadena de legitimidad. Cada capa recibe una herencia, la transforma y la entrega a la siguiente.
 
 En maGNUx, el arranque no consiste solo en encender una máquina. Consiste en justificar quién gobierna, qué recursos existen, qué identidad puede abrirlos y qué utilidad sistémica se deriva de esa apertura.
+
+---
+
+## Alcance del punto 1.5
+
+El punto **1.5 — Arranque soberano** se apoya directamente en el punto **1.4 — Cómo condicionar las capacidades del Kernel**.
+
+Si el punto 1.4 explica cómo los símbolos `CONFIG_*` condicionan técnicamente la compilación del kernel, el punto 1.5 explica por qué maGNUx necesita condicionar soberanamente el resultado de esa compilación.
+
+```text
+1.4 = cómo se condiciona técnicamente el kernel
+1.5 = por qué se condiciona soberanamente el kernel
+```
+
+Este apartado justifica las modificaciones o extensiones que maGNUx podría requerir sobre el kernel Linux actual: capacidades soberanas configurables desde `.config`, cerraduras por defecto, llaves de identidad, soberanía de nodos y mallas, xGNUpeD y dernelización.
+
+La proyección técnica futura puede desplegarse en tres modos:
+
+| Modo | Descripción | Gestión disponible |
+|---|---|---|
+| **Kernel compatible** | Linux conserva el modo tradicional, pero incorpora capacidades soberanas configurables. | Compatibilidad y soberanía disponibles desde el arranque, seleccionables por GRUB u otro gestor de arranque. |
+| **Arranque soberano** | El sistema solo arranca bajo el modelo soberano. Todo queda cerrado por defecto y se abre mediante legitimidad. | Solo soberanía: cerraduras, llaves, identidades sistémicas, nodos y mallas. |
+| **Zalty** | Distribución Linux tradicional derivada o inspirada en maGNUx. | Modelo Linux tradicional, adoptando principalmente capacidades comunicativas en modo singularizado. |
+
+Los nombres concretos de futuras opciones `CONFIG_*` quedan abiertos, pero conceptualmente podrían expresar capacidades como:
+
+```text
+CONFIG_MAGNUX_COMPATIBLE_BOOT
+CONFIG_MAGNUX_SOVEREIGN_BOOT
+CONFIG_MAGNUX_COMM_SINGULARITY
+CONFIG_MAGNUX_XGNUPED
+CONFIG_MAGNUX_DERNEL
+CONFIG_MAGNUX_LOCKS
+```
+
+Estos nombres son orientativos. Su función en este documento no es fijar una ABI ni una interfaz definitiva, sino mostrar que maGNUx no propone solo una filosofía de arranque: propone que esa filosofía pueda traducirse en capacidades configurables del kernel.
 
 ---
 
