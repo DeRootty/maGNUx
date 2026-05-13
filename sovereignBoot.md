@@ -22,8 +22,9 @@ En esta etapa, el sistema todavía no opera sobre recursos plenamente gobernable
 arranque temprano
 → declara hardware vivo
 → prepara puntos de anclaje
-→ deja una traza inicial
-→ permite que el kernel tome el relevo
+→ planta semillas por cada elemento declarado
+→ deja una traza inicial basado en nodos semioticos
+→ permite que el kernel tome el relevo, formando una malla
 ```
 
 Los puntos **2.2**, **2.3**, **2.4** y **2.4.1** del proyecto maGNUx describen esta base previa al kernel:
