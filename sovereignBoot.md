@@ -2,6 +2,8 @@
 
 # Del hardware vivo a la utilidad sistémica
 
+> Kernelización, cerraduras, xGNUpeD y dernelización en el modo soberano de maGNUx.
+
 Este documento define una pieza conceptual central dentro de maGNUx: la relación entre arranque temprano, kernel, cerraduras, xGNUpeD, identidades soberanas y dernelización del software.
 
 La idea principal es que el sistema no debe entenderse únicamente como una secuencia técnica de arranque, sino como una cadena de legitimidad. Cada capa recibe una herencia, la transforma y la entrega a la siguiente.
@@ -22,10 +24,12 @@ En esta etapa, el sistema todavía no opera sobre recursos plenamente gobernable
 arranque temprano
 → declara hardware vivo
 → prepara puntos de anclaje
-→ planta semillas por cada elemento declarado
-→ deja una traza inicial basado en nodos semioticos
-→ permite que el kernel tome el relevo, formando una malla
+→ planta una semilla de identidad por cada elemento declarado
+→ deja una traza inicial basada en nodos semióticos
+→ permite que el kernel tome el relevo formando una malla operativa
 ```
+
+En este contexto, una **semilla** no es todavía un recurso administrable, sino una marca inicial de existencia. Un **nodo semiótico** es el signo mínimo que permite reconocer, trazar y heredar esa existencia en capas posteriores. La **malla operativa** aparece cuando esos signos iniciales pueden relacionarse entre sí y sostener el relevo del kernel.
 
 Los puntos **2.2**, **2.3**, **2.4** y **2.4.1** del proyecto maGNUx describen esta base previa al kernel:
 
@@ -77,6 +81,8 @@ Estas interfaces permiten que un init PID 1 tradicional levante el sistema.
 Pero maGNUx propone una lectura más estricta.
 
 El kernel no debería limitarse a dejar interfaces disponibles. En modo soberano, el kernel debe transformar el hardware vivo en cerraduras.
+
+En Linux actual, estas cerraduras no existen todavía como categoría soberana formal. maGNUx las propone como reinterpretación y posible extensión del resultado de la kernelización: allí donde Linux expone interfaces y mecanismos de control, maGNUx propone cerraduras sujetas a identidad, contrato y legitimidad.
 
 ---
 
@@ -163,7 +169,7 @@ La pregunta principal en modo compatibilidad es:
 ¿Qué interfaces del kernel necesita abrir este init para levantar el sistema?
 ```
 
-Aquí los recursos se administran según el modelo Linux existente: permisos sobre archivos, nodos de dispositivo, procesos, usuarios, grupos, capabilities, ACLs, LSM y demás mecanismos tradicionales.
+Aquí los recursos se administran según el modelo Linux existente: permisos sobre archivos, nodos de dispositivo, procesos, usuarios, grupos, capabilities, ACLs, namespaces, cgroups, LSM y otros mecanismos de control, aislamiento o política.
 
 ---
 
@@ -197,17 +203,20 @@ cerradura cerrada → identidad legitimada → llave válida → apertura sobera
 
 ## 6. Soberanía y permisos tradicionales
 
-En Linux tradicional, el acceso se administra principalmente mediante permisos sobre objetos ya representados dentro del sistema:
+En Linux tradicional, el acceso se administra principalmente mediante permisos y políticas sobre objetos ya representados dentro del sistema:
 
 ```text
 archivos
 directorios
 nodos de dispositivo
 particiones
+procesos
 propietarios
 grupos
 ACLs
 capabilities
+namespaces
+cgroups
 políticas LSM
 ```
 
@@ -217,7 +226,7 @@ El acceso soberano gobierna algo más profundo: el hardware vivo que existe detr
 
 ```text
 Linux tradicional:
-¿tiene este proceso permisos sobre este objeto?
+¿tiene este proceso permisos o política suficiente sobre este objeto?
 
 maGNUx:
 ¿tiene esta identidad soberanía legítima para abrir esta cerradura
@@ -229,7 +238,7 @@ Ambos planos confluyen en el modo soberano:
 ```text
 soberanía sobre hardware vivo
 +
-permisos tradicionales sobre objetos del sistema
+permisos, políticas y controles tradicionales sobre objetos del sistema
 =
 operativa soberana
 ```
