@@ -268,14 +268,23 @@ arranque temprano
 → distribución operativa
 ```
 
-Las identidades principales pueden definirse así:
+Las identidades deben separarse en dos planos.
+
+Por un lado están las **identidades sistémicas**, que dan soberanía al nodo:
 
 ```text
 root  → soberanía material temprana
 admin → soberanía administrativa por llave
 comm  → soberanía comunicativa relacional
-user  → soberanía de uso legitimado
 ```
+
+Por otro lado está la identidad de **usuario operativo**, gestionable desde PID 1:
+
+```text
+user → soberanía de uso legitimado
+```
+
+`user` no está al mismo nivel sistémico que `root`, `admin` y `comm`. El usuario opera dentro de la soberanía del nodo; no constituye por sí mismo la identidad sistémica de la máquina.
 
 O en forma más directa:
 
@@ -288,7 +297,79 @@ user disfruta.
 
 ---
 
-## 8. Root: soberanía material temprana
+## 8. Soberanía de nodos y mallas
+
+maGNUx trabaja con soberanía de nodos y mallas.
+
+Un nodo no debe entenderse únicamente como una máquina, un proceso, un usuario o un recurso aislado. Un nodo es una entidad reconocible dentro de una malla de relaciones. Puede representar una máquina, una identidad sistémica, un recurso vivo, una cerradura, una comunicación singularizada o una posición operativa dentro del sistema.
+
+Una malla no es simplemente una red técnica. Es un tejido de relaciones, accesos, legitimidades, trazas y comunicaciones que permite saber quién actúa, desde dónde actúa, bajo qué autoridad y con qué finalidad sistémica.
+
+```text
+nodo
+→ entidad reconocible
+
+malla
+→ relación trazable entre nodos
+
+soberanía
+→ legitimidad para actuar dentro de la malla
+```
+
+En este sentido, maGNUx no se limita a administrar usuarios o permisos. Administra la legitimidad de los nodos dentro de una malla soberana.
+
+Bajo el dominio de maGNUx pueden existir usuarios ordinarios gestionados desde PID 1, sea cual sea el init empleado:
+
+```text
+systemd
+OpenRC
+sysVinit
+runit
+dinit
+init propio
+```
+
+Estos usuarios pertenecen al plano operativo del sistema. Pueden abrir sesiones, solicitar ejecución, consumir recursos, lanzar procesos y disfrutar capacidades legitimadas.
+
+Sin embargo, los usuarios ordinarios no deben confundirse con las identidades sistémicas.
+
+En maGNUx, las identidades sistémicas son:
+
+```text
+root
+admin
+comm
+```
+
+`root`, `admin` y `comm` no son simples cuentas de usuario. Son identidades estructurales mediante las cuales la máquina adquiere posición, autoridad y presencia dentro de las carreteras de la información.
+
+La identidad sistémica permite que la máquina no sea solo un equipo encendido, sino un nodo reconocible dentro de una malla informacional.
+
+```text
+root  → funda la relación con el hardware vivo
+admin → administra cerraduras mediante llaves legítimas
+comm  → singulariza comunicaciones dentro de la malla
+```
+
+El usuario ordinario, en cambio, no constituye por sí mismo la identidad sistémica de la máquina. El usuario disfruta recursos porque su uso ha sido legitimado dentro del contrato operativo, pero no define la soberanía basal del nodo.
+
+Por tanto:
+
+```text
+root, admin y comm identifican sistémicamente la máquina.
+user opera dentro de esa identidad.
+```
+
+O, dicho de forma más directa:
+
+```text
+Las identidades sistémicas dan soberanía al nodo.
+Los usuarios disfrutan recursos bajo esa soberanía.
+```
+
+---
+
+## 9. Root: soberanía material temprana
 
 `root` administra el hardware vivo antes de las cerraduras.
 
@@ -314,7 +395,7 @@ puntos vivos de arranque
 
 ---
 
-## 9. Admin: soberanía administrativa por llave
+## 10. Admin: soberanía administrativa por llave
 
 `admin` administra demostrando que tiene las llaves.
 
@@ -346,7 +427,7 @@ En modo compatibilidad, el administrador opera sobre interfaces heredadas del ke
 
 ---
 
-## 10. Comm: soberanía comunicativa relacional
+## 11. Comm: soberanía comunicativa relacional
 
 `comm` se encarga de singularizar las comunicaciones.
 
@@ -375,7 +456,7 @@ Su papel es evitar que el sistema sea una masa indistinguible de procesos hablan
 
 ---
 
-## 11. User: soberanía de uso legitimado
+## 12. User: soberanía de uso legitimado
 
 `user` disfruta de los recursos porque su disfrute está legitimado.
 
@@ -400,7 +481,7 @@ El usuario no abre el sistema por sí mismo. Disfruta aquello que el sistema le 
 
 ---
 
-## 12. Kernelización del hardware
+## 13. Kernelización del hardware
 
 La kernelización del hardware es el proceso por el cual el kernel toma el hardware vivo declarado por el arranque temprano y lo convierte en recursos kernelizados.
 
@@ -440,7 +521,7 @@ Ahí aparece la dernelización.
 
 ---
 
-## 13. Dernelización del software
+## 14. Dernelización del software
 
 La dernelización es dotar de utilidad a las cerraduras.
 
@@ -499,7 +580,7 @@ Allí donde el kernel protege el acceso al recurso, el dernel interpreta su util
 
 ---
 
-## 14. Relación entre kernel, xGNUpeD y dernel
+## 15. Relación entre kernel, xGNUpeD y dernel
 
 La secuencia conceptual queda así:
 
@@ -539,7 +620,7 @@ La función de cada capa es distinta:
 
 ---
 
-## 15. Modo compatibilidad frente a modo soberano
+## 16. Modo compatibilidad frente a modo soberano
 
 La distinción completa queda así:
 
@@ -569,7 +650,7 @@ En modo soberano, el sistema se levanta porque las cerraduras pueden abrirse leg
 
 ---
 
-## 16. Consecuencia para maGNUx
+## 17. Consecuencia para maGNUx
 
 La consecuencia principal es que maGNUx no debe limitarse a estudiar qué capacidades expone el kernel.
 
@@ -610,7 +691,7 @@ usuario
 
 ---
 
-## 17. Fórmula final
+## 18. Fórmula final
 
 La síntesis conceptual puede expresarse así:
 
