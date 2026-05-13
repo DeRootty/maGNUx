@@ -46,6 +46,7 @@ Este repositorio no debe leerse como una simple colección de notas, sino como u
 | 1.2 | [Hardware presente vs Hardware futuro](lookingfor.md) | Contrasta lo disponible hoy con el hardware necesario para madurar la propuesta. |
 | 1.3 | [Estándar C23: ISO/IEC 9899:2024](ISOC23.md) | Sitúa C como lenguaje de medio nivel para articular código sistémico. |
 | 1.4 | [Cómo condicionar las capacidades del Kernel](kernelConfigCaps.md) | Explica cómo los `CONFIG_*` condicionan la compilación del kernel y qué capacidades quedan expuestas en runtime. |
+| 1.5 | [Arranque soberano: del hardware vivo a la utilidad sistémica](sovereignBoot.md) | Justifica el arranque soberano, las cerraduras, xGNUpeD, nodos, mallas y dernelización como base para futuras capacidades configurables del kernel. |
 
 ### 2. Arranque temprano
 
