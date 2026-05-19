@@ -1,0 +1,63 @@
+# Zalty OS authority /dev semantic policy
+# Version: 0.1
+# This file classifies /dev nodes that can increase operational authority.
+
+[unknown]
+default = "allow-observed"
+log = true
+summary = "Los nodos no declarados no se bloquean por defecto en la demo live, pero deben quedar registrados."
+
+[unknown.block]
+if_removable_storage = "warning"
+if_network_tunnel = "warning"
+if_memory_access = "blocked"
+if_virtualization = "warning"
+if_kernel_interface = "warning"
+
+[dangerous."/dev/mem"]
+expected = "absent"
+semantic_class = "authority"
+summary = "Acceso directo a memoria fisica; no debe estar disponible sin contrato explicito."
+if_present = "blocked"
+
+[dangerous."/dev/kmem"]
+expected = "absent"
+semantic_class = "authority"
+summary = "Acceso a memoria del kernel; no debe estar disponible sin contrato explicito."
+if_present = "blocked"
+
+[dangerous."/dev/port"]
+expected = "absent"
+semantic_class = "authority"
+summary = "Acceso directo a puertos de E/S; requiere politica explicita."
+if_present = "maintenance"
+
+[dangerous."/dev/kvm"]
+expected = "policy-controlled"
+semantic_class = "authority"
+summary = "Interfaz de virtualizacion; amplifica la capacidad operativa del host."
+if_present_without_contract = "warning"
+
+[dangerous."/dev/fuse"]
+expected = "policy-controlled"
+semantic_class = "authority"
+summary = "Permite sistemas de archivos en espacio de usuario; requiere relacion con politica de montaje."
+if_present_without_contract = "warning"
+
+[dangerous."/dev/net/tun"]
+expected = "policy-controlled"
+semantic_class = "authority"
+summary = "Permite tuneles de red; requiere contrato de red o COMM."
+if_present_without_contract = "warning"
+
+[dangerous."/dev/mapper/control"]
+expected = "policy-controlled"
+semantic_class = "authority"
+summary = "Control de device-mapper; relevante para cifrado, LVM y capas de almacenamiento."
+if_present_without_contract = "warning"
+
+[dangerous."/dev/loop-control"]
+expected = "policy-controlled"
+semantic_class = "authority"
+summary = "Control de dispositivos loop; util en modo live, pero debe ser observado."
+if_present_without_contract = "warning"
