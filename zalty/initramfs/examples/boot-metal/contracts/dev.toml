@@ -1,0 +1,41 @@
+# Zalty OS /dev semantic contract
+# Version: 0.1
+# Scope: early initramfs live demonstration
+
+[contract]
+id = "zalty.dev.contract.v0"
+version = "0.1"
+scope = "/dev"
+purpose = "Declarar la correspondencia entre nodos tecnicos de dispositivo y nodos semioticos de arranque."
+
+[principle]
+summary = "/dev muestra que nodos tecnicos existen; /boot/metal declara que significan y bajo que condiciones son legitimos."
+
+[requirements]
+essential_char_devices = true
+storage_identity = true
+dangerous_devices_policy = true
+technical_inventory_required = true
+semantic_report_required = true
+
+[classes]
+essential = "Nodos universales minimos para operacion basica del sistema."
+trust_material = "Nodos que aportan entropia o material de confianza."
+early_communication = "Nodos usados para comunicacion temprana durante el arranque."
+kernel_observation = "Nodos que permiten observar mensajes o estado temprano del kernel."
+storage = "Nodos de bloque que sostienen firmware, metal, rootfs o datos criticos."
+authority = "Nodos capaces de ampliar autoridad operativa o acceso profundo al sistema."
+
+[states]
+ok = "Todos los nodos requeridos corresponden."
+warning = "Hay divergencias no criticas."
+degraded = "El sistema puede continuar, pero no cumple plenamente el contrato."
+maintenance = "Falta o diverge un nodo estructural; se recomienda shell de mantenimiento."
+blocked = "No se puede confiar en el entorno de dispositivos."
+
+[boot_decision]
+ok = "continue"
+warning = "continue-with-report"
+degraded = "continue-with-marker"
+maintenance = "drop-to-shell"
+blocked = "stop"
