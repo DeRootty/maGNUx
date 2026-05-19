@@ -1,0 +1,71 @@
+# Zalty OS storage /dev semantic nodes
+# Version: 0.1
+# UUID values are placeholders for the live demonstration.
+
+[[node]]
+id = "dev.storage.metal"
+kind = "block-device"
+role = "semantic-anchor"
+authority = "ROOT"
+required = true
+semantic_class = "storage"
+summary = "Dispositivo de bloque que contiene o simula la particion soberana semiotica del sistema."
+
+[node.match]
+strategy = "uuid-or-label"
+expected_uuid = "REPLACE-WITH-METAL-UUID"
+expected_label = "METAL"
+expected_fstype = "ext4"
+expected_mountpoint = "/boot/metal"
+
+[node.policy]
+if_missing = "maintenance"
+if_uuid_mismatch = "blocked"
+if_fstype_mismatch = "maintenance"
+if_mount_failed = "blocked"
+if_simulated = "warning"
+
+[[node]]
+id = "dev.storage.rootfs"
+kind = "block-device"
+role = "operative-root"
+authority = "ADMIN"
+required = true
+semantic_class = "storage"
+summary = "Sistema de archivos raiz operativo que sera entregado a ADMIN tras la validacion semiotica."
+
+[node.match]
+strategy = "uuid-or-label"
+expected_uuid = "REPLACE-WITH-ROOTFS-UUID"
+expected_label = "ROOTFS"
+expected_fstype = "ext4"
+expected_mountpoint = "/sysroot"
+
+[node.policy]
+if_missing = "blocked"
+if_uuid_mismatch = "maintenance"
+if_fstype_mismatch = "maintenance"
+if_mount_failed = "blocked"
+if_live_rootfs = "warning"
+
+[[node]]
+id = "dev.storage.boot_efi"
+kind = "block-device"
+role = "firmware-bridge"
+authority = "ROOT"
+required = false
+semantic_class = "storage"
+summary = "Particion de enlace con firmware UEFI; participa en el despertar del sistema, pero no contiene la soberania semiotica."
+
+[node.match]
+strategy = "uuid-or-label"
+expected_uuid = "REPLACE-WITH-EFI-UUID"
+expected_label = "EFI"
+expected_fstype = "vfat"
+expected_mountpoint = "/boot/efi"
+
+[node.policy]
+if_missing = "warning"
+if_uuid_mismatch = "maintenance"
+if_fstype_mismatch = "warning"
+if_mount_failed = "warning"
