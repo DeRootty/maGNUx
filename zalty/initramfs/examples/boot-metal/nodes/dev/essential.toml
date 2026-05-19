@@ -1,0 +1,129 @@
+# Zalty OS essential /dev semantic nodes
+# Version: 0.1
+# These nodes are intended for the first initramfs live demonstration.
+
+[[node]]
+id = "dev.null"
+technical_path = "/dev/null"
+kind = "char-device"
+role = "null-sink"
+authority = "ROOT"
+required = true
+semantic_class = "essential"
+summary = "Sumidero operativo universal; representa la capacidad del sistema de absorber flujo sin producir estado."
+
+[node.device]
+major = 1
+minor = 3
+expected_mode = "0666"
+
+[node.policy]
+if_missing = "blocked"
+if_wrong_type = "blocked"
+if_wrong_major_minor = "maintenance"
+if_wrong_permissions = "warning"
+
+[[node]]
+id = "dev.zero"
+technical_path = "/dev/zero"
+kind = "char-device"
+role = "zero-source"
+authority = "ROOT"
+required = true
+semantic_class = "essential"
+summary = "Fuente infinita de bytes nulos; representa inicializacion determinista de memoria o flujo."
+
+[node.device]
+major = 1
+minor = 5
+expected_mode = "0666"
+
+[node.policy]
+if_missing = "blocked"
+if_wrong_type = "blocked"
+if_wrong_major_minor = "maintenance"
+if_wrong_permissions = "warning"
+
+[[node]]
+id = "dev.random"
+technical_path = "/dev/random"
+kind = "char-device"
+role = "entropy-source-blocking"
+authority = "ROOT"
+required = true
+semantic_class = "trust_material"
+summary = "Fuente de entropia fuerte; representa incertidumbre material usada para confianza criptografica."
+
+[node.device]
+major = 1
+minor = 8
+expected_mode = "0666"
+
+[node.policy]
+if_missing = "blocked"
+if_wrong_type = "blocked"
+if_wrong_major_minor = "maintenance"
+if_wrong_permissions = "warning"
+if_low_entropy = "warning"
+
+[[node]]
+id = "dev.urandom"
+technical_path = "/dev/urandom"
+kind = "char-device"
+role = "entropy-source-nonblocking"
+authority = "ROOT"
+required = true
+semantic_class = "trust_material"
+summary = "Fuente de entropia operativa no bloqueante; sostiene generacion practica de identificadores y claves."
+
+[node.device]
+major = 1
+minor = 9
+expected_mode = "0666"
+
+[node.policy]
+if_missing = "blocked"
+if_wrong_type = "blocked"
+if_wrong_major_minor = "maintenance"
+if_wrong_permissions = "warning"
+
+[[node]]
+id = "dev.console"
+technical_path = "/dev/console"
+kind = "char-device"
+role = "primary-boot-console"
+authority = "ROOT"
+required = true
+semantic_class = "early_communication"
+summary = "Canal primario de comunicacion entre el arranque temprano y el operador o entorno de consola."
+
+[node.device]
+major = 5
+minor = 1
+expected_mode = "0600"
+
+[node.policy]
+if_missing = "maintenance"
+if_wrong_type = "blocked"
+if_wrong_major_minor = "maintenance"
+if_wrong_permissions = "warning"
+
+[[node]]
+id = "dev.kmsg"
+technical_path = "/dev/kmsg"
+kind = "char-device"
+role = "kernel-message-channel"
+authority = "ROOT"
+required = true
+semantic_class = "kernel_observation"
+summary = "Canal de mensajes del kernel; permite observar o registrar eventos tempranos del nucleo."
+
+[node.device]
+major = 1
+minor = 11
+
+[node.policy]
+if_missing = "warning"
+if_wrong_type = "warning"
+if_wrong_major_minor = "warning"
+if_unreadable = "warning"
