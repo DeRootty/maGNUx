@@ -8,12 +8,15 @@ Zalty es la distribución de referencia para explorar la implementación GNU/Lin
 
 - [Generalidades de la distribución](presentacion.md)
 - [Objetivos de Zalty](objetivos_zalty.md)
+- [Emergencia de identidades: root, admin y comm](identidades_zalty.md)
 
 ## Lectura recomendada
 
 Para una primera aproximación, empieza por [Generalidades de la distribución](presentacion.md).
 
 Para entender la función de la capa semiótica y el papel de una IA agente en la buena administración del sistema, continúa con [Objetivos de Zalty](objetivos_zalty.md).
+
+Para estudiar cómo emergen las identidades `root`, `admin` y `comm` desde los nodos técnicos y semióticos, consulta [Emergencia de identidades en Zalty](identidades_zalty.md).
 
 ## Relación con maGNUx
 
