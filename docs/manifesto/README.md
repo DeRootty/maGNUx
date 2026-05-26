@@ -24,7 +24,6 @@ Estos documentos del corpus anterior quedan integrados aquí como desarrollo pro
 | Soberanía sistémica | [sysKing.md](../sysKing.md) |
 | Entidades sistematizadas | [sysEntity.md](../sysEntity.md) |
 | Colaboración y soberanías futuras | [collab.md](../collab.md) |
-| Notas sobre el autor | [notasAut.md](../notasAut.md) |
 
 ## Lugar dentro del proyecto
 
