@@ -6,116 +6,270 @@
 
 ---
 
-## 5.1 Control
+## En pocas palabras
 
-Se entiende por **control** la capacidad de someter el hardware y los fundamentos del sistema a una autoridad estructural máxima.
+maGNUx organiza el sistema en tres estratos persistentes:
 
-Esta autoridad no debe confundirse simplemente con el privilegio tradicional de `root`, sino con una raíz más profunda: la instancia desde la que el sistema obtiene **legitimidad, continuidad y capacidad de persistencia**.
+```text
+ROOT
+→ autoridad estructural, identidad temprana, base material
+
+COMM
+→ mediación, comunicación, coherencia y reconciliación
+
+ADMIN
+→ operación cotidiana, servicios, usuarios, herramientas
+```
+
+La idea central no es añadir una capa decorativa sobre Linux. Es evitar que el sistema confunda:
+
+```text
+fundamento
+```
+
+con:
+
+```text
+operación
+```
+
+En maGNUx, el suelo no desaparece cuando se levanta la casa.
 
 ---
 
-## 5.2 Operación
+## Control y operación
+
+### Control
+
+Se entiende por **control** la capacidad de someter el hardware y los fundamentos del sistema a una autoridad estructural máxima.
+
+Esta autoridad no debe confundirse simplemente con el privilegio tradicional de `root`, sino con una raíz más profunda: la instancia desde la que el sistema obtiene legitimidad, continuidad y capacidad de persistencia.
+
+Control responde a la pregunta:
+
+```text
+¿qué sostiene el sistema y con qué legitimidad?
+```
+
+### Operación
 
 Se entiende por **operación** la materialización útil del sistema para usuarios, servicios, procesos y administradores.
 
 Es el plano donde aparecen:
-- Las tareas cotidianas.
-- Los entornos reconocibles.
-- La experiencia administrativa.
-- La interacción ordinaria.
 
----
+- tareas cotidianas;
+- entornos reconocibles;
+- administración;
+- sesiones;
+- servicios;
+- aplicaciones;
+- interacción ordinaria.
 
-## 5.3 La consecuencia
+Operación responde a la pregunta:
 
-La arquitectura contemporánea suele **mezclar ambos planos**.
+```text
+¿qué puede hacerse con el sistema una vez constituido?
+```
+
+### Consecuencia
+
+La arquitectura contemporánea suele mezclar ambos planos.
 
 maGNUx propone separarlos con claridad para evitar que la operación cotidiana absorba o diluya la autoridad estructural del sistema.
 
 ---
 
-## Los tres estratos
+## Diagrama general
 
-```
+```text
 ┌─────────────────────────────────────┐
-│              ADMIN                  │  ← Operación cotidiana
-│  (shells, servicios, herramientas)  │
+│              ADMIN                  │
+│  operación cotidiana                 │
+│  shells, servicios, apps, sesiones   │
 ├─────────────────────────────────────┤
-│               COMM                  │  ← Mediación y coherencia
-│  (IPC, DBus, Kommu services)        │
+│               COMM                  │
+│  mediación y coherencia              │
+│  IPC, DBus, Kommu, estado, política  │
 ├─────────────────────────────────────┤
-│               ROOT                  │  ← Autoridad estructural
-│  (kernel, initramfs, identidad)     │
+│               ROOT                  │
+│  autoridad estructural               │
+│  kernel, initramfs, identidad        │
 └─────────────────────────────────────┘
 ```
 
----
-
-### 6.1 ROOT
-
-ROOT no es solo el superusuario clásico ni una mera equivalencia con el kernel. Es la **raíz estructural del sistema**: la instancia que garantiza:
-
-- Continuidad.
-- Legitimidad inicial.
-- Base material.
-- Orientación del arranque.
-- Persistencia del fundamento.
-
-#### Dominios de autoridad de ROOT
-
-La autoridad plena exige **concurrencia de cuatro ámbitos**:
-
-| Dominio | Función |
-|---|---|
-| **Servicios primitivos** | Acceso directo a recursos fundamentales del sistema. |
-| **Servicios de comunicación** | Abstracción y gobierno de los canales LAN, INET y otras formas de conectividad. |
-| **Servicios administrativos** | Gestión del tráfico interno, prioridades, colas y políticas. |
-| **Servicios de usuario** | Ejecución subordinada de tareas, aplicaciones y sesiones. |
-
-> La raíz efectiva del sistema solo emerge cuando estos dominios quedan articulados bajo una misma coherencia estructural.
+Estos estratos no deben leerse como etapas desechables. Cada uno permanece vivo durante el ciclo de vida del sistema.
 
 ---
 
-### 6.2 COMM
+## ROOT
 
-COMM no es solo red ni transporte entre procesos. Es el **plano de mediación y coherencia**.
+ROOT no es solo el superusuario clásico ni una equivalencia simple con el kernel.
+
+ROOT es la raíz estructural del sistema: la instancia que garantiza:
+
+- continuidad;
+- legitimidad inicial;
+- base material;
+- orientación del arranque;
+- persistencia del fundamento;
+- autoridad sobre hardware, comunicación y licencia operativa.
+
+ROOT absorbe aquí los conceptos antiguos de:
+
+- protosistema raíz;
+- soberanía enraizada;
+- init_ID;
+- VMKZ;
+- autoridad del Host;
+- hroot, croot y droot.
+
+ROOT es el estrato que permite decir:
+
+```text
+este sistema no solo funciona;
+este sistema tiene fundamento.
+```
+
+---
+
+## COMM
+
+COMM no es solo red ni transporte entre procesos. Es el plano de mediación y coherencia.
 
 En COMM, la comunicación deja de ser mero intercambio y pasa a convertirse en:
-- Coordinación.
-- Validación.
-- Reconciliación de estado.
-- Secuenciación.
-- Gobierno.
+
+- coordinación;
+- validación;
+- reconciliación de estado;
+- secuenciación;
+- gobierno de permisos;
+- comunicación temprana;
+- trazabilidad.
+
+COMM absorbe conceptos antiguos como:
+
+- Kommu;
+- identidad comunicativa;
+- buses de arranque;
+- DBus reinterpretado;
+- IPC bajo contrato;
+- comunicación entre Host y Guest;
+- comunicación entre Dernel y Trilobytes.
+
+COMM es el estrato que permite decir:
+
+```text
+las partes del sistema no solo hablan;
+hablan bajo una coherencia común.
+```
 
 ---
 
-### 6.3 ADMIN
+## ADMIN
 
-ADMIN es el **entorno operativo subordinado**. Es el Linux reconocible: shells, servicios, herramientas, procesos de usuario, espacio administrativo y experiencia funcional cotidiana.
+ADMIN es el entorno operativo subordinado.
 
-> No es irrelevante; al contrario, es el lugar donde el sistema se vuelve útil. Pero **no debe confundirse con el fundamento que lo legitima**.
+Es el Linux reconocible:
+
+- shells;
+- servicios;
+- herramientas;
+- procesos de usuario;
+- administración cotidiana;
+- gestores de paquetes;
+- tiendas de aplicaciones;
+- escritorio;
+- sesión;
+- experiencia funcional.
+
+ADMIN no es irrelevante. Es donde el sistema se vuelve útil.
+
+Pero ADMIN no debe confundirse con el fundamento que lo legitima.
+
+ADMIN absorbe los conceptos antiguos de:
+
+- operación delegada;
+- Guest;
+- VMDZ;
+- sadmin, uadmin y aadmin;
+- servicios de usuario;
+- sesión orgánica;
+- administración de aplicaciones.
+
+ADMIN permite decir:
+
+```text
+el sistema puede usarse,
+pero su uso no agota su soberanía.
+```
+
+---
+
+## Dominios de autoridad
+
+ROOT se expresa mediante dominios de autoridad que después se desarrollan en el bloque de identidad:
+
+| Dominio | Relación | Función |
+|---|---|---|
+| Servicios primitivos | hroot | Hardware, CPU, memoria, dispositivos, materialidad. |
+| Servicios de comunicación | croot | IPC, red, buses, Kommu, comunicación interna. |
+| Servicios operativos | droot | Licencia Dernel, autorización y transición Host/Guest. |
+| Servicios administrativos | admin | Gestión cotidiana bajo contrato. |
+| Servicios de usuario | guest | Sesión, aplicaciones y actividad orgánica. |
+
+La raíz efectiva del sistema emerge cuando estos dominios quedan articulados bajo una misma coherencia estructural.
+
+---
+
+## Secuencia de permanencia
+
+maGNUx no concibe el arranque como una escalera que se tira después de subir.
+
+```text
+ROOT permanece
+  COMM permanece
+    ADMIN opera
+```
+
+El punto crucial es que ADMIN no reemplaza a COMM, y COMM no reemplaza a ROOT.
+
+Cada estrato sostiene al siguiente.
 
 ---
 
 ## Qué sí es y qué no es maGNUx
 
-### ✅ Sí es
+### Sí es
 
 - Una arquitectura conceptual para pensar el gobierno explícito del sistema.
 - Una tentativa de dotar al arranque de identidad y soberanía.
 - Una separación entre fundamento, mediación y operación.
 - Una propuesta transicional apoyada en Linux.
-- Una teoría del sistema orientada a la trazabilidad, la coherencia y la legitimidad del estado.
-- Una gramática emergente para ordenar piezas ya existentes y otras aún por definir.
+- Una teoría del sistema orientada a trazabilidad, coherencia y legitimidad del estado.
+- Una gramática para ordenar piezas existentes y otras aún por definir.
 
-### ❌ No es
+### No es
 
 - Un reemplazo inmediato de Linux.
 - Una implementación terminada.
 - Un sistema operativo clásico ya cerrado.
-- Una negación del valor de `systemd`, `dbus`, namespaces, cgroups o el userland contemporáneo.
+- Una negación del valor de systemd, DBus, namespaces, cgroups o el userland contemporáneo.
 - Una simple secuencia nueva de instrucciones de arranque.
 - Una promesa de invulnerabilidad absoluta.
+
+---
+
+## Criterio de aceptación conceptual
+
+La arquitectura de estratos queda correctamente formulada si permite responder:
+
+1. qué pertenece al fundamento ROOT;
+2. qué pertenece a la mediación COMM;
+3. qué pertenece a la operación ADMIN;
+4. qué permanece vivo tras el arranque;
+5. qué no debe confundirse con root tradicional;
+6. cómo se evita mezclar control y operación;
+7. cómo se prepara la transición hacia identidad, Dernel y Zalty.
 
 ---
 
