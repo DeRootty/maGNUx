@@ -4,25 +4,24 @@
 
 Esta sección abre la lectura técnica de maGNUx. Su función es condensar la hipótesis general en una forma evaluable: qué declara maGNUx, qué problema intenta resolver y qué piezas técnicas necesitaría para madurar.
 
-## Documentos principales
+## Lectura única de propuesta técnica
 
-| Orden | Documento | Archivo |
+| Orden | Documento | Función |
 |---:|---|---|
-| 1 | [maGNUx — Propuesta técnica introductoria](00-resumen-ejecutivo.md) | `00-resumen-ejecutivo.md` |
-| 2 | [Especificación técnica: xGNUpeD](01-xgnuped-spec.md) | `01-xgnuped-spec.md` |
-| 3 | [Especificación técnica: Dernel](02-dernel-spec.md) | `02-dernel-spec.md` |
+| 1 | [maGNUx — Propuesta técnica introductoria](00-resumen-ejecutivo.md) | Absorbe el manifiesto histórico, la confianza cero, el arranque soberano y el marco del primer prototipo. |
+| 2 | [Especificación técnica: xGNUpeD](01-xgnuped-spec.md) | Absorbe la necesidad de identidad temprana, distribución, kernel y cierre del arranque. |
+| 3 | [Especificación técnica: Dernel](02-dernel-spec.md) | Absorbe Dernel/ZaltID, contrato operativo y licencia entre host y guest. |
 
-## Corpus integrado
+## Criterio de absorción
 
-Estos documentos del corpus anterior quedan integrados aquí como desarrollo profundo:
+Los documentos históricos dejan de ser entradas alternativas de lectura. Sus conceptos quedan refundidos en esta secuencia:
 
-| Tema | Documento |
-|---|---|
-| Manifiesto histórico y confianza cero | [maGNUx.md](../maGNUx.md) |
-| Dernel / ZaltID | [dernelZaltID.md](../dernelZaltID.md) |
-| Contrato de sistema operativo | [contractOS.md](../contractOS.md) |
-| Capacidades configurables del kernel | [kernelConfigCaps.md](../kernelConfigCaps.md) |
-| Arranque soberano | [sovereignBoot.md](../sovereignBoot.md) |
+```text
+problema general
+→ identidad temprana
+→ licencia operativa
+→ prototipo verificable
+```
 
 ## Lugar dentro del proyecto
 
