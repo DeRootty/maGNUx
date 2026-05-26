@@ -6,39 +6,27 @@ Esta sección define xGNUpeD, Trilobytes, Dernel, Host/Guest y los dominios de a
 
 La identidad es el punto donde maGNUx deja de ser solo una teoría de arranque y empieza a formular quién puede actuar, bajo qué autoridad, con qué contrato y en qué dominio.
 
-## Documentos principales
+## Lectura única de identidad
 
-| Orden | Documento | Archivo |
+| Orden | Documento | Función |
 |---:|---|---|
-| 1 | [07 — xGNUpeD: la capa de identidad](07-xgnuped.md) | `07-xgnuped.md` |
-| 2 | [08 — Trilobytes: coherencia integral](08-trilobytes.md) | `08-trilobytes.md` |
-| 3 | [09 — Dernel: licencia operativa](09-dernel.md) | `09-dernel.md` |
-| 4 | [10 — Dinámica de identidades: Host y Guest](10-host-guest.md) | `10-host-guest.md` |
-| 5 | [11 — Root y los dominios de autoridad](11-root-dominios.md) | `11-root-dominios.md` |
+| 1 | [07 — xGNUpeD: la capa de identidad](07-xgnuped.md) | Absorbe identidad distributiva, asociativa, conmutativa y comunicativa. |
+| 2 | [08 — Trilobytes: coherencia integral](08-trilobytes.md) | Absorbe Trilobytes, Logon y Login como proceso coherente de legitimación orgánica. |
+| 3 | [09 — Dernel: licencia operativa](09-dernel.md) | Absorbe Dernel/ZaltID y la idea de licencia operativa entre host y guest. |
+| 4 | [10 — Dinámica de identidades: Host y Guest](10-host-guest.md) | Absorbe Host, Guest, VMKZ, VMDZ y plano delegado. |
+| 5 | [11 — Root y los dominios de autoridad](11-root-dominios.md) | Absorbe init_ID, contrato administrativo, autoridad raíz y dominios de ejecución. |
 
-## Corpus integrado
+## Criterio de absorción
 
-Estos documentos del corpus anterior quedan integrados aquí como desarrollo profundo:
+Los documentos históricos sobre identidad dejan de ser rutas alternativas. Sus conceptos quedan refundidos en esta secuencia:
 
-| Tema | Documento |
-|---|---|
-| xGNUpeD histórico | [xGNUpeD.md](../xGNUpeD.md) |
-| Identidad distributiva | [distroID.md](../distroID.md) |
-| Levantamiento de identidad distributiva | [distro.md](../distro.md) |
-| Identidad asociativa | [relonIO.md](../relonIO.md) |
-| Identidad conmutativa | [disruPed.md](../disruPed.md) |
-| Identidad comunicativa | [kommuID.md](../kommuID.md) |
-| Dernel / ZaltID | [dernelZaltID.md](../dernelZaltID.md) |
-| ZaltID como dernel modelo | [maGNUx.md](../maGNUx.md) |
-| Trilobytes histórico | [trilobytes.md](../trilobytes.md) |
-| Logon | [logon.md](../logon.md) |
-| Login | [login.md](../login.md) |
-| Host root | [hostroot.md](../hostroot.md) |
-| Guest root | [guestroot.md](../guestroot.md) |
-| VMKZ | [VMKZ.md](../VMKZ.md) |
-| VMDZ | [VMDZ.md](../VMDZ.md) |
-| Hardware de cifrado / TPM | [contractAdmin.md](../contractAdmin.md) |
-| Bypass VMKZ a VMDZ | [bypassKZDZ.md](../bypassKZDZ.md) |
+```text
+xGNUpeD
+→ Trilobytes
+→ Dernel
+→ Host / Guest
+→ Root y dominios de autoridad
+```
 
 ## Lugar dentro del proyecto
 
