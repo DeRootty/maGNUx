@@ -1,133 +1,343 @@
-# Especificación técnica: xGNUpeD
+# Especificación técnica: xGNUpeD / HostID
 
 > [⬆ Subir a sección](README.md) · [📚 Índice docs](../README.md) · [🏠 Inicio](../../README.md)
 
-**Estado:** Borrador inicial  
-**Capa:** ROOT (finalización del kernel)  
-**Precedencia:** después del kernel, antes del Dernel  
+**Estado:** Borrador técnico v0.2  
+**Capa:** ROOT  
+**Precedencia:** después del kernel/initramfs, antes del Dernel  
+**Implementación inicial:** binario o módulo de usuario temprano en initramfs  
 
 ---
 
-## Qué es
+## En pocas palabras
 
-xGNUpeD es el **driver del sistema**: la última etapa de la carga del kernel antes de que comience cualquier actividad del espacio operativo.
+xGNUpeD es la capa que declara identidad temprana del sistema.
 
-No es un nuevo `init`. Es la instancia que permite al kernel **reconocerse a sí mismo** y comunicar esa identidad al Dernel en un lenguaje base universal.
+En el prototipo v0.1, esa función se concreta como **HostID**:
 
----
-
-## Responsabilidades
-
-1. Asociar la máquina a la distribución instalada y a la versión de kernel.
-2. Generar y persistir la **identidad de Host** en una región de memoria protegida.
-3. Establecer el **lenguaje base** de comunicación Dernel ↔ kernel.
-4. Articular las cuatro propiedades de identidad (ver abajo).
-
-## Fuera de responsabilidad
-
-- No gestiona servicios.
-- No monta sistemas de ficheros de usuario.
-- No ejecuta ningún proceso del espacio de usuario.
-
----
-
-## Las cuatro propiedades de identidad
-
-### P1 — Identidad distributiva
-El sistema registra su linaje: distribución, versión de kernel, hash de instalación.
-
-```c
-typedef struct {
-    char distro_id[64];       // e.g. "maGNUx-base"
-    char kernel_version[32];  // e.g. "6.x.x-magnux"
-    uint8_t install_hash[32]; // SHA-256 de la instalación base
-} distributive_id_t;
+```text
+HostID
+→ representación mínima y verificable de la identidad del Host
+generada o leída durante initramfs
+antes de entregar control al sistema raíz ordinario.
 ```
 
-### P2 — Identidad conmutativa
-El sistema puede distinguir su propia naturaleza frente a despliegues compatibles (VM, container, bare metal).
+La especificación no intenta cerrar todo xGNUpeD. Define el subconjunto mínimo que puede probarse ahora.
+
+---
+
+## Objetivo técnico
+
+El objetivo es producir una estructura de identidad capaz de responder:
+
+1. qué Host está arrancando;
+2. qué kernel lo sostiene;
+3. qué distribución o linaje lo interpreta;
+4. en qué contexto arranca;
+5. qué política mínima se aplica;
+6. qué eventos tempranos se registran;
+7. qué integridad puede verificarse antes de continuar.
+
+---
+
+## No objetivos
+
+xGNUpeD / HostID v0.1 no debe:
+
+- gestionar servicios;
+- reemplazar init;
+- montar el sistema raíz final por sí solo;
+- autenticar usuarios;
+- implementar Trilobytes;
+- modificar el kernel;
+- prometer seguridad criptográfica completa;
+- requerir hardware especializado.
+
+---
+
+## Posición en el arranque
+
+```text
+firmware
+  ↓
+bootloader
+  ↓
+kernel
+  ↓
+initramfs
+  ↓
+xGNUpeD / HostID
+  ↓
+boot-validator
+  ↓
+Dernel policy
+  ↓
+switch_root / pivot_root
+```
+
+---
+
+## Modelo de identidad
+
+La identidad xGNUpeD se compone de cuatro propiedades, ya definidas conceptualmente en `docs/identidad/07-xgnuped.md`.
+
+Aquí se expresan como requisitos técnicos.
+
+| Propiedad | Requisito técnico mínimo |
+|---|---|
+| Identidad distributiva | Registrar distribución, kernel, build o linaje base. |
+| Identidad asociativa | Registrar relación con comunidad, repositorio, perfil o actualización. |
+| Identidad conmutativa | Detectar contexto: bare metal, VM, contenedor, modo rescate o desconocido. |
+| Identidad comunicativa | Emitir eventos tempranos estructurados y verificables. |
+
+---
+
+## Estructuras de datos propuestas
+
+### Contexto del Host
 
 ```c
 typedef enum {
     HOST_BARE_METAL = 0,
     HOST_VM         = 1,
     HOST_CONTAINER  = 2,
+    HOST_RESCUE     = 3,
     HOST_UNKNOWN    = 255
 } host_context_t;
 ```
 
-### P3 — Identidad asociativa
-Registro de contribuciones y actualizaciones, manteniendo coherencia estructural.
+### Identidad distributiva
 
 ```c
 typedef struct {
-    uint32_t update_seq;      // secuencia de actualizaciones
-    uint8_t  community_sig[64]; // firma de la comunidad/distribución
+    char distro_id[64];
+    char distro_version[64];
+    char kernel_version[64];
+    char machine_id[64];
+    unsigned char install_hash[32];
+} distributive_id_t;
+```
+
+### Identidad asociativa
+
+```c
+typedef struct {
+    char profile_id[64];
+    char repository_id[64];
+    unsigned int update_seq;
+    unsigned char community_sig[64];
 } associative_id_t;
 ```
 
-### P4 — Identidad comunicativa
-Log estructurado y auditable desde la primera instrucción del arranque.
+### Evento temprano
 
 ```c
+typedef enum {
+    BOOT_EVENT_INFO    = 0,
+    BOOT_EVENT_WARN    = 1,
+    BOOT_EVENT_ERROR   = 2,
+    BOOT_EVENT_DENY    = 3,
+    BOOT_EVENT_ACCEPT  = 4
+} boot_event_type_t;
+
 typedef struct {
-    uint64_t timestamp_ns;
-    uint8_t  stage;           // 0=pre-init, 1=kernel, 2=xgnuped, 3=dernel
-    uint8_t  event_type;
-    char     message[128];
+    unsigned long long timestamp_ns;
+    unsigned char stage;
+    boot_event_type_t type;
+    char component[32];
+    char message[160];
 } boot_event_t;
 ```
 
----
-
-## Estructura de datos: host_identity_t
+### Identidad completa del Host
 
 ```c
+#define XGNUPED_MAGIC 0x474E5558u /* GNUX */
+#define XGNUPED_VERSION 1
+#define XGNUPED_BOOT_LOG_SIZE 256
+
 typedef struct {
-    uint32_t         magic;           // 0x474E5558 ("GNUX")
-    uint32_t         version;         // versión de la estructura
+    unsigned int magic;
+    unsigned int version;
     distributive_id_t distributive;
-    host_context_t   context;
     associative_id_t associative;
-    boot_event_t     boot_log[256];   // ring buffer de arranque
-    uint32_t         boot_log_idx;
-    uint8_t          checksum[32];    // integridad de la estructura
+    host_context_t context;
+    boot_event_t boot_log[XGNUPED_BOOT_LOG_SIZE];
+    unsigned int boot_log_idx;
+    unsigned char checksum[32];
 } host_identity_t;
 ```
 
-Esta estructura se persiste en una **región de memoria reservada** durante todo el ciclo de vida del sistema.
+---
+
+## Fuentes de datos v0.1
+
+En initramfs, xGNUpeD / HostID puede obtener información desde:
+
+| Dato | Fuente tentativa |
+|---|---|
+| Kernel | `/proc/version`, `uname`, cmdline. |
+| Distro | `/etc/os-release` si está disponible en initramfs o declaración en `/boot/metal`. |
+| Máquina | `/etc/machine-id`, DMI, fallback generado. |
+| Contexto VM | `/sys/class/dmi/id/*`, CPUID, heurísticas simples. |
+| Política | `scripts/policy.conf` o futuro `/boot/metal/policy.toml`. |
+| Eventos | reloj monotónico, secuencia interna, early-comm. |
+
+La especificación debe permitir fallback: si un dato no existe, se declara como `unknown`, no se inventa.
 
 ---
 
-## Interfaz con el Dernel
+## Salidas esperadas
 
-xGNUpeD expone al Dernel una interfaz mínima:
+El prototipo debe producir, como mínimo:
+
+```text
+/run/maGNUx/host-id
+/run/maGNUx/boot-events.log
+/run/maGNUx/host-identity.toml
+```
+
+En fases tempranas, si `/run/maGNUx` aún no existe, puede usarse un destino provisional:
+
+```text
+/dev/shm/maGNUx/host-id
+/tmp/maGNUx/host-id
+```
+
+pero el objetivo de Zalty debe ser `/run/maGNUx`.
+
+---
+
+## Formato TOML mínimo
+
+```toml
+[host]
+id = "unknown-or-generated"
+context = "bare-metal"
+kernel = "6.x"
+distro = "zalty"
+policy = "default"
+
+[identity]
+distributive = true
+associative = true
+commutative = true
+communicative = true
+
+[status]
+valid = true
+checksum = "sha256:..."
+```
+
+---
+
+## Interfaz C mínima
 
 ```c
-// Obtener la identidad del host (solo lectura desde el Dernel)
-const host_identity_t* xgnuped_get_identity(void);
-
-// Verificar que la identidad es válida y no ha sido alterada
-int xgnuped_verify_integrity(void);
-
-// Registrar un evento de arranque
-void xgnuped_log_event(uint8_t stage, uint8_t type, const char* msg);
+int xgnuped_init(host_identity_t *out);
+int xgnuped_detect_context(host_identity_t *id);
+int xgnuped_load_distributive(host_identity_t *id);
+int xgnuped_load_associative(host_identity_t *id);
+int xgnuped_log_event(host_identity_t *id, boot_event_type_t type, const char *component, const char *message);
+int xgnuped_calculate_checksum(host_identity_t *id);
+int xgnuped_verify_integrity(const host_identity_t *id);
+int xgnuped_write_report(const host_identity_t *id, const char *path);
 ```
 
 ---
 
-## Integración en initramfs (prototipo v0.1)
+## Códigos de retorno
 
-En el prototipo, xGNUpeD se implementa como un binario estático en C ejecutado desde el `init` de initramfs, **antes** de cualquier montaje de sistema de ficheros de usuario.
+| Código | Significado |
+|---:|---|
+| `0` | Identidad generada y verificada. |
+| `1` | Identidad generada con campos desconocidos. |
+| `2` | Fallo de integridad no fatal. |
+| `10` | No se pudo crear salida. |
+| `20` | Política incompatible. |
+| `30` | Fallo fatal: no continuar. |
 
+---
+
+## Integración con boot-validator
+
+HostID no decide por sí solo si el sistema continúa. Entrega datos al validador.
+
+```text
+xGNUpeD / HostID
+→ declara identidad
+
+boot-validator
+→ evalúa continuidad
+
+Dernel policy
+→ autoriza operación inicial
 ```
-init
-  └── exec /sbin/xgnuped-init
-        ├── detecta contexto (bare metal / VM)
-        ├── genera host_identity_t
-        ├── la escribe en /dev/shm/host-identity (temporal)
-        └── retorna control al init con código de estado
+
+El validador debe poder leer:
+
+- `host_identity_t`;
+- reporte TOML;
+- eventos tempranos;
+- estado de integridad.
+
+---
+
+## Integración con Dernel
+
+Dernel recibe identidad de Host como precondición.
+
+```c
+int dernel_runtime_init(const host_identity_t *host_id);
 ```
+
+Dernel no debe iniciar si:
+
+- `magic` no coincide;
+- `version` no es compatible;
+- `checksum` falla de forma fatal;
+- la política exige un contexto distinto;
+- el estado del Host se marca como no válido.
+
+---
+
+## Criterios de aceptación v0.1
+
+La especificación xGNUpeD / HostID se considera implementable si el prototipo puede:
+
+1. ejecutarse desde initramfs;
+2. generar una estructura `host_identity_t`;
+3. detectar al menos `HOST_VM` y `HOST_UNKNOWN`;
+4. registrar kernel y distro si están disponibles;
+5. registrar eventos tempranos;
+6. escribir un reporte legible;
+7. calcular una suma de integridad;
+8. devolver códigos de estado claros;
+9. alimentar al boot-validator;
+10. alimentar al Dernel policy.
+
+---
+
+## Criterios de rechazo
+
+El prototipo debe fallar o degradar si:
+
+- no puede escribir ningún estado;
+- la política exige identidad completa y faltan campos críticos;
+- se detecta manipulación de la estructura;
+- el contexto detectado contradice la política;
+- la secuencia de arranque no permite continuidad.
+
+---
+
+## Relación con documentos conceptuales
+
+| Documento | Relación |
+|---|---|
+| `docs/identidad/07-xgnuped.md` | Define el sentido conceptual de xGNUpeD. |
+| `docs/arquitectura/04-inicio-sistema.md` | Sitúa xGNUpeD en el arranque temprano. |
+| `docs/arquitectura/05-bus-arranque.md` | Explica cómo comunica eventos tempranos. |
+| `docs/propuesta-tecnica/02-dernel-spec.md` | Consume la identidad generada. |
 
 ---
 
