@@ -1,8 +1,8 @@
-# maGNUx — propuesta de navegación final
+# maGNUx
 
-maGNUx es una arquitectura conceptual para el gobierno explícito del sistema operativo: identidad, autoridad, contrato y arranque temprano.
+maGNUx es una arquitectura conceptual para el gobierno explícito del sistema operativo: identidad, autoridad, contrato, soberanía sistémica y arranque temprano.
 
-Esta maqueta integra dos planos:
+Esta rama refunde la navegación nueva con el corpus documental anterior para dejar una sola lectura principal.
 
 ```text
 maGNUx
@@ -12,35 +12,33 @@ Zalty
 → distribución GNU/Linux experimental que ensaya maGNUx sobre Linux real
 ```
 
-## Cómo evaluar esta maqueta
+## Lectura única recomendada
 
-Abre este archivo en local y sigue la ruta recomendada. Todos los documentos principales tienen enlaces relativos para subir de nivel, volver al índice documental y regresar al inicio.
+La lectura principal del repositorio empieza aquí y continúa en `docs/`:
 
-## Estructura propuesta
+1. [Documentación maGNUx](docs/README.md)
+2. [Resumen ejecutivo](docs/propuesta-tecnica/00-resumen-ejecutivo.md)
+3. [Manifiesto](docs/manifesto/01-manifiesto.md)
+4. [Estratos de arquitectura](docs/arquitectura/03-estratos.md)
+5. [Inicio del sistema](docs/arquitectura/04-inicio-sistema.md)
+6. [xGNUpeD](docs/identidad/07-xgnuped.md)
+7. [Dernel](docs/identidad/09-dernel.md)
+8. [Zalty](zalty/readme.md)
+9. [Initramfs de Zalty](zalty/initramfs/README.md)
+10. [Prototipo HostID v0.1](zalty/initramfs/prototipo-hostid-v0.1/README.md)
 
-| Carpeta | Función |
-|---|---|
-| [`docs/`](docs/README.md) | Núcleo documental de maGNUx. |
-| [`docs/propuesta-tecnica/`](docs/propuesta-tecnica/README.md) | Resumen ejecutivo y especificaciones iniciales. |
-| [`docs/manifesto/`](docs/manifesto/README.md) | Manifiesto e hipótesis central. |
-| [`docs/arquitectura/`](docs/arquitectura/README.md) | Estratos, inicio, bus de arranque y capas POSIX. |
-| [`docs/identidad/`](docs/identidad/README.md) | xGNUpeD, Trilobytes, Dernel, Host/Guest y dominios raíz. |
-| [`docs/filosofia/`](docs/filosofia/README.md) | Filosofía Unix/GNU, hormiguero, hardware y maduración. |
-| [`zalty/`](zalty/readme.md) | Implementación GNU/Linux experimental. |
-| [`zalty/initramfs/`](zalty/initramfs/README.md) | Laboratorio de initramfs y arranque temprano. |
-| [`docs/legacy/`](docs/legacy/README.md) | Zona reservada para documentos antiguos o corpus extendido. |
+## Navegación por planos
 
-## Ruta corta de lectura
-
-1. [Resumen ejecutivo](docs/propuesta-tecnica/00-resumen-ejecutivo.md)
-2. [Manifiesto](docs/manifesto/01-manifiesto.md)
-3. [Estratos de arquitectura](docs/arquitectura/03-estratos.md)
-4. [Inicio del sistema](docs/arquitectura/04-inicio-sistema.md)
-5. [xGNUpeD](docs/identidad/07-xgnuped.md)
-6. [Dernel](docs/identidad/09-dernel.md)
-7. [Zalty](zalty/readme.md)
-8. [Initramfs de Zalty](zalty/initramfs/README.md)
-9. [Prototipo HostID v0.1](zalty/initramfs/prototipo-hostid-v0.1/README.md)
+| Plano | Entrada | Función |
+|---|---|---|
+| Propuesta técnica | [docs/propuesta-tecnica/](docs/propuesta-tecnica/README.md) | Síntesis ejecutiva y especificaciones iniciales. |
+| Manifiesto | [docs/manifesto/](docs/manifesto/README.md) | Sentido del proyecto, soberanía y legitimidad. |
+| Arquitectura | [docs/arquitectura/](docs/arquitectura/README.md) | Estratos, arranque, bus temprano y compatibilidad POSIX. |
+| Identidad | [docs/identidad/](docs/identidad/README.md) | xGNUpeD, Trilobytes, Dernel, Host/Guest y dominios raíz. |
+| Filosofía | [docs/filosofia/](docs/filosofia/README.md) | Unix/GNU, hormiguero, hardware y maduración. |
+| Zalty | [zalty/](zalty/readme.md) | Implementación experimental GNU/Linux de maGNUx. |
+| Initramfs | [zalty/initramfs/](zalty/initramfs/README.md) | Laboratorio de arranque temprano. |
+| Corpus integrado | [docs/legacy/](docs/legacy/README.md) | Documentos históricos ya enlazados desde la navegación principal. |
 
 ## Regla de separación
 
@@ -51,6 +49,16 @@ docs/ explica el contrato.
 zalty/ lo baja a máquina.
 ```
 
-## Estado de esta maqueta
+## Estado de esta rama
 
-Esta carpeta no pretende ser todavía el repositorio definitivo. Es una propuesta comprimida para revisar localmente la navegación Markdown final antes de decidir si se sube tal cual, si se retoca o si se integra por fases.
+Esta rama es una candidata de refundición documental. No sustituye `master` hasta que sea revisada y aceptada.
+
+El criterio de esta rama es:
+
+```text
+una sola lectura,
+una sola navegación,
+varios niveles de profundidad.
+```
+
+Los documentos nuevos actúan como columna vertebral. Los documentos antiguos quedan integrados como ampliaciones temáticas dentro de cada bloque.
