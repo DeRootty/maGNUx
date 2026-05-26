@@ -6,109 +6,328 @@
 
 ---
 
-## La separación fundamental
+## En pocas palabras
 
-En maGNUx separamos:
+maGNUx distingue entre **Host** y **Guest** para evitar que la máquina, el sistema, la administración y el usuario queden mezclados en una sola masa de privilegios.
 
 | Concepto | Definición |
 |---|---|
-| **Host** | Identidad de la máquina conceptualizada (el tipo de "coche" que circula). |
-| **Guest** | Identidad del conductor o entidad orgánica que lleva al Host a interaccionar con servicios pensados para tráfico orgánico. |
+| **Host** | Identidad material y estructural de la máquina como sistema. |
+| **Guest** | Identidad operativa delegada que actúa sobre el Host bajo licencia. |
+
+El Host no es simplemente “el ordenador”. El Guest no es simplemente “el usuario”.
+
+Host es el sistema como entidad material reconocida.
+
+Guest es la actividad autorizada que opera sobre esa entidad.
 
 ---
 
-## ¿Cómo nace el concepto de identidad droide?
+## La separación fundamental
+
+La separación Host/Guest permite formular:
+
+```text
+una cosa es sostener el sistema;
+otra cosa es usarlo.
+```
+
+En sistemas tradicionales, el usuario, la sesión, los servicios, la administración y los privilegios pueden acabar dependiendo de una noción demasiado amplia de root o del userspace.
+
+maGNUx propone separar:
+
+```text
+Host
+→ base material y estructural
+
+Guest
+→ operación delegada, orgánica o administrativa
+```
+
+---
+
+## La pregunta de la identidad droide
+
+El corpus anterior planteaba una imagen poderosa:
 
 > ¿Cómo una hormiga entiende cuál es su hormiguero?
 
-De la misma forma: ¿Cómo se puede recrear la decisión de un servicio, demonio o programa acerca de los límites de su objetivo algorítmico?
+Trasladado al sistema:
 
-¿Es la ruptura con la filosofía tradicional Unix, iniciada por SystemD, la solución?
+```text
+¿cómo sabe un servicio,
+un demonio,
+un proceso,
+o una sesión,
+cuál es su hormiguero técnico?
+```
 
-La arquitectura de Linux es una **"madeja de galerías de hormiguero"**. Tras el inicio del sistema, levantar el user space suponía una obra de ingeniería bastante idealizada y poco aterrizada en la realidad.
+La identidad droide no es una fantasía antropomórfica. Es la pregunta por los límites algorítmicos:
 
-Las arquitecturas que dotan de coherencia al hardware CISC x86 (sea de 64 o 32 bits) eran una verdadera pesadilla en relación al hardware y su potencia:
+- qué soy;
+- a qué sistema pertenezco;
+- qué puedo tocar;
+- qué debo ignorar;
+- qué autoridad me ha delegado capacidad;
+- qué ocurre si actúo fuera de mi dominio.
 
-- Por un lado debían lidiar con las colas FIFO, LIFO, FILO y LILO, que se encargaban de gestionar el registro de arranque.
-- Por otro lado, los exploits de seguridad que se heredan con la sinergia a la hora de hacer funcionar la arquitectura planteada del hardware con el modo de arrancar del software.
-
-Por todo esto vino a la luz **SystemD**, que de un plumazo dio una hoja de ruta por la cual avanzar, a costa de romper la pureza Unix.
-
-> SystemD es una línea recta que alcanza una manera de abrir vías de trabajo para ir afrontando las inclemencias del malware y poder ir parcheando los exploits con un éxito razonable para infraestructuras críticas.
+Host/Guest responde a esa necesidad de límite.
 
 ---
 
-## La identidad del Host
+## La madeja del hormiguero Linux
 
-### ¿Cómo se forma?
+Linux puede verse como una madeja de galerías de hormiguero:
 
+- kernel;
+- módulos;
+- drivers;
+- initramfs;
+- init;
+- servicios;
+- sockets;
+- buses;
+- sesiones;
+- permisos;
+- dispositivos;
+- políticas;
+- escritorios;
+- aplicaciones.
+
+Esa riqueza es su fuerza. Pero también dificulta responder de forma simple:
+
+```text
+¿qué parte sostiene el hormiguero
+y qué parte solo circula dentro de él?
 ```
+
+Host es el hormiguero como estructura.
+
+Guest es la entidad que circula dentro de él con autorización.
+
+---
+
+## VMKZ: levantamiento del Host
+
+El corpus anterior usaba **VMKZ** para describir el levantamiento del plano raíz/host.
+
+Refundido en esta lectura:
+
+```text
+VMKZ
+→ proceso conceptual por el cual el Host queda constituido
+  como base material, identificada y gobernable.
+```
+
+VMKZ no es simplemente una máquina virtual. Es una forma de nombrar el momento en que la máquina deja de ser solo hardware arrancado y pasa a ser Host reconocido.
+
+Secuencia conceptual:
+
+```text
+firmware
+  → bootloader
+    → kernel
+      → initramfs
+        → xGNUpeD
+          → VMKZ
+            → Host constituido
+```
+
+---
+
+## VMDZ: giro hacia el plano delegado
+
+El corpus anterior usaba **VMDZ** como motor del plano delegado/guest.
+
+Refundido aquí:
+
+```text
+VMDZ
+→ transición desde el Host constituido
+  hacia un Guest autorizado para operar.
+```
+
+Si VMKZ levanta el plano estructural, VMDZ permite el giro hacia la operación.
+
+```text
+VMKZ
+→ Host soberano
+
+VMDZ
+→ Guest delegado
+```
+
+La simetría entre ambos evita que el usuario aparezca como una intrusión dentro del sistema. El usuario aparece como Guest legitimado.
+
+---
+
+## Bypass VMKZ a VMDZ
+
+El bypass no debe entenderse como un atajo inseguro. En maGNUx expresa la transición regulada desde el estado temprano del Host hacia el estado avanzado de operación delegada.
+
+```text
+Host temprano
+→ identidad estructural
+→ licencia Dernel
+→ validación Trilobytes
+→ Guest operativo
+```
+
+El bypass solo es legítimo si conserva:
+
+- identidad del Host;
+- política de arranque;
+- licencia operativa;
+- coherencia de sesión;
+- trazabilidad;
+- posibilidad de revocación.
+
+---
+
+## Host
+
+La identidad del Host se forma gradualmente:
+
+```text
 Bootloader
-  └── define el chasis
-        └── Kernel
-              └── matricula a la máquina
-                    └── xGNUpeD
-                          └── consolida la identidad de Host
+  → define ruta de arranque
+Kernel
+  → reconoce hardware
+initramfs
+  → prepara transición temprana
+xGNUpeD
+  → declara identidad
+Dernel run time
+  → concede licencia estructural
+Host
+  → queda constituido como base operable
 ```
 
-### Componentes
+Componentes del Host:
 
-| Componente | Función en el Host |
+| Componente | Función |
 |---|---|
-| **Kernel host** | Reconocimiento de hardware, esclavización de núcleos. |
-| **Kommu services** | IPC, DBus, mediación de comunicaciones del sistema. |
-| **Dernel run time** | Ejecución acreditada. Ciclo de licencia operativa. |
+| Kernel host | Reconoce hardware, memoria, CPU, dispositivos y superficie técnica. |
+| xGNUpeD | Declara identidad temprana del sistema. |
+| Kommu services | Media comunicaciones internas desde el plano COMM. |
+| Dernel run time | Gestiona licencia operativa desde el lado Host. |
+| hroot / croot / droot | Dominios raíz que sostienen autoridad material, comunicativa y operativa. |
 
 ---
 
-## La identidad del Guest
+## Guest
 
-Actualmente tenemos a SystemD que parchea la inestabilidad del sistema con un punto o nexo de cruce, aliviando los exploits y las subsiguientes escaladas de privilegios asociadas a ellos.
+El Guest no es un intruso. Es una identidad operativa autorizada.
 
-Por otro lado, en el área admin (actualmente difusa y cargada en el userspace) teníamos:
-- **X11** y actualmente **Wayland**, que hace lo propio en el entorno gráfico, dotando de entidad a cada ventana gestionada en el entorno gráfico.
+Puede representar:
 
-### La identidad del Guest emerge de:
+- usuario orgánico;
+- sesión gráfica;
+- servicio autorizado;
+- entorno administrativo;
+- contenedor;
+- subsistema compatible;
+- plano delegado de operación.
 
-| Componente | Función en el Guest |
+Componentes del Guest:
+
+| Componente | Función |
 |---|---|
-| **Dernel guest** | Recibe la licencia operativa del host. |
-| **Logon service** | Autenticación estructural del guest. |
-| **Login sesión** | Sesión operativa desplegada para el usuario. |
+| Dernel guest | Recibe licencia operativa desde el Host. |
+| Trilobytes | Verifica coherencia de actividad orgánica. |
+| Logon | Legitima la entrada de la entidad orgánica. |
+| Login | Despliega la sesión operativa. |
+| ADMIN | Ejecuta operación cotidiana. |
 
 ---
 
-## Diagrama completo de identidades
+## Relación con entorno gráfico
 
+El corpus anterior mencionaba X11 y Wayland como ejemplos de entidades que dotan de identidad a ventanas, superficies y sesiones gráficas.
+
+Refundido aquí, el punto es:
+
+```text
+el escritorio no debería ser el primer lugar donde aparece la identidad operativa.
 ```
+
+Wayland, X11, KDE, GNOME u otros entornos pueden gestionar ventanas y sesiones, pero maGNUx sitúa la legitimidad antes:
+
+```text
+Host
+→ Dernel
+→ Trilobytes
+→ Guest
+→ sesión gráfica
+```
+
+Así, el entorno gráfico no inventa la identidad: la recibe.
+
+---
+
+## Diagrama completo
+
+```text
 ┌─────────────────────────────────────────────┐
-│                   HOST                       │
-│                                              │
-│  ┌─────────────┐  ┌──────────────────────┐  │
-│  │ Kernel host │  │   Kommu services     │  │
-│  │             │  │  (IPC, DBus, COMM)   │  │
-│  └──────┬──────┘  └──────────┬───────────┘  │
-│         │                    │              │
-│         └────────┬───────────┘              │
-│                  │                          │
-│          ┌───────▼────────┐                 │
-│          │ Dernel run time│                 │
-│          └───────┬────────┘                 │
-├──────────────────┼──────────────────────────┤
-│                  │           GUEST          │
-│          ┌───────▼────────┐                 │
-│          │  Dernel guest  │                 │
-│          └───────┬────────┘                 │
-│                  │                          │
-│          ┌───────▼────────┐                 │
-│          │ Logon service  │                 │
-│          └───────┬────────┘                 │
-│                  │                          │
-│          ┌───────▼────────┐                 │
-│          │ Login sesión   │                 │
-│          └────────────────┘                 │
+│                    HOST                      │
+│                                             │
+│  Kernel host                                │
+│      ↓                                      │
+│  xGNUpeD                                    │
+│      ↓                                      │
+│  VMKZ  → Host constituido                   │
+│      ↓                                      │
+│  Kommu services                             │
+│      ↓                                      │
+│  Dernel run time                            │
+├─────────────────────────────────────────────┤
+│              BYPASS VMKZ → VMDZ             │
+├─────────────────────────────────────────────┤
+│                    GUEST                     │
+│                                             │
+│  Dernel guest                               │
+│      ↓                                      │
+│  Trilobytes                                 │
+│      ↓                                      │
+│  Logon                                      │
+│      ↓                                      │
+│  Login                                      │
+│      ↓                                      │
+│  ADMIN / sesión / servicios                 │
 └─────────────────────────────────────────────┘
 ```
+
+---
+
+## Ser y no ser
+
+La frase “Ser y no Ser” expresa una tensión:
+
+- el Host es sistema;
+- el Guest opera como si el sistema fuera suyo;
+- pero el Guest no debe confundirse con la raíz material del Host.
+
+```text
+El Guest usa.
+El Host sostiene.
+El Dernel licencia.
+Trilobytes verifica.
+```
+
+---
+
+## Criterio de aceptación conceptual
+
+La dinámica Host/Guest queda correctamente definida si permite responder:
+
+1. qué constituye al Host;
+2. cuándo el Host queda reconocido;
+3. qué identidad Guest solicita operar;
+4. qué transición VMKZ → VMDZ se produce;
+5. qué licencia Dernel se concede;
+6. qué valida Trilobytes;
+7. qué sesión se abre;
+8. qué límites impiden confundir uso con soberanía.
 
 ---
 
