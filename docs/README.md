@@ -15,7 +15,7 @@ La documentación nueva funciona como columna vertebral. El corpus anterior se i
 | 3 | Manifiesto | [Hipótesis central](manifesto/02-hipotesis-central.md) | [Entidades sistematizadas](sysEntity.md), [Contrato OS](contractOS.md) |
 | 4 | Arquitectura | [Estratos](arquitectura/03-estratos.md) | [Host](hostroot.md), [Guest](guestroot.md), [VMKZ](VMKZ.md), [VMDZ](VMDZ.md) |
 | 5 | Arquitectura | [Inicio del sistema](arquitectura/04-inicio-sistema.md) | [Arranque temprano](initSoonrise.md), [Protosistema raíz](systemProt.md), [initramfs](initramfs.MD), [seL4](seL4.MD), [Hurd](Hurd.MD) |
-| 6 | Arquitectura | [Bus de arranque](arquitectura/05-bus-arranque.md) | [Kommu](kommu.md), [Tinetsys](tinetsys.md), [Identidad comunicativa](kommuID.md) |
+| 6 | Arquitectura | [Bus de arranque](arquitectura/05-bus-arranque.md) | [Kommu](kommu.md), [Identidad comunicativa](kommuID.md) |
 | 7 | Arquitectura | [Capas POSIX](arquitectura/06-capas-posix.md) | [Linux como kernel modelo](kernelLinux.md), [Carga del kernel](kernelLoad.md), [OpenRC](OpenRC.MD), [sysVinit](sysVinit.md), [runit](runit.md), [dinit](dinit.md), [systemd](SystemD.MD) |
 | 8 | Identidad | [xGNUpeD](identidad/07-xgnuped.md) | [xGNUpeD histórico](xGNUpeD.md), [Identidad distributiva](distroID.md), [Identidad asociativa](relonIO.md), [Identidad conmutativa](disruPed.md) |
 | 9 | Identidad | [Trilobytes](identidad/08-trilobytes.md) | [Trilobytes histórico](trilobytes.md), [Logon](logon.md), [Login](login.md) |
