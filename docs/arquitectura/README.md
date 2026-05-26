@@ -26,7 +26,7 @@ Estos documentos del corpus anterior quedan integrados aquí como desarrollo pro
 | Postulado initramfs | [initramfs.MD](../initramfs.MD) |
 | Postulado seL4 | [seL4.MD](../seL4.MD) |
 | Postulado Hurd | [Hurd.MD](../Hurd.MD) |
-| Inicio nativo con init_ID | [initID.MD](../initID.MD) |
+| Inicio nativo con init_ID | [initID.MD](../../initID.MD) |
 | Carga del kernel | [kernelLoad.md](../kernelLoad.md) |
 | Linux como kernel modelo | [kernelLinux.md](../kernelLinux.md) |
 | Levantamiento tradicional | [research00.md](../research00.md) |
