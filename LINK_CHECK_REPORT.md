@@ -29,6 +29,13 @@ Por tanto, los índices principales ya no deben empujar al lector hacia document
 
 ## Absorción profunda ya realizada
 
+### Bloque manifiesto
+
+| Documento nuevo | Conceptos absorbidos |
+|---|---|
+| `docs/manifesto/01-manifiesto.md` | GNU/GPL, Linux como giro tangencial a Unix, control/operación, identidad estructural, droide/dron, IA sistémica y KSIA Plasma como horizonte subordinado. |
+| `docs/manifesto/02-hipotesis-central.md` | Soberanía sistémica, entidades sistematizadas, contrato OS, metadistribución de paso, continuidad Unix y legitimidad del arranque. |
+
 ### Bloque identidad
 
 | Documento nuevo | Conceptos absorbidos |
@@ -50,7 +57,7 @@ Por tanto, los índices principales ya no deben empujar al lector hacia document
 
 ## Pendiente antes de marcar el PR como listo para merge
 
-1. absorber en profundidad los bloques `manifesto/`, `propuesta-tecnica/` y `filosofia/`;
+1. absorber en profundidad los bloques `propuesta-tecnica/` y `filosofia/`;
 2. decidir si los documentos históricos absorbidos se conservan sin enlazar, se mueven a archivo o se eliminan;
 3. validar automáticamente todos los enlaces Markdown;
 4. revisar que la descripción del PR refleje el nuevo criterio de absorción, no solo integración.
