@@ -6,24 +6,23 @@ Esta sección declara el sentido del proyecto, su hipótesis central y la legiti
 
 El manifiesto no es todavía una implementación. Es la declaración de por qué el sistema operativo debe poder explicitar identidad, autoridad, contrato y soberanía desde el arranque temprano.
 
-## Documentos principales
+## Lectura única del manifiesto
 
-| Orden | Documento | Archivo |
+| Orden | Documento | Función |
 |---:|---|---|
-| 1 | [01 — Manifiesto de maGNUx](01-manifiesto.md) | `01-manifiesto.md` |
-| 2 | [02 — Hipótesis central](02-hipotesis-central.md) | `02-hipotesis-central.md` |
+| 1 | [01 — Manifiesto de maGNUx](01-manifiesto.md) | Absorbe la introducción, el marco GNU/GPL, la motivación inicial y la necesidad de soberanía sistémica. |
+| 2 | [02 — Hipótesis central](02-hipotesis-central.md) | Absorbe la soberanía sistémica, las entidades sistematizadas, el contrato OS y el problema de legitimidad del arranque. |
 
-## Corpus integrado
+## Criterio de absorción
 
-Estos documentos del corpus anterior quedan integrados aquí como desarrollo profundo:
+Los textos antiguos de entrada, GNU, soberanía y entidades dejan de funcionar como puertas independientes. Sus conceptos se concentran aquí:
 
-| Tema | Documento |
-|---|---|
-| Entrada general al proyecto | [intro.md](../intro.md) |
-| Ecosistema GNU y cultura GPL | [GNUpeD.md](../GNUpeD.md) |
-| Soberanía sistémica | [sysKing.md](../sysKing.md) |
-| Entidades sistematizadas | [sysEntity.md](../sysEntity.md) |
-| Colaboración y soberanías futuras | [collab.md](../collab.md) |
+```text
+por qué existe maGNUx
+→ qué soberanía declara
+→ qué legitimidad necesita el arranque
+→ qué entidades participan en el sistema
+```
 
 ## Lugar dentro del proyecto
 
