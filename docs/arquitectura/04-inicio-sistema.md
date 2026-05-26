@@ -7,121 +7,363 @@
 
 ---
 
+## En pocas palabras
+
+Este documento absorbe la línea antigua de arranque temprano, protosistema raíz, initramfs, seL4, Hurd e init_ID dentro de una sola lectura.
+
+La pregunta central es:
+
+```text
+¿quién gobierna el sistema antes de que exista un sistema operativo plenamente gobernable?
+```
+
+maGNUx responde que el arranque no debe entenderse como una simple cadena técnica:
+
+```text
+firmware → bootloader → kernel → init → servicios
+```
+
+sino como una formación progresiva de autoridad:
+
+```text
+metal → ruta de arranque → autoridad temprana → identidad → licencia → operación
+```
+
+---
+
 ## La pregunta fundamental
 
-> ¿Quién gobierna el sistema **antes** de que el sistema aparezca como espacio operativo gobernable?
+Antes del userspace, antes de systemd, antes de OpenRC, antes de una shell, el sistema ya está tomando decisiones.
 
-Ahí es donde maGNUx se separa de systemd. No porque niegue el valor de systemd, sino porque entiende que el problema ya no consiste solo en **ordenar servicios**, sino en establecer una **soberanía estructural del arranque** que anteceda a la administración convencional.
+Se decide:
 
-> systemd no es el enemigo de maGNUx, sino su **antecedente incómodo**: la prueba de que la historia del sistema empuja hacia formas cada vez más explícitas de coordinación, pero también la prueba de que esa coordinación aún no ha alcanzado su fundamento último.
+- qué firmware arranca;
+- qué dispositivo se considera válido;
+- qué bootloader se ejecuta;
+- qué kernel se carga;
+- qué initramfs acompaña al kernel;
+- qué raíz se montará;
+- qué proceso recibirá continuidad.
 
----
+La pregunta soberana es:
 
-## Secuencia de arranque
+```text
+¿bajo qué legitimidad se acepta esa continuidad?
+```
 
-### 1. La CPU
+systemd no es el enemigo de maGNUx. Es su antecedente incómodo: demostró que la coordinación del sistema necesitaba una gramática más explícita, pero todavía opera dentro de un sistema que ya presupone su propia existencia.
 
-El núcleo principal de la CPU se reinicia y el contador de programa se fija en una dirección de memoria predefinida en la flash ROM (BIOS/UEFI).
+maGNUx intenta formular lo anterior:
 
-A partir de ese momento, se ejecuta un pseudosistema de operativa de inicio, declarando en RAM (en la parte más baja) las direcciones base usadas para la carga del bootloader.
-
----
-
-### 2. El bootloader
-
-Toma el control del estado bootstrap:
-
-- Escribe, de forma contigua, en la parte disponible más baja de la RAM.
-- Su objetivo es habilitar la partición boot.
-- Hace disponibles los binarios del kernel Linux que el usuario solicitará en su proceso de carga.
-
-> El bootloader define el **chasis**. El kernel debería otorgarle un número y matricular a la máquina, dotándola de una **identidad de Host**.
+```text
+la legitimidad antes de la administración.
+```
 
 ---
 
-### 3. initramfs o SEL4
+## Secuencia estratificada de arranque
 
-Su objetivo final es dar un resultado tan parecido como sea posible a lo que una carga de demonio gestor ACPI pueda resolver:
+### 1. Metal y firmware
 
-- Instanciar cuántos núcleos están en modo bajo consumo.
-- Dotarles de una puerta de llamada o invocación.
-- Aún no se han ejecutado los procesos INIT IPI.
+El hardware despierta desde una programación de metal:
 
-En otras palabras: se debe cargar el initramfs, permitiendo una interfaz de comunicación con el demonio que discrimina si al otro lado de su puerta hay **hardware físico real**.
+- CPU;
+- firmware;
+- BIOS/UEFI;
+- configuración de placa;
+- orden de arranque;
+- dispositivos disponibles.
 
-> Aunque actualmente es volátil, se pretende hacer evidente la necesidad de que **no desaparezca mientras el computador esté encendido**. Vital para definir parte de la identidad droide.
+Aquí todavía no hay sistema operativo. Pero tampoco hay pura inercia. La máquina ya está siguiendo reglas.
 
----
+Este nivel pregunta:
 
-### 4. El kernel
-
-#### Estrato host
-
-La parte de reconocimiento de host:
-
-- Lanza los procesos INIT IPI.
-- Los esclaviza a la identidad host: solo pueden recibir instrucciones de aquellos demonios levantados por el bootloader.
-- El kernel carga en memoria demonios que gestionan el modo de funcionamiento de los núcleos: de modo heredado → modo real → modo largo.
-- Dichos demonios quedan a la escucha y a la espera.
-
-#### Estrato run time
-
-La parte de reconocimiento del ciclo Turing:
-
-- Inicia solicitudes.
-- Balancea la carga.
-- Adjudica tareas.
-
-> Solo el kernel que haya sido instalado en la máquina cuando ésta carecía de sistema operativo podrá acceder a los recursos ACPI.
+```text
+¿dónde debo buscar continuidad?
+```
 
 ---
 
-### 5. El Dernel
+### 2. Bootloader
 
-En pocas palabras: **hace lo que systemd hace, pero solo y únicamente lo que debería de hacer en un entorno de ejecución de seguridad heredada**.
+El bootloader toma el control del estado bootstrap.
 
-- Da licencia operativa sobre el host al guest.
-- Define un host temprano y volutivo, que va ganando áreas de dominio mientras el arranque hace disponible todo el hardware.
+Su función técnica es cargar el kernel y sus artefactos asociados. Su función conceptual, en maGNUx, es definir el **chasis de continuidad**.
 
-#### Por qué mejora la seguridad frente a systemd
+El bootloader no debería ser solo un lanzador. Debería formar parte del contrato inicial:
 
-Los scripts en bash producen tiempos de ejecución lentos y en ocasiones generan idle en el procesador. En esa época, un idle era hackeable: una ventana para crear una interrupción de solicitud.
+- qué kernel se carga;
+- qué parámetros se pasan;
+- qué initramfs se adjunta;
+- qué raíz se espera;
+- qué modo de arranque se declara;
+- qué identidad inicial puede verificarse.
 
-SystemD mantiene al procesador principal atareado, sin tiempos para respirar. maGNUx propone una alternativa:
-
-> Para que un proceso se ejecute, las directrices tempranas del levantamiento del host detectarán si es una pieza crítica para continuar con el levantamiento del host, o si sencillamente no aporta nada.  
-> Si no aporta → es un exploit.  
-> Si aporta → es un proceso válido.
-
-Un arranque de este estilo sería **virtualmente invulnerable a los idle**.
+```text
+bootloader
+→ define la ruta de continuidad
+```
 
 ---
 
-## Inicio estratificado: resumen
+### 3. Kernel
 
-| Estrato | Función | Estado |
+El kernel reconoce la máquina como superficie técnica:
+
+- CPU;
+- memoria;
+- dispositivos;
+- interrupciones;
+- almacenamiento;
+- buses;
+- controladores;
+- modos de ejecución;
+- primitivas de proceso y memoria.
+
+Pero reconocer hardware no equivale a declarar soberanía.
+
+En maGNUx, el kernel es la gran base material, pero todavía necesita una capa que formule identidad y contrato.
+
+```text
+kernel
+→ reconoce recursos
+→ expone capacidades
+→ todavía no declara por sí solo identidad maGNUx
+```
+
+---
+
+### 4. Autoridad temprana
+
+Aquí aparecen las hipótesis absorbidas:
+
+| Hipótesis | Aporte | Límite |
 |---|---|---|
-| **ROOT** | CPU, memoria, almacenamiento masivo, comunicación mínima de seguridad. | Privilegio absoluto y continuidad material. |
-| **COMM** | Orquesta, aplica políticas, vigila coherencia, media entre nivel máquina y nivel administrativo. | Activo durante todo el ciclo de vida. |
-| **ADMIN** | Entorno que el usuario reconoce como "un Linux normal": servicios, shell, herramientas, procesos. | Subordinado a ROOT, coordinado por COMM. |
+| initramfs | Espacio viable hoy para ensayar autoridad temprana en Linux real. | Es volátil y transitorio por diseño tradicional. |
+| seL4 | Microkernel formalmente verificado, fuerte en aislamiento y garantías. | No es la vía inmediata sobre Linux existente. |
+| Hurd/GNU Mach | Modelo de servidores sobre microkernel, útil para pensar autoridad distribuida. | Madurez y adopción limitadas frente a Linux actual. |
+| init_ID | Identidad inicial soberana antes del userspace pleno. | Requiere formalización técnica. |
 
-> La clave es que el fundamento inicial **no desaparece**. El suelo de confianza permanece.
+La conclusión de maGNUx es pragmática:
+
+```text
+initramfs es el laboratorio viable actual.
+seL4 y Hurd son hipótesis arquitectónicas.
+init_ID es la pregunta de identidad temprana.
+```
 
 ---
 
-## La insuficiencia del arranque heredado
+## Protosistema raíz
+
+El antiguo “protosistema raíz” queda refundido aquí como el primer estado en el que el sistema puede empezar a decir algo sobre sí mismo.
+
+No es todavía el sistema operativo completo.
+
+Es una raíz mínima capaz de:
+
+- montar lo imprescindible;
+- leer política inicial;
+- validar estado;
+- reconocer hardware crítico;
+- preparar comunicación temprana;
+- iniciar identidad;
+- decidir si continúa o se detiene.
+
+```text
+protosistema raíz
+→ no es userspace normal
+→ no es todavía ADMIN
+→ es ROOT en formación
+```
+
+---
+
+## initramfs como laboratorio viable
+
+initramfs no es la meta final de maGNUx. Es la prótesis inicial que permite experimentar hoy.
+
+Su valor es que aparece antes del sistema raíz ordinario y puede:
+
+- ejecutar lógica temprana;
+- inspeccionar `/proc`, `/sys`, `/dev`;
+- montar raíz real;
+- decidir continuidad;
+- preparar entorno;
+- fallar antes de entregar control;
+- dejar rastros en `/run`;
+- dialogar con `/boot/metal/` en la propuesta Zalty.
+
+En maGNUx, initramfs se interpreta así:
+
+```text
+initramfs
+→ laboratorio de soberanía temprana
+→ espacio transitorio que ensaya permanencia conceptual
+→ punto de prueba para xGNUpeD y HostID
+```
+
+---
+
+## seL4 como hipótesis de garantía
+
+seL4 aporta otra pregunta:
+
+```text
+¿qué ocurriría si la autoridad temprana se apoyara en un microkernel verificado?
+```
+
+Su valor conceptual para maGNUx está en:
+
+- aislamiento fuerte;
+- razonamiento formal;
+- mínima base confiable;
+- separación de servidores;
+- autoridad explícita.
+
+Pero la fase práctica de maGNUx no empieza sustituyendo Linux por seL4. Empieza usando Linux como laboratorio, sin perder de vista que seL4 representa una dirección de madurez posible.
+
+---
+
+## Hurd como hipótesis de servidores
+
+Hurd/GNU Mach aporta una intuición distinta:
+
+```text
+el sistema puede organizar funciones como servidores comunicantes,
+no como un bloque monolítico único.
+```
+
+Para maGNUx, Hurd es útil no tanto como destino inmediato, sino como recordatorio arquitectónico:
+
+- la autoridad puede distribuirse;
+- los servicios pueden tener identidad;
+- el sistema puede componerse como conversación de servidores;
+- la raíz no tiene por qué ser plana.
+
+---
+
+## init_ID como identidad inicial
+
+init_ID resume la pregunta:
+
+```text
+¿qué identidad tiene el sistema en el instante previo a convertirse en sistema operativo visible?
+```
+
+No basta con PID 1.
+
+PID 1 puede ser una pieza técnica. init_ID es una identidad de arranque:
+
+- qué arranca;
+- por qué arranca;
+- qué contrato acepta;
+- qué hardware reconoce;
+- qué distribución interpreta;
+- qué continuidad conserva;
+- qué política permite seguir.
+
+init_ID conecta directamente con xGNUpeD:
+
+```text
+init_ID
+→ pregunta inicial
+
+xGNUpeD
+→ formulación de identidad temprana
+```
+
+---
+
+## Del arranque heredado al arranque soberano
 
 ### Antes de systemd
-- Scripts, convenciones, prioridades implícitas.
-- Piezas difíciles de unificar.
+
+- scripts;
+- prioridades implícitas;
+- convenciones dispersas;
+- dependencias difíciles de auditar;
+- arranque funcional, pero poco declarativo.
 
 ### Con systemd
-- Orden, gramática y capacidad de administración declarativa.
-- Un paso decisivo, pero sigue siendo un orden de software **dentro del host**.
+
+- unidades;
+- dependencias;
+- cgroups;
+- logs;
+- sesión;
+- estado;
+- administración más coherente.
+
+systemd fue un paso decisivo, pero sigue ordenando desde dentro de un host que ya se presupone válido.
 
 ### Con maGNUx
-- Soberanía estructural del arranque.
-- Identidad del sistema que **antecede** a la administración convencional.
+
+- identidad previa;
+- contrato de arranque;
+- autoridad temprana;
+- separación ROOT/COMM/ADMIN;
+- licencia Dernel;
+- verificación Trilobytes;
+- compatibilidad con Linux sin perder horizonte soberano.
+
+---
+
+## Secuencia maGNUx de arranque
+
+```text
+metal / firmware
+  ↓
+bootloader
+  ↓
+kernel Linux
+  ↓
+initramfs como laboratorio ROOT
+  ↓
+init_ID como pregunta de identidad inicial
+  ↓
+xGNUpeD como formulación de identidad
+  ↓
+Dernel como licencia operativa
+  ↓
+Trilobytes como coherencia de sesión
+  ↓
+ADMIN como operación cotidiana
+```
+
+---
+
+## Permanencia del fundamento
+
+La clave de maGNUx es que el fundamento inicial no desaparece.
+
+En el arranque tradicional, muchas piezas tempranas parecen desvanecerse tras entregar control.
+
+maGNUx propone otra lectura:
+
+```text
+lo temprano no debe desaparecer;
+debe quedar representado como autoridad persistente.
+```
+
+Por eso `/run/maGNUx` en Zalty funciona como ensayo de raíz semiótica viva, y `/boot/metal/` como declaración persistente.
+
+---
+
+## Criterio de aceptación conceptual
+
+El inicio estratificado queda correctamente formulado si permite responder:
+
+1. qué autoridad existe antes del userspace;
+2. qué papel cumple el bootloader;
+3. qué reconoce el kernel;
+4. qué puede ensayar initramfs;
+5. qué aportan seL4 y Hurd como hipótesis;
+6. qué pregunta formula init_ID;
+7. cómo aparece xGNUpeD;
+8. cómo se entrega continuidad a Dernel;
+9. cómo se evita que ADMIN sustituya a ROOT;
+10. cómo permanece vivo el fundamento inicial.
 
 ---
 
