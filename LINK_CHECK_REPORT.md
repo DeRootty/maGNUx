@@ -36,6 +36,14 @@ Por tanto, los índices principales ya no deben empujar al lector hacia document
 | `docs/manifesto/01-manifiesto.md` | GNU/GPL, Linux como giro tangencial a Unix, control/operación, identidad estructural, droide/dron, IA sistémica y KSIA Plasma como horizonte subordinado. |
 | `docs/manifesto/02-hipotesis-central.md` | Soberanía sistémica, entidades sistematizadas, contrato OS, metadistribución de paso, continuidad Unix y legitimidad del arranque. |
 
+### Bloque propuesta técnica
+
+| Documento nuevo | Conceptos absorbidos |
+|---|---|
+| `docs/propuesta-tecnica/00-resumen-ejecutivo.md` | Alcance evaluable del prototipo, componentes mínimos, entregables, fuera de alcance, criterios de aceptación y hoja de ruta. |
+| `docs/propuesta-tecnica/01-xgnuped-spec.md` | HostID/xGNUpeD como contrato técnico: estructuras C, fuentes de datos, salida TOML, interfaz mínima, códigos de retorno e integración con Dernel. |
+| `docs/propuesta-tecnica/02-dernel-spec.md` | Dernel como contrato técnico de licencia operativa: política, modos, estructuras, decisiones, reportes TOML y criterios de aceptación/rechazo. |
+
 ### Bloque identidad
 
 | Documento nuevo | Conceptos absorbidos |
@@ -57,7 +65,7 @@ Por tanto, los índices principales ya no deben empujar al lector hacia document
 
 ## Pendiente antes de marcar el PR como listo para merge
 
-1. absorber en profundidad los bloques `propuesta-tecnica/` y `filosofia/`;
+1. absorber en profundidad el bloque `filosofia/`;
 2. decidir si los documentos históricos absorbidos se conservan sin enlazar, se mueven a archivo o se eliminan;
 3. validar automáticamente todos los enlaces Markdown;
 4. revisar que la descripción del PR refleje el nuevo criterio de absorción, no solo integración.
