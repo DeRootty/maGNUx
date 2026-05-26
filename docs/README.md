@@ -21,7 +21,7 @@ La documentación nueva funciona como columna vertebral. El corpus anterior se i
 | 9 | Identidad | [Trilobytes](identidad/08-trilobytes.md) | [Trilobytes histórico](trilobytes.md), [Logon](logon.md), [Login](login.md) |
 | 10 | Identidad | [Dernel](identidad/09-dernel.md) | [Dernel/ZaltID](dernelZaltID.md), [maGNUx](maGNUx.md) |
 | 11 | Identidad | [Host y Guest](identidad/10-host-guest.md) | [Host root](hostroot.md), [Guest root](guestroot.md), [Bypass VMKZ a VMDZ](bypassKZDZ.md) |
-| 12 | Identidad | [Root y dominios](identidad/11-root-dominios.md) | [init_ID](initID.MD), [Contrato administrativo](contractAdmin.md) |
+| 12 | Identidad | [Root y dominios](identidad/11-root-dominios.md) | [init_ID](../initID.MD), [Contrato administrativo](contractAdmin.md) |
 | 13 | Filosofía | [Unix y GNU](filosofia/12-filosofia-unix-gnu.md) | [Ecosistema GNU](GNUpeD.md), [C23](ISOC23.md) |
 | 14 | Filosofía | [Hormiguero](filosofia/13-hormiguero.md) | [Entidades sistematizadas](sysEntity.md), [Colaboración](collab.md) |
 | 15 | Filosofía | [Hardware](filosofia/14-hardware.md) | [Hardware presente/futuro](lookingfor.md), [ASM x86_64](intelASMx86_64.md), [Kernel config caps](kernelConfigCaps.md) |
