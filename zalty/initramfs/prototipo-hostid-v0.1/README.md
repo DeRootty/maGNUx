@@ -1,88 +1,85 @@
-# prototipo-initramfs
+# Prototipo HostID v0.1
 
 > [⬆ Subir a initramfs](../README.md) · [🏠 Inicio](../../../README.md)
 
 **Versión:** 0.1  
-**Objetivo:** demostrar identidad de host temprana y persistente en initramfs  
-**Herramientas:** C (estático), bash, QEMU  
+**Objetivo:** demostrar identidad de host temprana y persistente en initramfs.  
+**Herramientas:** C, shell, QEMU.
 
 ---
 
 ## Estructura
 
-```
-prototipo-initramfs/
-  ├── doc/
-  │     ├── build.md          — cómo compilar y empaquetar
-  │     └── test-qemu.md      — cómo probar en QEMU
-  │
-  ├── src/
-  │     ├── identity/
-  │     │     ├── host_identity.h   — estructura de datos central
-  │     │     └── host_identity.c   — implementación xGNUpeD (prototipo)
-  │     ├── boot/
-  │     │     ├── boot_validator.h
-  │     │     └── boot_validator.c  — validación de secuencia de arranque
-  │     └── comm/
-  │           ├── early_comm.h
-  │           └── early_comm.c      — canal mínimo entre etapas
-  │
-  ├── scripts/
-  │     ├── init                    — init refactorizado por estratos
-  │     ├── build-initramfs.sh      — empaqueta el initramfs
-  │     └── policy.conf             — política Dernel (prototipo)
-  │
-  └── tests/
-        ├── run-qemu.sh             — lanza el test en QEMU
-        └── expected-output.txt     — salida esperada para validación
+```text
+prototipo-hostid-v0.1/
+├── README.md
+├── scripts/
+│   ├── init
+│   ├── build-initramfs.sh
+│   └── policy.conf
+├── src/
+│   ├── identity/
+│   │   ├── host_identity.h
+│   │   └── host_identity.c
+│   ├── boot/
+│   │   ├── boot_validator.h
+│   │   └── boot_validator.c
+│   └── comm/
+│       ├── early_comm.h
+│       └── early_comm.c
+└── tests/
+    └── run-qemu.sh
 ```
 
 ---
 
 ## Qué demuestra este prototipo
 
-1. **Identidad temprana:** el sistema genera un `host_identity_t` antes de montar `/`.
-2. **Persistencia:** la identidad no desaparece tras el `pivot_root`.
-3. **Discriminación de procesos:** solo los binarios de la lista blanca pueden ejecutarse en fase ROOT.
+1. **Identidad temprana:** el sistema puede generar una identidad de host antes de entregar el control al sistema raíz.
+2. **Persistencia conceptual:** la identidad se concibe como estado temprano que debe sobrevivir a la transición hacia el sistema operativo completo.
+3. **Política inicial:** `policy.conf` actúa como primera política declarativa de arranque.
+4. **Validación de secuencia:** el bloque `boot/` modela la comprobación de condiciones antes de continuar.
+5. **Comunicación temprana:** el bloque `comm/` reserva un canal mínimo entre etapas.
 
 ## Qué NO hace este prototipo
 
-- No implementa Trilobytes.
-- No implementa Kommu services completo.
-- No tiene integración con KDE / Wayland.
-- No requiere hardware específico: funciona en QEMU.
+- No implementa Trilobytes completo.
+- No implementa Kommu como sistema completo de servicios.
+- No integra todavía KDE, Wayland ni capa gráfica.
+- No requiere hardware específico.
+- No sustituye al manifiesto maGNUx: solo ensaya una hipótesis técnica dentro de Zalty.
 
 ---
 
-## Requisitos para compilar
+## Requisitos orientativos
 
 ```bash
-# Compilador C estático
-apt install gcc musl-tools
+# Compilador C
+apt install gcc
 
-# QEMU para testing
+# QEMU para pruebas
 apt install qemu-system-x86
 
-# Herramientas de initramfs
+# Herramientas de empaquetado initramfs
 apt install cpio
 ```
 
 ---
 
-## Inicio rápido
+## Inicio rápido orientativo
 
 ```bash
-# 1. Compilar los binarios
-cd prototipo-initramfs
+cd zalty/initramfs/prototipo-hostid-v0.1
 ./scripts/build-initramfs.sh
-
-# 2. Probar en QEMU
 ./tests/run-qemu.sh
-
-# 3. Ver la salida esperada
-cat tests/expected-output.txt
 ```
 
 ## Nota de integración
 
-Este prototipo procede de la propuesta maGNUx v2 y se ubica aquí porque Zalty es el plano de implementación experimental. No debe confundirse con el manifiesto: aquí se prueba, no se redefine.
+Este prototipo procede de la propuesta maGNUx v2 y se ubica aquí porque Zalty es el plano de implementación experimental.
+
+```text
+maGNUx declara.
+Zalty ensaya.
+Este prototipo prueba una hipótesis temprana de identidad de host.
+```
