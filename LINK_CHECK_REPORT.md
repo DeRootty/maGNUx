@@ -27,25 +27,30 @@ ahora: documentos nuevos como lectura única + corpus antiguo absorbido conceptu
 
 Por tanto, los índices principales ya no deben empujar al lector hacia documentos duplicados como ruta alternativa. Los documentos históricos pueden permanecer durante la transición, pero la lectura recomendada debe pasar por los documentos nuevos.
 
-## Duplicidades conceptuales absorbidas
+## Absorción profunda ya realizada
 
-| Concepto | Documento nuevo que absorbe | Documento histórico absorbido |
-|---|---|---|
-| xGNUpeD e identidades | `docs/identidad/07-xgnuped.md` | `docs/xGNUpeD.md`, `docs/distroID.md`, `docs/relonIO.md`, `docs/disruPed.md`, `docs/kommuID.md` |
-| Dernel / ZaltID | `docs/identidad/09-dernel.md` | `docs/dernelZaltID.md`, `docs/maGNUx.md` |
-| Trilobytes / Logon / Login | `docs/identidad/08-trilobytes.md` | `docs/trilobytes.md`, `docs/logon.md`, `docs/login.md` |
-| Host / Guest / VMKZ / VMDZ | `docs/identidad/10-host-guest.md` | `docs/hostroot.md`, `docs/guestroot.md`, `docs/VMKZ.md`, `docs/VMDZ.md`, `docs/bypassKZDZ.md` |
-| Unix / GNU / C | `docs/filosofia/12-filosofia-unix-gnu.md` | `docs/GNUpeD.md`, `docs/ISOC23.md` |
-| Hardware y capacidades | `docs/filosofia/14-hardware.md` | `docs/lookingfor.md`, `docs/intelASMx86_64.md`, `docs/kernelConfigCaps.md` |
-| Arranque temprano | `docs/arquitectura/04-inicio-sistema.md` | `docs/initSoonrise.md`, `docs/systemProt.md`, `docs/initramfs.MD`, `docs/seL4.MD`, `docs/Hurd.MD`, `initID.MD` |
-| Linux, init y compatibilidad | `docs/arquitectura/06-capas-posix.md` | `docs/kernelLoad.md`, `docs/kernelLinux.md`, `docs/research00.md`, documentos init tradicionales |
+### Bloque identidad
 
-## Estado
+| Documento nuevo | Conceptos absorbidos |
+|---|---|
+| `docs/identidad/07-xgnuped.md` | xGNUpeD, identidad distributiva, asociativa, conmutativa y comunicativa. |
+| `docs/identidad/08-trilobytes.md` | Trilobytes, Logon, Login, legitimación orgánica y coherencia de sesión. |
+| `docs/identidad/09-dernel.md` | Dernel, ZaltID, licencia operativa, contrato operativo y relación con systemd. |
+| `docs/identidad/10-host-guest.md` | Host, Guest, VMKZ, VMDZ, bypass y plano delegado. |
+| `docs/identidad/11-root-dominios.md` | hroot, croot, droot, admin, init_ID, contrato administrativo y dominios de autoridad. |
 
-La navegación principal queda corregida y orientada a lectura única.
+### Bloque arquitectura
 
-Pendiente antes de marcar el PR como listo para merge:
+| Documento nuevo | Conceptos absorbidos |
+|---|---|
+| `docs/arquitectura/03-estratos.md` | ROOT, COMM, ADMIN, control/operación y dominios estructurales. |
+| `docs/arquitectura/04-inicio-sistema.md` | Arranque temprano, protosistema raíz, initramfs, seL4, Hurd e init_ID. |
+| `docs/arquitectura/05-bus-arranque.md` | Kommu, identidad comunicativa, `/boot/metal`, `/run/maGNUx`, nodos técnicos/semióticos y hardware futuro. |
+| `docs/arquitectura/06-capas-posix.md` | Linux como kernel modelo, carga del kernel, POSIX, init tradicionales, systemd, OpenRC, runit, dinit, sysVinit y hacks al kernel. |
 
-1. decidir si los documentos históricos absorbidos se conservan sin enlazar, se mueven a archivo o se eliminan;
-2. validar automáticamente todos los enlaces Markdown;
-3. revisar que cada documento nuevo contiene ya suficiente contenido absorbido y no solo una referencia conceptual.
+## Pendiente antes de marcar el PR como listo para merge
+
+1. absorber en profundidad los bloques `manifesto/`, `propuesta-tecnica/` y `filosofia/`;
+2. decidir si los documentos históricos absorbidos se conservan sin enlazar, se mueven a archivo o se eliminan;
+3. validar automáticamente todos los enlaces Markdown;
+4. revisar que la descripción del PR refleje el nuevo criterio de absorción, no solo integración.
