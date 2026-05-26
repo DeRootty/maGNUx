@@ -6,29 +6,25 @@ Esta sección sitúa la relación de maGNUx con Unix/GNU, la metáfora del hormi
 
 La filosofía no queda separada de la técnica: funciona como criterio de lectura para entender por qué maGNUx habla de soberanía, nodos, identidad, contrato y comunidad.
 
-## Documentos principales
+## Lectura única de filosofía
 
-| Orden | Documento | Archivo |
+| Orden | Documento | Función |
 |---:|---|---|
-| 1 | [12 — Filosofía Unix y el ecosistema GNU](12-filosofia-unix-gnu.md) | `12-filosofia-unix-gnu.md` |
-| 2 | [13 — La metáfora del hormiguero](13-hormiguero.md) | `13-hormiguero.md` |
-| 3 | [14 — Arquitectura y materialidad del hardware](14-hardware.md) | `14-hardware.md` |
-| 4 | [15 — Hoja de maduración](15-hoja-maduracion.md) | `15-hoja-maduracion.md` |
+| 1 | [12 — Filosofía Unix y el ecosistema GNU](12-filosofia-unix-gnu.md) | Absorbe GNU, GPL, cultura Unix y el papel de C como lenguaje de medio nivel. |
+| 2 | [13 — La metáfora del hormiguero](13-hormiguero.md) | Absorbe entidades sistematizadas, comunidad, coordinación y colaboración. |
+| 3 | [14 — Arquitectura y materialidad del hardware](14-hardware.md) | Absorbe hardware presente/futuro, x86_64, RISC-V, ISA y capacidades configurables del kernel. |
+| 4 | [15 — Hoja de maduración](15-hoja-maduracion.md) | Absorbe soberanía sistémica, arranque soberano, hacks al kernel y transición hacia prototipo. |
 
-## Corpus integrado
+## Criterio de absorción
 
-Estos documentos del corpus anterior quedan integrados aquí como desarrollo profundo:
+Los documentos antiguos filosóficos, culturales y de hardware dejan de actuar como entradas paralelas. Sus conceptos se concentran aquí:
 
-| Tema | Documento |
-|---|---|
-| Ecosistema GNU | [GNUpeD.md](../GNUpeD.md) |
-| Estándar C23 | [ISOC23.md](../ISOC23.md) |
-| Hardware presente y futuro | [lookingfor.md](../lookingfor.md) |
-| ASM x86_64 Intel | [intelASMx86_64.md](../intelASMx86_64.md) |
-| Soberanía sistémica | [sysKing.md](../sysKing.md) |
-| Entidades sistematizadas | [sysEntity.md](../sysEntity.md) |
-| Colaboración | [collab.md](../collab.md) |
-| Notas del autor | [notasAut.md](../notasAut.md) |
+```text
+Unix / GNU
+→ hormiguero y comunidad
+→ hardware y materialidad
+→ maduración del proyecto
+```
 
 ## Lugar dentro del proyecto
 
