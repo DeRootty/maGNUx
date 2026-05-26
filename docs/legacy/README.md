@@ -25,7 +25,7 @@ La navegación única decide dónde entra cada documento.
 | Bloque nuevo | Documentos históricos integrados |
 |---|---|
 | Propuesta técnica | `maGNUx.md`, `dernelZaltID.md`, `contractOS.md`, `kernelConfigCaps.md`, `sovereignBoot.md` |
-| Manifiesto | `intro.md`, `GNUpeD.md`, `sysKing.md`, `sysEntity.md`, `collab.md`, `notasAut.md` |
+| Manifiesto | `intro.md`, `GNUpeD.md`, `sysKing.md`, `sysEntity.md`, `collab.md` |
 | Arquitectura | `initSoonrise.md`, `systemProt.md`, `initramfs.MD`, `seL4.MD`, `Hurd.MD`, `kernelLoad.md`, `kernelLinux.md`, `research00.md`, documentos init y hacks al kernel |
 | Identidad | `xGNUpeD.md`, `distroID.md`, `relonIO.md`, `disruPed.md`, `kommuID.md`, `trilobytes.md`, `logon.md`, `login.md`, `hostroot.md`, `guestroot.md`, `VMKZ.md`, `VMDZ.md`, `bypassKZDZ.md` |
 | Filosofía | `GNUpeD.md`, `ISOC23.md`, `lookingfor.md`, `intelASMx86_64.md`, `sysKing.md`, `sysEntity.md`, `collab.md` |
