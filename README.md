@@ -10,6 +10,9 @@ maGNUx
 
 Zalty
 → distribución GNU/Linux experimental que ensaya maGNUx sobre Linux real
+
+GCC ES Técnico
+→ documentación técnica en español sobre GCC, compilación y cadena de herramientas
 ```
 
 ## Lectura única recomendada
@@ -26,6 +29,7 @@ La lectura principal del repositorio empieza aquí y continúa en `docs/`:
 8. [Zalty](zalty/readme.md)
 9. [Initramfs de Zalty](zalty/initramfs/README.md)
 10. [Prototipo HostID v0.1](zalty/initramfs/prototipo-hostid-v0.1/README.md)
+11. [GCC ES Técnico](docs/gcc/README.md)
 
 ## Navegación por planos
 
@@ -38,6 +42,7 @@ La lectura principal del repositorio empieza aquí y continúa en `docs/`:
 | Filosofía | [docs/filosofia/](docs/filosofia/README.md) | Unix/GNU, hormiguero, hardware y maduración. |
 | Zalty | [zalty/](zalty/readme.md) | Implementación experimental GNU/Linux de maGNUx. |
 | Initramfs | [zalty/initramfs/](zalty/initramfs/README.md) | Laboratorio de arranque temprano. |
+| GCC ES Técnico | [docs/gcc/](docs/gcc/README.md) | Traducción y documentación técnica en español sobre GCC. |
 | Corpus integrado | [docs/legacy/](docs/legacy/README.md) | Documentos históricos ya enlazados desde la navegación principal. |
 
 ## Regla de separación
