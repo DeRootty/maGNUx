@@ -31,6 +31,7 @@ La documentación nueva funciona como columna vertebral. Los conceptos del corpu
 | 19 | Implementación | [Zalty](../zalty/readme.md) | Presenta la distribución GNU/Linux experimental. |
 | 20 | Implementación | [Initramfs de Zalty](../zalty/initramfs/README.md) | Sitúa el laboratorio de arranque temprano. |
 | 21 | Implementación | [Prototipo HostID v0.1](../zalty/initramfs/prototipo-hostid-v0.1/README.md) | Primer ensayo técnico de identidad temprana. |
+| 22 | Herramientas GNU | [GCC ES Técnico](gcc/README.md) | Documentación técnica en español sobre GCC, compilación y cadena de herramientas. |
 
 ## Secciones principales
 
@@ -41,6 +42,7 @@ La documentación nueva funciona como columna vertebral. Los conceptos del corpu
 | [Arquitectura](arquitectura/README.md) | Modelo de capas, arranque y compatibilidad. |
 | [Identidad](identidad/README.md) | Autoridad, identidad y dominios orgánicos/técnicos. |
 | [Filosofía](filosofia/README.md) | Marco cultural, hardware y maduración. |
+| [GCC ES Técnico](gcc/README.md) | Traducción técnica y guía documental de GCC en español. |
 | [Corpus absorbido](legacy/README.md) | Mapa de documentos históricos absorbidos por la lectura principal. |
 
 ## Política de navegación
