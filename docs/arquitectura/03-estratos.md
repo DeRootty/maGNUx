@@ -259,6 +259,26 @@ Cada estrato sostiene al siguiente.
 
 ---
 
+## La metáfora del edificio y la conexión transversal
+
+Los tres estratos persistentes admiten una representación espacial:
+
+| Planta | Ámbito | Figura de autoridad/operación |
+|---|---|---|
+| Alta | **Dernel** | **ADMIN** |
+| Media | **xGNUpeD** | **COMM** |
+| Baja | **Kernel** | **ROOT** |
+
+**Trilobytes es la escalera de incendios**, una conexión transversal entre los tres ámbitos. No constituye otra planta ni altera la distinción entre control y operación.
+
+La metáfora no sustituye el orden temporal del arranque ni implica que Trilobytes tenga acceso ilimitado a todas las plantas. La identidad se constituye tempranamente; la intermediación transversal es una **función posterior y condicionada**.
+
+Para intermediar, Trilobytes necesita la luz verde de **ROOT, COMM y ADMIN**: tres delegaciones positivas e independientes. La identidad común de la arquitectura no implica autoridad común.
+
+La descripción completa está en [Trilobytes](../identidad/08-trilobytes.md).
+
+---
+
 ## Criterio de aceptación conceptual
 
 La arquitectura de estratos queda correctamente formulada si permite responder:
