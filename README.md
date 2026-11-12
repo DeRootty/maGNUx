@@ -26,10 +26,12 @@ La lectura principal del repositorio empieza aquí y continúa en `docs/`:
 5. [Inicio del sistema](docs/arquitectura/04-inicio-sistema.md)
 6. [xGNUpeD](docs/identidad/07-xgnuped.md)
 7. [Dernel](docs/identidad/09-dernel.md)
-8. [Zalty](zalty/readme.md)
-9. [Initramfs de Zalty](zalty/initramfs/README.md)
-10. [Prototipo HostID v0.1](zalty/initramfs/prototipo-hostid-v0.1/README.md)
-11. [GCC ES Técnico](docs/gcc/README.md)
+8. [Trilobytes: coherencia y representación](docs/identidad/08-trilobytes.md)
+9. [Especificación de mediación Trilobytes](docs/propuesta-tecnica/03-trilobytes-mediacion-spec.md)
+10. [Zalty](zalty/readme.md)
+11. [Initramfs de Zalty](zalty/initramfs/README.md)
+12. [Prototipo HostID v0.1](zalty/initramfs/prototipo-hostid-v0.1/README.md)
+13. [GCC ES Técnico](docs/gcc/README.md)
 
 ## Navegación por planos
 
