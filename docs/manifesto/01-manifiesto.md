@@ -271,6 +271,25 @@ La interfaz gráfica sería una expresión de esa arquitectura, no su origen.
 
 ---
 
+## Representación computacional: Trilobytes
+
+La separación entre soberanía estructural y operación cotidiana abre una nueva pregunta:
+
+~~~text
+¿la máquina entrega al usuario los servicios previstos por el proveedor,
+o puede actuar legítimamente para buscar servicios en su nombre?
+~~~
+
+La ampliación de **Trilobytes** propone ambos modelos mediante un agente de representación computacional. En uno coordina la **oferta** hacia el usuario; en el otro representa su **demanda** y procura servicios dentro del contrato autorizado.
+
+Se preservan los tres ámbitos de maGNUx: **ROOT / Kernel**, **COMM / xGNUpeD** y **ADMIN / Dernel**. Trilobytes se relaciona transversalmente con los tres, como una *escalera de incendios* de un edificio de tres plantas, sin constituir una cuarta soberanía.
+
+La intermediación activa necesita **tres delegaciones positivas independientes** —ROOT, COMM y ADMIN—, más un mandato que determine a quién representa. Esta autorización conjunta **no somete ROOT a Dernel** ni transfiere irrestrictamente privilegios al agente.
+
+Se conserva la función previa de Trilobytes como verificador de coherencia de identidad, licencia y sesión. La intermediación es su ampliación funcional, todavía **hipótesis arquitectónica**: [Trilobytes](../identidad/08-trilobytes.md) y [especificación técnica propuesta](../propuesta-tecnica/03-trilobytes-mediacion-spec.md).
+
+---
+
 ## Qué pretende madurar maGNUx
 
 maGNUx pretende madurar cinco áreas:
