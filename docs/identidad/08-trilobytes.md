@@ -1,4 +1,4 @@
-# 08 — Trilobytes: coherencia integral
+# 08 — Trilobytes: coherencia integral y representación
 
 > [⬆ Subir a sección](README.md) · [📚 Índice docs](../README.md) · [🏠 Inicio](../../README.md)
 
@@ -8,7 +8,7 @@
 
 ## En pocas palabras
 
-**Trilobytes** es la capa de coherencia integral entre identidad, política, operación y sesión orgánica.
+**Trilobytes** verifica la coherencia integral entre identidad, política, operación y sesión orgánica; la ampliación propuesta lo habilita además como agente de representación e intermediación, únicamente bajo triple delegación positiva y mandato válido.
 
 Si xGNUpeD declara la identidad inicial del sistema, y Dernel concede licencia operativa, Trilobytes comprueba que la actividad que va a desplegarse en el entorno de usuario es coherente con ambas cosas.
 
@@ -226,6 +226,51 @@ Dernel
 Trilobytes
 → verifica que la actividad orgánica respeta ese marco
 ```
+
+---
+
+## Ampliación: Trilobytes como interfaz y agente de representación
+
+Se conserva **íntegra** la función original de coherencia, Logon/Login y legitimación orgánica. La evolución propuesta incorpora un segundo momento: la **intermediación activa**. La primera función comprueba si una actividad es legítima; la segunda representa intereses ante las capacidades del sistema, siempre que haya sido habilitada.
+
+Una presentación posible ante el usuario es:
+
+> Hola, soy Trilobytes, la interfaz de comunicación de tu computadora. ¿En qué puedo ayudarte? >_
+
+### TRi + Lobby + Bytes
+
+- **Tri:** los tres ámbitos de la arquitectura.
+- **Lobby:** intermediación especializada en representación de intereses.
+- **Bytes:** servicio computacional (byte de ocho bits).
+
+No se trata de una etimología histórica, sino de la **intención conceptual de la denominación**.
+
+### El edificio y su escalera de incendios
+
+La planta baja es el **Kernel**, ante el que opera **ROOT**; la planta media es **xGNUpeD**, ante el que opera **COMM**; la planta alta es **Dernel**, ante el que opera **ADMIN**. **Trilobytes es la escalera de incendios** que relaciona las tres plantas, no una cuarta planta ni un nivel de autoridad superior.
+
+La escalera simboliza conexión transversal e independencia funcional potencial. No constituye una vía para evitar controles, suplantar autoridades ni apropiarse de privilegios.
+
+### La triple luz verde
+
+La intermediación solo queda habilitada si concurren **delegaciones positivas, explícitas y vigentes de ROOT, COMM y ADMIN**, cada una dentro de su ámbito. No basta la aprobación de dos; tampoco la ausencia de oposición. La triple habilitación **no subordina ROOT al Dernel**, ni equivale a conceder todas las facultades de las tres autoridades al agente.
+
+La composición tradicional del manifiesto `hroot + croot + droot = root` se mantiene distinta: describe los dominios constitutivos de ROOT, mientras que esta triple delegación legitima únicamente a **Trilobytes como intermediario**. La validación de coherencia puede existir antes de que se habilite la intermediación.
+
+### A quién representa
+
+La concesión estructural no determina por sí sola el representado. Un **mandato específico** distingue mandante, representado, beneficiario y alcance.
+
+- **Orientación al proveedor:** Trilobytes coordina servicios ofrecidos por un proveedor a sus usuarios.
+- **Orientación al usuario:** Trilobytes procura, compara e integra servicios en representación de las necesidades del usuario.
+
+**En un modelo, Trilobytes lleva servicios al usuario; en el otro, los busca en su nombre.** Ni el proveedor ni el usuario reciben privilegios por esa orientación. Toda operación debe respetar concesiones y mecanismos de ejecución.
+
+### Consecuencia para el diseño
+
+Se propone separar un componente **verificador/guard** de un **agente de interacción** implementable en Go. La caída de Trilobytes o la revocación de una aprobación no deben comprometer la continuidad esencial del Host. Trilobytes deja de **iniciar intermediaciones nuevas** si pierde una de las tres aprobaciones; las operaciones en curso exigen una política de cancelación o recuperación.
+
+La especificación preliminar de contratos, estados y pruebas está en [03 — Trilobytes: legitimación e intermediación](../propuesta-tecnica/03-trilobytes-mediacion-spec.md).
 
 ---
 
