@@ -262,6 +262,20 @@ Kernel
 
 ---
 
+## COMM, identidad y delegación a Trilobytes
+
+La asociación funcional propuesta es **COMM ↔ xGNUpeD**, del mismo modo que ROOT opera ante el Kernel y ADMIN ante Dernel. Este vínculo **no** sustituye la misión original de xGNUpeD: declarar una identidad técnica temprana distributiva, asociativa, conmutativa y comunicativa.
+
+La identidad inicial del Host sigue naciendo de xGNUpeD. Trilobytes **no inventa ni reemplaza** esa identidad; la utiliza para vincular actividad, sesión, contrato y mandato a un mismo sistema reconocible.
+
+COMM puede conceder desde su ámbito una **delegación positiva** para la futura intermediación de Trilobytes. Dicha concesión no equivale a la de ROOT o ADMIN, no confiere permisos ajenos y debe verificarse junto a las otras dos antes de habilitar al agente.
+
+La relación es **secuencial al constituir identidad** y puede volverse **transversal durante la operación**: una vez iniciado, Trilobytes puede dialogar con xGNUpeD/COMM sin alterar la identidad de origen.
+
+Véase [la ampliación de Trilobytes](08-trilobytes.md) y su [especificación propuesta](../propuesta-tecnica/03-trilobytes-mediacion-spec.md).
+
+---
+
 ## Criterio de aceptación conceptual
 
 xGNUpeD existe correctamente si permite responder antes del userspace ordinario:
