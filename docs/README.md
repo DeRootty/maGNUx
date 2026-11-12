@@ -45,6 +45,12 @@ La documentación nueva funciona como columna vertebral. Los conceptos del corpu
 | [GCC ES Técnico](gcc/README.md) | Traducción técnica y guía documental de GCC en español. |
 | [Corpus absorbido](legacy/README.md) | Mapa de documentos históricos absorbidos por la lectura principal. |
 
+## Ampliación oficial: Trilobytes
+
+La [descripción de Trilobytes](identidad/08-trilobytes.md) mantiene su función de coherencia de sesión y añade la representación contractual de intereses. La [especificación de legitimación e intermediación](propuesta-tecnica/03-trilobytes-mediacion-spec.md) formaliza la triple delegación positiva ROOT/COMM/ADMIN y deja claro que todavía es una propuesta, no una implementación de Zalty.
+
+---
+
 ## Política de navegación
 
 Consulta [NAVIGATION.md](NAVIGATION.md) para el patrón de enlaces internos.
