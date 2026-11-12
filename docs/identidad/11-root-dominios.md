@@ -322,6 +322,20 @@ Root / dominios
 
 ---
 
+## Soberanía ROOT y luz verde de Trilobytes
+
+La regla `hroot + croot + droot = root` **constituye la lectura de autoridad estructural compuesta** de maGNUx. No debe confundirse con la nueva habilitación de Trilobytes por **ROOT + COMM + ADMIN**: esta última no recompone ROOT, sino que legitima una función de intermediación.
+
+**ROOT no queda sometido a Dernel, COMM ni Trilobytes.** ROOT puede conceder una delegación positiva desde su propio ámbito para que Trilobytes intermedie, sin desprenderse de su soberanía. ADMIN y COMM conceden únicamente las facultades de sus respectivos ámbitos.
+
+La ausencia o revocación de la concesión ROOT impide la **intermediación conjunta de Trilobytes**, no elimina ni rebaja la autoridad ROOT. Un modo de arranque ROOT puro puede existir fuera de la vía ordinaria de Dernel; tampoco supone que el agente esté automáticamente habilitado.
+
+El permiso administrativo corriente y el ejercicio de ROOT deben conservarse como rutas diferenciadas. Una autorización de intermediación **no puede usarse como escalada genérica de privilegios**.
+
+Consúltese [Trilobytes](08-trilobytes.md) y la [especificación de su triple habilitación](../propuesta-tecnica/03-trilobytes-mediacion-spec.md).
+
+---
+
 ## Criterio de aceptación conceptual
 
 La teoría de root y dominios queda correctamente formulada si permite responder:
