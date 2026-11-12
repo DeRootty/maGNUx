@@ -309,6 +309,24 @@ Sesión operativa
 
 ---
 
+## ADMIN, delegación y mandato de intermediación
+
+Se propone expresar la relación funcional como **ADMIN es a Dernel lo que ROOT es al Kernel**. ADMIN ejerce la máxima autoridad administrativa **dentro del contrato Dernel**, no sobre la soberanía de ROOT.
+
+Dernel sigue traduciendo identidad del Host en **licencia operativa del Guest**. Esa licencia no debe confundirse con la eventual **delegación positiva de ADMIN a Trilobytes** para que pueda ejercer intermediación. Son decisiones relacionadas, pero distintas:
+
+- **Licencia Guest:** qué operaciones están habilitadas para una entidad o sesión.
+- **Delegación ADMIN a Trilobytes:** qué facultades administrativas concretas aporta ADMIN a la habilitación del agente.
+- **Mandato de representación:** en interés de quién debe trabajar el agente (usuario, organización o proveedor).
+
+Trilobytes no adquiere autoridad por tener una licencia de sesión; requiere asimismo las delegaciones independientes de **ROOT y COMM**, además de la de ADMIN. Si falta cualquiera de ellas, no se activa la intermediación.
+
+Un arranque especial **ROOT puro** queda conceptualmente fuera de la jurisdicción administrativa de Dernel; no equivale a una concesión automática a Trilobytes. En Linux real, la implementación de esta distinción requiere mecanismos efectivos de privilegios y políticas, no solo nombres de roles.
+
+La propuesta técnica de [delegaciones y revocación](../propuesta-tecnica/03-trilobytes-mediacion-spec.md) desarrolla esta separación sin alterar el Dernel v0.1.
+
+---
+
 ## Criterio de aceptación conceptual
 
 Dernel existe correctamente si permite responder:
