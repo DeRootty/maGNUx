@@ -11,10 +11,14 @@ La identidad es el punto donde maGNUx deja de ser solo una teoría de arranque y
 | Orden | Documento | Función |
 |---:|---|---|
 | 1 | [07 — xGNUpeD: la capa de identidad](07-xgnuped.md) | Absorbe identidad distributiva, asociativa, conmutativa y comunicativa. |
-| 2 | [08 — Trilobytes: coherencia integral](08-trilobytes.md) | Absorbe Trilobytes, Logon y Login como proceso coherente de legitimación orgánica. |
+| 2 | [08 — Trilobytes: coherencia y representación](08-trilobytes.md) | Conserva coherencia, Logon y Login; incorpora intermediación por triple delegación y mandato. |
 | 3 | [09 — Dernel: licencia operativa](09-dernel.md) | Absorbe Dernel/ZaltID y la idea de licencia operativa entre host y guest. |
 | 4 | [10 — Dinámica de identidades: Host y Guest](10-host-guest.md) | Absorbe Host, Guest, VMKZ, VMDZ y plano delegado. |
 | 5 | [11 — Root y los dominios de autoridad](11-root-dominios.md) | Absorbe init_ID, contrato administrativo, autoridad raíz y dominios de ejecución. |
+
+La ampliación de Trilobytes dispone de una [especificación técnica propuesta](../propuesta-tecnica/03-trilobytes-mediacion-spec.md). Su desarrollo no modifica el alcance del prototipo HostID v0.1.
+
+---
 
 ## Criterio de absorción
 
