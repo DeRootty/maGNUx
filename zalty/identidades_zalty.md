@@ -27,6 +27,39 @@ comm
 
 ---
 
+## Lectura semiótica del nodo: signo, objeto e intérprete
+
+La adaptación didáctica de maGNUx al sitio web añade un modelo de lectura basado en tres elementos:
+
+| Elemento | Pregunta en el sistema | Ejemplo de relación |
+|---|---|---|
+| **Signo** | ¿Qué declara el sistema? | Identidad, estado, política, contrato y licencia. |
+| **Objeto** | ¿A qué realidad corresponde la declaración? | Host, arranque, proceso, recurso o acción observable. |
+| **Intérprete** | ¿Quién interpreta y aplica esa declaración? | Un validador, un componente bajo contrato o la actividad de un Guest, según el ámbito. |
+
+La relación entre los tres elementos obliga a contrastar lo **declarado**, lo **observado** y lo **interpretado**. Su concordancia es una hipótesis de coherencia sistémica, no una garantía automática proporcionada por el mero uso del vocabulario semiótico. COMM debe permitir relacionar y auditar esas declaraciones, mientras que la ejecución y la autorización permanecen sujetas a los mecanismos efectivos de cada estrato.
+
+### Ficha conceptual de nodo semiótico
+
+El sitio propone ocho campos para investigar y describir un nodo:
+
+| Campo | Pregunta |
+|---|---|
+| Identidad | ¿Qué nodo es y cómo se distingue? |
+| Función | ¿Qué tarea declara realizar? |
+| Relación | ¿De qué nodos o dominios depende? |
+| Contrato | ¿Qué operaciones y límites se le reconocen? |
+| Firma | ¿Qué evidencia autenticada de origen e integridad sería necesaria? |
+| Traza | ¿Qué eventos permiten reconstruir sus acciones? |
+| Estado | ¿Qué condición efectiva presenta? |
+| Significado | ¿Cómo interpreta el sistema su función y su autoridad? |
+
+La **firma es un requisito por especificar**, no una afirmación de que todos los nodos de Zalty estén firmados actualmente. Una ficha descriptiva sin mecanismos de verificación y aplicación no concede privilegios ni demuestra legitimidad.
+
+Esta lectura amplía el contraste ya expuesto entre nodo técnico y nodo semiótico, sin crear una cuarta identidad ni alterar el orden ROOT/COMM/ADMIN.
+
+---
+
 ## 1. Identidad root
 
 La identidad `root` emerge de la existencia de nodos técnicos.
