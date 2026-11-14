@@ -55,6 +55,25 @@
 
 ---
 
+## Apertura académica y contrastación
+
+El sitio editorial presenta maGNUx como **una propuesta eminentemente académica**, dirigida al estudio crítico por parte de estudiantes de ingeniería, comunidades GNU/Linux y desarrolladores de hardware y software. La invitación no depende de aceptar el manifiesto: incluye discutirlo, formular alternativas y refutar hipótesis mediante resultados.
+
+Para convertir la teoría en un programa contrastable, esta lectura añade preguntas de trabajo:
+
+1. ¿Las cuatro propiedades de xGNUpeD son suficientes para declarar una identidad de Host coherente? ¿Qué observación demostraría que falta alguna?
+2. ¿Cómo se distingue una diversidad distributiva legítima de una relación sin contrato o con autoridad ambigua?
+3. ¿Puede identificarse la **superficie fragmentaria** mediante relaciones explícitas, dependencias, transiciones y estados de autorización?
+4. ¿Cuándo una declaración semiótica coincide con la realidad observable y cuándo queda reducida a una etiqueta?
+5. ¿Permite una configuración razonada de Gentoo rastrear alguna necesidad funcional hasta interfaces y código del kernel sin forzar correspondencias inexistentes?
+6. ¿La intermediación de Trilobytes niega efectivamente toda operación que carezca de alguna de las tres delegaciones o del mandato válido?
+
+Las respuestas requieren **criterios de aceptación, casos negativos, registros reproducibles y comparación con mecanismos existentes**. Los resultados no demostrados deben conservar la etiqueta de hipótesis. Así, maGNUx formula, Zalty ensaya y el resultado puede ser examinado por terceros.
+
+Lecturas de referencia: [xGNUpeD](../identidad/07-xgnuped.md), [nodos semióticos de Zalty](../../zalty/identidades_zalty.md), [trazabilidad CONFIG_*](../kernelConfigCaps.md) y [Trilobytes](../propuesta-tecnica/03-trilobytes-mediacion-spec.md).
+
+---
+
 ## Ruta de maduración propuesta
 
 ### Fase 0 — Ontología (estado actual)
