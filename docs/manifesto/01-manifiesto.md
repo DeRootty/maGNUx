@@ -8,7 +8,7 @@
 
 ## En pocas palabras
 
-maGNUx nace de una intuición sencilla: Linux funciona extraordinariamente bien, pero su arquitectura histórica no declara de forma explícita quién gobierna el sistema, desde dónde se legitima el arranque y cómo se separa la autoridad estructural de la operación cotidiana.
+maGNUx nace de una intuición sencilla: Linux funciona extraordinariamente bien y dispone de mecanismos de control, seguridad y auditoría. Pero la existencia de esos mecanismos no constituye por sí sola una teoría común que explique quién gobierna el sistema, desde dónde se legitima el arranque y cómo se distingue la autoridad estructural de la operación cotidiana.
 
 El manifiesto propone una lectura nueva:
 
@@ -18,7 +18,7 @@ Linux es insuficiente porque ha crecido tanto
 que necesita una teoría explícita de gobierno interno.
 ```
 
-maGNUx no niega Linux. Lo toma como suelo real para estudiar cómo un sistema GNU/Linux podría declarar identidad, autoridad, contrato, comunicación y operación desde el arranque temprano.
+maGNUx no niega Linux. Lo toma como suelo real para estudiar cómo un sistema GNU/Linux podría declarar identidad, autoridad, contrato, comunicación y operación desde el arranque temprano. No reclama haber descubierto los mecanismos existentes: propone una gramática para relacionarlos, razonar sobre ellos y comprobar las consecuencias de su articulación.
 
 ---
 
@@ -106,6 +106,36 @@ maGNUx interpreta Linux como un giro tangencial a Unix: conserva su potencia com
 
 ---
 
+## El vacío disciplinario y la superficie fragmentaria
+
+Un sistema puede resolver correctamente miles de problemas particulares sin disponer de una teoría integradora que permita explicar sus relaciones en conjunto. Permisos, políticas, mecanismos de arranque verificado y auditoría cumplen funciones reales; su existencia, sin embargo, no responde por sí sola a la pregunta de cómo se reconocen mutuamente sus autoridades, sus límites y sus contratos a lo largo del ciclo de vida del sistema.
+
+maGNUx denomina **vacío disciplinario** a esa falta de una gramática sistémica suficientemente explícita para relacionar, examinar y poner a prueba las decisiones de identidad, gobierno, comunicación y operación. No significa que Linux carezca de teorías, normas o ingeniería rigurosa. Señala el problema concreto que maGNUx quiere estudiar: la ausencia de un marco integrador compartido no se resuelve por la sola acumulación de mecanismos eficaces.
+
+Desde esa perspectiva aparece una noción: **superficie fragmentaria**. Es el conjunto de relaciones entre componentes, interfaces, autoridades, políticas, dependencias y transiciones de estado cuya coherencia común no está suficientemente declarada o no puede comprobarse con claridad.
+
+La hipótesis es que el vacío disciplinario **aumenta la superficie fragmentaria**: multiplica las oportunidades de que decisiones localmente válidas diverjan al relacionarse. No produce inevitablemente fragmentación efectiva, ni permite deducir que toda diferencia entre distribuciones sea una deficiencia. La diversidad puede ser legítima, fértil y compatible con la soberanía.
+
+Por eso la superficie fragmentaria **no se mide simplemente contando componentes**. Un sistema extenso, con contratos explícitos y verificables, podría presentar menos relaciones ambiguas que otro pequeño cuyas autoridades se superponen o cuyas dependencias permanecen implícitas.
+
+La teoría debe poder hacer algo más que nombrar el problema:
+
+- **Describir** qué entidad actúa, bajo qué identidad y con qué autoridad.
+- **Relacionar** sus contratos, delegaciones y condiciones de continuidad.
+- **Predecir** dónde una relación sin coherencia declarada puede admitir divergencias.
+- **Comprobar** mediante implementaciones y pruebas si esas divergencias pueden detectarse, rechazarse o reducirse.
+
+No basta con que la explicación resulte coherente en el papel. Sus consecuencias deben poder contrastarse. maGNUx formula el marco; Zalty ensaya una parte de sus hipótesis sobre Linux real. La relación propuesta entre vacío disciplinario, superficie fragmentaria y fragmentación efectiva seguirá abierta a revisión mientras no se definan criterios de observación y pruebas reproducibles.
+
+```text
+La diversidad no es la fragmentación.
+La coherencia no exige uniformidad.
+La soberanía empieza cuando las relaciones
+pueden declararse, examinarse y ponerse a prueba.
+```
+
+---
+
 ## El problema de fondo
 
 Un sistema operativo moderno puede arrancar, ejecutar servicios, gestionar usuarios y actualizar paquetes sin responder explícitamente:
@@ -120,7 +150,7 @@ Un sistema operativo moderno puede arrancar, ejecutar servicios, gestionar usuar
 ¿qué parte puede ser delegada?
 ```
 
-La ausencia de esas respuestas no impide funcionar. Pero limita la soberanía estructural.
+Que esas respuestas se distribuyan entre herramientas y capas no impide funcionar. maGNUx pregunta si, además, forman una declaración común, persistente y verificable. Donde esa coherencia queda implícita, puede ampliarse la superficie fragmentaria.
 
 maGNUx surge para formular esas preguntas de forma arquitectónica.
 
@@ -292,7 +322,7 @@ Se conserva la función previa de Trilobytes como verificador de coherencia de i
 
 ## Qué pretende madurar maGNUx
 
-maGNUx pretende madurar cinco áreas:
+maGNUx pretende madurar seis áreas:
 
 | Área | Pregunta |
 |---|---|
@@ -301,6 +331,7 @@ maGNUx pretende madurar cinco áreas:
 | Comunicación | ¿Cómo se coordinan las capas? |
 | Operación | ¿Qué se permite hacer al Guest? |
 | Compatibilidad | ¿Cómo se conserva Linux/POSIX sin quedar limitado por ellos? |
+| Coherencia sistémica | ¿Cómo se identifica y contrasta la superficie fragmentaria sin confundir diversidad con fragmentación? |
 
 Estas áreas se despliegan después en:
 
@@ -334,7 +365,7 @@ maGNUx pretende formular una necesidad: la de un GNU/Linux capaz de declararse a
 
 maGNUx puede parecer filosóficamente interesante, arquitectónicamente provocador y técnicamente incompleto.
 
-Esa incompletitud no es un fallo accidental. Es el estado natural de una arquitectura que está intentando nombrar un problema antes de cerrarlo prematuramente.
+Esa incompletitud no es un fallo accidental. Es el estado natural de una arquitectura que está intentando nombrar un problema antes de cerrarlo prematuramente. Su maduración exige que la teoría no solo describa el sistema, sino que permita deducir consecuencias y someterlas a comprobación, sin presentar como resultados demostrados lo que todavía son hipótesis.
 
 ```text
 maGNUx no es una negación de Linux.
