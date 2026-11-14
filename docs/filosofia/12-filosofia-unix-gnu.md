@@ -62,6 +62,27 @@ Esto viene de la mano de los sistemas libres, que son verdaderas **rutas de bajo
 
 ---
 
+## Redundancia del constructo y superficie fragmentaria
+
+La adaptación editorial publicada en el sitio introduce la **redundancia del constructo** como una pregunta previa a la repetición de código. Llama *constructo* al conjunto de principios, normas, criterios de autoridad y relatos con los que una comunidad o proveedor explica qué es su sistema y para qué existe. Dos implementaciones pueden parecer distintas y, sin embargo, repetir decisiones que nunca llegan a articularse en un contrato compartido.
+
+Para investigarlo, el sitio distingue cuatro planos de posible redundancia:
+
+| Plano | Pregunta de investigación |
+|---|---|
+| Filosófico o de constructo | ¿Se replantean por separado los mismos principios de identidad, autoridad y propósito? |
+| Operativo | ¿Se resuelven varias veces funciones equivalentes sin interfaces o contratos compatibles? |
+| Seguridad | ¿Se repiten defensas sin una declaración coherente de sus límites y responsabilidades? |
+| Mantenimiento | ¿Se multiplica el esfuerzo de sostener cambios que podrían compartir una base verificable? |
+
+La clasificación editorial de sistemas mediante metáforas como *filosofía comunitaria*, *constitución de proyecto*, *política empresarial* o *doctrina de producto* se entiende como herramienta comparativa, **no como una taxonomía exhaustiva ni como afirmación de que un ecosistema carezca de filosofía o gobernanza**.
+
+No toda repetición es redundancia dañina: la diversidad de implementaciones, la defensa en profundidad y el mantenimiento independiente pueden estar justificados. La cuestión es identificar las relaciones cuya coherencia no se declara o no se puede comprobar; esa es una posible contribución a la **superficie fragmentaria**, según la [hipótesis del manifiesto](../manifesto/01-manifiesto.md).
+
+maGNUx no persigue que todas las comunidades construyan lo mismo. Propone criterios para comprender **cuándo una diferencia es deliberada y cuándo expresa una relación no resuelta**.
+
+---
+
 ## Lo que maGNUx hereda de Unix
 
 maGNUx no rompe con Unix; lo **prolonga**:
