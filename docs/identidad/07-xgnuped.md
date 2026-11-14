@@ -81,6 +81,24 @@ en este estado de arranque.
 
 ---
 
+## Una identidad de sistema que emerge de cuatro propiedades
+
+En la lectura desarrollada para el sitio editorial de maGNUx, **distributiva, asociativa, conmutativa y comunicativa son cuatro propiedades de una misma identidad sistémica**, no cuatro identidades de Host que deban competir entre sí. Los encabezados históricos «identidad distributiva», «identidad asociativa» y equivalentes se conservan en este documento para mantener la continuidad del corpus: describen cuatro aspectos de la identidad declarada por xGNUpeD.
+
+```text
+propiedad distributiva
++ propiedad asociativa
++ propiedad conmutativa
++ propiedad comunicativa
+→ identidad del sistema declarada y susceptible de comprobación
+```
+
+La composición no consiste en sumar campos sin criterio. Requiere que las declaraciones no se contradigan y que pueda identificarse qué fuente, política o contexto respalda cada una. Una propiedad desconocida se debe declarar como tal; no se da por satisfecha por silencio.
+
+Esta distinción permite conservar la diversidad distributiva sin convertirla en pérdida automática de identidad: xGNUpeD reconoce el linaje, las asociaciones aceptadas, las capacidades conmutables y la forma de comunicar su estado. El Dernel recibe una identidad articulada, no cuatro autoridades independientes.
+
+---
+
 ## Identidad distributiva
 
 La **identidad distributiva** expresa la relación del sistema con la distribución que lo interpreta.
@@ -208,6 +226,23 @@ Sin identidad comunicativa, el sistema puede ejecutar. Pero no puede explicar de
 | Comunicativa | ¿Cómo declara y transmite su estado? | Opacidad, logs sin autoridad, trazabilidad débil. |
 
 Estas cuatro propiedades no son decoración teórica. Son la base para que el Dernel pueda operar sobre un sistema que ya tiene una identidad mínima.
+
+---
+
+## Criterio práctico de observación
+
+La lectura editorial del sitio propone convertir cada propiedad en una pregunta que pueda investigarse:
+
+| Propiedad | Declaración esperada | Observación o comprobación pendiente |
+|---|---|---|
+| Distributiva | Distribución, kernel y linaje base | Contrastar los datos declarados con el Host arrancado. |
+| Asociativa | Comunidad, repositorios, perfil y relaciones admitidas | Comprobar que una asociación está amparada por política y contrato. |
+| Conmutativa | Capacidades propias, compatibles, prestadas o rechazadas; contexto de arranque | Verificar que el cambio de contexto o de componente no falsea la identidad. |
+| Comunicativa | Eventos, estado y origen de las declaraciones | Examinar trazas, integridad y continuidad entre etapas. |
+
+Una hipótesis adicional del sitio pregunta si las propiedades declaradas permitirían **reducir comprobaciones redundantes o recorridos innecesarios**. Sigue siendo una cuestión de investigación, no una mejora de rendimiento acreditada. Habría que comparar trazas, número de verificaciones, costes y resultados bajo configuraciones equivalentes.
+
+Para el subconjunto técnicamente definido, véase la [especificación HostID](../propuesta-tecnica/01-xgnuped-spec.md).
 
 ---
 
