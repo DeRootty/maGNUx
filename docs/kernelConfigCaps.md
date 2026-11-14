@@ -490,6 +490,48 @@ Por tanto, si maGNUx define un init propio, debe distinguir:
 
 ---
 
+## 15 bis. Método de trazabilidad funcional a partir de Gentoo
+
+La adaptación didáctica del sitio maGNUx recoge un método de investigación que parte de decisiones reales de instalación o compilación de software en Gentoo, en lugar de recorrer los directorios del kernel sin una pregunta funcional previa. Su objetivo es documentar por qué se necesita una capacidad y qué mecanismos la satisfacen.
+
+El itinerario de estudio propuesto es:
+
+```text
+USE flag o característica de paquete
+→ dependencias del paquete
+→ requisitos funcionales
+→ interfaces del sistema operativo
+→ posibles CONFIG_* relacionados
+→ Kconfig y Makefiles
+→ código fuente
+→ recurso administrado
+```
+
+**Advertencia metodológica:** un USE flag de Portage y un símbolo `CONFIG_*` pertenecen a sistemas de configuración distintos. No existe necesariamente una relación directa: la característica puede resolverse por completo en espacio de usuario. La cadena anterior es una **ruta de investigación**, no una regla universal de correspondencia.
+
+### Ficha reproducible de trazabilidad
+
+Para cada caso, la ficha del sitio propone registrar:
+
+1. Paquete de Gentoo investigado.
+2. USE flag o característica seleccionada.
+3. Dependencias introducidas.
+4. Funcionalidad que justifica la selección.
+5. Interfaces del sistema operativo utilizadas.
+6. Opciones `CONFIG_*` relacionadas, si existen.
+7. Definiciones y dependencias Kconfig.
+8. Archivos Makefile implicados.
+9. Archivos de código fuente relevantes.
+10. Recursos del sistema administrados.
+11. Consecuencias observadas o esperadas de habilitar o excluir la funcionalidad.
+12. Posible aplicación dentro de maGNUx.
+
+Debe anotarse, además, la **versión del paquete, del kernel y del árbol fuente**, así como los campos «sin relación», «desconocido» o «por investigar» cuando corresponda. No se deben inventar dependencias para completar una tabla.
+
+La ficha permite conectar decisiones de construcción con sus consecuencias en tiempo de ejecución y evaluar, mediante pruebas, si una capacidad debe estar disponible durante el arranque temprano, durante la activación de servicios, bajo regulación en ejecución o si requiere un desarrollo adicional. El objetivo no es minimizar ciegamente el número de opciones: es **justificar cada decisión**.
+
+---
+
 ## 16. Conclusión
 
 Los tags `CONFIG_*` condicionan la compilación del kernel.
