@@ -92,6 +92,14 @@ Aquí se expresan como requisitos técnicos.
 
 ---
 
+### Una identidad, cuatro propiedades
+
+La nomenclatura «identidad distributiva/asociativa/conmutativa/comunicativa» procede del corpus original. La adaptación editorial del sitio aclara que se trata de **cuatro propiedades que concurren en una identidad del Host**, no de cuatro credenciales soberanas independientes. Se conservan los nombres de las estructuras C por compatibilidad documental.
+
+Los indicadores del ejemplo TOML de esta especificación son declaraciones de estado; por sí solos **no constituyen pruebas criptográficas ni acreditan que una propiedad se haya validado**. En una implementación futura, la comprobación deberá vincular cada valor con su fuente, la política aplicable y su resultado de verificación.
+
+---
+
 ## Estructuras de datos propuestas
 
 ### Contexto del Host
