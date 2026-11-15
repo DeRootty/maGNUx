@@ -15,23 +15,24 @@ La documentación nueva funciona como columna vertebral. Los conceptos del corpu
 | 3 | Propuesta técnica | [Especificación Dernel](propuesta-tecnica/02-dernel-spec.md) | Formaliza la licencia operativa entre host y guest. |
 | 4 | Manifiesto | [Manifiesto](manifesto/01-manifiesto.md) | Expone la razón de ser del proyecto. |
 | 5 | Manifiesto | [Hipótesis central](manifesto/02-hipotesis-central.md) | Declara la soberanía sistémica como problema de arranque. |
-| 6 | Arquitectura | [Estratos](arquitectura/03-estratos.md) | Ordena ROOT, COMM y ADMIN. |
-| 7 | Arquitectura | [Inicio del sistema](arquitectura/04-inicio-sistema.md) | Describe la transición desde metal hacia sistema. |
-| 8 | Arquitectura | [Bus de arranque](arquitectura/05-bus-arranque.md) | Explica la comunicación temprana. |
-| 9 | Arquitectura | [Capas POSIX](arquitectura/06-capas-posix.md) | Sitúa compatibilidad, Linux e init tradicionales. |
-| 10 | Identidad | [xGNUpeD](identidad/07-xgnuped.md) | Define identidad distributiva, conmutativa, asociativa y comunicativa. |
-| 11 | Identidad | [Trilobytes](identidad/08-trilobytes.md) | Integra coherencia, logon, login y legitimación orgánica. |
-| 12 | Identidad | [Dernel](identidad/09-dernel.md) | Explica la licencia operativa y la traducción entre kernel, host y guest. |
-| 13 | Identidad | [Host y Guest](identidad/10-host-guest.md) | Refunde Host, Guest, VMKZ, VMDZ y plano delegado. |
-| 14 | Identidad | [Root y dominios](identidad/11-root-dominios.md) | Delimita dominios raíz, autoridad y administración. |
-| 15 | Filosofía | [Unix y GNU](filosofia/12-filosofia-unix-gnu.md) | Integra filosofía Unix, GNU, GPL y C como medio sistémico. |
-| 16 | Filosofía | [Hormiguero](filosofia/13-hormiguero.md) | Usa la metáfora orgánica para explicar nodos, comunidad y coordinación. |
-| 17 | Filosofía | [Hardware](filosofia/14-hardware.md) | Relaciona hardware presente, futuro, ISA y capacidades del kernel. |
-| 18 | Filosofía | [Hoja de maduración](filosofia/15-hoja-maduracion.md) | Ordena fases, límites y transición hacia prototipo. |
-| 19 | Implementación | [Zalty](../zalty/readme.md) | Presenta la distribución GNU/Linux experimental. |
-| 20 | Implementación | [Initramfs de Zalty](../zalty/initramfs/README.md) | Sitúa el laboratorio de arranque temprano. |
-| 21 | Implementación | [Prototipo HostID v0.1](../zalty/initramfs/prototipo-hostid-v0.1/README.md) | Primer ensayo técnico de identidad temprana. |
-| 22 | Herramientas GNU | [GCC ES Técnico](gcc/README.md) | Documentación técnica en español sobre GCC, compilación y cadena de herramientas. |
+| 6 | Manifiesto | [Horizonte tecnológico — Arquetipar sistemas operativos](manifesto/horizonte-arquetipado.md) | Organiza las siete dimensiones, la maqueta y su continuidad por convolución. |
+| 7 | Arquitectura | [Estratos](arquitectura/03-estratos.md) | Ordena ROOT, COMM y ADMIN. |
+| 8 | Arquitectura | [Inicio del sistema](arquitectura/04-inicio-sistema.md) | Describe la transición desde metal hacia sistema. |
+| 9 | Arquitectura | [Bus de arranque](arquitectura/05-bus-arranque.md) | Explica la comunicación temprana. |
+| 10 | Arquitectura | [Capas POSIX](arquitectura/06-capas-posix.md) | Sitúa compatibilidad, Linux e init tradicionales. |
+| 11 | Identidad | [xGNUpeD](identidad/07-xgnuped.md) | Define identidad distributiva, conmutativa, asociativa y comunicativa. |
+| 12 | Identidad | [Trilobytes](identidad/08-trilobytes.md) | Integra coherencia, logon, login y legitimación orgánica. |
+| 13 | Identidad | [Dernel](identidad/09-dernel.md) | Explica la licencia operativa y la traducción entre kernel, host y guest. |
+| 14 | Identidad | [Host y Guest](identidad/10-host-guest.md) | Refunde Host, Guest, VMKZ, VMDZ y plano delegado. |
+| 15 | Identidad | [Root y dominios](identidad/11-root-dominios.md) | Delimita dominios raíz, autoridad y administración. |
+| 16 | Filosofía | [Unix y GNU](filosofia/12-filosofia-unix-gnu.md) | Integra filosofía Unix, GNU, GPL y C como medio sistémico. |
+| 17 | Filosofía | [Hormiguero](filosofia/13-hormiguero.md) | Usa la metáfora orgánica para explicar nodos, comunidad y coordinación. |
+| 18 | Filosofía | [Hardware](filosofia/14-hardware.md) | Relaciona hardware presente, futuro, ISA y capacidades del kernel. |
+| 19 | Filosofía | [Hoja de maduración](filosofia/15-hoja-maduracion.md) | Ordena fases, límites y transición hacia prototipo. |
+| 20 | Implementación | [Zalty](../zalty/readme.md) | Presenta la distribución GNU/Linux experimental. |
+| 21 | Implementación | [Initramfs de Zalty](../zalty/initramfs/README.md) | Sitúa el laboratorio de arranque temprano. |
+| 22 | Implementación | [Prototipo HostID v0.1](../zalty/initramfs/prototipo-hostid-v0.1/README.md) | Primer ensayo técnico de identidad temprana. |
+| 23 | Herramientas GNU | [GCC ES Técnico](gcc/README.md) | Documentación técnica en español sobre GCC, compilación y cadena de herramientas. |
 
 ## Secciones principales
 
