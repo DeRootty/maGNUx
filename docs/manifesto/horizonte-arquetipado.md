@@ -121,6 +121,49 @@ La palabra «convolución» se utiliza aquí en el sentido conceptual del manifi
 
 ---
 
+## Proyección especulativa, tensión de avance y fractura
+
+La representación helicoidal incorpora una pregunta que no puede resolverse fijando de antemano el paso de la hélice: **¿qué impulsa su avance y qué condiciones puede soportar la maqueta sin perder coherencia?**
+
+maGNUx propone distinguir dos proyecciones conceptuales asociadas al ángulo `φ`:
+
+- **Proyección efectiva, asociada al coseno de φ:** ámbito que la materialización permite realizar y demostrar bajo las condiciones observadas.
+- **Proyección especulativa, asociada al seno de φ:** campo de posibilidades, exigencias y relaciones cuya incorporación se anticipa, pero cuya conformidad todavía debe someterse a prueba.
+
+La **proyección especulativa establece la tensión del paso helicoidal**. No se define esa tensión como una mera resta entre seno y coseno. La proyección especulativa puede alojar expectativas muy diversas: nuevas funciones, servicios, relaciones entre componentes, cambios contractuales, automatización, hardware añadido o modos de operación que todavía no han adquirido garantías suficientes. El banco de pruebas deberá determinar cómo se manifiesta esa tensión en una implementación concreta.
+
+La tensión no es, por sí misma, una anomalía. Puede impulsar la ampliación de capacidades y la reordenación legítima de relaciones. Pero **el arquetipo no soporta necesariamente cualquier tensión sin consecuencias**.
+
+Las siete dimensiones delimitan condiciones de integridad. Si una transformación especulativa exige más de lo que las relaciones constitutivas pueden absorber, la maqueta puede **fracturarse**: su identidad, las competencias legítimas, sus contratos o la correspondencia entre declaraciones y hechos dejan de mantenerse coherentemente. Una fractura conceptual **no equivale automáticamente a una intrusión o brecha explotable**; puede convertirse en un problema de ciberseguridad cuando permite comprometer una garantía de seguridad o realizar operaciones contrarias a la autoridad y el contrato establecidos.
+
+El ejemplo de Trilobytes hace visible esta diferencia: ampliar sus funciones de intermediación es una posibilidad especulativa legítima; permitirle operar sin alguna de las delegaciones positivas independientes de ROOT, COMM y ADMIN, o sin mandato válido, fracturaría la condición contractual que lo legitima, aunque el programa siguiera ejecutándose.
+
+### El banco de pruebas como instrumento de observación
+
+Por tanto, el banco de pruebas no solo acredita el funcionamiento básico de una materialización del arquetipo. Debe ayudar a **modelar experimentalmente la tensión asociada al paso de hélice y a localizar condiciones de fractura**.
+
+Una investigación reproducible tendría que:
+
+1. **Declarar el arquetipo y sus requisitos** antes de iniciar el ensayo, diferenciando invariantes, competencias y contratos.
+2. **Fijar el contexto material**: silicio, firmware, kernel, recursos vivos, configuración y escala de observación.
+3. **Formular la proyección especulativa antes de conocer los resultados**: qué posibilidades se pretende incorporar, qué cambios se esperan y qué relaciones podrían tensionarse.
+4. **Medir la proyección efectiva** mediante pruebas sintéticas y de integración que documenten capacidades, estados, autorizaciones, denegaciones y resultados.
+5. **Introducir variaciones controladas** de carga, componentes, dependencias, contratos y delegaciones, registrando las transiciones y los mecanismos de protección.
+6. **Distinguir el límite de coherencia de la vulnerabilidad explotable**: detectar una contradicción del modelo no demuestra todavía que exista una brecha de seguridad.
+7. **Estudiar la relación entre tensión observada y avance temporal**, sin imponer un paso constante ni una relación matemática no respaldada por datos.
+
+Las tensiones pueden depender de varias dimensiones a la vez. No debe suponerse que un único número compense violaciones irrenunciables de autoridad o contrato con mejoras de rendimiento. El sistema puede necesitar **límites por competencia y condiciones que nunca deban cruzarse**, además de indicadores cuantitativos.
+
+### El alcance de la analogía fractal
+
+La convolución se propone también como una **expresión de tipo fractal**: la tensión y sus consecuencias podrían examinarse a diferentes escalas, desde el sistema completo hasta contratos, capas o nodos particulares. Esta posibilidad no convierte automáticamente a una hélice en un fractal. Solo tendría contenido matemático si se identificaran regularidades entre escalas que pudieran medirse, compararse y eventualmente refutarse.
+
+Mientras falten esas mediciones, radio constante, seno, coseno, paso helicoidal, tensión y fractura son **elementos de un modelo conceptual en proceso de formalización**. Su utilidad será producir preguntas y predicciones que un laboratorio pueda contrastar, no sustituir la experimentación mediante una imagen geométrica.
+
+Este planteamiento deja abierto el horizonte de capacidades emergentes, incluida la inteligencia artificial integrada a bajo nivel. Que una capacidad nueva pueda aparecer en el hardware vivo no le concede por ello autoridad legítima: también ella deberá responder ante la identidad, el contrato, la evidencia y los límites de integridad de la maqueta.
+
+---
+
 ## De la maqueta a los estratos
 
 Las siete dimensiones no sustituyen ROOT, COMM y ADMIN. Explican **qué relaciones debe resolver una maqueta**, mientras que los estratos describen **cómo maGNUx propone organizar esas relaciones** en su arquitectura.
@@ -141,7 +184,7 @@ La utilidad disciplinaria del arquetipo depende de no confundir una geometría c
 
 **Ya puede investigarse** la identidad temprana de un Host, la declaración de contratos, la comprobación de capacidades expuestas, las transiciones de estado, el registro de evidencias y la denegación de operaciones sin competencia o delegación suficiente.
 
-**Queda por formalizar** qué representa exactamente el radio teórico, cómo se define la posición angular, qué determina el paso temporal de la hélice y cómo se traducen sus unidades a arquitecturas materiales distintas. Tampoco se ha demostrado que una trayectoria helicoidal describa mejor todas las clases de continuidad de un sistema operativo: ese alcance pertenece a la investigación.
+**Queda por formalizar** qué representa exactamente el radio teórico, cómo se define la posición angular, cómo se relaciona la tensión especulativa con el paso temporal de la hélice y cómo se traducen sus unidades a arquitecturas materiales distintas. También está pendiente identificar límites de fractura observables y comprobar si existen regularidades entre escalas. Tampoco se ha demostrado que una trayectoria helicoidal describa mejor todas las clases de continuidad de un sistema operativo: ese alcance pertenece a la investigación.
 
 Una primera comprobación deberá distinguir entre la maqueta declarada y lo que realmente puede ejecutar la máquina, registrar sus divergencias y contrastar sus consecuencias con las predicciones de maGNUx. La **superficie fragmentaria** ofrece una de las preguntas que esa contrastación deberá estudiar.
 
