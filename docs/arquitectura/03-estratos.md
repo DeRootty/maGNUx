@@ -293,4 +293,4 @@ La arquitectura de estratos queda correctamente formulada si permite responder:
 
 ---
 
-*← [Hipótesis central](../manifesto/02-hipotesis-central.md) | [Índice](../README.md) | Siguiente: [Inicio del sistema →](04-inicio-sistema.md)*
+*← [Horizonte tecnológico y arquetipos](../manifesto/horizonte-arquetipado.md) | [Índice](../README.md) | Siguiente: [Inicio del sistema →](04-inicio-sistema.md)*
