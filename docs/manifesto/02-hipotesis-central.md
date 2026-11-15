@@ -332,6 +332,16 @@ Ese es el punto de partida del resto de la documentación.
 
 ---
 
+## Del principio a la maqueta
+
+Una teoría de soberanía no se materializa por el solo hecho de formular sus principios. Antes de elegir mecanismos o distribuciones, maGNUx propone **arquetipar**: construir una maqueta de sistema operativo a partir de referencias constitutivas que puedan relacionarse y examinarse.
+
+Las siete dimensiones —identidad, autoridad, contrato, capacidades, estado, evidencia y continuidad— establecen una secuencia de preguntas. La identidad remite a la materialidad; la autoridad requiere competencias; las competencias piden contratos; los contratos gobiernan capacidades; la operación adquiere estados; los estados necesitan evidencia; y la continuidad sitúa su materialización en el tiempo.
+
+Este paso está desarrollado en [Horizonte tecnológico — Arquetipar sistemas operativos](horizonte-arquetipado.md). La maqueta no sustituye a los estratos ROOT, COMM y ADMIN: prepara su lectura como una respuesta arquitectónica a esas preguntas.
+
+---
+
 ## Criterio de aceptación conceptual
 
 La hipótesis central queda correctamente formulada si permite responder:
@@ -345,8 +355,9 @@ La hipótesis central queda correctamente formulada si permite responder:
 7. qué implica una metadistribución de paso;
 8. cómo se articula ROOT/COMM/ADMIN;
 9. por qué la IA sistémica exige identidad previa;
-10. cómo se abre el paso hacia arquitectura e identidad.
+10. cómo se abre el paso hacia arquitectura e identidad;
+11. cómo se relacionan las siete dimensiones con la construcción del arquetipo.
 
 ---
 
-*← [Manifiesto](01-manifiesto.md) | [Índice](../README.md) | Siguiente: [Los tres estratos →](../arquitectura/03-estratos.md)*
+*← [Manifiesto](01-manifiesto.md) | [Índice](../README.md) | Siguiente: [Horizonte tecnológico y arquetipos →](horizonte-arquetipado.md)*
