@@ -106,6 +106,39 @@ maGNUx interpreta Linux como un giro tangencial a Unix: conserva su potencia com
 
 ---
 
+## Microsoft como referencia: políticas de sistema y filosofía comunitaria
+
+El problema de la continuidad sistémica no es exclusivo del ecosistema GNU/Linux. Conviene observar cómo otras tradiciones han intentado sostener sistemas operativos cada vez más complejos sin perder compatibilidad, integridad o capacidad de transformación.
+
+Microsoft ofrece una referencia documentada. Desde la formulación de *Windows as a Service*, presentada con Windows 10, concibe las nuevas funciones y el mantenimiento como un proceso continuado, acompañado de canales de actualización, ciclos de soporte, pruebas de compatibilidad y mecanismos de despliegue. Su documentación explica que las actualizaciones acumulativas buscan evitar la dispersión de configuraciones y mantener los equipos próximos a las condiciones verificadas por el fabricante. Véanse la [declaración inicial de Windows como servicio (2015)](https://blogs.windows.com/windows-insider/2015/01/21/the-next-generation-of-windows-windows-10/) y la [descripción técnica del modelo de mantenimiento](https://learn.microsoft.com/en-us/windows/deployment/update/waas-overview).
+
+La continuidad no depende únicamente de distribuir código nuevo. Las [*safeguard holds* o retenciones de protección](https://learn.microsoft.com/en-us/windows/deployment/update/safeguard-holds) permiten posponer una actualización cuando se conocen riesgos graves de incompatibilidad. Por su parte, las [líneas base de seguridad](https://learn.microsoft.com/en-us/windows/security/operating-system-security/device-management/windows-security-configuration-framework/windows-security-baselines) convierten recomendaciones de ingeniería en políticas de configuración aplicables y revisables. Son ejemplos observables de cómo una plataforma establece reglas para admitir, contener o rechazar determinadas transformaciones.
+
+**Desde la interpretación de maGNUx**, ese conjunto de políticas, mecanismos y ciclos puede leerse como una **teoría operativa implícita de continuidad**: un modo sistemático de relacionar gobierno del producto, configuración, mantenimiento y compatibilidad a lo largo del tiempo. La expresión es una lectura analítica del presente manifiesto; **no significa que Microsoft haya publicado o denominado formalmente una «teoría de sistemas operativos» equivalente a maGNUx**. Tampoco implica que conservar el nombre de una versión de Windows garantice, por sí solo, la integridad del sistema.
+
+La comparación interesa porque reconoce un problema común, pero también pone de manifiesto dos puntos de partida diferentes.
+
+En Windows, las políticas de plataforma se articulan principalmente desde la responsabilidad de un fabricante que define, distribuye y mantiene su producto, aunque los administradores y organizaciones puedan configurar numerosos aspectos de su operación. En maGNUx, el fundamento normativo se inspira en la **filosofía GNU**, que sitúa el control del software en las personas que lo utilizan: las libertades de ejecutar, estudiar, modificar, compartir y redistribuir versiones modificadas. Estas libertades se describen en la [definición de software libre del proyecto GNU](https://www.gnu.org/philosophy/free-sw.en.html). A ellas se suma el carácter plural y colaborativo del desarrollo del kernel Linux y de sus distribuciones, sin suponer que todas las comunidades adopten las mismas políticas o la misma filosofía.
+
+Por tanto, maGNUx no pretende trasladar las políticas de Microsoft a GNU/Linux ni presentar a Windows como una arquitectura carente de fundamentos. Tampoco sostiene que las libertades del software libre basten, por sí mismas, para asegurar la coherencia técnica de cada sistema. Su propósito es **hacer explícita una teoría de constitución y continuidad** desde la que los distintos componentes, autoridades y contratos de un sistema GNU/Linux puedan describirse, justificarse y someterse a pruebas sin sacrificar la capacidad comunitaria de estudiar, modificar y compartir.
+
+La diferencia puede resumirse sin convertirla en rivalidad:
+
+```text
+Microsoft / Windows
+→ gobierno de plataforma expresado en políticas,
+  compatibilidad, seguridad y mantenimiento continuo.
+
+GNU y comunidades Linux / maGNUx
+→ libertades y cooperación como fundamento;
+  teoría explícita de identidad, competencia,
+  contrato y continuidad como objeto de investigación.
+```
+
+Las experiencias de Windows son **evidencia de la necesidad práctica de gobernar transformaciones**, no una demostración de la hipótesis helicoidal de maGNUx. Esta última deberá contrastarse con [arquetipos, tensión especulativa y bancos de pruebas](horizonte-arquetipado.md). El interés científico consiste en aprender de los mecanismos que ya funcionan y preguntar qué relaciones generales pueden explicar, qué límites dejan abiertos y qué predicciones nuevas puede formular nuestra teoría.
+
+---
+
 ## El vacío disciplinario y la superficie fragmentaria
 
 Un sistema puede resolver correctamente miles de problemas particulares sin disponer de una teoría integradora que permita explicar sus relaciones en conjunto. Permisos, políticas, mecanismos de arranque verificado y auditoría cumplen funciones reales; su existencia, sin embargo, no responde por sí sola a la pregunta de cómo se reconocen mutuamente sus autoridades, sus límites y sus contratos a lo largo del ciclo de vida del sistema.
