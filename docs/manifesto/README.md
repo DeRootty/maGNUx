@@ -12,6 +12,7 @@ El manifiesto no es todavía una implementación. Es la declaración de por qué
 |---:|---|---|
 | 1 | [01 — Manifiesto de maGNUx](01-manifiesto.md) | Absorbe la introducción, el marco GNU/GPL, la motivación inicial y la necesidad de soberanía sistémica. |
 | 2 | [02 — Hipótesis central](02-hipotesis-central.md) | Absorbe la soberanía sistémica, las entidades sistematizadas, el contrato OS y el problema de legitimidad del arranque. |
+| 3 | [Horizonte tecnológico — Arquetipar sistemas operativos](horizonte-arquetipado.md) | Desarrolla las siete dimensiones, el arquetipo como maqueta, su proyección material y la continuidad helicoidal. |
 
 ## Criterio de absorción
 
@@ -22,6 +23,7 @@ por qué existe maGNUx
 → qué soberanía declara
 → qué legitimidad necesita el arranque
 → qué entidades participan en el sistema
+→ cómo se construye un arquetipo conforme a siete dimensiones
 ```
 
 ## Lugar dentro del proyecto
