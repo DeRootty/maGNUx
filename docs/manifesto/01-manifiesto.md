@@ -343,6 +343,8 @@ Manifiesto
 → Zalty como laboratorio
 ```
 
+El [horizonte de arquetipado](horizonte-arquetipado.md) desarrolla el paso entre teoría y arquitectura: las siete dimensiones permiten construir una maqueta antes de proyectarla sobre hardware concreto. Se lee después de la [hipótesis central](02-hipotesis-central.md), sin sustituir la organización del corpus.
+
 ---
 
 ## Qué no pretende maGNUx
