@@ -106,36 +106,50 @@ maGNUx interpreta Linux como un giro tangencial a Unix: conserva su potencia com
 
 ---
 
-## Microsoft como referencia: políticas de sistema y filosofía comunitaria
+## Microsoft como referencia crítica: políticas, continuidad y límites de la integración
 
-El problema de la continuidad sistémica no es exclusivo del ecosistema GNU/Linux. Conviene observar cómo otras tradiciones han intentado sostener sistemas operativos cada vez más complejos sin perder compatibilidad, integridad o capacidad de transformación.
+La necesidad que maGNUx intenta formular se hace más visible al examinar la experiencia histórica de los sistemas operativos de gran implantación. Microsoft representa un caso especialmente significativo: ha dispuesto de décadas de desarrollo, una posición industrial estratégica y capacidad para definir políticas comunes sobre un ecosistema extraordinariamente amplio. Pese a ello, la continuidad de Windows continúa requiriendo intervenciones correctivas ante incompatibilidades, regresiones y fallos que pueden afectar a la experiencia del usuario.
 
-Microsoft ofrece una referencia documentada. Desde la formulación de *Windows as a Service*, presentada con Windows 10, concibe las nuevas funciones y el mantenimiento como un proceso continuado, acompañado de canales de actualización, ciclos de soporte, pruebas de compatibilidad y mecanismos de despliegue. Su documentación explica que las actualizaciones acumulativas buscan evitar la dispersión de configuraciones y mantener los equipos próximos a las condiciones verificadas por el fabricante. Véanse la [declaración inicial de Windows como servicio (2015)](https://blogs.windows.com/windows-insider/2015/01/21/the-next-generation-of-windows-windows-10/) y la [descripción técnica del modelo de mantenimiento](https://learn.microsoft.com/en-us/windows/deployment/update/waas-overview).
+Con la estrategia *Windows as a Service*, introducida con Windows 10, Microsoft apostó por un mantenimiento continuado mediante actualizaciones de funciones, seguridad y calidad. Esta estrategia no debe confundirse con una teoría formal de sistemas operativos: constituye, ante todo, **un modelo de gobierno del producto articulado mediante políticas, procesos de ingeniería y mecanismos de mantenimiento**. Véanse la [presentación de Windows 10 y su servicio continuado](https://blogs.windows.com/windows-insider/2015/01/21/the-next-generation-of-windows-windows-10/) y la [documentación técnica de actualización](https://learn.microsoft.com/en-us/windows/deployment/update/waas-overview).
 
-La continuidad no depende únicamente de distribuir código nuevo. Las [*safeguard holds* o retenciones de protección](https://learn.microsoft.com/en-us/windows/deployment/update/safeguard-holds) permiten posponer una actualización cuando se conocen riesgos graves de incompatibilidad. Por su parte, las [líneas base de seguridad](https://learn.microsoft.com/en-us/windows/security/operating-system-security/device-management/windows-security-configuration-framework/windows-security-baselines) convierten recomendaciones de ingeniería en políticas de configuración aplicables y revisables. Son ejemplos observables de cómo una plataforma establece reglas para admitir, contener o rechazar determinadas transformaciones.
+La propia documentación pública de Microsoft muestra los límites prácticos de ese gobierno. Las [retenciones preventivas de actualización (*safeguard holds*)](https://learn.microsoft.com/en-us/windows/deployment/update/safeguard-holds) impiden temporalmente que determinados equipos reciban nuevas versiones cuando se detectan problemas graves de compatibilidad. Las [incidencias resueltas de Windows 11, versión 25H2](https://learn.microsoft.com/en-us/windows/release-health/resolved-issues-windows-11-25h2) registran, entre otros casos de 2026, fallos en conexiones remotas, audio o relaciones de confianza con dominios asociados a determinadas actualizaciones. El [centro de comunicaciones de Windows](https://learn.microsoft.com/en-us/windows/release-health/windows-message-center) documenta además actualizaciones extraordinarias (*out-of-band*) para corregir incidencias surgidas después de entregas ordinarias, incluidas las relativas a operaciones de licencia y activación notificadas el 13 de noviembre de 2026.
 
-**Desde la interpretación de maGNUx**, ese conjunto de políticas, mecanismos y ciclos puede leerse como una **teoría operativa implícita de continuidad**: un modo sistemático de relacionar gobierno del producto, configuración, mantenimiento y compatibilidad a lo largo del tiempo. La expresión es una lectura analítica del presente manifiesto; **no significa que Microsoft haya publicado o denominado formalmente una «teoría de sistemas operativos» equivalente a maGNUx**. Tampoco implica que conservar el nombre de una versión de Windows garantice, por sí solo, la integridad del sistema.
+Estos hechos no hacen de Windows un sistema incapaz de funcionar, ni permiten afirmar que cualquier vulnerabilidad se deba a una misma causa. La reparación y las medidas de contención también son prácticas responsables de ingeniería. Pero **sí evidencian que la continuidad mantenida mediante políticas y correcciones sigue expuesta a interacciones que no siempre quedan resueltas de antemano**.
 
-La comparación interesa porque reconoce un problema común, pero también pone de manifiesto dos puntos de partida diferentes.
+La discusión no es exclusivamente técnica. La confianza y la experiencia de uso importan. En enero de 2026, una [crónica de *The Verge* sobre la necesidad de recuperar la confianza en Windows](https://www.theverge.com/tech/870045/microsoft-windows-11-issues-rebuilding-trust-notepad) recogió críticas a los fallos de fiabilidad, el rendimiento y las decisiones de producto, así como el reconocimiento por responsables de Microsoft de que debían responder mejor a las preocupaciones de sus usuarios. Eso documenta una controversia pública real; **no autoriza a atribuir la misma percepción a todos los usuarios**.
 
-En Windows, las políticas de plataforma se articulan principalmente desde la responsabilidad de un fabricante que define, distribuye y mantiene su producto, aunque los administradores y organizaciones puedan configurar numerosos aspectos de su operación. En maGNUx, el fundamento normativo se inspira en la **filosofía GNU**, que sitúa el control del software en las personas que lo utilizan: las libertades de ejecutar, estudiar, modificar, compartir y redistribuir versiones modificadas. Estas libertades se describen en la [definición de software libre del proyecto GNU](https://www.gnu.org/philosophy/free-sw.en.html). A ellas se suma el carácter plural y colaborativo del desarrollo del kernel Linux y de sus distribuciones, sin suponer que todas las comunidades adopten las mismas políticas o la misma filosofía.
+### El límite que maGNUx observa
 
-Por tanto, maGNUx no pretende trasladar las políticas de Microsoft a GNU/Linux ni presentar a Windows como una arquitectura carente de fundamentos. Tampoco sostiene que las libertades del software libre basten, por sí mismas, para asegurar la coherencia técnica de cada sistema. Su propósito es **hacer explícita una teoría de constitución y continuidad** desde la que los distintos componentes, autoridades y contratos de un sistema GNU/Linux puedan describirse, justificarse y someterse a pruebas sin sacrificar la capacidad comunitaria de estudiar, modificar y compartir.
+Desde la perspectiva crítica de maGNUx, la experiencia de Windows ilustra el riesgo de **confundir un corpus de políticas de mantenimiento con una teoría explícita de constitución y continuidad**. Una política establece qué debe permitirse, restringirse o corregirse. Una teoría debería también explicar *por qué* determinadas relaciones producen esas exigencias, *cómo* interactúan en el conjunto y *qué consecuencias permite anticipar* su transformación.
 
-La diferencia puede resumirse sin convertirla en rivalidad:
+Cuando una arquitectura necesita añadir nuevas capas de compatibilidad, rutas de recuperación, excepciones, bloqueos preventivos o correcciones extraordinarias, maGNUx propone preguntarse si tales intervenciones atienden únicamente al incidente inmediato o revelan relaciones cuya coherencia general no había sido suficientemente expresada. Desde este punto de vista pueden denominarse, **en sentido metafórico**, *prótesis funcionales*: mecanismos añadidos para sostener una continuidad que el sistema no ha logrado garantizar anticipadamente en todas sus condiciones de uso.
+
+La metáfora no debe convertirse en acusación automática. Una prótesis puede ser necesaria y beneficiosa; una mitigación puede evitar daños importantes. La cuestión investigable es **cuándo una intervención mejora de forma sostenible la coherencia y cuándo el conjunto de excepciones y dependencias incrementa la complejidad, los recursos necesarios o la superficie fragmentaria**.
+
+Esta lectura plantea una hipótesis de maGNUx, no una causalidad histórica ya demostrada: **la acumulación de políticas y soluciones localmente correctas podría dejar sin resolver relaciones constitutivas que solo se vuelven visibles durante las transformaciones del sistema**.
+
+### Dos fundamentos distintos para afrontar un mismo problema
+
+Microsoft gobierna Windows fundamentalmente mediante decisiones de plataforma, ingeniería y políticas del proveedor, aunque usuarios, administradores, desarrolladores y organizaciones también intervengan dentro de los márgenes disponibles. maGNUx propone un fundamento diferente: **partir de las libertades promovidas por GNU y del trabajo plural de las comunidades Linux para construir una teoría abierta a discusión, refutación y mejora colectiva**. La [definición de software libre de GNU](https://www.gnu.org/philosophy/free-sw.en.html) sitúa en primer plano las libertades de ejecutar, estudiar, modificar y compartir el software.
+
+Esas libertades no aseguran por sí solas estabilidad, integridad ni ausencia de fragmentación; GNU/Linux también necesita ingeniería, pruebas, mantenimiento y mecanismos correctivos. Lo que maGNUx propone añadir es una gramática común para **arquetipar** sistemas operativos: construir maquetas según las dimensiones de identidad, autoridad por competencia, contrato, capacidades, estado, evidencia y continuidad; materializarlas sobre hardware concreto; y someterlas a tensiones rigurosas en un banco de pruebas.
 
 ```text
-Microsoft / Windows
-→ gobierno de plataforma expresado en políticas,
-  compatibilidad, seguridad y mantenimiento continuo.
+Windows como referencia crítica
+→ políticas de plataforma y mantenimiento continuo
+→ incidencias observables, mitigaciones y costes de compatibilidad
+→ pregunta por las relaciones no suficientemente anticipadas
 
-GNU y comunidades Linux / maGNUx
-→ libertades y cooperación como fundamento;
-  teoría explícita de identidad, competencia,
-  contrato y continuidad como objeto de investigación.
+maGNUx como programa de investigación
+→ filosofía GNU y cooperación entre comunidades Linux
+→ teoría explícita y arquetipos dimensionales
+→ pruebas de tensión, fractura y continuidad
+→ evidencias contrastables y predicciones revisables
 ```
 
-Las experiencias de Windows son **evidencia de la necesidad práctica de gobernar transformaciones**, no una demostración de la hipótesis helicoidal de maGNUx. Esta última deberá contrastarse con [arquetipos, tensión especulativa y bancos de pruebas](horizonte-arquetipado.md). El interés científico consiste en aprender de los mecanismos que ya funcionan y preguntar qué relaciones generales pueden explicar, qué límites dejan abiertos y qué predicciones nuevas puede formular nuestra teoría.
+maGNUx **no declara demostrado un fracaso universal de Windows**, ni sostiene que Microsoft carezca de conocimientos teóricos o que sus políticas carezcan de utilidad. Su crítica se dirige a **los límites de una estrategia de continuidad cuyo éxito práctico no equivale, por sí mismo, a disponer de una teoría constitutiva explícita, debatible y predictiva**. Del mismo modo, maGNUx todavía debe demostrar que su propia teoría reduce fallos, ambigüedades o sobrecargas frente a alternativas existentes.
+
+Ahí reside el vínculo con el [horizonte tecnológico de los arquetipos](horizonte-arquetipado.md): el banco de pruebas deberá distinguir las transformaciones absorbidas de las que fracturan la maqueta y registrar evidencias suficientes para comparar resultados. El objetivo no es sustituir una política corporativa por un manifiesto sin pruebas, sino investigar **si una teoría abierta permite anticipar mejor las tensiones y mitigar los acontecimientos que hoy obligan a corregir, contener o reconstruir la continuidad del sistema**.
 
 ---
 
