@@ -153,6 +153,51 @@ Ahí reside el vínculo con el [horizonte tecnológico de los arquetipos](horizo
 
 ---
 
+## Apple como referencia de integración material: éxito relativo y límites de soberanía
+
+Tras considerar las limitaciones de la continuidad sostenida mediante políticas, surge una referencia distinta: **Apple**, cuya integración estrecha de hardware, sistema operativo y herramientas de desarrollo permite observar una estrategia de transformación tecnológica más concentrada sobre sus propias plataformas.
+
+La [transición anunciada en 2020 de los Mac a Apple Silicon](https://www.apple.com/newsroom/2020/06/apple-announces-mac-transition-to-apple-silicon/) ofrece un ejemplo verificable. Apple diseñó una familia de procesadores y preparó simultáneamente macOS, compiladores, binarios universales, herramientas de desarrollo y mecanismos de compatibilidad para trasladar aplicaciones a esa materialidad. Su [documentación de seguridad](https://support.apple.com/en-euro/guide/security/sec114e4db04/web) describe además una cadena de confianza que comienza en el silicio y continúa durante el arranque, las actualizaciones y la ejecución. Son manifestaciones públicas de una **coordinación deliberada entre decisiones materiales y operativas**.
+
+Desde maGNUx, esta experiencia puede leerse como un **éxito relativo de orquestación sistémica**. Los cambios de procesador, sistema y herramientas no aparecen exclusivamente como decisiones aisladas: forman parte de transiciones planificadas que permiten conservar determinadas capacidades y abrir otras nuevas. La imagen del *paso helicoidal* resulta sugerente para observarlas, pero su uso aquí es **analógico**, no la constatación de que Apple aplique el modelo geométrico de maGNUx o haya medido su radio, su paso o su tensión especulativa.
+
+Este juicio debe conservar sus límites. Apple opera sobre un conjunto de configuraciones que controla más estrechamente, mientras que Windows presta servicio a numerosas arquitecturas y combinaciones de componentes de terceros. No sería riguroso concluir una superioridad integral sin comparar estabilidad, seguridad, soporte, compatibilidad y costes bajo condiciones equivalentes. Tampoco la integración evita la aparición de *prótesis funcionales*: [Rosetta](https://developer.apple.com/documentation/Apple-Silicon/about-the-rosetta-translation-environment) fue un mecanismo transitorio de traducción para preservar aplicaciones Intel durante la migración a Apple Silicon, y Apple anunció el cierre progresivo de su soporte general. Las [correcciones de seguridad de macOS](https://support.apple.com/en-us/149035) confirman, asimismo, que su arquitectura no está libre de fallos ni tensiones.
+
+### Lo observable no autoriza a presumir una teoría idéntica
+
+Apple publica una parte relevante de su ingeniería, incluidas [descripciones de seguridad de plataforma](https://support.apple.com/guide/security/apple-soc-security-sec87716a080/web) y [componentes de código abierto](https://opensource.apple.com/). Al mismo tiempo, conserva decisiones internas y componentes propietarios cuya fundamentación completa no es pública. **La existencia de resultados técnicos coordinados no basta para afirmar que Apple posea una teoría de sistemas operativos equivalente a maGNUx.**
+
+Puede contar con criterios integradores sólidos, con modelos internos especializados o con procedimientos de ingeniería que producen resultados semejantes desde otra lógica. El manifiesto no necesita elegir una explicación que la evidencia disponible no permite distinguir. Apple es una referencia para **estudiar relaciones de integración observables**, no una prueba de coincidencia teórica.
+
+### Coherencia, precio y libertad no son la misma magnitud
+
+La integración vertical también concentra capacidad de decisión sobre el hardware, las interfaces y el ecosistema. El precio comercial de los productos suscita una crítica legítima cuando se pregunta qué parte remunera costes e innovación, qué parte refleja diferenciación y qué margen de elección conserva el comprador.
+
+La [información financiera presentada por Apple para el ejercicio 2026](https://www.sec.gov/Archives/edgar/data/320193/000032019326000026/aapl-20260926.htm) recoge un margen bruto del 39,3 % en productos y del 76,2 % en servicios. Son magnitudes económicas pertinentes, pero **no equivalen al beneficio neto, ni prueban un sobreprecio fraudulento, ni permiten deducir que la empresa oculte una teoría que abarataría necesariamente sus dispositivos**. El conocimiento técnico y la estructura de costes no determinan por sí solos cuál debe ser el precio de mercado.
+
+La tensión entre integración y libertad de elección tampoco es meramente filosófica. En 2025, la [Comisión Europea sancionó restricciones de Apple a la posibilidad de que los desarrolladores informaran de ofertas externas a la App Store](https://digital-strategy.ec.europa.eu/en/news/commission-finds-apple-and-meta-breach-digital-markets-act). Este caso permite examinar condiciones concretas de gobernanza y competencia sin extrapolarlas a una acusación general de engaño.
+
+Desde el fundamento GNU, la pregunta de maGNUx no es si Apple sabe diseñar sistemas coherentes —sus resultados documentados muestran decisiones de integración relevantes—, sino **si esa coherencia puede formularse mediante principios discutibles, verificables y reutilizables sin depender necesariamente del control exclusivo de un fabricante**.
+
+```text
+Apple como referencia
+→ integración material y software coordinados
+→ transiciones con resultados observables
+→ límites de compatibilidad, seguridad y libertad de elección
+
+maGNUx como propuesta
+→ teoría abierta de constitución y continuidad
+→ arquetipos dimensionales materializables en hardware diverso
+→ pruebas de tensiones y límites de fractura
+→ conocimiento contrastable al servicio de las comunidades
+```
+
+Así, Microsoft y Apple no aparecen como polos morales opuestos. Representan **dos estrategias industriales con desafíos distintos** que ayudan a formular una pregunta común: qué condiciones permiten sostener transformaciones complejas, cuáles producen dependencia o fractura y qué parte de ese conocimiento puede hacerse explícita para que otros sistemas lo estudien, reproduzcan o refuten.
+
+La hipótesis de maGNUx permanece abierta: mediante el [arquetipado y los bancos de pruebas](horizonte-arquetipado.md), aspira a expresar tales relaciones antes de que sus tensiones se manifiesten únicamente como incompatibilidades, pérdidas de control o correcciones posteriores.
+
+---
+
 ## El vacío disciplinario y la superficie fragmentaria
 
 Un sistema puede resolver correctamente miles de problemas particulares sin disponer de una teoría integradora que permita explicar sus relaciones en conjunto. Permisos, políticas, mecanismos de arranque verificado y auditoría cumplen funciones reales; su existencia, sin embargo, no responde por sí sola a la pregunta de cómo se reconocen mutuamente sus autoridades, sus límites y sus contratos a lo largo del ciclo de vida del sistema.
