@@ -34,6 +34,11 @@ La lectura principal del repositorio empieza aquí y continúa en `docs/`:
 13. [Prototipo HostID v0.1](zalty/initramfs/prototipo-hostid-v0.1/README.md)
 14. [GCC ES Técnico](docs/gcc/README.md)
 
+## Nueva base constitutiva: Commonwealth del silicio
+
+- [Volumen I — Roma, Britania y Commonwealth](docs/manifesto/volumen-i-britania-roma-commonwealth.md): historia de los dominios imperiales y su evolución.
+- [Volumen II — Commonwealth del silicio](docs/manifesto/volumen-ii-commonwealth-del-silicio.md): continuidad histórica aplicada a maGNUx; ROOT/kernel, COMM/xGNUpeD, ADMIN/Dernel, modos de mantenimiento y Trilobytes en el arranque ordinario.
+
 ## Navegación por planos
 
 | Plano | Entrada | Función |
