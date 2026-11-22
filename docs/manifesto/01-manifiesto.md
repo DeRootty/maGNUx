@@ -473,3 +473,14 @@ qué teoría estructural necesita para el futuro.
 ---
 
 *← [Índice](../README.md) | Siguiente: [Hipótesis central →](02-hipotesis-central.md)*
+
+
+---
+
+## Ampliación constitutiva: Commonwealth del silicio
+
+Esta formulación del manifiesto debe leerse junto con el [Volumen I — De la Britania romana a la Commonwealth](volumen-i-britania-roma-commonwealth.md) y el [Volumen II — La Commonwealth del silicio](volumen-ii-commonwealth-del-silicio.md).
+
+El capítulo 23 del Volumen II afina la secuencia de constitución **kernel/ROOT → xGNUpeD/COMM → Dernel/ADMIN** y distingue los arranques excepcionales de mantenimiento del arranque ordinario que activa **Trilobytes** bajo la concurrencia de tres delegaciones positivas. En régimen cotidiano, Dernel habilita una identidad operativa de usuario **no ADMIN** y Trilobytes media la coordinación entre Dernel y kernel: el usuario decide la actividad; las autoridades mantienen límites y continuidad verificables.
+
+La analogía de conquista del silicio, fundamentos militarizados y Commonwealth es conceptual: no constituye reivindicación de poder político ni afirmación de viabilidad ya demostrada.
