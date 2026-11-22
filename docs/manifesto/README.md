@@ -14,6 +14,18 @@ El manifiesto no es todavía una implementación. Es la declaración de por qué
 | 2 | [02 — Hipótesis central](02-hipotesis-central.md) | Absorbe la soberanía sistémica, las entidades sistematizadas, el contrato OS y el problema de legitimidad del arranque. |
 | 3 | [Horizonte tecnológico — Arquetipar sistemas operativos](horizonte-arquetipado.md) | Desarrolla las siete dimensiones, el arquetipo como maqueta, su proyección material y la continuidad helicoidal. |
 
+
+## Base histórico-constitutiva: la Commonwealth del silicio
+
+El corpus del manifiesto incorpora dos volúmenes complementarios:
+
+- [Volumen I — De la Britania romana a la Commonwealth](volumen-i-britania-roma-commonwealth.md): precedente histórico para distinguir imperio, separación, autonomía y asociación.
+- [Volumen II — La Commonwealth del silicio](volumen-ii-commonwealth-del-silicio.md): propone una soberanía operativa semiótico-contractual y una constitución de arranque: **kernel/ROOT → xGNUpeD/COMM → Dernel/ADMIN → Trilobytes (arranque ordinario bajo triple delegación) → identidad de usuario no ADMIN**.
+
+La «conquista de la tierra del silicio» designa metafóricamente la constitución de una autoridad técnica delimitada por la arquitectura de hardware, no una reivindicación militar o política real. El Volumen II distingue los modos especiales de mantenimiento de la sesión ordinaria, en la que Trilobytes funciona como «escalera de incendios» que permite la cooperación entre Kernel y Dernel, conservando sus respectivas competencias.
+
+**Estado:** base conceptual de investigación; pendiente de formalización, prototipos y validación.
+
 ## Criterio de absorción
 
 Los textos antiguos de entrada, GNU, soberanía y entidades dejan de funcionar como puertas independientes. Sus conceptos se concentran aquí:
