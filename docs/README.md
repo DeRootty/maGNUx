@@ -46,6 +46,10 @@ La documentación nueva funciona como columna vertebral. Los conceptos del corpu
 | [GCC ES Técnico](gcc/README.md) | Traducción técnica y guía documental de GCC en español. |
 | [Corpus absorbido](legacy/README.md) | Mapa de documentos históricos absorbidos por la lectura principal. |
 
+## Base constitutiva de la Commonwealth del silicio
+
+El manifiesto se amplía con el [Volumen I histórico](manifesto/volumen-i-britania-roma-commonwealth.md) y el [Volumen II constitutivo](manifesto/volumen-ii-commonwealth-del-silicio.md). Este último desarrolla la secuencia ROOT/kernel → COMM/xGNUpeD → ADMIN/Dernel, los modos de mantenimiento y el arranque ordinario con Trilobytes, sin confundir ADMIN con la identidad no administrativa del usuario.
+
 ## Ampliación oficial: Trilobytes
 
 La [descripción de Trilobytes](identidad/08-trilobytes.md) mantiene su función de coherencia de sesión y añade la representación contractual de intereses. La [especificación de legitimación e intermediación](propuesta-tecnica/03-trilobytes-mediacion-spec.md) formaliza la triple delegación positiva ROOT/COMM/ADMIN y deja claro que todavía es una propuesta, no una implementación de Zalty.
