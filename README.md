@@ -149,7 +149,7 @@ zalty/ lo baja a máquina.
 
 ## Estado de master y las ramas históricas
 
-Esta es la rama principal `master`. La antigua rama de refundición documental ya se integró mediante el [PR #47](https://github.com/DeRootty/maGNUx/pull/47). Para la historia y el propósito de las tres ramas, consulta la [auditoría de ramas](docs/gestion-ramas.md).
+La línea principal de referencia sigue siendo `master`; esta rama `feature/rgba-trilobytes-alpha` es temporal y no sustituye su contenido. La antigua rama de refundición documental ya se integró mediante el [PR #47](https://github.com/DeRootty/maGNUx/pull/47). Para la historia de las ramas, consulta la [auditoría de ramas](docs/gestion-ramas.md).
 
 El criterio de esta rama es:
 
