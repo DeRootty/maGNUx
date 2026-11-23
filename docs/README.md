@@ -16,6 +16,7 @@ La documentación nueva funciona como columna vertebral. Los conceptos del corpu
 | 4 | Manifiesto | [Manifiesto](manifesto/01-manifiesto.md) | Expone la razón de ser del proyecto. |
 | 5 | Manifiesto | [Hipótesis central](manifesto/02-hipotesis-central.md) | Declara la soberanía sistémica como problema de arranque. |
 | 6 | Manifiesto | [Horizonte tecnológico — Arquetipar sistemas operativos](manifesto/horizonte-arquetipado.md) | Organiza las siete dimensiones, la maqueta y su continuidad por convolución. |
+| 6 bis | Manifiesto | [Artículo de soberanía contributiva](manifesto/03-reciprocidad-economica-computacional.md) | Presenta la hipótesis de financiación verificable de contribuciones libres, IA, contratos y gobernanza comunitaria. |
 | 7 | Arquitectura | [Estratos](arquitectura/03-estratos.md) | Ordena ROOT, COMM y ADMIN. |
 | 8 | Arquitectura | [Inicio del sistema](arquitectura/04-inicio-sistema.md) | Describe la transición desde metal hacia sistema. |
 | 9 | Arquitectura | [Bus de arranque](arquitectura/05-bus-arranque.md) | Explica la comunicación temprana. |
@@ -49,6 +50,10 @@ La documentación nueva funciona como columna vertebral. Los conceptos del corpu
 ## Base constitutiva de la Commonwealth del silicio
 
 El manifiesto se amplía con el [Volumen I histórico](manifesto/volumen-i-britania-roma-commonwealth.md) y el [Volumen II constitutivo](manifesto/volumen-ii-commonwealth-del-silicio.md). Este último desarrolla la secuencia ROOT/kernel → COMM/xGNUpeD → ADMIN/Dernel, los modos de mantenimiento y el arranque ordinario con Trilobytes, sin confundir ADMIN con la identidad no administrativa del usuario.
+
+## Soberanía contributiva y auditoría de ramas
+
+El [artículo académico del manifiesto](manifesto/03-reciprocidad-economica-computacional.md) propone financiar el software libre mediante contratos, evidencias y valoración revisable, distinguiendo la historia de la esclavitud colonial del voluntariado informático. La [auditoría de ramas](gestion-ramas.md) aclara qué integra ya master y por qué deben conservarse las ramas de archivo.
 
 ## Ampliación oficial: Trilobytes
 
