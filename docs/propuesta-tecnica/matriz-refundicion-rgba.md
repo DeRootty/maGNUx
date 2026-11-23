@@ -157,3 +157,44 @@ La rama no debe mantenerse como manifiesto rival: es un **espacio de revisión t
 5. ¿Qué métricas permitirán medir capacidad de carga ecológica y el valor predictivo de α?
 
 **Criterio del próximo paso:** conservar el material original y enriquecerlo por cambios pequeños, coherentes y revisables, no añadir otro corpus paralelo.
+
+---
+
+## Resultado de la fase 3 — Refundición controlada (2026-11-23)
+
+**Estado:** integración documental efectuada en la rama; revisión técnica y eventual Pull Request necesarios antes de incorporar cambios a `master`.
+
+Se han modificado sin borrar su corpus anterior: `docs/manifesto/01-manifiesto.md`, `02-hipotesis-central.md`, `docs/arquitectura/03-estratos.md`, `04-inicio-sistema.md`, `05-bus-arranque.md`, `docs/identidad/07-xgnuped.md`, `08-trilobytes.md` y `09-dernel.md`.
+
+Los índices de arquitectura e identidad también enlazan la reformulación; la documentación del manifiesto y la propuesta técnica enlazaban ya los documentos de nueva creación.
+
+### Equivalencias conservadas
+
+| Antes | Después de la refundición |
+| --- | --- |
+| ROOT es fundamento soberano | R describe el sustrato kernel y respeta su soberanía previa; no pasa a estar sometido a ADMIN. |
+| xGNUpeD declara identidad y media la comunicación | COMM/G añade objetos funcionales derivados con dependencias materiales. |
+| Dernel concede licencia operativa | ADMIN/B puede declarar entidades administrativas a partir de recursos R y G. |
+| Trilobytes verifica y puede intermediar con triple delegación | Se añade el revelado RAW, sin transformar verificación en intermediación autorizada. |
+| IA como servicio accesorio | USER-α aparece como identidad ordinaria que utiliza servicios IA sin reemplazarla como infraestructura opcional. |
+| initramfs como ensayo real, seL4 como hipótesis | Ruta A prototipable separada de Ruta B seL4/NPU todavía no demostrada. |
+| Continuidad sistémica | Se concreta la diferencia entre fallo del kernel y fallo funcional de COMM o ADMIN. |
+
+### Comprobación automática del corpus modificado
+
+Se inspeccionó el conjunto de archivos Markdown alterados en la rama para comprobar:
+
+- Un título Markdown principal por archivo.
+- Resolución de las rutas Markdown locales enlazadas a ficheros del repositorio.
+- Conservación de la base de `master` y su historial.
+
+**Resultado de la inspección realizada:** 18 archivos Markdown revisados; sin títulos de documento duplicados ni enlaces relativos a archivos inexistentes detectados. Esta comprobación **no** valida el significado de todas las afirmaciones ni representa pruebas de software.
+
+### Pendientes reales antes de fusionar
+
+1. Revisión editorial de consistencia terminológica en todo el corpus, especialmente la interpretación de la triple delegación cuando se representa al usuario.
+2. Revisión técnica de factibilidad de seL4+NPU y separación entre política declarativa y privilegios nativos; puede mantenerse como hipótesis sin bloquear la publicación.
+3. Pruebas de ejecución para el descriptor RAW, las sesiones y la degradación `α/$` → `3/$`, todavía **no implementadas**.
+4. Revisión humana del Pull Request de refundición. No fusionar por inercia o por un simple resultado positivo de enlaces.
+
+**Siguiente paso:** abrir un Pull Request **en borrador** desde `feature/rgba-trilobytes-alpha` hacia `master` con esta matriz y sus criterios de aceptación. El objetivo es un solo `master` consolidado cuando la revisión lo permita.
