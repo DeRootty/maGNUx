@@ -274,6 +274,26 @@ La especificación preliminar de contratos, estados y pruebas está en [03 — T
 
 ---
 
+## Revelado RAW de sesiones y canal α
+
+La arquitectura RGBA añade a Trilobytes una **función de composición operativa** que no elimina su misión original de coherencia ni sustituye la intermediación bajo mandato.
+
+Se distinguen tres actividades:
+
+1. **Verificar:** contrastar identidad del Host, principales, objetos declarados por R/G/B, contratos y dependencias.
+2. **Revelar:** convertir el estado constitutivo de una sesión (su **RAW sistémico**) en un descriptor operativo que exprese visibilidad, operaciones admitidas y disponibilidad de colaboración α. La aplicación real de permisos corresponde a mecanismos nativos y servicios competentes.
+3. **Intermediar activamente:** representar intereses dentro de un mandato válido cuando estén vigentes las tres delegaciones positivas ROOT, COMM y ADMIN. La mera verificación o composición no sustituye esta condición.
+
+En el revelado participan objetos del kernel (R), servicios derivados de xGNUpeD (G), entidades administrativas de Dernel (B) y —cuando existe y está autorizada— la identidad del **usuario IA α** como colaborador transversal. La IA no ocupa una cuarta planta del edificio, no recibe privilegios superiores y no comparte automáticamente las credenciales privadas del humano.
+
+El prompt representa el resultado validado: `3/$` señala Trilobytes sin α; `α/$` representa una sesión USER con IA coadyuvante habilitada. Ni el prompt ni la metáfora de iluminación conceden permisos. Si α falla, el objetivo es recuperar la sesión `3/$` con continuidad humana y revocación o finalización segura de tareas pendientes.
+
+**La imagen de la sesión no es la fotografía del kernel:** puede revelar objetos G y B con realidad funcional y dependencias verificables que no tienen un tipo equivalente en el inventario nativo R. Trilobytes debe preservar su procedencia, no inventarlos.
+
+Consultar [04 — Modelo ecológico RGBA](../manifesto/04-modelo-ecologico-rgba.md), [ADR-0001](../propuesta-tecnica/adr-0001-composicion-rgba.md) y la [especificación de sesiones](../propuesta-tecnica/04-sesion-rgba-spec.md). **Estado:** definición propuesta; no es un componente implementado en Zalty.
+
+---
+
 ## Criterio de aceptación conceptual
 
 Trilobytes existe correctamente si permite responder:
