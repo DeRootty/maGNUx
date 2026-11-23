@@ -225,6 +225,27 @@ Pero la fase práctica de maGNUx no empieza sustituyendo Linux por seL4. Empieza
 
 ---
 
+## Dos rutas de maduración del arranque: Zalty y dominio α
+
+El modelo RGBA establece un **objetivo de investigación** que debe distinguirse del arranque que maGNUx puede ensayar actualmente.
+
+| Ruta | Estado | Orden de constitución |
+|---|---|---|
+| **A — Zalty/Linux + initramfs** | Laboratorio actual y línea de prueba inmediata | Firmware → cargador → kernel Linux → initramfs → validaciones en `/boot/metal/` → `/` definitivo → xGNUpeD/Dernel/Trilobytes → sesión `3/$` y simulación opcional de α. |
+| **B — seL4 + NPU + GNU/Linux** | Arquitectura objetivo, no demostrada | El dominio seL4 y su control de la colaboración IA se constituyen antes de montar la raíz Linux definitiva. Linux debe coexistir mediante una estrategia de ejecución y propiedad de hardware explícitamente validada. |
+
+La NPU realiza operaciones neuronales; **seL4 se ejecuta en CPU**. Una NPU funcional no garantiza la existencia de controladores o un dominio seL4 compatible. La interacción de seL4 con Linux puede exigir virtualización, asignación de núcleos, gestión de MMU/IOMMU, aislamiento DMA y propiedad clara de dispositivos.
+
+«Antes de montar `/`» se refiere a la **raíz definitiva** del sistema GNU/Linux, no a que una CPU pueda iniciar dos kernels autónomos sobre los mismos recursos sin supervisor. Los ficheros persistentes de `/boot/metal/` requieren acceso por localizadores tempranos antes de existir su punto de montaje ordinario.
+
+En la ruta A, el objetivo inmediato es verificar contratos, identidad, trazabilidad de objetos y transiciones de sesión `3/$` ↔ `α/$` con un colaborador IA simulado, sin afirmar NPU ni seL4 funcionales. En la ruta B se investigará el aislamiento físico y el arranque real del dominio α.
+
+La independencia de la IA es un requisito de **continuidad**, no solo una comodidad: su fallo no debe derribar las operaciones humanas esenciales.
+
+Documentos de referencia: [modelo ecológico RGBA](../manifesto/04-modelo-ecologico-rgba.md) y [ADR-0001](../propuesta-tecnica/adr-0001-composicion-rgba.md).
+
+---
+
 ## Hurd como hipótesis de servidores
 
 Hurd/GNU Mach aporta una intuición distinta:
