@@ -327,6 +327,22 @@ La propuesta técnica de [delegaciones y revocación](../propuesta-tecnica/03-tr
 
 ---
 
+## Dernel como compositor administrativo (canal B)
+
+Dernel conserva su competencia de **licencia operativa** y su relación ADMIN. Además, la composición RGBA permite describir la existencia funcional de sus objetos: Dernel puede utilizar tanto recursos del kernel (canal R) como servicios de xGNUpeD (canal G) para constituir **entidades organizativas y administrativas** que el kernel no reconoce como clases nativas.
+
+Un contrato de servicio o una política de administración, por ejemplo `b:network-policy`, puede depender de `g:connectivity` y, por transitividad, de `r:net0`. Esa política es real en el dominio ADMIN, pero sigue limitada por los permisos efectivos sobre los recursos inferiores.
+
+Esta distinción entre **objeto administrativo** y **recurso material** hace posible razonar sobre fallos diferentes: Dernel puede tener una política inconsistente aunque el driver o el kernel continúen funcionando. La coherencia contractual debe incluir el estado de las dependencias y exigir revisión cuando estas cambien.
+
+**Trilobytes no crea esta política por revelarla**: la recibe del dominio competente, verifica sus referencias y compone la sesión según contratos. La colaboración del usuario IA α podrá interpretarla si su propio contrato lo permite, sin convertirlo en administrador.
+
+La diferencia entre ADMIN/Dernel y USER ordinario permanece. Un usuario puede trabajar sobre una sesión revelada que contiene objetos B sin poseer el rol administrativo `/>`.
+
+Desarrollo: [modelo ecológico RGBA](../manifesto/04-modelo-ecologico-rgba.md) y [especificación provisional de sesión](../propuesta-tecnica/04-sesion-rgba-spec.md).
+
+---
+
 ## Criterio de aceptación conceptual
 
 Dernel existe correctamente si permite responder:
