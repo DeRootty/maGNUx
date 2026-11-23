@@ -332,6 +332,20 @@ Ese es el punto de partida del resto de la documentación.
 
 ---
 
+## De la soberanía a la sesión revelada
+
+La secuencia **ROOT → COMM → ADMIN** describe dominios permanentes de competencia. No agota por sí sola los objetos que una sesión puede utilizar. El kernel expone recursos materiales y mecanismos; xGNUpeD constituye objetos y servicios funcionales a partir de esos recursos; Dernel puede constituir objetos administrativos adicionales a partir de recursos del kernel y servicios COMM.
+
+Una **sesión maGNUx** se propone como composición contractual de esas realidades, no como sustitución de una por otra. Los contratos iluminan el alcance de cada relación según identidad, propósito y política, sin inventar permisos. Trilobytes verificaría su coherencia y revelaría el descriptor efectivo de la sesión; los mecanismos de ejecución del sistema seguirían aplicando la autoridad real.
+
+La representación resultante es **RGBA**: R/ROOT, G/COMM, B/ADMIN, y α cuando exista un usuario IA ordinario, separado y coadyuvante. La ausencia de α no invalida la sesión: `3/$` representa el funcionamiento ordinario con Trilobytes sin IA y `α/$` señala colaboración IA habilitada, **sin elevación de permisos**.
+
+La hipótesis se considera útil si permite demostrar tanto la **trazabilidad de objetos emergentes** (de ADMIN o COMM hacia sus dependencias materiales) como una **degradación segura** cuando desaparece la IA o falla un servicio superior mientras el kernel sigue activo.
+
+Desarrollo constitutivo: [04 — Modelo ecológico RGBA](04-modelo-ecologico-rgba.md). Desarrollo evaluable: [04 — Especificación de sesión](../propuesta-tecnica/04-sesion-rgba-spec.md).
+
+---
+
 ## Del principio a la maqueta
 
 Una teoría de soberanía no se materializa por el solo hecho de formular sus principios. Antes de elegir mecanismos o distribuciones, maGNUx propone **arquetipar**: construir una maqueta de sistema operativo a partir de referencias constitutivas que puedan relacionarse y examinarse.

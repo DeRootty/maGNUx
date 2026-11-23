@@ -15,6 +15,12 @@ La arquitectura funciona como puente entre el manifiesto y la identidad operativ
 | 3 | [05 — Bus de comunicación de arranque](05-bus-arranque.md) | Absorbe Kommu, identidad comunicativa y mediación temprana entre capas. |
 | 4 | [06 — Capas de compatibilidad POSIX](06-capas-posix.md) | Absorbe Linux como kernel modelo, carga del kernel, inits tradicionales y hacks al kernel actual. |
 
+## Lectura complementaria RGBA (en revisión)
+
+Los [estratos ROOT/COMM/ADMIN](03-estratos.md) incorporan ahora objetos funcionales emergentes y sostenibilidad ecológica. El [inicio del sistema](04-inicio-sistema.md) distingue la ruta Zalty/Linux del objetivo seL4/NPU, y el [bus de arranque](05-bus-arranque.md) separa `/boot/metal/` persistente de los canales runtime que α podría necesitar.
+
+El desarrollo constitutivo se encuentra en [04 — Modelo ecológico RGBA](../manifesto/04-modelo-ecologico-rgba.md). Son hipótesis y especificaciones en revisión, no funciones implementadas.
+
 ## Criterio de absorción
 
 Los documentos antiguos de arranque, microkernel, Linux, init y hacks dejan de formar una segunda tabla de navegación. Sus conceptos se concentran aquí:

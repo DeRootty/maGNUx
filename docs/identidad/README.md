@@ -20,6 +20,12 @@ La ampliación de Trilobytes dispone de una [especificación técnica propuesta]
 
 ---
 
+## Composición de identidad de sesión (en revisión)
+
+La refundición RGBA amplía **xGNUpeD** (objetos funcionales G), **Dernel** (objetos administrativos B) y **Trilobytes** (verificación, revelado RAW e intermediación). Mantiene las autoridades originales y sus tres delegaciones independientes cuando el agente representa intereses.
+
+La [especificación de sesiones](../propuesta-tecnica/04-sesion-rgba-spec.md) presenta escenarios `3/$` y `α/$`, sin elevación de privilegios ni dependencia obligatoria de IA. Se trata de una propuesta para validar, no una función actualmente disponible en Zalty.
+
 ## Criterio de absorción
 
 Los documentos históricos sobre identidad dejan de ser rutas alternativas. Sus conceptos quedan refundidos en esta secuencia:

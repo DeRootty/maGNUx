@@ -34,6 +34,89 @@ La lectura principal del repositorio empieza aquí y continúa en `docs/`:
 13. [Prototipo HostID v0.1](zalty/initramfs/prototipo-hostid-v0.1/README.md)
 14. [GCC ES Técnico](docs/gcc/README.md)
 
+## Revisión RGBA — rama temporal
+
+> **Propuesta en desarrollo, todavía no fusionada en `master`.** El objetivo es una única línea documental tras resolver las contradicciones y completar la revisión.
+
+- [Constitución ecológica y composición RGBA](docs/manifesto/04-modelo-ecologico-rgba.md): fundamento ecológico, contratos, Trilobytes y usuario α.
+- [Matriz de refundición](docs/propuesta-tecnica/matriz-refundicion-rgba.md): preservación del corpus y tensiones identificadas.
+- [ADR-0001 — Composición y límites de autoridad](docs/propuesta-tecnica/adr-0001-composicion-rgba.md): decisiones técnicas propuestas y límites de seguridad.
+- [04 — Sesión RGBA](docs/propuesta-tecnica/04-sesion-rgba-spec.md): formato ilustrativo, ciclo `3/# maGNUx
+
+maGNUx es una arquitectura conceptual para el gobierno explícito del sistema operativo: identidad, autoridad, contrato, soberanía sistémica y arranque temprano.
+
+Esta rama refunde la navegación nueva con el corpus documental anterior para dejar una sola lectura principal.
+
+```text
+maGNUx
+→ manifiesto, arquitectura, identidad, filosofía y propuesta técnica
+
+Zalty
+→ distribución GNU/Linux experimental que ensaya maGNUx sobre Linux real
+
+GCC ES Técnico
+→ documentación técnica en español sobre GCC, compilación y cadena de herramientas
+```
+
+## Lectura única recomendada
+
+La lectura principal del repositorio empieza aquí y continúa en `docs/`:
+
+1. [Documentación maGNUx](docs/README.md)
+2. [Resumen ejecutivo](docs/propuesta-tecnica/00-resumen-ejecutivo.md)
+3. [Manifiesto](docs/manifesto/01-manifiesto.md)
+4. [Horizonte tecnológico — Arquetipar sistemas operativos](docs/manifesto/horizonte-arquetipado.md)
+5. [Estratos de arquitectura](docs/arquitectura/03-estratos.md)
+6. [Inicio del sistema](docs/arquitectura/04-inicio-sistema.md)
+7. [xGNUpeD](docs/identidad/07-xgnuped.md)
+8. [Dernel](docs/identidad/09-dernel.md)
+9. [Trilobytes: coherencia y representación](docs/identidad/08-trilobytes.md)
+10. [Especificación de mediación Trilobytes](docs/propuesta-tecnica/03-trilobytes-mediacion-spec.md)
+11. [Zalty](zalty/readme.md)
+12. [Initramfs de Zalty](zalty/initramfs/README.md)
+13. [Prototipo HostID v0.1](zalty/initramfs/prototipo-hostid-v0.1/README.md)
+14. [GCC ES Técnico](docs/gcc/README.md)
+
+ ↔ `α/# maGNUx
+
+maGNUx es una arquitectura conceptual para el gobierno explícito del sistema operativo: identidad, autoridad, contrato, soberanía sistémica y arranque temprano.
+
+Esta rama refunde la navegación nueva con el corpus documental anterior para dejar una sola lectura principal.
+
+```text
+maGNUx
+→ manifiesto, arquitectura, identidad, filosofía y propuesta técnica
+
+Zalty
+→ distribución GNU/Linux experimental que ensaya maGNUx sobre Linux real
+
+GCC ES Técnico
+→ documentación técnica en español sobre GCC, compilación y cadena de herramientas
+```
+
+## Lectura única recomendada
+
+La lectura principal del repositorio empieza aquí y continúa en `docs/`:
+
+1. [Documentación maGNUx](docs/README.md)
+2. [Resumen ejecutivo](docs/propuesta-tecnica/00-resumen-ejecutivo.md)
+3. [Manifiesto](docs/manifesto/01-manifiesto.md)
+4. [Horizonte tecnológico — Arquetipar sistemas operativos](docs/manifesto/horizonte-arquetipado.md)
+5. [Estratos de arquitectura](docs/arquitectura/03-estratos.md)
+6. [Inicio del sistema](docs/arquitectura/04-inicio-sistema.md)
+7. [xGNUpeD](docs/identidad/07-xgnuped.md)
+8. [Dernel](docs/identidad/09-dernel.md)
+9. [Trilobytes: coherencia y representación](docs/identidad/08-trilobytes.md)
+10. [Especificación de mediación Trilobytes](docs/propuesta-tecnica/03-trilobytes-mediacion-spec.md)
+11. [Zalty](zalty/readme.md)
+12. [Initramfs de Zalty](zalty/initramfs/README.md)
+13. [Prototipo HostID v0.1](zalty/initramfs/prototipo-hostid-v0.1/README.md)
+14. [GCC ES Técnico](docs/gcc/README.md)
+
+ y casos de validación.
+
+**Importante:** no se declara operativo un dominio seL4/NPU ni una interfaz de seguridad solo por documentarlos.
+
 ## Nueva base constitutiva: Commonwealth del silicio
 
 - [Volumen I — Roma, Britania y Commonwealth](docs/manifesto/volumen-i-britania-roma-commonwealth.md): historia de los dominios imperiales y su evolución.
@@ -66,7 +149,7 @@ zalty/ lo baja a máquina.
 
 ## Estado de master y las ramas históricas
 
-Esta es la rama principal `master`. La antigua rama de refundición documental ya se integró mediante el [PR #47](https://github.com/DeRootty/maGNUx/pull/47). Para la historia y el propósito de las tres ramas, consulta la [auditoría de ramas](docs/gestion-ramas.md).
+La línea principal de referencia sigue siendo `master`; esta rama `feature/rgba-trilobytes-alpha` es temporal y no sustituye su contenido. La antigua rama de refundición documental ya se integró mediante el [PR #47](https://github.com/DeRootty/maGNUx/pull/47). Para la historia de las ramas, consulta la [auditoría de ramas](docs/gestion-ramas.md).
 
 El criterio de esta rama es:
 

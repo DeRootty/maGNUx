@@ -205,6 +205,20 @@ pero su uso no agota su soberanía.
 
 ---
 
+## Ecología de los estratos y objetos emergentes
+
+La metáfora del ecosistema precisa lo que significa «cada estrato sostiene al siguiente». El kernel reconoce y gobierna los **recursos fundamentales** —procesos, memoria, dispositivos y mecanismos—. COMM/xGNUpeD ocupa el dominio intermedio: consume esos recursos y puede declarar **servicios y objetos comunicativos con identidad propia**. ADMIN/Dernel puede consumir recursos R y entidades G y declarar **objetos administrativos** que no figuran como tipos nativos del kernel.
+
+Ejemplo: `r:net0` (interfaz) → `g:connectivity` (servicio constituido por COMM) → `b:network-policy` (entidad administrativa de Dernel). No se infiere que el kernel comprenda directamente la política, aunque deba suministrar y proteger sus dependencias materiales.
+
+Esta emergencia es **funcional, no una fuente adicional de soberanía**. Para la observabilidad se propone un grafo de procedencia: identidad de emisor, clase de objeto, dependencias, estado del ciclo de vida y contratos que gobiernan su uso. Un objeto derivado no debe permanecer declarado como plenamente operativo si pierde una dependencia material indispensable.
+
+La **capacidad de carga sistémica** describe el límite dinámico de sostenibilidad de esta organización: recursos físicos, latencia, dependencia, bloqueo y posibilidad de recuperación. Un kernel sano es compatible con un servicio COMM o ADMIN degradado. El canal α podría ayudar a anticipar esa degradación, siempre con privilegios ordinarios y sin convertirse en autoridad ejecutiva.
+
+Esta visión se integra en el [modelo ecológico RGBA](../manifesto/04-modelo-ecologico-rgba.md) y se traduce a casos de sesión en la [especificación provisional](../propuesta-tecnica/04-sesion-rgba-spec.md).
+
+---
+
 ## Dominios de autoridad
 
 ROOT se expresa mediante dominios de autoridad que después se desarrollan en el bloque de identidad:

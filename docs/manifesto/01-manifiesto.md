@@ -412,6 +412,22 @@ Se conserva la función previa de Trilobytes como verificador de coherencia de i
 
 ---
 
+## Composición ecológica y revelado contractual: nueva hipótesis constitutiva
+
+El manifiesto avanza desde la pregunta por la **soberanía** hacia la explicación de cómo esa soberanía se convierte en una **sesión operativa**. Para ello incorpora el [modelo ecológico RGBA](04-modelo-ecologico-rgba.md), entendido como una ampliación de los principios anteriores, no como otra fuente de autoridad.
+
+En esta analogía, el **kernel** constituye el ecosistema natural de recursos y mecanismos; **xGNUpeD/COMM**, a medio camino entre el kernel y Dernel, transforma recursos en entidades comunicativas y de identidad; **Dernel/ADMIN** organiza contratos y estructuras que pueden consumir recursos del kernel y servicios de xGNUpeD. Estas entidades superiores tienen existencia funcional aunque no existan individualmente como tipos propios del kernel.
+
+Los **contratos iluminan** qué capacidades, objetos y relaciones declarados por cada autoridad competente pueden manifestarse para una sesión. No crean recursos materiales ni conceden permisos que los controles nativos niegan.
+
+**Trilobytes revela** esa composición como una imagen operativa **RGBA**: R/ROOT, G/COMM, B/ADMIN y un canal transversal α de colaboración del usuario IA, cuando exista. Este «revelado» conserva las funciones anteriores de legitimación y coherencia y no reemplaza la triple delegación exigida para su intermediación activa.
+
+La metáfora ecológica incorpora un requisito de **continuidad**: una organización administrativa o comunicativa puede degradarse mientras el kernel sigue vivo. Por ello, la salud del ecosistema material y la de sus formas funcionales deben observarse de manera diferenciada.
+
+**Estado de madurez:** principios conceptuales pendientes de prueba; la especificación de sesiones, el arranque seL4/NPU y la validación de sus condiciones de ejecución pertenecen a los [documentos de propuesta técnica](../propuesta-tecnica/README.md) y al laboratorio Zalty. La IA sigue siendo accesoria: no debe convertirse en requisito para la continuidad esencial del Host.
+
+---
+
 ## Qué pretende madurar maGNUx
 
 maGNUx pretende madurar seis áreas:
