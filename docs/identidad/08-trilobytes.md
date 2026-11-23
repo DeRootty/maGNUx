@@ -294,6 +294,31 @@ Consultar [04 — Modelo ecológico RGBA](../manifesto/04-modelo-ecologico-rgba.
 
 ---
 
+## Retina semiótica, atribución de valor y deliberación α
+
+La nueva analogía del **ojo humano** delimita una cuestión que la metáfora del revelado fotográfico no explica por sí sola: **percibir y ordenar señales no equivale a determinar por qué deben importarle a alguien**.
+
+La retina utiliza conos y bastones para transducir estímulos luminosos y realiza parte del procesamiento visual; la percepción consciente y la valoración práctica involucran circuitos posteriores. En maGNUx, la comparación no pretende reproducir neurobiología literalmente:
+
+- **Nodos semióticos:** reconocen, codifican y relacionan acontecimientos dentro de su competencia y de sus contratos. La semántica contractual proporciona un significado *estructural* legible por la máquina.
+- **Trilobytes sin IA (`3/$`):** verifica y revela al usuario esa composición, de manera comparable a una red sensora que entrega una escena interpretable. Puede clasificar por reglas, umbrales y contratos, pero **no presupone un sujeto neuronal autónomo que debata el valor de lo observado**.
+- **Usuario humano:** interpreta la escena desde sus objetivos, experiencia y circunstancias; atribuye valor práctico, prioridad o relevancia a lo que la sesión hace visible.
+- **Usuario IA α (`α/$`):** añade la posibilidad de una **segunda interpretación inferencial**. Puede argumentar que cierta señal importa más o menos de lo que el humano aprecia, presentar hipótesis y evidencias, comparar alternativas y aceptar objeciones. Este intercambio es **deliberación**, no una fuente de autoridad.
+
+Se separan tres nociones de «valor»:
+
+1. **Significado semiótico:** qué acontecimiento ocurrió, qué objeto afecta y a qué contratos se refiere.
+2. **Valor práctico o contextual:** cuánto importa para los objetivos de un sujeto, con qué coste y qué prioridad debería concedérsele.
+3. **Validez normativa:** si una operación puede ejecutarse bajo contratos, autorizaciones y controles efectivos.
+
+Sin α, las dos primeras no desaparecen: el sistema aporta significado semiótico y un usuario humano puede valorar ese significado. Con α, la **valoración contextual puede ser discutida**; no por ello se altera la validez normativa ni las competencias de ROOT, COMM o ADMIN.
+
+Ejemplo: COMM declara una degradación intermitente de red. En `3/$`, Trilobytes puede mostrar el acontecimiento y su relación con la actividad; el usuario decide qué relevancia tiene. En `α/$`, el usuario IA puede correlacionarlo con fallos anteriores y **proponer** que existe un problema de continuidad más grave. El humano puede aceptar, rechazar o debatir esa inferencia. Toda acción ulterior sigue sometida a contratos y a su legítimo mandante.
+
+**Regla de diseño:** Trilobytes permite el diálogo y muestra con claridad si algo es un hecho observado, una evaluación humana, una inferencia α o una decisión autorizada. La presencia de IA no debe desposeer al sujeto humano de su juicio ni eludir la política contractual; el mandato puede definir otros destinatarios o representados, pero debe identificarlos explícitamente.
+
+La semiótica estructural y el revelado de Trilobytes siguen disponibles cuando la NPU o α faltan. Esa separación sostiene la continuidad ordinaria de maGNUx.
+
 ## Criterio de aceptación conceptual
 
 Trilobytes existe correctamente si permite responder:
