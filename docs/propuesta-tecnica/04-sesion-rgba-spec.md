@@ -154,6 +154,35 @@ Ante una contradicción que afecte a una operación privilegiada, **denegar por 
 
 Regla de trazabilidad: `b:network-policy` depende de `g:connectivity` y esta de `r:net0`; que B sea invisible como tipo kernel no la hace inexistente. No se transforma por ello en autoridad del kernel.
 
+### 4.1. Valoración deliberativa sobre una señal
+
+La información visible en una sesión RGBA debe distinguir **cuatro tipos de contenido**: `OBSERVATION` (hecho con evidencia), `SEMANTIC_CONTEXT` (significado y dependencias contractuales), `EVALUATION` (valoración contextual atribuida a un sujeto) y `AUTHORIZATION_DECISION` (decisión verificable de autoridad). No debe deducirse el último tipo a partir de los tres anteriores.
+
+**Sin α — `3/$`:** ante un nodo semiótico que informa de latencia de red, Trilobytes puede mostrar su contexto y una severidad determinada por reglas. El operador humano otorga valor práctico: ignorar, inspeccionar, priorizar o solicitar una acción autorizada.
+
+**Con α — `α/$`:** `user:alpha` puede formular una evaluación inferencial —por ejemplo, «la degradación es probablemente precursora de una pérdida de conectividad»— y ofrecer los identificadores de evidencia y el nivel de incertidumbre. El operador puede pedir razones, refutar supuestos o proponer otra prioridad. **Este diálogo no convierte la valoración IA en política ejecutable**.
+
+Un posible sobre de evento para la deliberación:
+
+```json
+{
+  "schema": "magnux.value-dialog.v0",
+  "session_id": "session-demo",
+  "source_event_id": "event-demo-1",
+  "evaluation_author": "user:alpha",
+  "kind": "EVALUATION",
+  "assessment": "possible-continuity-risk",
+  "confidence": "unvalidated-estimate",
+  "evidence_refs": ["observation-demo"],
+  "proposed_priority": "review",
+  "authority_effect": "none"
+}
+```
+
+Es una representación **ilustrativa**, no un esquema aprobado ni una estimación de probabilidad comprobada.
+
+Para diseñar la interfaz, prever una respuesta del usuario humano que pueda **aceptar, cuestionar o descartar** la valoración, con registro de autoría y decisión. El mandato y la autoridad necesarios para efectuar acciones siguen siendo independientes del diálogo.
+
 ## 5. Estados de la sesión y de α
 
 Mantener dos autómatas independientes:
