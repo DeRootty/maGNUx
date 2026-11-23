@@ -124,3 +124,36 @@ La **fase 2: auditoría de coherencia** tendrá como entregable una relación de
 - [ ] Fusionar a `master` tras revisión.
 
 La rama no debe mantenerse como manifiesto rival: es un **espacio de revisión temporal** destinado a volver a una única línea principal de referencia.
+
+---
+
+## Resultado de la fase 2 — Auditoría y especificación provisional (2026-11-23)
+
+**Estado:** documentación de auditoría completada; decisiones **propuestas**, pendientes de verificación y posible ajuste en la refundición. No es una declaración de código implementado ni de pruebas ejecutadas.
+
+### Documentos de salida
+
+- [ADR-0001 — Composición RGBA y límites de autoridad](adr-0001-composicion-rgba.md): tratamiento propuesto de T1–T7, compromisos de seguridad y rutas A/B.
+- [04 — Especificación provisional de sesión RGBA](04-sesion-rgba-spec.md): RAW, descriptor revelado, estados independientes, trazas de sesión S1–S4 y pruebas negativas NEG-01–NEG-10.
+
+### Revisión del registro
+
+- [x] Formular resolución técnica **propuesta** para T1–T7.
+- [x] Mantener IA accesoria sin negar la identidad especial USER-α.
+- [x] Separar verificación, revelado e intermediación de Trilobytes.
+- [x] Distinguir ruta A (Linux/Zalty) de ruta B (seL4/NPU), sin afirmar coexistencia demostrada.
+- [x] Documentar el recorrido `3/$` → `α/$` → `3/$` y un intento de acceso ADMIN.
+- [x] Definir pruebas negativas de privilegios, pérdida de recursos y continuidad.
+- [ ] Aceptar/revisar formalmente las decisiones con pruebas o fundamentos adicionales.
+- [ ] Refundir los documentos principales y actualizar la navegación (fase 3).
+- [ ] Abrir Pull Request, revisar y fusionar a `master` cuando proceda.
+
+### Preguntas de investigación que NO bloquean la refundición documental
+
+1. ¿Cómo se relacionarán una o varias identidades α con múltiples sesiones humanas?
+2. ¿Qué protocolo hace cumplir el descriptor y cómo se protege de modificaciones y condiciones de carrera?
+3. ¿Qué plataforma concreta ofrece NPU accesible desde el dominio seL4 y qué método permite coexistir con GNU/Linux?
+4. ¿Qué esquema de almacenamiento/medición de arranque ofrecerá integridad, autenticidad y protección contra rollback?
+5. ¿Qué métricas permitirán medir capacidad de carga ecológica y el valor predictivo de α?
+
+**Criterio del próximo paso:** conservar el material original y enriquecerlo por cambios pequeños, coherentes y revisables, no añadir otro corpus paralelo.
