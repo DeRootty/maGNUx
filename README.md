@@ -39,6 +39,8 @@ La lectura principal del repositorio empieza aquí y continúa en `docs/`:
 - [Volumen I — Roma, Britania y Commonwealth](docs/manifesto/volumen-i-britania-roma-commonwealth.md): historia de los dominios imperiales y su evolución.
 - [Volumen II — Commonwealth del silicio](docs/manifesto/volumen-ii-commonwealth-del-silicio.md): continuidad histórica aplicada a maGNUx; ROOT/kernel, COMM/xGNUpeD, ADMIN/Dernel, modos de mantenimiento y Trilobytes en el arranque ordinario.
 
+- [Artículo académico — Reciprocidad económica y soberanía contributiva](docs/manifesto/03-reciprocidad-economica-computacional.md): registro verificable, evaluación asistida por IA y financiación del mantenimiento del software libre.
+
 ## Navegación por planos
 
 | Plano | Entrada | Función |
@@ -64,7 +66,7 @@ zalty/ lo baja a máquina.
 
 ## Estado de esta rama
 
-Esta rama es una candidata de refundición documental. No sustituye `master` hasta que sea revisada y aceptada.
+Esta es la rama principal `master`. La antigua rama de refundición documental ya se integró mediante el [PR #47](https://github.com/DeRootty/maGNUx/pull/47). Para la historia y el propósito de las tres ramas, consulta la [auditoría de ramas](docs/gestion-ramas.md).
 
 El criterio de esta rama es:
 
