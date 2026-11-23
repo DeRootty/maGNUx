@@ -15,6 +15,7 @@ La documentación nueva funciona como columna vertebral. Los conceptos del corpu
 | 3 | Propuesta técnica | [Especificación Dernel](propuesta-tecnica/02-dernel-spec.md) | Formaliza la licencia operativa entre host y guest. |
 | 4 | Manifiesto | [Manifiesto](manifesto/01-manifiesto.md) | Expone la razón de ser del proyecto. |
 | 5 | Manifiesto | [Hipótesis central](manifesto/02-hipotesis-central.md) | Declara la soberanía sistémica como problema de arranque. |
+| 5 bis | Manifiesto en revisión | [04 — Composición ecológica RGBA](manifesto/04-modelo-ecologico-rgba.md) | Introduce el revelado de sesiones y la contribución del usuario α. |
 | 6 | Manifiesto | [Horizonte tecnológico — Arquetipar sistemas operativos](manifesto/horizonte-arquetipado.md) | Organiza las siete dimensiones, la maqueta y su continuidad por convolución. |
 | 6 bis | Manifiesto | [Artículo de soberanía contributiva](manifesto/03-reciprocidad-economica-computacional.md) | Presenta la hipótesis de financiación verificable de contribuciones libres, IA, contratos y gobernanza comunitaria. |
 | 7 | Arquitectura | [Estratos](arquitectura/03-estratos.md) | Ordena ROOT, COMM y ADMIN. |
@@ -54,6 +55,12 @@ El manifiesto se amplía con el [Volumen I histórico](manifesto/volumen-i-brita
 ## Soberanía contributiva y auditoría de ramas
 
 El [artículo académico del manifiesto](manifesto/03-reciprocidad-economica-computacional.md) propone financiar el software libre mediante contratos, evidencias y valoración revisable, distinguiendo la historia de la esclavitud colonial del voluntariado informático. La [auditoría de ramas](gestion-ramas.md) aclara qué integra ya master y por qué deben conservarse las ramas de archivo.
+
+## Revisión arquitectónica RGBA (rama temporal)
+
+La nueva propuesta puede revisarse desde el [modelo ecológico RGBA](manifesto/04-modelo-ecologico-rgba.md), la [matriz de correspondencias](propuesta-tecnica/matriz-refundicion-rgba.md), el [ADR-0001](propuesta-tecnica/adr-0001-composicion-rgba.md) y la [especificación provisional de sesión](propuesta-tecnica/04-sesion-rgba-spec.md).
+
+El objetivo es refundir estas aportaciones en la única lectura principal de `master`, sin introducir una línea doctrinal alternativa ni presentar como implementado el arranque seL4/NPU.
 
 ## Ampliación oficial: Trilobytes
 
