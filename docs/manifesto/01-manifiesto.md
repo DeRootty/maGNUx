@@ -484,3 +484,8 @@ Esta formulación del manifiesto debe leerse junto con el [Volumen I — De la B
 El capítulo 23 del Volumen II afina la secuencia de constitución **kernel/ROOT → xGNUpeD/COMM → Dernel/ADMIN** y distingue los arranques excepcionales de mantenimiento del arranque ordinario que activa **Trilobytes** bajo la concurrencia de tres delegaciones positivas. En régimen cotidiano, Dernel habilita una identidad operativa de usuario **no ADMIN** y Trilobytes media la coordinación entre Dernel y kernel: el usuario decide la actividad; las autoridades mantienen límites y continuidad verificables.
 
 La analogía de conquista del silicio, fundamentos militarizados y Commonwealth es conceptual: no constituye reivindicación de poder político ni afirmación de viabilidad ya demostrada.
+
+
+## Dimensión constitutiva de reciprocidad
+
+La [propuesta académica de soberanía contributiva y reciprocidad económica](03-reciprocidad-economica-computacional.md) extiende la Commonwealth del silicio a las aportaciones de desarrollo, mantenimiento y conocimiento. Distingue las libertades del software de la gratuidad del trabajo y postula financiación voluntaria mediante evidencias y gobernanza revisable; blockchain e IA son instrumentos opcionales, no autoridades últimas de valoración ni fuentes automáticas de dinero.
