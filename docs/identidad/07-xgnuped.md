@@ -311,6 +311,22 @@ Véase [la ampliación de Trilobytes](08-trilobytes.md) y su [especificación pr
 
 ---
 
+## xGNUpeD como estrato intermedio de existencia funcional (canal G)
+
+A su función previa de **declarar identidad** y mediar la comunicación se añade una pregunta explícita: **¿qué objetos funcionales constituye COMM al consumir los recursos que ROOT/kernel reconoce y expone?**
+
+COMM/xGNUpeD ocupa estratégicamente el espacio intermedio entre el kernel y Dernel. No se limita a renombrar un socket o una interfaz; puede articular varios recursos y servicios bajo una identidad de comunicación, estado y dependencias, de modo que una entidad `g:...` sea significativa para otras capas aunque el kernel solo registre sus componentes técnicos.
+
+Ejemplo abstracto: `r:net0` es un recurso reconocido por el kernel; `g:connectivity` es un servicio de identidad y comunicación que usa ese recurso. Dernel puede incorporar la segunda entidad a sus propias estructuras sin necesidad de que el kernel interprete su significado administrativo.
+
+Para que una entidad derivada pueda ser **iluminada contractualmente** y revelada por Trilobytes, debería proporcionar como mínimo: `issuer=COMM`, identificador estable, clase, dependencias con R, versión de estado y contratos asociados. Su presentación no sustituye la legitimación ni la aplicación de permisos a nivel del kernel.
+
+La matriz conceptual se desarrolla en el [modelo ecológico RGBA](../manifesto/04-modelo-ecologico-rgba.md), con un descriptor ilustrativo en la [especificación de sesión](../propuesta-tecnica/04-sesion-rgba-spec.md).
+
+**Límite:** los objetos G son una abstracción semiótica funcional; todavía no existe una API xGNUpeD plenamente implementada que los gestione como está descrito aquí.
+
+---
+
 ## Criterio de aceptación conceptual
 
 xGNUpeD existe correctamente si permite responder antes del userspace ordinario:
