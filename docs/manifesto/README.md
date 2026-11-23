@@ -13,6 +13,7 @@ El manifiesto no es todavía una implementación. Es la declaración de por qué
 | 1 | [01 — Manifiesto de maGNUx](01-manifiesto.md) | Absorbe la introducción, el marco GNU/GPL, la motivación inicial y la necesidad de soberanía sistémica. |
 | 2 | [02 — Hipótesis central](02-hipotesis-central.md) | Absorbe la soberanía sistémica, las entidades sistematizadas, el contrato OS y el problema de legitimidad del arranque. |
 | 3 | [Horizonte tecnológico — Arquetipar sistemas operativos](horizonte-arquetipado.md) | Desarrolla las siete dimensiones, el arquetipo como maqueta, su proyección material y la continuidad helicoidal. |
+| 4 | [03 — Soberanía contributiva y reciprocidad económica](03-reciprocidad-economica-computacional.md) | Artículo académico: trazabilidad de aportaciones, valoración asistida por IA, gobernanza y sostenibilidad del software libre. |
 
 
 ## Base histórico-constitutiva: la Commonwealth del silicio
@@ -25,6 +26,10 @@ El corpus del manifiesto incorpora dos volúmenes complementarios:
 La «conquista de la tierra del silicio» designa metafóricamente la constitución de una autoridad técnica delimitada por la arquitectura de hardware, no una reivindicación militar o política real. El Volumen II distingue los modos especiales de mantenimiento de la sesión ordinaria, en la que Trilobytes funciona como «escalera de incendios» que permite la cooperación entre Kernel y Dernel, conservando sus respectivas competencias.
 
 **Estado:** base conceptual de investigación; pendiente de formalización, prototipos y validación.
+
+## Dimensión económica de la Commonwealth del silicio
+
+La [propuesta de reciprocidad económica](03-reciprocidad-economica-computacional.md) amplía la soberanía operativa con **soberanía contributiva**, sin identificar software libre con trabajo necesariamente gratuito ni equiparar la colaboración voluntaria con la esclavitud histórica. Propone protocolos verificables, fondos financiados realmente y valoración por IA sujeta a revisión.
 
 ## Criterio de absorción
 
