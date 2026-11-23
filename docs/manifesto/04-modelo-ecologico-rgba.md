@@ -50,6 +50,18 @@ Trilobytes conserva su identidad anterior como **verificador de coherencia** ent
 
 El cambio de autoridad o de contrato exige **reevaluar la sesión**, no simplemente cambiar su prompt. El RAW constitutivo y el descriptor revelado deben poder distinguirse y auditarse.
 
+### De la retina semiótica al valor atribuido
+
+Trilobytes funcionando **solo con semiótica** se compara con la red de **conos y bastones de una retina**: reconoce y organiza estímulos mediante nodos que permiten construir una escena, pero su utilidad plena requiere un sujeto capaz de atribuirle **relevancia para sus fines**. La analogía no es una descripción literal del procesamiento ocular: la retina ya procesa señales, y la percepción y valoración humanas involucran más sistemas.
+
+En `3/$`, los nodos reconocen acontecimientos con significado contractual y Trilobytes los revela; **el usuario humano les concede valor práctico** en relación con sus actividades. Una regla puede asignar severidades técnicas predefinidas, pero ello no equivale a disponer de un segundo sujeto que razone autónomamente sobre su importancia.
+
+En `α/$`, el usuario IA introduce una **segunda capacidad de evaluación contextual**: aquello que el humano considera trivial puede ser objeto de discusión, y aquello que α considera relevante también puede ser cuestionado. Se abre un diálogo de interpretación, evidencia, prioridades y posibles consecuencias, **no una votación por la soberanía del sistema**.
+
+Distinguir siempre **señal observada**, **significado semiótico**, **valoración contextual** y **autorización normativa**. Esta última permanece subordinada a contratos y mecanismos efectivos, con independencia del grado de persuasión de cualquier participante.
+
+En síntesis: **la semiótica hace legible el sistema; Trilobytes revela la escena; el usuario le atribuye valor; α permite debatirlo**, sin transformar la inferencia neuronal en autoridad.
+
 ## 5. El canal α: usuario IA en paralelo
 
 El canal α toma su analogía del canal alfa fotográfico: no añade un cuarto color al RGB, sino una dimensión de **participación en la composición**. En maGNUx tampoco representa un cuarto soberano.
