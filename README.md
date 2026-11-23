@@ -64,7 +64,7 @@ docs/ explica el contrato.
 zalty/ lo baja a máquina.
 ```
 
-## Estado de esta rama
+## Estado de master y las ramas históricas
 
 Esta es la rama principal `master`. La antigua rama de refundición documental ya se integró mediante el [PR #47](https://github.com/DeRootty/maGNUx/pull/47). Para la historia y el propósito de las tres ramas, consulta la [auditoría de ramas](docs/gestion-ramas.md).
 
