@@ -12,6 +12,7 @@ El manifiesto no es todavía una implementación. Es la declaración de por qué
 |---:|---|---|
 | 1 | [01 — Manifiesto de maGNUx](01-manifiesto.md) | Absorbe la introducción, el marco GNU/GPL, la motivación inicial y la necesidad de soberanía sistémica. |
 | 2 | [02 — Hipótesis central](02-hipotesis-central.md) | Absorbe la soberanía sistémica, las entidades sistematizadas, el contrato OS y el problema de legitimidad del arranque. |
+| 2 bis | [04 — Constitución ecológica y composición RGBA](04-modelo-ecologico-rgba.md) | **Borrador en revisión:** sesion revelada por Trilobytes, existencia funcional y usuario α; se integra sin reemplazar la hipótesis central. |
 | 3 | [Horizonte tecnológico — Arquetipar sistemas operativos](horizonte-arquetipado.md) | Desarrolla las siete dimensiones, el arquetipo como maqueta, su proyección material y la continuidad helicoidal. |
 | 4 | [03 — Soberanía contributiva y reciprocidad económica](03-reciprocidad-economica-computacional.md) | Artículo académico: trazabilidad de aportaciones, valoración asistida por IA, gobernanza y sostenibilidad del software libre. |
 
