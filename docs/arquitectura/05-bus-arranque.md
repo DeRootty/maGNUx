@@ -173,6 +173,24 @@ Durante la fase inicial, `/run/maGNUx` ensaya lo que `/upLoad` podría integrar 
 
 ---
 
+## Persistencia, estado vivo y canal transversal α
+
+La llegada del modelo RGBA añade nuevos consumidores de identidad y contrato, pero **no transforma `/boot/metal/` en un bus de memoria compartida**.
+
+Se distinguen tres funciones:
+
+- **Persistencia material y contractual** (`/boot/metal/` como ruta visible tras su montaje): manifiestos, identidad, contratos y dependencias verificables de arranque; exigencia de autenticidad, integridad, protección frente a rollback y política de escritura.
+- **Estado semiótico operativo** (`/run/maGNUx/` en la ruta Linux de Zalty): observaciones, validaciones, relaciones entre objetos y evidencias transitorias, sin sustituir la autoridad de la fuente persistente.
+- **Comunicación de ejecución α–Linux**, si se adopta la ruta futura seL4: IPC, mensajes o memoria compartida expresamente diseñada, con aislamiento entre dominios y control de propiedad de buffers y dispositivos; una partición SSD/FAT no proporciona esas garantías por sí sola.
+
+Los objetos emergentes del canal G y B deben identificar origen y dependencias materiales, para que Trilobytes pueda reconstruir el grafo `R → G → B` y revelar una sesión coherente. Sus eventos pueden utilizar nodos semióticos contratualmente habilitados. **Observar un evento no equivale a autorizar una acción**.
+
+La capacidad de α para comunicar avisos mediante Trilobytes no debe corromper la entrada del usuario en TTY ni conceder privilegios por el texto recibido. Las inferencias son datos; las decisiones ejecutivas siguen sometidas a contratos y mecanismos efectivos.
+
+La especificación [04 — Sesión RGBA](../propuesta-tecnica/04-sesion-rgba-spec.md) propone el flujo de estados sin establecer todavía el transporte concreto entre los futuros dominios.
+
+---
+
 ## Nodos técnicos y nodos semióticos
 
 Linux expone nodos técnicos:
