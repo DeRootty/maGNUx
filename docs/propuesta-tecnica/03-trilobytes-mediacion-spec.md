@@ -8,9 +8,15 @@
 
 ---
 
+## Precisiones de continuidad: Trilobytes y Alfa
+
+La ampliación [helicoidal y de usuario Alfa](../manifesto/04-helice-alfa-continuidad.md) precisa el lenguaje de esta especificación. **Trilobytes renderiza/revela el resultado de las capas**, sin convertirse en el origen de la autoridad ROOT, COMM o ADMIN. Los verificadores y ejecutores autorizados aplican decisiones; el guard aquí descrito consume y comunica evidencias. **Alfa es un sujeto computacional distinto**, capaz de adquirir los roles efectivos del contexto cuando existe delegación válida, como desarrolla [su especificación de identidad](../identidad/12-usuario-alfa.md).
+
+Esta precisión no altera la triple luz verde para **la intermediación de Trilobytes** ni convierte esa luz verde en permiso para ejecutar cualquier acción de Alfa.
+
 ## Objetivo y alcance
 
-Ampliar el Trilobytes publicado —verificador de coherencia entre identidad, política, licencia y sesión— con un **agente de intermediación computacional** que represente intereses bajo mandato legítimo.
+Ampliar el Trilobytes publicado —revelador de coherencia entre identidad, política, licencia y sesión, apoyado en validadores legítimos— con una **función de intermediación computacional** que represente intereses bajo mandato válido.
 
 La nueva función no sustituye Logon/Login, la verificación de sesión, xGNUpeD, Dernel, ROOT ni el init de Linux. El prototipo HostID v0.1 de Zalty permanece intacto y no implementa todavía esta especificación.
 
@@ -18,10 +24,10 @@ La nueva función no sustituye Logon/Login, la verificación de sesión, xGNUpeD
 
 | Momento | Función | Requisito |
 |---|---|---|
-| Coherencia | Verificar identidad, estado, política, licencia y legitimidad de sesión; aceptar, degradar o negar. | Validaciones que ya establece el manifiesto. |
+| Coherencia | Recoger verificaciones auténticas de identidad, estado, política, licencia y legitimidad; revelar si el sistema acepta, degrada o niega. | Validadores y ejecutores competentes con evidencia. |
 | Intermediación | Interpretar peticiones; representar intereses; descubrir, proponer y coordinar servicios. | Triple delegación positiva vigente y mandato concreto. |
 
-**Verificar** una sesión no equivale a **estar habilitado** para intermediar. Si no se obtiene la triple delegación, la segunda función permanece deshabilitada; las verificaciones necesarias para el funcionamiento seguro pueden continuar.
+**Revelar una verificación** de sesión no equivale a **estar habilitado** para intermediar. Si no se obtiene la triple delegación, la segunda función permanece deshabilitada; las verificaciones necesarias para el funcionamiento seguro pueden continuar.
 
 ## Tres ámbitos y metáfora del edificio
 
@@ -141,7 +147,7 @@ Un estado degradado o de rescate puede conservar comprobaciones y diagnóstico; 
 
 ## Descomposición inicial en Go
 
-- **`trilobytes-guard`:** consume identidad xGNUpeD, licencia Dernel y evidencias de concesión; publica una decisión verificable. Debe mantenerse mínimo y auditable.
+- **`trilobytes-guard`:** consume identidad xGNUpeD, licencia Dernel y evidencias de concesión; publica el resultado comprobable de la validación y, cuando su contrato lo permita, verifica precondiciones. No origina por sí mismo las facultades de ROOT/COMM/ADMIN. Debe mantenerse mínimo y auditable.
 - **`trilobytes-agent`:** interfaz conversacional o CLI, descubrimiento y propuestas de orquestación; no se activa como intermediario sin decisión válida del guard.
 - **Ejecutores externos:** servicios privilegiados con facultades propias que verifican las autorizaciones relevantes antes de actuar. El agente no ejecuta por sí mismo operaciones ROOT solo por tener una luz verde.
 
@@ -161,6 +167,10 @@ En una primera iteración puede aprovecharse systemd, OpenRC u otro supervisor. 
 10. Intento de usar la luz verde como elevación de privilegios: rechazar en el ejecutor.
 11. Modo ROOT puro: conservar soberanía ROOT sin atribuir a Trilobytes permisos automáticos.
 12. Todas las decisiones quedan vinculadas a identidad, estado y trazas auditables.
+
+## Relación con la nueva arquitectura de Alfa
+
+Alfa es la propiedad emergente postulada por el movimiento helicoidal y, en su traducción computacional, una identidad distinta del interfaz Trilobytes. La [arquitectura de dominio temprano](../arquitectura/07-dominio-alfa.md) propone NPU para inferencia y seL4 para control aislado compatible; el [contrato de observabilidad](04-alfa-observabilidad-spec.md) define cómo documentar inferencias y evidencia. Estas son investigaciones posteriores a la mediación v0.3, **no funciones presentes en el prototipo Zalty/HostID**.
 
 ## Roadmap y exclusiones
 
