@@ -38,6 +38,7 @@
 │   ├── manifesto/
 │   │   ├── 01-manifiesto.md
 │   │   ├── 02-hipotesis-central.md
+│   │   ├── EPILOGO.md
 │   │   └── README.md
 │   └── propuesta-tecnica/
 │       ├── 00-resumen-ejecutivo.md
@@ -71,3 +72,5 @@
             └── tests/
                 └── run-qemu.sh
 ```
+
+[Epílogo y notas](docs/manifesto/EPILOGO.md) · [Índice del manifiesto](docs/manifesto/README.md)

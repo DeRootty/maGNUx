@@ -15,7 +15,7 @@ El manifiesto no es todavía una implementación. Es la declaración de por qué
 | 3 | [Horizonte tecnológico — Arquetipar sistemas operativos](horizonte-arquetipado.md) | Desarrolla las siete dimensiones, el arquetipo como maqueta, su proyección material y la continuidad helicoidal. |
 | 3 bis | [04 — Hélice, Alfa y evidencia del sistema vivo](04-helice-alfa-continuidad.md) | Continúa la dimensión de continuidad con el vórtice Alfa, la fuente viva, suficiencia y realimentación DevOps. |
 | 4 | [03 — Soberanía contributiva y reciprocidad económica](03-reciprocidad-economica-computacional.md) | Artículo académico: trazabilidad de aportaciones, valoración asistida por IA, gobernanza y sostenibilidad del software libre. |
-
+| 5 | [Epílogo y notas](EPILOGO.md) | Genealogía cronológica, aportaciones del autor y del diálogo asistido; documento abierto. |
 
 ## Base histórico-constitutiva: la Commonwealth del silicio
 

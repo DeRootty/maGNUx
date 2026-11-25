@@ -38,6 +38,7 @@ La documentación nueva funciona como columna vertebral. Los conceptos del corpu
 | 21 | Implementación | [Initramfs de Zalty](../zalty/initramfs/README.md) | Sitúa el laboratorio de arranque temprano. |
 | 22 | Implementación | [Prototipo HostID v0.1](../zalty/initramfs/prototipo-hostid-v0.1/README.md) | Primer ensayo técnico de identidad temprana. |
 | 23 | Herramientas GNU | [GCC ES Técnico](gcc/README.md) | Documentación técnica en español sobre GCC, compilación y cadena de herramientas. |
+| 24 | Manifiesto | [Epílogo y notas](manifesto/EPILOGO.md) | Genealogía, aportaciones y derivas; documento abierto. |
 
 ## Secciones principales
 
@@ -45,6 +46,7 @@ La documentación nueva funciona como columna vertebral. Los conceptos del corpu
 |---|---|
 | [Propuesta técnica](propuesta-tecnica/README.md) | Síntesis ejecutiva y primeras especificaciones. |
 | [Manifiesto](manifesto/README.md) | Declaración de intención, soberanía e hipótesis central. |
+| [Epílogo y notas](manifesto/EPILOGO.md) | Memoria del avance orgánico y notas de investigación abiertas. |
 | [Arquitectura](arquitectura/README.md) | Modelo de capas, arranque y compatibilidad. |
 | [Identidad](identidad/README.md) | Autoridad, identidad y dominios orgánicos/técnicos. |
 | [Filosofía](filosofia/README.md) | Marco cultural, hardware y maduración. |

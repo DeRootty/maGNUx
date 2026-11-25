@@ -37,6 +37,7 @@ La lectura principal del repositorio empieza aquí y continúa en `docs/`:
 12. [Initramfs de Zalty](zalty/initramfs/README.md)
 13. [Prototipo HostID v0.1](zalty/initramfs/prototipo-hostid-v0.1/README.md)
 14. [GCC ES Técnico](docs/gcc/README.md)
+15. [Epílogo y notas](docs/manifesto/EPILOGO.md) — evolución orgánica, autoría y cuestiones abiertas.
 
 ## Nueva base constitutiva: Commonwealth del silicio
 
@@ -53,6 +54,7 @@ La [continuidad helicoidal](docs/manifesto/horizonte-arquetipado.md) conduce aho
 |---|---|---|
 | Propuesta técnica | [docs/propuesta-tecnica/](docs/propuesta-tecnica/README.md) | Síntesis ejecutiva y especificaciones iniciales. |
 | Manifiesto | [docs/manifesto/](docs/manifesto/README.md) | Sentido del proyecto, soberanía y legitimidad. |
+| Epílogo y notas | [Epílogo y notas](docs/manifesto/EPILOGO.md) | Genealogía del manifiesto y registro abierto de su evolución. |
 | Arquitectura | [docs/arquitectura/](docs/arquitectura/README.md) | Estratos, arranque, bus temprano y compatibilidad POSIX. |
 | Identidad | [docs/identidad/](docs/identidad/README.md) | xGNUpeD, Trilobytes, Dernel, Host/Guest y dominios raíz. |
 | Filosofía | [docs/filosofia/](docs/filosofia/README.md) | Unix/GNU, hormiguero, hardware y maduración. |

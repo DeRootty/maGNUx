@@ -493,3 +493,9 @@ La analogía de conquista del silicio, fundamentos militarizados y Commonwealth 
 ## Dimensión constitutiva de reciprocidad
 
 La [propuesta académica de soberanía contributiva y reciprocidad económica](03-reciprocidad-economica-computacional.md) extiende la Commonwealth del silicio a las aportaciones de desarrollo, mantenimiento y conocimiento. Distingue las libertades del software de la gratuidad del trabajo y postula financiación voluntaria mediante evidencias y gobernanza revisable; blockchain e IA son instrumentos opcionales, no autoridades últimas de valoración ni fuentes automáticas de dinero.
+
+---
+
+## Epílogo y notas
+
+Consulta el [epílogo abierto del manifiesto](EPILOGO.md) para conocer la genealogía de los postulados, las aportaciones del autor y del diálogo asistido, y las derivas conceptuales sujetas a futuras revisiones.
