@@ -16,6 +16,8 @@ Esta sección abre la lectura técnica de maGNUx. Su función es condensar la hi
 
 [03 — Trilobytes: legitimación e intermediación computacional](03-trilobytes-mediacion-spec.md) especifica el futuro agente Go, su doble función (coherencia e intermediación), la triple delegación positiva ROOT/COMM/ADMIN, el mandato de representación, la revocación y las pruebas propuestas. Es un borrador arquitectónico, no un componente implementado en Zalty.
 
+[04 — Alfa: telemetría viva y evidencia para versiones](04-alfa-observabilidad-spec.md) convierte el [artículo helicoidal](../manifesto/04-helice-alfa-continuidad.md) en ensayos de observabilidad activa, logs reproducibles y realimentación DevOps/SRE. No altera el alcance de Zalty/HostID v0.1.
+
 ---
 
 ## Criterio de absorción
