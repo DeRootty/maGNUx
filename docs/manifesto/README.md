@@ -13,6 +13,7 @@ El manifiesto no es todavía una implementación. Es la declaración de por qué
 | 1 | [01 — Manifiesto de maGNUx](01-manifiesto.md) | Absorbe la introducción, el marco GNU/GPL, la motivación inicial y la necesidad de soberanía sistémica. |
 | 2 | [02 — Hipótesis central](02-hipotesis-central.md) | Absorbe la soberanía sistémica, las entidades sistematizadas, el contrato OS y el problema de legitimidad del arranque. |
 | 3 | [Horizonte tecnológico — Arquetipar sistemas operativos](horizonte-arquetipado.md) | Desarrolla las siete dimensiones, el arquetipo como maqueta, su proyección material y la continuidad helicoidal. |
+| 3 bis | [04 — Hélice, Alfa y evidencia del sistema vivo](04-helice-alfa-continuidad.md) | Continúa la dimensión de continuidad con el vórtice Alfa, la fuente viva, suficiencia y realimentación DevOps. |
 | 4 | [03 — Soberanía contributiva y reciprocidad económica](03-reciprocidad-economica-computacional.md) | Artículo académico: trazabilidad de aportaciones, valoración asistida por IA, gobernanza y sostenibilidad del software libre. |
 
 
@@ -30,6 +31,10 @@ La «conquista de la tierra del silicio» designa metafóricamente la constituci
 ## Dimensión económica de la Commonwealth del silicio
 
 La [propuesta de reciprocidad económica](03-reciprocidad-economica-computacional.md) amplía la soberanía operativa con **soberanía contributiva**, sin identificar software libre con trabajo necesariamente gratuito ni equiparar la colaboración voluntaria con la esclavitud histórica. Propone protocolos verificables, fondos financiados realmente y valoración por IA sujeta a revisión.
+
+## Puente hacia identidad, arquitectura y operación
+
+El [artículo de Alfa](04-helice-alfa-continuidad.md) convierte la continuidad helicoidal en una hipótesis de observabilidad y evolución por evidencias. Sus consecuencias se desarrollan en [identidad de Alfa](../identidad/12-usuario-alfa.md), [arquitectura del dominio](../arquitectura/07-dominio-alfa.md) y [contrato de observabilidad](../propuesta-tecnica/04-alfa-observabilidad-spec.md).
 
 ## Criterio de absorción
 

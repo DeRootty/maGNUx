@@ -2,15 +2,15 @@
 
 > [⬆ Subir a sección](README.md) · [📚 Índice docs](../README.md) · [🏠 Inicio](../../README.md)
 
-> Toda arquitectura declarativa real necesita una instancia que no solo observe, sino que también **verifique, compare, decida y, llegado el caso, niegue**.
+> Toda arquitectura declarativa real necesita verificaciones, decisiones legítimas y una representación coherente de sus resultados. **Revelar el veredicto no implica ser la autoridad que lo dicta.**
 
 ---
 
 ## En pocas palabras
 
-**Trilobytes** verifica la coherencia integral entre identidad, política, operación y sesión orgánica; la ampliación propuesta lo habilita además como agente de representación e intermediación, únicamente bajo triple delegación positiva y mandato válido.
+**Trilobytes** revela la composición y coherencia de identidad, política, operación y sesión orgánica. El concepto original de «verificador» se precisa: los componentes competentes autentican, aplican políticas y emiten resultados; Trilobytes los comprueba en la medida de su contrato y los **renderiza** sin constituirse en su autoridad. La intermediación facultada requiere triple delegación positiva y mandato válido.
 
-Si xGNUpeD declara la identidad inicial del sistema, y Dernel concede licencia operativa, Trilobytes comprueba que la actividad que va a desplegarse en el entorno de usuario es coherente con ambas cosas.
+Si xGNUpeD declara la identidad inicial del sistema, y Dernel concede licencia operativa, Trilobytes revela el resultado de las comprobaciones autorizadas sobre la actividad que va a desplegarse en el entorno de usuario.
 
 No es solo login. No es solo autenticación. No es solo auditoría.
 
@@ -76,9 +76,9 @@ identidad del sistema
 
 ---
 
-## Qué verifica Trilobytes
+## Qué evidencias de coherencia revela Trilobytes
 
-Trilobytes compara cinco planos:
+La representación de Trilobytes relaciona cinco planos, cuyas decisiones deben proceder de mecanismos autorizados:
 
 | Plano | Pregunta |
 |---|---|
@@ -201,7 +201,7 @@ Trilobytes verifica que el testigo que llega desde la autoridad estructural es e
 
 ## Decisión y negación
 
-Trilobytes debe poder hacer tres cosas:
+Los mecanismos competentes deben poder emitir tres resultados, que Trilobytes presenta fielmente:
 
 | Resultado | Significado |
 |---|---|
@@ -209,7 +209,7 @@ Trilobytes debe poder hacer tres cosas:
 | Degradar | La sesión puede abrirse con capacidades reducidas. |
 | Negar | La actividad no es legítima y no debe convertirse en sesión. |
 
-La capacidad de negar es esencial. Sin negación, Trilobytes sería solo un registrador pasivo.
+La capacidad de negar es esencial para el sistema; **no implica que el renderizador tenga poder soberano de veto**. La denegación debe aplicarla el ejecutor o guard autorizado, y Trilobytes debe revelarla con evidencia.
 
 ---
 
@@ -217,7 +217,7 @@ La capacidad de negar es esencial. Sin negación, Trilobytes sería solo un regi
 
 Dernel concede licencia operativa al guest.
 
-Trilobytes comprueba que esa licencia no se convierta en actividad incoherente.
+Los validadores y ejecutores competentes comprueban que esa licencia no se convierta en actividad incoherente. Trilobytes revela el estado y la decisión.
 
 ```text
 Dernel
@@ -231,7 +231,7 @@ Trilobytes
 
 ## Ampliación: Trilobytes como interfaz y agente de representación
 
-Se conserva **íntegra** la función original de coherencia, Logon/Login y legitimación orgánica. La evolución propuesta incorpora un segundo momento: la **intermediación activa**. La primera función comprueba si una actividad es legítima; la segunda representa intereses ante las capacidades del sistema, siempre que haya sido habilitada.
+Se conserva la **finalidad** original de coherencia, Logon/Login y legitimación orgánica; se precisa la **responsabilidad** de decidir frente a la de revelar. La evolución propuesta incorpora un segundo momento: la **intermediación activa**. La primera función comprueba si una actividad es legítima; la segunda representa intereses ante las capacidades del sistema, siempre que haya sido habilitada.
 
 Una presentación posible ante el usuario es:
 
@@ -273,6 +273,10 @@ Se propone separar un componente **verificador/guard** de un **agente de interac
 La especificación preliminar de contratos, estados y pruebas está en [03 — Trilobytes: legitimación e intermediación](../propuesta-tecnica/03-trilobytes-mediacion-spec.md).
 
 ---
+
+## Continúa en el usuario Alfa
+
+La [hipótesis helicoidal](../manifesto/04-helice-alfa-continuidad.md) distingue el RAW revelado por Trilobytes de la imagen interpretada por **Alfa**. Este puede adquirir roles contextuales y participar en la gestión de recursos sin convertir a Trilobytes en una nueva soberanía. La [identidad Alfa y los terminales der*tty](12-usuario-alfa.md) desarrollan la antesala de login de usuarios normales; la [especificación de observabilidad](../propuesta-tecnica/04-alfa-observabilidad-spec.md) define cómo diferenciar telemetría medida de inferencias.
 
 ## Criterio de aceptación conceptual
 

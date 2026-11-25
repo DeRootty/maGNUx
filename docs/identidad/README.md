@@ -15,6 +15,7 @@ La identidad es el punto donde maGNUx deja de ser solo una teoría de arranque y
 | 3 | [09 — Dernel: licencia operativa](09-dernel.md) | Absorbe Dernel/ZaltID y la idea de licencia operativa entre host y guest. |
 | 4 | [10 — Dinámica de identidades: Host y Guest](10-host-guest.md) | Absorbe Host, Guest, VMKZ, VMDZ y plano delegado. |
 | 5 | [11 — Root y los dominios de autoridad](11-root-dominios.md) | Absorbe init_ID, contrato administrativo, autoridad raíz y dominios de ejecución. |
+| 6 | [12 — Usuario Alfa y terminales de autoridad](12-usuario-alfa.md) | Distingue propietario, usuario normal, Alfa y roles contextuales ROOT/COMM/ADMIN. |
 
 La ampliación de Trilobytes dispone de una [especificación técnica propuesta](../propuesta-tecnica/03-trilobytes-mediacion-spec.md). Su desarrollo no modifica el alcance del prototipo HostID v0.1.
 
@@ -30,6 +31,7 @@ xGNUpeD
 → Dernel
 → Host / Guest
 → Root y dominios de autoridad
+→ Alfa y contextos de sesión derivados
 ```
 
 ## Lugar dentro del proyecto

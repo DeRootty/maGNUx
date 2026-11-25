@@ -164,6 +164,14 @@ Este planteamiento deja abierto el horizonte de capacidades emergentes, incluida
 
 ---
 
+### Continuidad de la hélice: de trayectoria a evidencia emergente
+
+La séptima dimensión permite ahora una investigación adicional: si el movimiento helicoidal genera una «estela» funcional observable, esa estela podría revelar **si la versión compilada y las políticas vigentes siguen siendo suficientes** para las demandas y el silicio concretos. En la ampliación del manifiesto, esta propiedad se denomina **usuario Alfa (α)**. Alfa interpreta el estado y, bajo autoridad contractual, puede introducir variaciones acotadas para contrastar hipótesis; sus informes podrían alimentar el desarrollo posterior sin reemplazar la decisión de los ingenieros.
+
+La hipótesis se desarrolla en [04 — La hélice, Alfa y la evidencia del sistema vivo](04-helice-alfa-continuidad.md); su traducción comprobable está en la [especificación de observabilidad](../propuesta-tecnica/04-alfa-observabilidad-spec.md). No se afirma que el movimiento helicoidal, como analogía, haya demostrado una propiedad física nueva del software.
+
+---
+
 ## De la maqueta a los estratos
 
 Las siete dimensiones no sustituyen ROOT, COMM y ADMIN. Explican **qué relaciones debe resolver una maqueta**, mientras que los estratos describen **cómo maGNUx propone organizar esas relaciones** en su arquitectura.

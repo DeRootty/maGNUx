@@ -14,6 +14,7 @@ La arquitectura funciona como puente entre el manifiesto y la identidad operativ
 | 2 | [04 — El inicio estratificado del sistema](04-inicio-sistema.md) | Absorbe arranque temprano, protosistema raíz, initramfs, seL4, Hurd e init_ID como hipótesis de autoridad temprana. |
 | 3 | [05 — Bus de comunicación de arranque](05-bus-arranque.md) | Absorbe Kommu, identidad comunicativa y mediación temprana entre capas. |
 | 4 | [06 — Capas de compatibilidad POSIX](06-capas-posix.md) | Absorbe Linux como kernel modelo, carga del kernel, inits tradicionales y hacks al kernel actual. |
+| 5 | [07 — Dominio Alfa y arranque](07-dominio-alfa.md) | Estudia seL4, NPU/GPU, reserva de RAM y contrato de descubrimiento por Linux como horizonte posterior. |
 
 ## Criterio de absorción
 
@@ -24,6 +25,7 @@ estratos
 → inicio temprano
 → comunicación de arranque
 → compatibilidad POSIX y Linux actual
+→ dominio Alfa como hipótesis posterior a HostID v0.1
 ```
 
 ## Lugar dentro del proyecto

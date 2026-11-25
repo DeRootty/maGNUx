@@ -23,12 +23,16 @@ La lectura principal del repositorio empieza aquí y continúa en `docs/`:
 2. [Resumen ejecutivo](docs/propuesta-tecnica/00-resumen-ejecutivo.md)
 3. [Manifiesto](docs/manifesto/01-manifiesto.md)
 4. [Horizonte tecnológico — Arquetipar sistemas operativos](docs/manifesto/horizonte-arquetipado.md)
+4 bis. [Hélice, Alfa y evidencia del sistema vivo](docs/manifesto/04-helice-alfa-continuidad.md)
 5. [Estratos de arquitectura](docs/arquitectura/03-estratos.md)
 6. [Inicio del sistema](docs/arquitectura/04-inicio-sistema.md)
 7. [xGNUpeD](docs/identidad/07-xgnuped.md)
 8. [Dernel](docs/identidad/09-dernel.md)
 9. [Trilobytes: coherencia y representación](docs/identidad/08-trilobytes.md)
 10. [Especificación de mediación Trilobytes](docs/propuesta-tecnica/03-trilobytes-mediacion-spec.md)
+10 bis. [Alfa: identidad, propietario y contextos terminales](docs/identidad/12-usuario-alfa.md)
+10 ter. [Dominio Alfa: seL4, NPU, GPU y arranque](docs/arquitectura/07-dominio-alfa.md)
+10 quater. [Alfa: observabilidad y evidencia DevOps](docs/propuesta-tecnica/04-alfa-observabilidad-spec.md)
 11. [Zalty](zalty/readme.md)
 12. [Initramfs de Zalty](zalty/initramfs/README.md)
 13. [Prototipo HostID v0.1](zalty/initramfs/prototipo-hostid-v0.1/README.md)
@@ -40,6 +44,8 @@ La lectura principal del repositorio empieza aquí y continúa en `docs/`:
 - [Volumen II — Commonwealth del silicio](docs/manifesto/volumen-ii-commonwealth-del-silicio.md): continuidad histórica aplicada a maGNUx; ROOT/kernel, COMM/xGNUpeD, ADMIN/Dernel, modos de mantenimiento y Trilobytes en el arranque ordinario.
 
 - [Artículo académico — Reciprocidad económica y soberanía contributiva](docs/manifesto/03-reciprocidad-economica-computacional.md): registro verificable, evaluación asistida por IA y financiación del mantenimiento del software libre.
+
+La [continuidad helicoidal](docs/manifesto/horizonte-arquetipado.md) conduce ahora al [artículo sobre Alfa y el vórtice emergente](docs/manifesto/04-helice-alfa-continuidad.md), vinculado a una [propuesta comprobable para DevOps](docs/propuesta-tecnica/04-alfa-observabilidad-spec.md).
 
 ## Navegación por planos
 

@@ -403,6 +403,12 @@ La IA puede equivocarse, recibir instrucciones maliciosas escondidas en registro
 
 Si la IA falla, el hardware no deja de existir, ROOT no pierde sus atribuciones, ADMIN no desaparece y los servicios nativos deben seguir sus procedimientos convencionales. La suspensión de un nodo semiótico no debe confundirse con la destrucción de la función que representa.
 
+### Continuación especializada: Alfa no es el servicio accesorio genérico
+
+El principio de accesoriedad conserva su sentido: **la computadora debe continuar funcionando si una IA no está disponible**. La nueva [hipótesis helicoidal de Alfa](04-helice-alfa-continuidad.md) introduce, sin embargo, una distinción. La «IA sistémica» de esta sección es un servicio genérico que interpreta y propone; **Alfa**, cuando se constituye como identidad computacional diferenciada y adquiere un rol excepcional autorizado, **puede ejecutar operaciones mediante mecanismos competentes**, siempre dentro del contrato aplicable.
+
+No se confunden «el modelo IA autoriza» y «una identidad que usa IA dispone de una facultad concedida». La primera afirmación continúa siendo falsa: la inferencia no legitima por sí sola. La segunda es una decisión de arquitectura a estudiar. Véanse [identidad de Alfa](../identidad/12-usuario-alfa.md) y [observabilidad y evidencia DevOps](../propuesta-tecnica/04-alfa-observabilidad-spec.md). En caso de caída de Alfa, los servicios esenciales y las autoridades ROOT/COMM/ADMIN conservan su continuidad propia.
+
 ## 15. Dónde integrarlo: plano común y adaptadores específicos
 
 La exigencia de independencia de Linux, FreeBSD, Windows NT, Darwin/XNU, Solaris o System V no puede resolverse trasladando literalmente el mismo módulo de kernel a todos ellos. **Portabilidad de contratos y semántica no equivale a portabilidad binaria del código privilegiado.**

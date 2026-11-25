@@ -13,19 +13,23 @@ La documentación nueva funciona como columna vertebral. Los conceptos del corpu
 | 1 | Propuesta técnica | [Resumen ejecutivo](propuesta-tecnica/00-resumen-ejecutivo.md) | Presenta el problema, la hipótesis y el prototipo viable. |
 | 2 | Propuesta técnica | [Especificación xGNUpeD](propuesta-tecnica/01-xgnuped-spec.md) | Formaliza la capa de identidad temprana. |
 | 3 | Propuesta técnica | [Especificación Dernel](propuesta-tecnica/02-dernel-spec.md) | Formaliza la licencia operativa entre host y guest. |
+| 3 bis | Propuesta técnica | [Alfa: observabilidad y evidencia](propuesta-tecnica/04-alfa-observabilidad-spec.md) | Fuentes vivas, pruebas y logs reproducibles para DevOps/SRE. |
 | 4 | Manifiesto | [Manifiesto](manifesto/01-manifiesto.md) | Expone la razón de ser del proyecto. |
 | 5 | Manifiesto | [Hipótesis central](manifesto/02-hipotesis-central.md) | Declara la soberanía sistémica como problema de arranque. |
 | 6 | Manifiesto | [Horizonte tecnológico — Arquetipar sistemas operativos](manifesto/horizonte-arquetipado.md) | Organiza las siete dimensiones, la maqueta y su continuidad por convolución. |
+| 6 ter | Manifiesto | [Hélice, Alfa y evidencia evolutiva](manifesto/04-helice-alfa-continuidad.md) | Continúa la séptima dimensión: vórtice, suficiencia y realimentación. |
 | 6 bis | Manifiesto | [Artículo de soberanía contributiva](manifesto/03-reciprocidad-economica-computacional.md) | Presenta la hipótesis de financiación verificable de contribuciones libres, IA, contratos y gobernanza comunitaria. |
 | 7 | Arquitectura | [Estratos](arquitectura/03-estratos.md) | Ordena ROOT, COMM y ADMIN. |
 | 8 | Arquitectura | [Inicio del sistema](arquitectura/04-inicio-sistema.md) | Describe la transición desde metal hacia sistema. |
 | 9 | Arquitectura | [Bus de arranque](arquitectura/05-bus-arranque.md) | Explica la comunicación temprana. |
 | 10 | Arquitectura | [Capas POSIX](arquitectura/06-capas-posix.md) | Sitúa compatibilidad, Linux e init tradicionales. |
+| 10 bis | Arquitectura | [Dominio Alfa y arranque](arquitectura/07-dominio-alfa.md) | Investiga seL4 en RAM, NPU/GPU y descubrimiento por Linux. |
 | 11 | Identidad | [xGNUpeD](identidad/07-xgnuped.md) | Define identidad distributiva, conmutativa, asociativa y comunicativa. |
 | 12 | Identidad | [Trilobytes](identidad/08-trilobytes.md) | Integra coherencia, logon, login y legitimación orgánica. |
 | 13 | Identidad | [Dernel](identidad/09-dernel.md) | Explica la licencia operativa y la traducción entre kernel, host y guest. |
 | 14 | Identidad | [Host y Guest](identidad/10-host-guest.md) | Refunde Host, Guest, VMKZ, VMDZ y plano delegado. |
 | 15 | Identidad | [Root y dominios](identidad/11-root-dominios.md) | Delimita dominios raíz, autoridad y administración. |
+| 15 bis | Identidad | [Alfa y roles en sesión](identidad/12-usuario-alfa.md) | Distingue identidad humana, propiedad, roles y co-autoridad de Alfa. |
 | 16 | Filosofía | [Unix y GNU](filosofia/12-filosofia-unix-gnu.md) | Integra filosofía Unix, GNU, GPL y C como medio sistémico. |
 | 17 | Filosofía | [Hormiguero](filosofia/13-hormiguero.md) | Usa la metáfora orgánica para explicar nodos, comunidad y coordinación. |
 | 18 | Filosofía | [Hardware](filosofia/14-hardware.md) | Relaciona hardware presente, futuro, ISA y capacidades del kernel. |
@@ -58,6 +62,12 @@ El [artículo académico del manifiesto](manifesto/03-reciprocidad-economica-com
 ## Ampliación oficial: Trilobytes
 
 La [descripción de Trilobytes](identidad/08-trilobytes.md) mantiene su función de coherencia de sesión y añade la representación contractual de intereses. La [especificación de legitimación e intermediación](propuesta-tecnica/03-trilobytes-mediacion-spec.md) formaliza la triple delegación positiva ROOT/COMM/ADMIN y deja claro que todavía es una propuesta, no una implementación de Zalty.
+
+---
+
+## Continuidad helicoidal y evidencia Alfa
+
+La [séptima dimensión](manifesto/horizonte-arquetipado.md) continúa en el [artículo de Alfa](manifesto/04-helice-alfa-continuidad.md). La [identidad](identidad/12-usuario-alfa.md), el [dominio de arranque](arquitectura/07-dominio-alfa.md) y el [contrato DevOps](propuesta-tecnica/04-alfa-observabilidad-spec.md) desarrollan sus consecuencias en distintos planos. **Esta hipótesis no está implementada en HostID v0.1.**
 
 ---
 

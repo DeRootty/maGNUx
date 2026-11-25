@@ -353,6 +353,10 @@ Por eso maGNUx empieza antes de la IA: empieza por la soberanía del sistema.
 
 ---
 
+La ampliación de esta tensión futura se articula como una **propiedad emergente del avance helicoidal**: [usuario Alfa, fuente viva y suficiencia evolutiva](04-helice-alfa-continuidad.md). En esa hipótesis Alfa puede procesar la representación de Trilobytes y producir evidencia para versiones futuras; **no se presenta como una función ya implementada**.
+
+---
+
 ## Dos rutas de autoridad temprana
 
 El manifiesto reconoce dos rutas conceptuales:
