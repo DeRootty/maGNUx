@@ -225,6 +225,14 @@ Pero la fase práctica de maGNUx no empieza sustituyendo Linux por seL4. Empieza
 
 ---
 
+### Extensión futura: preconstitución del dominio Alfa
+
+La ruta ordinaria aquí descrita continúa siendo el laboratorio Linux/initramfs de Zalty. Sobre ella se estudia una variante **posterior**, no implementada, donde un dominio de control basado en seL4 se prepara en RAM reservada antes de Linux y se ofrece al kernel como **dispositivo lógico identificable**, con NPU para inferencia y otros aceleradores cuando proceda. No debe confundirse «cargado en RAM» con «ejecutado por la NPU»: seL4 exige un procesador compatible, y el descubrimiento por Linux necesita mecanismos de plataforma y controlador.
+
+La extensión queda especificada en [07 — Dominio Alfa: arranque y procesamiento heterogéneo](07-dominio-alfa.md); el sistema principal debe poder continuar si Alfa está ausente o caído, conforme a la política de arranque.
+
+---
+
 ## Hurd como hipótesis de servidores
 
 Hurd/GNU Mach aporta una intuición distinta:
