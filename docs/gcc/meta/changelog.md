@@ -65,3 +65,11 @@
 - Se inicia la sección 3.7 sobre OpenMP, OpenACC y offload.
 - Se documentan `-foffload=`, `-foffload-options=`, `-fopenacc`, `-fopenacc-dim=`, `-fopenmp`, `-fopenmp-simd` y `-fopenmp-target-simd-clone`.
 - Se actualiza glosario, README y manifiesto de continuidad.
+
+## Revisión 11 — 27 de noviembre de 2026
+
+- Auditoría: master contenía 00–20, pese al índice histórico de entrega 10.
+- Reconstrucción selectiva de 21–25 desde § 3.4 de GCC 16.1.0 y glosario de trabajo 90; 26–41 quedan marcados pendientes.
+- Ejemplos originales y referencia primaria; no se certifica traducción literal completa.
+- Nueva guía y prueba diferencial independiente para Gentoo, enlazada desde GCC.
+- Sin PDF ni ZIP de entrega cerrada; no se alteran entregas anteriores.

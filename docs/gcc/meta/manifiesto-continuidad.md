@@ -1,10 +1,10 @@
-# Manifiesto de continuidad - entrega 10
+# Manifiesto de continuidad — revisión de reconstrucción (27-11-2026)
 
 ## Objeto
 
 Este manifiesto permite continuar la edición técnica en español del manual **Using the GNU Compiler Collection, for gcc version 16.1.0** sin perder el punto exacto de avance, el criterio terminológico ni la estructura de salida.
 
-## Avance acumulado
+## Avance declarado por la entrega 10 (histórico, no inventario actual)
 
 Se ha cubierto, en forma de edición técnica navegable:
 
@@ -25,23 +25,11 @@ Se ha cubierto, en forma de edición técnica navegable:
 15. Sección 3.6: opciones que controlan Objective-C y Objective-C++.
 16. Inicio de sección 3.7: opciones que controlan OpenMP y OpenACC.
 
-## Punto exacto de continuación
+## Punto real de continuación
 
-La siguiente entrega debe continuar en:
+La rama master solo contenía 00–20 antes de la revisión. Se reconstruyeron 21–25 (sección 3.4, cobertura selectiva) y el glosario 90. No se recuperó el texto histórico de las unidades 21–41. Quedan pendientes 26–37 (C++), 38–40 (Objective-C), 41 (OpenMP/OpenACC), los aspectos de § 3.4 no cubiertos y posteriormente § 3.8 (formato de diagnósticos) y el resto del manual. El índice distingue capítulos presentes de pendientes.
 
-```text
-3.8 Options to Control Diagnostic Messages Formatting
-```
-
-El punto de entrada natural es `-fmessage-length=n`, seguido de opciones de formato de diagnósticos como `-fdiagnostics-plain-output`, `-fdiagnostics-show-location=`, `-fdiagnostics-color`, `GCC_COLORS`, caret diagnostics, URLs, paths, nesting, JSON/SARIF si aparecen en la sección, y controles relacionados.
-
-## Prioridad recomendada para la entrega 11
-
-1. Iniciar sección 3.8 sobre formato de mensajes de diagnóstico.
-2. Explicar diferencia entre diagnóstico, advertencia, error, nota y localización fuente.
-3. Cubrir line wrapping, color, salida plana, rutas de eventos y estabilidad para herramientas.
-4. Mantener ZIP Markdown y PDF.
-5. Actualizar glosario, changelog y manifiesto.
+Para Gentoo se crea una ruta experimental independiente que enlaza las secciones oficiales 3.2, 3.4, 3.12, 3.14 y 3.19, sin anticipar conclusiones sobre el manifiesto. La página de § 3.8 no pudo recuperarse durante la revisión; no se inventa una traducción.
 
 ## Criterio editorial
 
@@ -50,7 +38,7 @@ El punto de entrada natural es `-fmessage-length=n`, seguido de opciones de form
 - Traducir la explicación semántica y contextual.
 - Priorizar claridad para usuarios de Linux, GCC, C/C++, Objective-C, toolchains, paralelismo, offload y sistemas.
 - Mantener navegación entre archivos Markdown.
-- Generar siempre ZIP Markdown y PDF.
+- Para entregas de distribución cerradas, generar ZIP Markdown y PDF cuando se complete y valide el bloque. Esta revisión es una incorporación directa al repositorio, no una entrega PDF completa.
 - Actualizar `CHANGELOG.md`, `MANIFIESTO_CONTINUIDAD.md` y glosario.
 
 ## Nota de honestidad

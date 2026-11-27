@@ -46,3 +46,7 @@ nuevos/_pendientes/
 ```
 
 Después se decide si son capítulos nuevos, ampliaciones de capítulos existentes, entradas de glosario o notas meta.
+
+## Aplicación experimental
+
+El [Laboratorio I — Gentoo](../laboratorios/gentoo/README.md) utiliza esta documentación para estudiar la cadena flag → cabeceras → fuente preprocesada → compilador → objeto. Los experimentos son originales y se mantienen fuera del manual.

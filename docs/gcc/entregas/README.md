@@ -11,3 +11,5 @@ Las entregas se conservan como registro editorial resumido. La documentación ac
 - [Entrega 08](entrega-08.md) — 39 archivos Markdown, 4 archivos añadidos por nombre.
 - [Entrega 09](entrega-09.md) — 43 archivos Markdown, 4 archivos añadidos por nombre.
 - [Entrega 10](entrega-10.md) — 46 archivos Markdown, 3 archivos añadidos por nombre.
+
+- [Revisión 11](entrega-11.md) — reconstrucción selectiva 21–25 y glosario; inventario corregido.

@@ -3,7 +3,7 @@
 
 Esta carpeta contiene la documentación canónica viva de traducción y estudio del manual **Using the GNU Compiler Collection, for gcc version 16.1.0**.
 
-La versión canónica actual conserva el contenido consolidado hasta la entrega 10, cierra **3.6 Options Controlling Objective-C and Objective-C++ Dialects** como lectura técnica inicial e inicia **3.7 Options Controlling OpenMP and OpenACC**. El objetivo de esta entrega es completar el bloque Objective-C/Objective-C++ y preparar la transición hacia el formato de diagnósticos de GCC.
+El índice histórico de la entrega 10 enumeraba 42 unidades numeradas, pero en master solo estaban presentes las unidades 00–20. La revisión de 27 de noviembre de 2026 reconstruye selectivamente 21–25 a partir de GCC 16.1.0 y un glosario de trabajo. Las unidades 26–41 siguen pendientes de recuperación o reconstrucción; no se presentan como disponibles. 
 
 No es todavía una traducción completa del manual de 1237 páginas. Es una edición técnica por entregas, navegable y preparada para revisión comunitaria.
 
@@ -35,22 +35,22 @@ No es todavía una traducción completa del manual de 1237 páginas. Es una edic
 24. [Sección 3.4 - Palabras clave, builtins y entorno hosted/freestanding](23-keywords-builtins-hosted-freestanding.md)
 25. [Sección 3.4 - Inline, extensiones, dependencias estructuradas y compatibilidad](24-inline-extensiones-dependencias.md)
 26. [Sección 3.4 - Signedness, arrays flexibles y orden escalar en estructuras](25-signedness-flex-arrays-sso.md)
-27. [Sección 3.5 - Dialecto C++: introducción y ABI](26-cpp-dialecto-abi.md)
-28. [Sección 3.5 - Compatibilidad ABI, acceso y memoria dinámica](27-cpp-compat-acceso-new-delete.md)
-29. [Sección 3.5 - `char8_t`, conceptos y `constexpr`](28-cpp-char8-concepts-constexpr.md)
-30. [Sección 3.5 - Contratos, corrutinas y volcados C++](29-cpp-contracts-coroutines-dumps.md)
-31. [Sección 3.5 - Plantillas, módulos y diagnósticos C++ iniciales](30-cpp-templates-modules-diagnostics.md)
-32. [Sección 3.5 - Temporales, RTTI y deallocation sized](31-cpp-temporales-rtti-deallocation.md)
-33. [Sección 3.5 - Enumeraciones, orden de evaluación, plantillas y estáticos](32-cpp-enums-eval-templates-statics.md)
-34. [Sección 3.5 - Visibilidad, DSO y compatibilidad Microsoft](33-cpp-visibilidad-dso-ms.md)
-35. [Sección 3.5 - Advertencias específicas de C++](34-cpp-warnings-especificas.md)
-36. [Sección 3.5 - Advertencias C++ sobre orden, movimiento y range-for](35-cpp-warnings-reorder-move-range.md)
-37. [Sección 3.5 - Advertencias C++ sobre etiquetas, enlace y reglas de estilo](36-cpp-warnings-tags-linkage-effective.md)
-38. [Sección 3.5 - Advertencias C++ sobre sobrecarga, memoria y jerarquías](37-cpp-warnings-overload-memory-hierarchy.md)
-39. [Sección 3.6 - Objective-C y Objective-C++: introducción y runtime](38-objc-intro-runtime.md)
-40. [Sección 3.6 - Objective-C y Objective-C++: despacho, excepciones, GC y `nil`](39-objc-dispatch-exceptions-gc.md)
-41. [Sección 3.6 - Objective-C y Objective-C++: clases reemplazables, ivars y advertencias](40-objc-visibilidad-decls-warnings.md)
-42. [Sección 3.7 - OpenMP, OpenACC y offload](41-openmp-openacc-offload.md)
+27. Sección 3.5 - Dialecto C++: introducción y ABI — pendiente de reconstrucción (`26-cpp-dialecto-abi.md`)
+28. Sección 3.5 - Compatibilidad ABI, acceso y memoria dinámica — pendiente de reconstrucción (`27-cpp-compat-acceso-new-delete.md`)
+29. Sección 3.5 - `char8_t`, conceptos y `constexpr` — pendiente de reconstrucción (`28-cpp-char8-concepts-constexpr.md`)
+30. Sección 3.5 - Contratos, corrutinas y volcados C++ — pendiente de reconstrucción (`29-cpp-contracts-coroutines-dumps.md`)
+31. Sección 3.5 - Plantillas, módulos y diagnósticos C++ iniciales — pendiente de reconstrucción (`30-cpp-templates-modules-diagnostics.md`)
+32. Sección 3.5 - Temporales, RTTI y deallocation sized — pendiente de reconstrucción (`31-cpp-temporales-rtti-deallocation.md`)
+33. Sección 3.5 - Enumeraciones, orden de evaluación, plantillas y estáticos — pendiente de reconstrucción (`32-cpp-enums-eval-templates-statics.md`)
+34. Sección 3.5 - Visibilidad, DSO y compatibilidad Microsoft — pendiente de reconstrucción (`33-cpp-visibilidad-dso-ms.md`)
+35. Sección 3.5 - Advertencias específicas de C++ — pendiente de reconstrucción (`34-cpp-warnings-especificas.md`)
+36. Sección 3.5 - Advertencias C++ sobre orden, movimiento y range-for — pendiente de reconstrucción (`35-cpp-warnings-reorder-move-range.md`)
+37. Sección 3.5 - Advertencias C++ sobre etiquetas, enlace y reglas de estilo — pendiente de reconstrucción (`36-cpp-warnings-tags-linkage-effective.md`)
+38. Sección 3.5 - Advertencias C++ sobre sobrecarga, memoria y jerarquías — pendiente de reconstrucción (`37-cpp-warnings-overload-memory-hierarchy.md`)
+39. Sección 3.6 - Objective-C y Objective-C++: introducción y runtime — pendiente de reconstrucción (`38-objc-intro-runtime.md`)
+40. Sección 3.6 - Objective-C y Objective-C++: despacho, excepciones, GC y `nil` — pendiente de reconstrucción (`39-objc-dispatch-exceptions-gc.md`)
+41. Sección 3.6 - Objective-C y Objective-C++: clases reemplazables, ivars y advertencias — pendiente de reconstrucción (`40-objc-visibilidad-decls-warnings.md`)
+42. Sección 3.7 - OpenMP, OpenACC y offload — pendiente de reconstrucción (`41-openmp-openacc-offload.md`)
 43. [Glosario técnico inglés/español](90-glosario-tecnico.md)
 44. [CHANGELOG](../meta/changelog.md)
 45. [Manifiesto de continuidad](../meta/manifiesto-continuidad.md)
@@ -64,7 +64,4 @@ No es todavía una traducción completa del manual de 1237 páginas. Es una edic
 
 ## Estado editorial
 
-La documentación canónica procede de la entrega 10 y queda preparada para nuevas ampliaciones:
-
-- ZIP con Markdown navegable.
-- PDF estándar equivalente a esta entrega.
+La documentación canónica contiene 00–25 y el glosario 90. Véase [manifiesto de continuidad](../meta/manifiesto-continuidad.md) para el inventario pendiente. Los [experimentos Gentoo](../../laboratorios/gentoo/README.md) constituyen material original separado, no capítulos del manual. No se ha generado PDF en esta revisión del repositorio.

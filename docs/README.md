@@ -38,6 +38,7 @@ La documentación nueva funciona como columna vertebral. Los conceptos del corpu
 | 21 | Implementación | [Initramfs de Zalty](../zalty/initramfs/README.md) | Sitúa el laboratorio de arranque temprano. |
 | 22 | Implementación | [Prototipo HostID v0.1](../zalty/initramfs/prototipo-hostid-v0.1/README.md) | Primer ensayo técnico de identidad temprana. |
 | 23 | Herramientas GNU | [GCC ES Técnico](gcc/README.md) | Documentación técnica en español sobre GCC, compilación y cadena de herramientas. |
+| 23 bis | Laboratorio | [Gentoo](laboratorios/gentoo/README.md) | Trazabilidad de flags, cabeceras y compilador. |
 | 24 | Manifiesto | [Epílogo y notas](manifesto/EPILOGO.md) | Genealogía, aportaciones y derivas; documento abierto. |
 
 ## Secciones principales

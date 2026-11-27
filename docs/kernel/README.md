@@ -4,6 +4,8 @@
 
 Este directorio contiene los bloques alfabéticos de la tabla de símbolos `CONFIG_*` del kernel Linux 6.18.25.
 
+**Nota de versión:** el inventario existente permanece identificado como Linux 6.18.25. La nueva referencia de investigación seleccionada para el [laboratorio Gentoo](../laboratorios/gentoo/README.md) es Linux 6.18.65 LTS; el catálogo aún no ha sido regenerado ni contrastado contra esa revisión.
+
 La tabla se separa en archivos pequeños para que GitHub pueda renderizarla sin superar sus límites de visualización.
 
 ## Índice alfabético
