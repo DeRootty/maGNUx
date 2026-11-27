@@ -1,7 +1,9 @@
 # Uso de la GNU Compiler Collection - GCC 16.1.0
 
 > [Portada GCC](../README.md) · [Documentación maGNUx](../../README.md) · [Inicio del repositorio](../../../README.md)
-## Edición técnica en español - documentación canónica
+## Edición técnica comentada anterior
+
+La traducción directa del manual original se desarrolla en el [Aula de integración: GCC en español](../../laboratorios/gentoo/aula-gcc/README.md). Este índice conserva el material previo de apoyo.
 
 Esta carpeta contiene la documentación canónica viva de traducción y estudio del manual **Using the GNU Compiler Collection, for gcc version 16.1.0**.
 

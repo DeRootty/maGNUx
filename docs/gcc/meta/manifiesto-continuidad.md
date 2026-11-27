@@ -27,7 +27,11 @@ Se ha cubierto, en forma de edición técnica navegable:
 15. Sección 3.6: opciones que controlan Objective-C y Objective-C++.
 16. Inicio de sección 3.7: opciones que controlan OpenMP y OpenACC.
 
-## Punto real de continuación
+## Nueva ruta de traducción directa
+
+La traducción íntegra solicitada pasa al [Aula de integración de Gentoo](../../laboratorios/gentoo/aula-gcc/README.md). El [índice de la traducción directa](../../laboratorios/gentoo/aula-gcc/manual/README.md) declara su cobertura real. Las unidades comentadas históricas se conservan; no se confunden con capítulos completos del original.
+
+## Punto real de continuación (edición técnica comentada)
 
 La rama master solo contenía 00–20 antes de la revisión. Se reconstruyeron 21–25 (sección 3.4, cobertura selectiva) y el glosario 90. No se recuperó el texto histórico de las unidades 21–41. Quedan pendientes 26–37 (C++), 38–40 (Objective-C), 41 (OpenMP/OpenACC), los aspectos de § 3.4 no cubiertos y posteriormente § 3.8 (formato de diagnósticos) y el resto del manual. El índice distingue capítulos presentes de pendientes.
 

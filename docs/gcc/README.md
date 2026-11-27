@@ -22,7 +22,9 @@ nuevos/_pendientes/
 
 ## Lectura principal
 
-Empieza por el índice canónico:
+**Nueva ruta de traducción directa:** [Aula de integración — GCC en español](../laboratorios/gentoo/aula-gcc/README.md). La traducción íntegra del original pasa a desarrollarse allí. Los archivos de esta carpeta se preservan como edición técnica comentada anterior y no se contabilizan como traducción completa.
+
+Para consultar esta edición anterior:
 
 - [Índice de unidades disponibles en español](docs/README.md)
 - [Glosario técnico](docs/90-glosario-tecnico.md)

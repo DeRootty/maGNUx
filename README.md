@@ -37,7 +37,7 @@ La lectura principal del repositorio empieza aquí y continúa en `docs/`:
 12. [Initramfs de Zalty](zalty/initramfs/README.md)
 13. [Prototipo HostID v0.1](zalty/initramfs/prototipo-hostid-v0.1/README.md)
 14. [GCC ES Técnico](docs/gcc/README.md) — [Índice de unidades disponibles](docs/gcc/docs/README.md)
-14 bis. [Laboratorio I — Gentoo](docs/laboratorios/gentoo/README.md) — trazabilidad experimental de flags y compilación.
+14 bis. [Laboratorio I — Gentoo](docs/laboratorios/gentoo/README.md) — [Aula de integración: GCC en español](docs/laboratorios/gentoo/aula-gcc/README.md).
 15. [Epílogo y notas](docs/manifesto/EPILOGO.md) — evolución orgánica, autoría y cuestiones abiertas.
 
 ## Nueva base constitutiva: Commonwealth del silicio

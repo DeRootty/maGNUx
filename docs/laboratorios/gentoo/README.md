@@ -7,8 +7,12 @@
 ## Referencias de trabajo
 
 - Kernel objetivo: Linux 6.18.65 LTS, vanilla y, cuando se disponga del árbol, gentoo-sources correspondiente; registrar el origen y los parches. El [catálogo previo](../../kernel/README.md) es 6.18.25 y no se debe confundir con el nuevo árbol.
-- Manual de estudio: [GCC 16.1.0, edición técnica en español](../../gcc/README.md). La versión instalada en Gentoo se registrará con `gcc -v`; no se presupone que coincida con el manual.
+- Manual de estudio: [Aula de integración: GCC 16.1.0 en español](aula-gcc/README.md), traducción directa en curso y adaptación experimental. [Material comentado anterior](../../gcc/README.md). La versión instalada en Gentoo se registrará con `gcc -v`; no se presupone que coincida con el manual.
 - La primera prueba de concepto se realizó fuera de Gentoo, con GCC 14.2.0 (Debian). No se ha compilado Linux 6.18.65 en esta revisión.
+
+## Aula de integración
+
+[Entrar al aula: GCC en español, adaptación especial para propósito experimental en Gentoo](aula-gcc/README.md). El objeto de estudio es Linux 6.18.65 LTS. Se distinguen traducción directa y adaptación experimental; el manual completo es un objetivo pendiente, no una publicación terminada.
 
 ## Ruta de aprendizaje
 
