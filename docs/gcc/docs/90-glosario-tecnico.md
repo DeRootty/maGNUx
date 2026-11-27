@@ -1,6 +1,6 @@
 # Glosario técnico inglés–español
 
-> [⬆ Índice GCC](README.md) · [🏠 Inicio](../../../README.md)
+> [Índice de unidades](README.md) · [Portada GCC](../README.md) · [Inicio del repositorio](../../../README.md)
 
 Glosario reconstruido de trabajo; no se presenta como recuperación exacta del glosario de la entrega 10.
 

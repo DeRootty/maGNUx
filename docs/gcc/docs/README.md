@@ -1,4 +1,6 @@
 # Uso de la GNU Compiler Collection - GCC 16.1.0
+
+> [Portada GCC](../README.md) · [Documentación maGNUx](../../README.md) · [Inicio del repositorio](../../../README.md)
 ## Edición técnica en español - documentación canónica
 
 Esta carpeta contiene la documentación canónica viva de traducción y estudio del manual **Using the GNU Compiler Collection, for gcc version 16.1.0**.
@@ -7,7 +9,7 @@ El índice histórico de la entrega 10 enumeraba 42 unidades numeradas, pero en 
 
 No es todavía una traducción completa del manual de 1237 páginas. Es una edición técnica por entregas, navegable y preparada para revisión comunitaria.
 
-## Navegación
+## Unidades disponibles en español
 
 1. [Portada, atribución y nota de licencia](00-portada-y-licencia.md)
 2. [Capítulo 1 - Lenguajes de programación soportados por GCC](01-lenguajes-soportados.md)
@@ -35,32 +37,34 @@ No es todavía una traducción completa del manual de 1237 páginas. Es una edic
 24. [Sección 3.4 - Palabras clave, builtins y entorno hosted/freestanding](23-keywords-builtins-hosted-freestanding.md)
 25. [Sección 3.4 - Inline, extensiones, dependencias estructuradas y compatibilidad](24-inline-extensiones-dependencias.md)
 26. [Sección 3.4 - Signedness, arrays flexibles y orden escalar en estructuras](25-signedness-flex-arrays-sso.md)
-27. Sección 3.5 - Dialecto C++: introducción y ABI — pendiente de reconstrucción (`26-cpp-dialecto-abi.md`)
-28. Sección 3.5 - Compatibilidad ABI, acceso y memoria dinámica — pendiente de reconstrucción (`27-cpp-compat-acceso-new-delete.md`)
-29. Sección 3.5 - `char8_t`, conceptos y `constexpr` — pendiente de reconstrucción (`28-cpp-char8-concepts-constexpr.md`)
-30. Sección 3.5 - Contratos, corrutinas y volcados C++ — pendiente de reconstrucción (`29-cpp-contracts-coroutines-dumps.md`)
-31. Sección 3.5 - Plantillas, módulos y diagnósticos C++ iniciales — pendiente de reconstrucción (`30-cpp-templates-modules-diagnostics.md`)
-32. Sección 3.5 - Temporales, RTTI y deallocation sized — pendiente de reconstrucción (`31-cpp-temporales-rtti-deallocation.md`)
-33. Sección 3.5 - Enumeraciones, orden de evaluación, plantillas y estáticos — pendiente de reconstrucción (`32-cpp-enums-eval-templates-statics.md`)
-34. Sección 3.5 - Visibilidad, DSO y compatibilidad Microsoft — pendiente de reconstrucción (`33-cpp-visibilidad-dso-ms.md`)
-35. Sección 3.5 - Advertencias específicas de C++ — pendiente de reconstrucción (`34-cpp-warnings-especificas.md`)
-36. Sección 3.5 - Advertencias C++ sobre orden, movimiento y range-for — pendiente de reconstrucción (`35-cpp-warnings-reorder-move-range.md`)
-37. Sección 3.5 - Advertencias C++ sobre etiquetas, enlace y reglas de estilo — pendiente de reconstrucción (`36-cpp-warnings-tags-linkage-effective.md`)
-38. Sección 3.5 - Advertencias C++ sobre sobrecarga, memoria y jerarquías — pendiente de reconstrucción (`37-cpp-warnings-overload-memory-hierarchy.md`)
-39. Sección 3.6 - Objective-C y Objective-C++: introducción y runtime — pendiente de reconstrucción (`38-objc-intro-runtime.md`)
-40. Sección 3.6 - Objective-C y Objective-C++: despacho, excepciones, GC y `nil` — pendiente de reconstrucción (`39-objc-dispatch-exceptions-gc.md`)
-41. Sección 3.6 - Objective-C y Objective-C++: clases reemplazables, ivars y advertencias — pendiente de reconstrucción (`40-objc-visibilidad-decls-warnings.md`)
-42. Sección 3.7 - OpenMP, OpenACC y offload — pendiente de reconstrucción (`41-openmp-openacc-offload.md`)
-43. [Glosario técnico inglés/español](90-glosario-tecnico.md)
-44. [CHANGELOG](../meta/changelog.md)
-45. [Manifiesto de continuidad](../meta/manifiesto-continuidad.md)
+
+## Recursos y navegación
+
+- [Glosario técnico inglés/español](90-glosario-tecnico.md)
+- [Histórico de entregas](../entregas/README.md)
+- [Registro de cambios](../meta/changelog.md)
+- [Manifiesto de continuidad](../meta/manifiesto-continuidad.md)
+- [Laboratorio Gentoo](../../laboratorios/gentoo/README.md)
+
+## Secciones pendientes de reconstrucción
+
+Estas secciones todavía no tienen unidades Markdown disponibles en español. Para consultarlas mientras se reconstruyen, utiliza el original **en inglés** de GCC 16.1.0:
+
+| Sección | Unidades pendientes | Fuente oficial |
+|---|---|---|
+| 3.5 — Dialecto C++ | 26–37 | [Leer original](https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/C_002b_002b-Dialect-Options.html) |
+| 3.6 — Objective-C y Objective-C++ | 38–40 | [Leer original](https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/Objective-C-and-Objective-C_002b_002b-Dialect-Options.html) |
+| 3.7 — OpenMP y OpenACC | 41 | [Leer original](https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/OpenMP-and-OpenACC-Options.html) |
+| 3.8 y siguientes | Por desarrollar | [Índice oficial del manual](https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/) |
+
+El inventario detallado se conserva en el [manifiesto de continuidad](../meta/manifiesto-continuidad.md). No se enlazan archivos aún inexistentes.
 
 ## Criterio de traducción
 
 - Se traduce al español técnico de sistemas y programación.
 - Se conservan literales, nombres de opciones, herramientas, arquitecturas, ABI, símbolos y fragmentos de código.
 - Las opciones de GCC no se traducen. Se traduce su explicación y su papel dentro de la cadena de construcción.
-- En esta entrega se fija vocabulario para *Objective-C runtime*, *message dispatch*, *nil receiver*, *garbage collection*, *instance variable*, *selector*, *protocol*, *OpenMP*, *OpenACC*, *offload target*, *target triplet*, *SIMD clone* y *host fallback*.
+- El glosario de trabajo se amplía con cada unidad disponible; la terminología de secciones pendientes se cotejará al reconstruirlas.
 
 ## Estado editorial
 

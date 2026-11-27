@@ -1,5 +1,7 @@
 # Pendientes de incorporación
 
+> [Portada GCC](../../README.md) · [Índice de unidades](../../docs/README.md) · [Inicio del repositorio](../../../../README.md)
+
 Coloca aquí nuevos archivos Markdown antes de integrarlos en la documentación canónica.
 
 Cada archivo debe revisarse para decidir si:

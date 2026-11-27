@@ -29,4 +29,4 @@ Este caso contrasta con una flag `-D`: incluso cuando la unidad preprocesada coi
 
 **Estado de la sección:** cobertura selectiva de § 3.4, no inventario exhaustivo de opciones. Quedan por cotejar, entre otras, `-aux-info`, `-fcond-mismatch`, `-fgimple`, `-fgnu-tm`, `-flax-vector-conversions` y `-fpermitted-flt-eval-methods`.
 
-[Anterior](24-inline-extensiones-dependencias.md) | [Índice](README.md) | Sección 3.5 pendiente de reconstrucción
+[Anterior](24-inline-extensiones-dependencias.md) | [Índice](README.md) | [Siguiente sección 3.5 — original en inglés](https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/C_002b_002b-Dialect-Options.html) · traducción pendiente

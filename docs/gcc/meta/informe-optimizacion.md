@@ -1,5 +1,7 @@
 # Informe de optimización documental
 
+> [Portada GCC](../README.md) · [Índice de unidades](../docs/README.md) · [Inicio del repositorio](../../../README.md)
+
 ## Origen
 
 Se partió de un árbol con entregas acumulativas de Markdown.

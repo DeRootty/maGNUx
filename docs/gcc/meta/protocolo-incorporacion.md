@@ -1,5 +1,7 @@
 # Protocolo de incorporación documental
 
+> [Portada GCC](../README.md) · [Índice de unidades](../docs/README.md) · [Inicio del repositorio](../../../README.md)
+
 Este documento define cómo añadir nuevas ampliaciones sin volver al modelo de duplicación por entregas completas.
 
 ## Entrada inicial
@@ -42,6 +44,8 @@ navegación anterior / índice / siguiente
 meta/changelog.md
 entregas/entrega-XX.md
 ```
+
+Antes de publicar una incorporación, comprobar que cada destino Markdown existe con la misma capitalización y que los enlaces anterior/siguiente apuntan a las unidades contiguas disponibles. Los capítulos pendientes no deben tener enlaces a archivos ficticios; cuando se disponga de una referencia verificada, identificar el enlace al manual oficial en inglés. Mantener el acceso a la portada y al índice desde los documentos editoriales.
 
 ## Regla principal
 

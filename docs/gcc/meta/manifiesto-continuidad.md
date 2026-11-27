@@ -1,5 +1,7 @@
 # Manifiesto de continuidad — revisión de reconstrucción (27-11-2026)
 
+> [Portada GCC](../README.md) · [Índice de unidades](../docs/README.md) · [Inicio del repositorio](../../../README.md)
+
 ## Objeto
 
 Este manifiesto permite continuar la edición técnica en español del manual **Using the GNU Compiler Collection, for gcc version 16.1.0** sin perder el punto exacto de avance, el criterio terminológico ni la estructura de salida.
@@ -31,6 +33,25 @@ La rama master solo contenía 00–20 antes de la revisión. Se reconstruyeron 2
 
 Para Gentoo se crea una ruta experimental independiente que enlaza las secciones oficiales 3.2, 3.4, 3.12, 3.14 y 3.19, sin anticipar conclusiones sobre el manifiesto. La página de § 3.8 no pudo recuperarse durante la revisión; no se inventa una traducción.
 
+### Inventario histórico de unidades aún pendientes
+
+- Sección 3.5 - Dialecto C++: introducción y ABI — pendiente de reconstrucción (`26-cpp-dialecto-abi.md`)
+- Sección 3.5 - Compatibilidad ABI, acceso y memoria dinámica — pendiente de reconstrucción (`27-cpp-compat-acceso-new-delete.md`)
+- Sección 3.5 - `char8_t`, conceptos y `constexpr` — pendiente de reconstrucción (`28-cpp-char8-concepts-constexpr.md`)
+- Sección 3.5 - Contratos, corrutinas y volcados C++ — pendiente de reconstrucción (`29-cpp-contracts-coroutines-dumps.md`)
+- Sección 3.5 - Plantillas, módulos y diagnósticos C++ iniciales — pendiente de reconstrucción (`30-cpp-templates-modules-diagnostics.md`)
+- Sección 3.5 - Temporales, RTTI y deallocation sized — pendiente de reconstrucción (`31-cpp-temporales-rtti-deallocation.md`)
+- Sección 3.5 - Enumeraciones, orden de evaluación, plantillas y estáticos — pendiente de reconstrucción (`32-cpp-enums-eval-templates-statics.md`)
+- Sección 3.5 - Visibilidad, DSO y compatibilidad Microsoft — pendiente de reconstrucción (`33-cpp-visibilidad-dso-ms.md`)
+- Sección 3.5 - Advertencias específicas de C++ — pendiente de reconstrucción (`34-cpp-warnings-especificas.md`)
+- Sección 3.5 - Advertencias C++ sobre orden, movimiento y range-for — pendiente de reconstrucción (`35-cpp-warnings-reorder-move-range.md`)
+- Sección 3.5 - Advertencias C++ sobre etiquetas, enlace y reglas de estilo — pendiente de reconstrucción (`36-cpp-warnings-tags-linkage-effective.md`)
+- Sección 3.5 - Advertencias C++ sobre sobrecarga, memoria y jerarquías — pendiente de reconstrucción (`37-cpp-warnings-overload-memory-hierarchy.md`)
+- Sección 3.6 - Objective-C y Objective-C++: introducción y runtime — pendiente de reconstrucción (`38-objc-intro-runtime.md`)
+- Sección 3.6 - Objective-C y Objective-C++: despacho, excepciones, GC y `nil` — pendiente de reconstrucción (`39-objc-dispatch-exceptions-gc.md`)
+- Sección 3.6 - Objective-C y Objective-C++: clases reemplazables, ivars y advertencias — pendiente de reconstrucción (`40-objc-visibilidad-decls-warnings.md`)
+- Sección 3.7 - OpenMP, OpenACC y offload — pendiente de reconstrucción (`41-openmp-openacc-offload.md`)
+
 ## Criterio editorial
 
 - Mantener español técnico de sistemas y programación.
@@ -45,4 +66,4 @@ Para Gentoo se crea una ruta experimental independiente que enlaza las secciones
 
 Esta entrega no reemplaza al manual oficial. Es una edición técnica derivada y parcial, orientada a divulgación y estudio. Debe revisarse comunitariamente antes de considerarse una traducción completa o definitiva.
 
-[Anterior](changelog.md) | [Índice](../README.md)
+[Registro de cambios](changelog.md) | [Índice de unidades](../docs/README.md) | [Portada GCC](../README.md)

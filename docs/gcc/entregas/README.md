@@ -1,6 +1,8 @@
 # Histórico de entregas
 
-Las entregas se conservan como registro editorial resumido. La documentación activa está en `../docs/`.
+> [Portada GCC](../README.md) · [Índice de unidades](../docs/README.md) · [Inicio del repositorio](../../../README.md)
+
+Las entregas se conservan como registro editorial resumido. La documentación activa está en el [índice de unidades disponibles](../docs/README.md). Las cantidades de archivos corresponden a las entregas históricas, no al inventario actual.
 
 - [Entrega 02](entrega-02.md) — 10 archivos Markdown, 10 archivos añadidos por nombre.
 - [Entrega 03](entrega-03.md) — 14 archivos Markdown, 4 archivos añadidos por nombre.

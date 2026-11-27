@@ -1,5 +1,7 @@
 # GCC ES Técnico MD
 
+> [Documentación maGNUx](../README.md) · [Inicio del repositorio](../../README.md)
+
 Documentación técnica en español sobre GCC, reorganizada como documentación canónica viva.
 
 Esta estructura sustituye el modelo de entregas completas duplicadas por un modelo mantenible:
@@ -22,7 +24,11 @@ nuevos/_pendientes/
 
 Empieza por el índice canónico:
 
-- [Índice de documentación](docs/README.md)
+- [Índice de unidades disponibles en español](docs/README.md)
+- [Glosario técnico](docs/90-glosario-tecnico.md)
+- [Manual oficial GCC 16.1.0 (inglés)](https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/)
+
+Las unidades 00–25 y el glosario están disponibles en esta rama. Las unidades 26–41 pendientes se distinguen en el índice y remiten al original en inglés, sin enlaces a archivos Markdown inexistentes.
 
 ## Documentos meta
 
@@ -39,7 +45,7 @@ Las carpetas antiguas `gcc-es-tecnico-md-entrega-XX/` contenían copias completa
 
 ## Ampliaciones futuras
 
-Los nuevos `.md` deben entrar primero por:
+Los nuevos `.md` deben entrar primero por la [zona de pendientes](nuevos/_pendientes/readme.md):
 
 ```text
 nuevos/_pendientes/

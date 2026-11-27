@@ -1,5 +1,7 @@
 # CHANGELOG
 
+> [Portada GCC](../README.md) · [Índice de unidades](../docs/README.md) · [Inicio del repositorio](../../../README.md)
+
 ## Entrega 09
 
 - Se conserva toda la estructura de la entrega 08.
@@ -73,3 +75,10 @@
 - Ejemplos originales y referencia primaria; no se certifica traducción literal completa.
 - Nueva guía y prueba diferencial independiente para Gentoo, enlazada desde GCC.
 - Sin PDF ni ZIP de entrega cerrada; no se alteran entregas anteriores.
+
+## Revisión de navegación — 27 de noviembre de 2026
+
+- Separación de unidades disponibles y secciones pendientes en el índice, conservando el inventario detallado en continuidad.
+- Referencias oficiales en inglés para 3.5–3.7; acceso al índice original para 3.8 y siguientes.
+- Rutas de retorno desde los documentos editoriales y el histórico; acceso directo al índice desde maGNUx.
+- Comprobar destinos relativos y navegación anterior/siguiente antes de integrar cada unidad.
