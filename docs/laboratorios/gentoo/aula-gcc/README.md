@@ -7,7 +7,7 @@
 **Objeto de estudio:** kernel Linux **6.18.65 LTS**, árbol original (vanilla) y árbol Gentoo correspondiente, una vez obtenidos y verificados los fuentes y parches.  
 **Manual de referencia:** *Using the GNU Compiler Collection*, GCC **16.1.0**, de Richard M. Stallman y la comunidad de desarrolladores de GCC.  
 **Entorno objetivo:** Gentoo GNU/Linux, amd64/x86-64. La versión de GCC realmente utilizada se registrará en cada experimento; no tiene por qué coincidir con la versión del manual.  
-**Estado editorial:** traducción íntegra del manual como objetivo; primera incorporación parcial del texto original, no edición terminada.
+**Estado editorial:** traducción íntegra del manual como objetivo; traducción directa en curso, no edición terminada. Incluye todas las partes del manual como objetivo, sin selección temática.
 
 El aula tiene una doble finalidad: estudiar en español el manual de GCC en su orden original y utilizar ese conocimiento para reproducir la trayectoria de una flag desde la decisión de entrada hasta los fuentes, cabeceras, macros, unidad de traducción, representación intermedia, objeto y enlace final del kernel.
 
@@ -39,4 +39,4 @@ No todas las decisiones atraviesan todas las etapas. No se presupone que una USE
 
 La metodología experimental parte de [G01](../01-traza-gcc.md), continúa con [G02](../02-traza-kbuild.md) y [G03](../03-traza-portage.md). El [catálogo CONFIG_* anterior](../../../kernel/README.md) permanece identificado como Linux 6.18.25; no se ha regenerado para 6.18.65.
 
-**Límite de esta publicación:** primera entrega de la traducción directa; no se ha ejecutado una compilación del kernel 6.18.65 ni se certifica que los capítulos aún pendientes estén traducidos.
+**Límite de esta publicación:** traducción directa aún incompleta; no se ha ejecutado una compilación del kernel 6.18.65 ni se certifica que los capítulos aún pendientes estén traducidos.

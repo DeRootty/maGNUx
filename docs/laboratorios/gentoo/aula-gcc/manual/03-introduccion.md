@@ -28,6 +28,4 @@ Véase «Option Index» en el [manual original](https://gcc.gnu.org/onlinedocs/g
 
 ---
 
-[Anterior: capítulo 2](02-estandares.md) · [Índice de secciones del capítulo 3](README.md) · [3.2: control del tipo de salida](03-02-tipo-salida.md)
-
-**Nota editorial:** la sección 3.1 permanece pendiente. El salto a 3.2 no implica que 3.1 haya sido traducida.
+[Anterior: capítulo 2](02-estandares.md) · [Índice de secciones del capítulo 3](README.md) · [Siguiente: 3.1 — Resumen de opciones](03-01-resumen-opciones.md)

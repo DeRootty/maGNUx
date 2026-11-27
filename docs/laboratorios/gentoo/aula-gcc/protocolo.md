@@ -20,7 +20,7 @@ El objetivo es traducir la obra completa desde la edición exacta GCC 16.1.0. No
 |---|---|---|
 | gcc/doc/frontends.texi | 97e49f4e1165185eda3260712dd5461d2ad07b52 | Capítulo 1 |
 | gcc/doc/standards.texi | 2e345713c2c5157700b50198ab82b6a17b91f4b1 | Capítulo 2 |
-| gcc/doc/invoke.texi | 9207a021e64224b74d5019719c3d7e39a2663807 | Introducción del capítulo 3; 3.2 inicio hasta fin de -o; 3.3; 3.15 |
+| gcc/doc/invoke.texi | 9207a021e64224b74d5019719c3d7e39a2663807 | Introducción del capítulo 3; 3.1, 3.2, 3.3 y 3.15 |
 | gcc/doc/gcc.texi | 495f09bc9d3ec73daec1ebd3f32a5412c5fde34a | Portada y aviso |
 | gcc/doc/include/fdl.texi | af1a9c1d1965b115dbdf325cce17743eb094db74 | Fuente original íntegra |
 | gcc/doc/include/funding.texi | d1583fabc0d8bec19f49bd13e78821cb0bc04527 | Fuente original íntegra |
@@ -48,4 +48,4 @@ El [glosario anterior](../../../gcc/docs/90-glosario-tecnico.md) se conserva com
 
 ## Próxima unidad pendiente
 
-La sección 3.1 no está traducida directamente. La sección 3.2 debe continuar exactamente en `-dumpbase`; también quedan pendientes 3.4–3.14 y 3.16 en adelante, además de los capítulos 4–18 y anexos. No se anuncia un porcentaje de cobertura basado en el número de archivos ni se da por terminada una sección por haberla resumido.
+Las secciones 3.1 y 3.2 se han traducido en una segunda incorporación, incluida la entrada `@file` procedente de `libiberty/at-file.texi` (blob `080d1951d62df67643aaffa7a5acabf5d756864e`). La siguiente sección en orden es 3.4; quedan pendientes 3.4–3.14 y 3.16 en adelante, además de los capítulos 4–18 y anexos. El alcance es toda la obra, incluidos los lenguajes, objetivos de compilación, herramientas y apéndices que no sean relevantes para Gentoo. No se anuncia un porcentaje de cobertura basado en el número de archivos ni se da por terminada una sección por haberla resumido.

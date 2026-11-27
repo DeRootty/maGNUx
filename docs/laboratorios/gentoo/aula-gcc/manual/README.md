@@ -2,7 +2,7 @@
 
 > [Aula de integración](../README.md) · [Laboratorio Gentoo](../../README.md) · [Inicio](../../../../../README.md)
 
-**Proyecto de traducción completa** de *Using the GNU Compiler Collection*, a partir de las fuentes originales de la versión 16.1.0. Esta es la primera entrega de traducción directa, no la obra terminada. La edición comentada anterior no se contabiliza como texto íntegramente traducido.
+**Proyecto de traducción completa** de *Using the GNU Compiler Collection*, a partir de las fuentes originales de la versión 16.1.0. La traducción directa está en curso y abarca toda la obra como objetivo, sin excluir capítulos por su relación con Gentoo. No es la obra terminada. La edición comentada anterior no se contabiliza como texto íntegramente traducido.
 
 [Edición, atribución y licencia](00-edicion-y-licencia.md) · [Manual inglés](https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/) · [Protocolo editorial](../protocolo.md)
 
@@ -39,8 +39,8 @@
 
 | Sección | Disponibilidad |
 |---|---|
-| 3.1 — Resumen de opciones | Pendiente |
-| 3.2 — [Control del tipo de salida](03-02-tipo-salida.md) | Parcial: comienzo de la sección hasta la descripción de -o; pendiente desde -dumpbase |
+| 3.1 — [Resumen de opciones](03-01-resumen-opciones.md) | Sección completa, incluidas todas las arquitecturas; revisión pendiente |
+| 3.2 — [Control del tipo de salida](03-02-tipo-salida.md) | Texto completo de la sección, incluida la entrada @file; revisión pendiente |
 | 3.3 — [Compilación de programas C++](03-03-compilar-cpp.md) | Texto completo de la sección; revisión pendiente |
 | 3.4 — Dialecto C | Pendiente de traducción directa |
 | 3.5 — Dialecto C++ | Pendiente |
