@@ -37,7 +37,7 @@ La lectura principal del repositorio empieza aquí y continúa en `docs/`:
 12. [Initramfs de Zalty](zalty/initramfs/README.md)
 13. [Prototipo HostID v0.1](zalty/initramfs/prototipo-hostid-v0.1/README.md)
 14. [GCC ES Técnico](docs/gcc/README.md) — [Índice de unidades disponibles](docs/gcc/docs/README.md)
-14 bis. [Laboratorio I — Gentoo](docs/laboratorios/gentoo/README.md) — [Aula de integración: GCC en español](docs/laboratorios/gentoo/aula-gcc/README.md).
+14 bis. [Laboratorios de investigación](docs/laboratorios/README.md) — Gentoo, Slackware y Arch Linux.
 15. [Epílogo y notas](docs/manifesto/EPILOGO.md) — evolución orgánica, autoría y cuestiones abiertas.
 
 ## Nueva base constitutiva: Commonwealth del silicio
@@ -62,6 +62,7 @@ La [continuidad helicoidal](docs/manifesto/horizonte-arquetipado.md) conduce aho
 | Zalty | [zalty/](zalty/readme.md) | Implementación experimental GNU/Linux de maGNUx. |
 | Initramfs | [zalty/initramfs/](zalty/initramfs/README.md) | Laboratorio de arranque temprano. |
 | GCC ES Técnico | [docs/gcc/](docs/gcc/README.md) | Traducción y documentación técnica en español sobre GCC. |
+| Laboratorios | [Índice de laboratorios](docs/laboratorios/README.md) | Gentoo en desarrollo; Slackware y Arch Linux en construcción. |
 | Corpus integrado | [docs/legacy/](docs/legacy/README.md) | Documentos históricos ya enlazados desde la navegación principal. |
 
 ## Regla de separación

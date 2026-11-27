@@ -1,8 +1,8 @@
 # Laboratorio I — Gentoo: trazabilidad de compilación
 
-> [⬆ Documentación](../../README.md) · [🏠 Inicio](../../../README.md)
+> [⬆ Laboratorios](../README.md) · [Documentación](../../README.md) · [🏠 Inicio](../../../README.md)
 
-**Estado:** metodología en construcción. Prioridad: comprender la relación entre flags, cabeceras, fuente compilable y comportamiento del compilador. No se deriva todavía una gramática semiótica ni una conclusión sobre Slackware o Arch. Ambos laboratorios quedan previstos, no desarrollados.
+**Estado:** metodología en construcción. Prioridad: comprender la relación entre flags, cabeceras, fuente compilable y comportamiento del compilador. No se deriva todavía una gramática semiótica ni una conclusión sobre Slackware o Arch. Los [laboratorios II — Slackware](../slackware/README.md) y [III — Arch Linux](../arch/README.md) tienen portadas en construcción; sus metodologías quedan pendientes de la maduración del laboratorio Gentoo.
 
 ## Referencias de trabajo
 

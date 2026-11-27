@@ -38,7 +38,7 @@ La documentación nueva funciona como columna vertebral. Los conceptos del corpu
 | 21 | Implementación | [Initramfs de Zalty](../zalty/initramfs/README.md) | Sitúa el laboratorio de arranque temprano. |
 | 22 | Implementación | [Prototipo HostID v0.1](../zalty/initramfs/prototipo-hostid-v0.1/README.md) | Primer ensayo técnico de identidad temprana. |
 | 23 | Herramientas GNU | [GCC ES Técnico](gcc/README.md) · [Índice](gcc/docs/README.md) | Documentación técnica en español sobre GCC, compilación y cadena de herramientas. |
-| 23 bis | Laboratorio | [Gentoo](laboratorios/gentoo/README.md) · [Aula de integración GCC](laboratorios/gentoo/aula-gcc/README.md) | Trazabilidad de flags, cabeceras y compilador. |
+| 23 bis | Laboratorios | [Índice de laboratorios](laboratorios/README.md) | Gentoo en desarrollo; Slackware y Arch Linux en construcción. |
 | 24 | Manifiesto | [Epílogo y notas](manifesto/EPILOGO.md) | Genealogía, aportaciones y derivas; documento abierto. |
 
 ## Secciones principales
@@ -52,6 +52,7 @@ La documentación nueva funciona como columna vertebral. Los conceptos del corpu
 | [Identidad](identidad/README.md) | Autoridad, identidad y dominios orgánicos/técnicos. |
 | [Filosofía](filosofia/README.md) | Marco cultural, hardware y maduración. |
 | [GCC ES Técnico](gcc/README.md) | Traducción técnica y guía documental de GCC en español. |
+| [Laboratorios de investigación](laboratorios/README.md) | Gentoo, Slackware y Arch Linux. |
 | [Corpus absorbido](legacy/README.md) | Mapa de documentos históricos absorbidos por la lectura principal. |
 
 ## Base constitutiva de la Commonwealth del silicio
