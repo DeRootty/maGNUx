@@ -10,7 +10,7 @@
 
 **Trilobytes** revela la composición y coherencia de identidad, política, operación y sesión orgánica. El concepto original de «verificador» se precisa: los componentes competentes autentican, aplican políticas y emiten resultados; Trilobytes los comprueba en la medida de su contrato y los **renderiza** sin constituirse en su autoridad. La intermediación facultada requiere triple delegación positiva y mandato válido.
 
-Si xGNUpeD declara la identidad inicial del sistema, y Dernel concede licencia operativa, Trilobytes revela el resultado de las comprobaciones autorizadas sobre la actividad que va a desplegarse en el entorno de usuario.
+xGNUpeD declara la identidad, levanta la distribución y habilita el Adminland. Dernel ejerce ADMIN desde ese dominio, concede licencia y habilita el Userland. Trilobytes encuentra así un RAW constitutivo compuesto por los recursos y objetos emergentes de ROOT, COMM y ADMIN, y revela el resultado de las comprobaciones autorizadas sobre la actividad que va a desplegarse. No fabrica por sí solo esos canales ni convierte al usuario ordinario en ADMIN.
 
 No es solo login. No es solo autenticación. No es solo auditoría.
 
@@ -152,7 +152,7 @@ En Linux actual, partes de este problema se reparten entre:
 - cgroups;
 - logs.
 
-Trilobytes no niega esas piezas. Las reinterpreta desde una pregunta más alta:
+Trilobytes no niega esas piezas. En el modelo constitutivo es lo más parecido a la función inaugural de PID 1 en cuanto al paso a la operativa del usuario; no equivale al PID 1 real de Linux, ni implica asumir la supervisión, gestión de señales y recolección de procesos huérfanos de init. Las verificaciones y el revelado pueden existir sin intermediación activa; esta última conserva su triple delegación. Las reinterpreta desde una pregunta más alta:
 
 ```text
 ¿qué significa que una actividad orgánica quede legitimada por el sistema?
@@ -168,11 +168,12 @@ Trilobytes actúa en el umbral entre Host y Guest:
 
 ```text
 Host estructural
-  → xGNUpeD
-  → Dernel
+  → xGNUpeD / COMM
+  → Adminland habilitado
+  → Dernel / ADMIN
+  → Userland habilitado
   → Trilobytes
-  → Guest operativo
-  → sesión del usuario
+  → Guest operativo / sesión del usuario
 ```
 
 Su lugar natural es el proceso de entrada a la sesión, pero su alcance conceptual empieza antes del escritorio y continúa durante la sesión.
@@ -188,7 +189,9 @@ Cada capa del sistema corre un tramo:
 ```text
 kernel
 → xGNUpeD
+→ Adminland
 → Dernel
+→ Userland
 → Trilobytes
 → sesión
 ```
@@ -298,11 +301,13 @@ Trilobytes existe correctamente si permite responder:
 ```text
 Kernel
   └── xGNUpeD
-        └── Dernel
-              └── Trilobytes
-                    ├── Logon
-                    ├── Login
-                    └── Sesión del usuario
+        └── Adminland habilitado
+              └── Dernel / ADMIN
+                    └── Userland habilitado
+                          └── Trilobytes
+                                ├── Logon
+                                ├── Login
+                                └── Sesión del usuario
 ```
 
 ---

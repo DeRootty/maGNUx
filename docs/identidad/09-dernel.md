@@ -8,7 +8,7 @@
 
 ## En pocas palabras
 
-**Dernel** es la capa que convierte la identidad estructural del Host en **licencia operativa** para el Guest.
+**Dernel** es la capa que, desde el **Adminland habilitado por xGNUpeD**, convierte la identidad estructural del Host en **licencia operativa** para el Guest y habilita el **Userland**. ADMIN es su autoridad propia dentro de ese contrato; el usuario ordinario no hereda esa autoridad.
 
 No sustituye al kernel. No es un init completo. No es simplemente un gestor de servicios.
 
@@ -81,11 +81,11 @@ Media entre:
 ```text
 Host estructural
 (kernel + xGNUpeD + identidad temprana)
-
-        ↕
-
-Guest operativo
-(entorno de usuario, servicios, sesión, administración)
+        ↓
+Adminland (Dernel / ADMIN)
+        ↓ licencia operativa
+Userland / Guest operativo
+(entorno de usuario, servicios y sesión)
 ```
 
 Su tarea es responder:
@@ -213,9 +213,9 @@ arranque + supervisión + sesión + política + operación
 Dernel propone separar:
 
 ```text
-identidad temprana  → xGNUpeD
-licencia operativa  → Dernel
-coherencia de sesión → Trilobytes
+identidad y Adminland → xGNUpeD
+licencia y Userland   → Dernel
+revelado de sesión    → Trilobytes
 servicios concretos → init/supervisor compatible
 ```
 
@@ -294,9 +294,11 @@ Kernel
   ↓
 xGNUpeD
   ↓
-Dernel run time
+Adminland habilitado
   ↓
-Dernel guest
+Dernel run time / ADMIN
+  ↓
+Dernel guest: licencia y habilitación Userland
   ↓
 Trilobytes
   ↓

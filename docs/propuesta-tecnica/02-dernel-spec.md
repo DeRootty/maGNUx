@@ -3,7 +3,7 @@
 > [⬆ Subir a sección](README.md) · [📚 Índice docs](../README.md) · [🏠 Inicio](../../README.md)
 
 **Estado:** Borrador técnico v0.2  
-**Capa:** Entre ROOT, COMM y ADMIN  
+**Ámbito constitutivo:** ADMIN, en el Adminland habilitado por xGNUpeD  
 **Dependencia:** xGNUpeD / HostID debe haber producido identidad válida  
 **Implementación inicial:** política leída por initramfs + validador mínimo  
 
@@ -11,7 +11,7 @@
 
 ## En pocas palabras
 
-Dernel es la capa de **licencia operativa**.
+Dernel es la capa de **licencia operativa**: ejerce ADMIN en el Adminland habilitado por xGNUpeD y habilita el Userland bajo contrato. La política mínima de v0.1 ensaya continuidad y licencia, pero no constituye aún ambos dominios diferenciados.
 
 En el prototipo v0.1 no se implementa todavía como subsistema completo. Se expresa como una política mínima que decide:
 
@@ -244,7 +244,7 @@ Responsabilidades:
 2. validar política;
 3. comprobar contexto;
 4. autorizar binarios críticos;
-5. levantar o habilitar canal COMM mínimo;
+5. utilizar o solicitar un canal COMM mínimo autorizado por xGNUpeD; en v0.1 puede ensayarse mediante mecanismos existentes, sin asumir la autoridad COMM;
 6. emitir reporte;
 7. decidir continuidad.
 

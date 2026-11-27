@@ -4,7 +4,7 @@
 > [⬆ Subir a sección](README.md) · [📚 Índice docs](../README.md) · [🏠 Inicio](../../README.md) · [Manifiesto](01-manifiesto.md)
 
 **Autor del manifiesto:** Derootty  
-**Fecha de revisión:** 25 de noviembre de 2026 (segunda revisión, tras contraste documental)  
+**Fecha de revisión:** 27 de noviembre de 2026 (tercera revisión; constitución de dominios)  
 **Estado:** documento abierto, provisional y sujeto a futuras revisiones.
 
 ---
@@ -121,6 +121,16 @@ El autor asigna a Alfa la función de diagnosticar si la versión compilada, con
 **Aportación asistida.** Formalización del ciclo de retroalimentación y precisión de los requisitos de implementación: seL4 necesita un procesador de control compatible; una NPU convencional proporciona inferencia neuronal, pero no debe presuponerse capaz de ejecutar el microkernel. La distribución de recursos y la integración temprana con Linux permanecen abiertas a validación.
 
 **Deriva.** El sistema podría aportar evidencias sobre la suficiencia de las decisiones arquitectónicas que lo constituyeron. Alfa no sustituye al ingeniero ni adquiere soberanía sobre las autoridades: contribuye a cerrar un ciclo de observación, diagnóstico, corrección, nueva compilación y evaluación.
+
+### 27 de noviembre de 2026 — Constitución de dominios y revelado de la sesión
+
+**Evidencia: C para las precisiones expresadas directamente por el autor en el diálogo de esta fecha; D para su incorporación al corpus mediante esta revisión.**
+
+**Postulados del autor.** Se explicita el significado de xGNUpeD: x remite a Unix/Linux, GNU a la operativa administrativa y de usuario, y peD unido a la U de GNU expresa levantar una distribución sobre Linux. El autor diferencia dos habilitaciones: xGNUpeD habilita el Adminland y Dernel habilita el Userland. Trilobytes es lo más parecido, en sentido funcional, a PID 1; la sesión todavía debe ser revelada a partir del RAW constituido.
+
+**Aportación asistida.** Se distingue el PID 0 del kernel Linux del PID 1 que ejecuta init, y la precedencia constitutiva del orden real de ejecución de procesos. Se formula el principio según el cual cada estrato habilita las condiciones de existencia del siguiente sin transferirle necesariamente su autoridad.
+
+**Deriva.** La teoría diferencia arranque del kernel, levantamiento de distribución, habilitación administrativa, habilitación de usuario y revelado de sesión. El Adminland y el Userland quedan como dominios arquitectónicos diferenciados, no como nuevas autoridades ni espacios de privilegio nativos ya existentes en Linux. La realización mediante initramfs, supervisores o cambios de arquitectura sigue abierta. Véanse el [manifiesto](01-manifiesto.md), [los estratos](../arquitectura/03-estratos.md) y [el inicio estratificado](../arquitectura/04-inicio-sistema.md).
 
 ## 3. Sentido orgánico de la evolución
 

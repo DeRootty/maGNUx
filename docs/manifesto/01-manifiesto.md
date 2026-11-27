@@ -275,6 +275,29 @@ Confundir ambas produce sistemas poderosos, pero conceptualmente peligrosos.
 
 ---
 
+## Constitución de la distribución y habilitación de dominios
+
+La separación entre control y operación adquiere una consecuencia en el propio arranque: **levantar la distribución, habilitar el dominio administrativo y habilitar el dominio de usuario no son el mismo acontecimiento**.
+
+xGNUpeD expresa su cometido en su nombre: la **x** remite a la familia Unix/Linux; **GNU**, a la operativa administrativa y de usuario; y **peD**, unido semánticamente a la U de GNU en **UpeD**, expresa la función de levantar una distribución sobre el núcleo Linux. No se trata de tres entidades, sino de una denominación que vincula linaje, entorno operativo y propósito constitutivo.
+
+El kernel, bajo ROOT, proporciona el sustrato material y los recursos primarios. xGNUpeD, bajo COMM, compone esos recursos y constituye objetos funcionales de la distribución, habilitando el **Adminland**: el dominio en el que Dernel puede ejercer ADMIN. Dernel, desde ese dominio, concede las licencias y habilita el **Userland**, donde el usuario ordinario podrá operar sin confundirse con la autoridad administrativa.
+
+```text
+Kernel / ROOT
+  → xGNUpeD / COMM
+      → habilitación del Adminland
+          → Dernel / ADMIN
+              → habilitación del Userland
+                  → Trilobytes: revelado contractual de la sesión
+```
+
+**Cada estrato constitutivo habilita las condiciones de existencia del siguiente, sin transferirle necesariamente su propia autoridad.** Adminland y Userland son dominios funcionales de la teoría, no dos nuevos niveles de privilegios ya implementados en Linux ni autoridades adicionales. La secuencia expresa precedencia constitutiva, no un calendario rígido de procesos: los estratos permanecen vivos y pueden interactuar después del arranque.
+
+La distinción se desarrolla en [los tres estratos](../arquitectura/03-estratos.md) y [el inicio estratificado](../arquitectura/04-inicio-sistema.md).
+
+---
+
 ## Identidad estructural
 
 maGNUx propone que el sistema necesita una identidad anterior al uso ordinario.
@@ -399,6 +422,10 @@ La interfaz gráfica sería una expresión de esa arquitectura, no su origen.
 
 ## Representación computacional: Trilobytes
 
+La constitución anterior produce un RAW: recursos, objetos emergentes, estados y contratos con procedencia en ROOT, COMM y ADMIN. Trilobytes no fabrica esos tres canales; revela su composición y hace inteligible el paso hacia la sesión, de acuerdo con las verificaciones y decisiones de las autoridades competentes. En la analogía RGBA, Alfa es una capacidad transversal de mediación, no una cuarta autoridad.
+
+La comparación con systemd es razonable, pero no constituye una equivalencia. xGNUpeD tiene un propósito constitutivo anterior al Userland definitivo. Trilobytes es, en la teoría, lo más próximo a la función inaugural de PID 1 en cuanto al umbral de la operativa del usuario, aunque no se le asigna ese número de proceso ni todas las responsabilidades de un init. En Linux actual, PID 0 pertenece al kernel y PID 1 ejecuta init (por ejemplo, systemd); el Adminland no es un espacio de ejecución nativo separado de Linux. Una realización experimental puede utilizar un initramfs y un supervisor existentes. Véase [Trilobytes](../identidad/08-trilobytes.md).
+
 La separación entre soberanía estructural y operación cotidiana abre una nueva pregunta:
 
 ~~~text
@@ -485,7 +512,7 @@ qué teoría estructural necesita para el futuro.
 
 Esta formulación del manifiesto debe leerse junto con el [Volumen I — De la Britania romana a la Commonwealth](volumen-i-britania-roma-commonwealth.md) y el [Volumen II — La Commonwealth del silicio](volumen-ii-commonwealth-del-silicio.md).
 
-El capítulo 23 del Volumen II afina la secuencia de constitución **kernel/ROOT → xGNUpeD/COMM → Dernel/ADMIN** y distingue los arranques excepcionales de mantenimiento del arranque ordinario que activa **Trilobytes** bajo la concurrencia de tres delegaciones positivas. En régimen cotidiano, Dernel habilita una identidad operativa de usuario **no ADMIN** y Trilobytes media la coordinación entre Dernel y kernel: el usuario decide la actividad; las autoridades mantienen límites y continuidad verificables.
+El capítulo 23 del Volumen II afina la secuencia de constitución **kernel/ROOT → xGNUpeD/COMM → Dernel/ADMIN** y distingue los arranques excepcionales de mantenimiento del arranque ordinario que activa **Trilobytes** bajo la concurrencia de tres delegaciones positivas. En régimen cotidiano, xGNUpeD habilita el Adminland; Dernel, desde ADMIN, habilita el Userland y concede una identidad operativa **no ADMIN**. Trilobytes revela la sesión y, bajo las delegaciones y el mandato correspondientes, media entre los ámbitos competentes: el usuario decide la actividad; las autoridades mantienen límites y continuidad verificables.
 
 La analogía de conquista del silicio, fundamentos militarizados y Commonwealth es conceptual: no constituye reivindicación de poder político ni afirmación de viabilidad ya demostrada.
 

@@ -18,7 +18,7 @@ Esta precisión no altera la triple luz verde para **la intermediación de Trilo
 
 Ampliar el Trilobytes publicado —revelador de coherencia entre identidad, política, licencia y sesión, apoyado en validadores legítimos— con una **función de intermediación computacional** que represente intereses bajo mandato válido.
 
-La nueva función no sustituye Logon/Login, la verificación de sesión, xGNUpeD, Dernel, ROOT ni el init de Linux. El prototipo HostID v0.1 de Zalty permanece intacto y no implementa todavía esta especificación.
+La nueva función no sustituye Logon/Login, la verificación de sesión, xGNUpeD, Dernel, ROOT ni el init de Linux. En la arquitectura objetivo xGNUpeD habilita Adminland y Dernel habilita Userland; Trilobytes revela la composición RAW en el umbral de la sesión. Su analogía con la función inaugural de PID 1 es constitutiva y no prescribe su PID, la sustitución del supervisor ni la intermediación sin triple delegación. El prototipo HostID v0.1 de Zalty permanece intacto y no implementa todavía esta especificación.
 
 ## Dos momentos, no dos soberanías
 

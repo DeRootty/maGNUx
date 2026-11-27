@@ -330,16 +330,24 @@ initramfs como laboratorio ROOT
   ↓
 init_ID como pregunta de identidad inicial
   ↓
-xGNUpeD como formulación de identidad
+xGNUpeD / COMM: identidad y levantamiento de la distribución
   ↓
-Dernel como licencia operativa
+Adminland habilitado
   ↓
-Trilobytes como coherencia de sesión
+Dernel / ADMIN: licencia operativa
   ↓
-ADMIN como operación cotidiana
+Userland habilitado
+  ↓
+Trilobytes: revelado de la sesión
+  ↓
+operación ordinaria de usuario
 ```
 
 ---
+
+La secuencia expresa dependencias constitutivas, no una asignación de PID ni un orden obligatorio de todos los hilos. En Linux convencional PID 0 corresponde a tareas del kernel y PID 1 a init. En maGNUx, xGNUpeD no se identifica con un PID 0 de usuario inexistente; su cometido es levantar la distribución antes de habilitar el Adminland. Trilobytes se aproxima funcionalmente al umbral inaugural de PID 1, sin que ello obligue a sustituir init ni a asumir todas sus responsabilidades.
+
+El initramfs, que ya es espacio de usuario temprano en sentido técnico Linux, permite ensayar etapas de esta constitución antes del Userland definitivo de maGNUx. La forma de separar y proteger los dominios, el supervisor de procesos y la eventual asignación de PID quedan pendientes de diseño y validación.
 
 ## Permanencia del fundamento
 

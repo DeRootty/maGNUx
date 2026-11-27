@@ -18,7 +18,7 @@ COMM
 → mediación, comunicación, coherencia y reconciliación
 
 ADMIN
-→ operación cotidiana, servicios, usuarios, herramientas
+→ autoridad administrativa de Dernel; licencia y habilitación del Userland
 ```
 
 La idea central no es añadir una capa decorativa sobre Linux. Es evitar que el sistema confunda:
@@ -84,8 +84,8 @@ maGNUx propone separarlos con claridad para evitar que la operación cotidiana a
 ```text
 ┌─────────────────────────────────────┐
 │              ADMIN                  │
-│  operación cotidiana                 │
-│  shells, servicios, apps, sesiones   │
+│  Dernel en el Adminland              │
+│  licencia y habilitación Userland    │
 ├─────────────────────────────────────┤
 │               COMM                  │
 │  mediación y coherencia              │
@@ -96,6 +96,8 @@ maGNUx propone separarlos con claridad para evitar que la operación cotidiana a
 │  kernel, initramfs, identidad        │
 └─────────────────────────────────────┘
 ```
+
+Entre COMM y ADMIN existe el umbral del **Adminland**, habilitado por xGNUpeD. Entre ADMIN y la actividad ordinaria existe el umbral del **Userland**, habilitado por Dernel. Ambos son dominios constitutivos, no soberanías adicionales; Trilobytes revela la sesión de manera transversal.
 
 Estos estratos no deben leerse como etapas desechables. Cada uno permanece vivo durante el ciclo de vida del sistema.
 
@@ -156,7 +158,7 @@ COMM absorbe conceptos antiguos como:
 - comunicación entre Host y Guest;
 - comunicación entre Dernel y Trilobytes.
 
-COMM es el estrato que permite decir:
+xGNUpeD expresa COMM: levanta la distribución sobre los recursos del kernel, constituye objetos funcionales y habilita el Adminland en el que Dernel podrá operar. COMM es el estrato que permite decir:
 
 ```text
 las partes del sistema no solo hablan;
@@ -167,9 +169,7 @@ hablan bajo una coherencia común.
 
 ## ADMIN
 
-ADMIN es el entorno operativo subordinado.
-
-Es el Linux reconocible:
+ADMIN es la máxima autoridad administrativa dentro del contrato de Dernel, no una autoridad sobre ROOT. Dernel opera en el Adminland habilitado por xGNUpeD y, mediante licencia operativa, habilita el Userland. El entorno de usuario resultante contiene el Linux reconocible:
 
 - shells;
 - servicios;
@@ -182,11 +182,9 @@ Es el Linux reconocible:
 - sesión;
 - experiencia funcional.
 
-ADMIN no es irrelevante. Es donde el sistema se vuelve útil.
+ADMIN no equivale al usuario ordinario ni a sus procesos. Su ámbito administrativo hace posible un Userland útil y gobernable, sin confundirse con el fundamento que lo legitima.
 
-Pero ADMIN no debe confundirse con el fundamento que lo legitima.
-
-ADMIN absorbe los conceptos antiguos de:
+La relación entre ADMIN y el Userland habilitado permite situar los conceptos antiguos de:
 
 - operación delegada;
 - Guest;
@@ -227,13 +225,14 @@ maGNUx no concibe el arranque como una escalera que se tira después de subir.
 
 ```text
 ROOT permanece
-  COMM permanece
-    ADMIN opera
+  COMM permanece → Adminland habilitado
+    ADMIN permanece → Userland habilitado
+      Trilobytes revela la sesión
 ```
 
 El punto crucial es que ADMIN no reemplaza a COMM, y COMM no reemplaza a ROOT.
 
-Cada estrato sostiene al siguiente.
+Cada estrato sostiene al siguiente sin transferirle necesariamente su propia autoridad. El usuario ordinario no es ADMIN; las sesiones excepcionales adquieren roles mediante autorización expresa.
 
 ---
 

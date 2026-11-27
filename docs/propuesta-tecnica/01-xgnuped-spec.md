@@ -3,7 +3,7 @@
 > [⬆ Subir a sección](README.md) · [📚 Índice docs](../README.md) · [🏠 Inicio](../../README.md)
 
 **Estado:** Borrador técnico v0.2  
-**Capa:** ROOT  
+**Ámbito constitutivo:** COMM (sobre recursos de ROOT)  
 **Precedencia:** después del kernel/initramfs, antes del Dernel  
 **Implementación inicial:** binario o módulo de usuario temprano en initramfs  
 
@@ -22,7 +22,7 @@ generada o leída durante initramfs
 antes de entregar control al sistema raíz ordinario.
 ```
 
-La especificación no intenta cerrar todo xGNUpeD. Define el subconjunto mínimo que puede probarse ahora.
+La especificación no intenta cerrar todo xGNUpeD. Define el subconjunto mínimo que puede probarse ahora. La arquitectura objetivo le atribuye el levantamiento de la distribución y la habilitación del Adminland para Dernel. HostID es un ensayo parcial de identidad, no una implementación de esa habilitación ni del dominio COMM completo. El espacio de usuario temprano de initramfs no equivale al Userland definitivo de maGNUx.
 
 ---
 

@@ -44,6 +44,8 @@ La suficiencia no exige maximizar potencia permanentemente. Exige un funcionamie
 
 Trilobytes **revela o renderiza la composición resultante de las capas interactuantes**. La expresión RAW no designa bytes sin procesar procedentes directamente de cada transistor, sino el **estado de máquina observable con su procedencia**, antes de que Alfa lo enriquezca mediante interpretación e inferencia. Esa representación puede incluir mediciones físicas, contadores, políticas, eventos y estados derivados; cada fuente debe distinguirse.
 
+La composición se forma progresivamente: ROOT proporciona el ecosistema primario; COMM/xGNUpeD levanta la distribución y habilita el Adminland; ADMIN/Dernel habilita el Userland. La sesión revelada por Trilobytes contiene tanto objetos primarios como los objetos emergentes de los estratos superiores, según contratos y capacidades. Habilitar un dominio no equivale a revelar una sesión.
+
 Trilobytes no constituye por sí mismo los objetos de ROOT, COMM o ADMIN y no adquiere soberanía superior a esas autoridades. Los mecanismos autorizados de identidad, política y ejecución emiten sus decisiones; Trilobytes las representa, verifica su coherencia declarada cuando corresponda y comunica sus resultados. Su **intermediación facultada** conserva el requisito publicado de triple delegación positiva e independiente de ROOT, COMM y ADMIN, más mandato vigente. La decisión de autorizar no nace simplemente del renderizador.
 
 En la analogía RGBA, **el canal Alfa no es una cuarta soberanía**. Es una dimensión dinámica de mediación y profundidad de representación. maGNUx adopta aquí una convención propia, que no debe confundirse con la opacidad de las bibliotecas gráficas:

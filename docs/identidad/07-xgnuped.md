@@ -19,7 +19,11 @@ Asocia:
 - la comunidad o linaje del sistema;
 - y el lenguaje base con el que el Dernel podrá comunicarse con el kernel.
 
-No es un nuevo `init`. Tampoco es un reemplazo completo de systemd. Es la **finalización semiótica de la carga del kernel**: el punto en el que el sistema ya no solo tiene un kernel vivo, sino una identidad mínima desde la que puede empezar a gobernarse.
+No es reducible a un `init` ni a un reemplazo de systemd. Es la **finalización semiótica de la carga del kernel** y el levantamiento constitutivo de la distribución: además de declarar identidad, compone recursos y objetos funcionales bajo COMM para habilitar el Adminland.
+
+### Significado de xGNUpeD
+
+La **x** remite a la familia Unix/Linux; **GNU** representa la operativa administrativa y de usuario; **peD**, unido a la U de GNU (**UpeD**), expresa el cometido de levantar una distribución sobre el núcleo Linux. La U compartida enlaza el entorno GNU con su constitución funcional. No atribuye a xGNUpeD la autoridad ADMIN: prepara el dominio en el que Dernel la ejercerá.
 
 ---
 
@@ -258,7 +262,7 @@ xGNUpeD se sitúa antes en la pregunta:
 ¿qué tiene que quedar declarado para que ese sistema pueda existir con identidad propia?
 ```
 
-Por eso maGNUx no plantea xGNUpeD como “otro systemd”, sino como una capa previa de identidad sobre la que luego el sistema operativo podrá decidir qué init, supervisor o gestor de servicios tiene sentido.
+Por eso la comparación con systemd es razonable, pero xGNUpeD es más que un gestor de arranque y servicios: constituye la distribución y habilita el Adminland. Dernel habilita después el Userland; Trilobytes revela la sesión. En Linux real no existe un PID 0 de userland; el eventual proceso init (PID 1), supervisor o gestor de servicios pertenece al diseño técnico, que puede reutilizar mecanismos existentes.
 
 ---
 
@@ -269,9 +273,9 @@ El Dernel necesita saber sobre qué host concede licencia operativa.
 No puede conceder licencia sobre una máquina abstracta. Necesita una identidad de base:
 
 ```text
-xGNUpeD declara identidad.
-Dernel concede licencia.
-Trilobytes verifica coherencia.
+xGNUpeD declara identidad, levanta la distribución y habilita Adminland.
+Dernel ejerce ADMIN, concede licencia y habilita Userland.
+Trilobytes verifica coherencia y revela la sesión.
 ```
 
 Sin xGNUpeD, el Dernel sería una autoridad sin sujeto claro.
@@ -288,11 +292,15 @@ Kernel
         ├── identidad conmutativa
         └── identidad comunicativa
               ↓
-            Dernel
+            Adminland
+              ↓
+            Dernel / ADMIN
+              ↓
+            Userland
               ↓
           Trilobytes
               ↓
-        Entorno operativo
+        Sesión de usuario
 ```
 
 ---
