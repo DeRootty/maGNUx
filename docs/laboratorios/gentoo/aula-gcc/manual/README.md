@@ -6,6 +6,10 @@
 
 [Edición, atribución y licencia](00-edicion-y-licencia.md) · [Manual inglés](https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/) · [Protocolo editorial](../protocolo.md)
 
+## Traducción automática complementaria
+
+[Motor de traducción y flujo de GitHub Actions](../../../../../tools/traduccion-gcc/README.md). El proceso genera un inventario y borradores separados cuando se ejecuta; no se contabilizan como texto revisado ni se sustituyen los capítulos de esta edición.
+
 ## Índice de capítulos (numeración del original)
 
 | Capítulo | Estado de traducción directa |

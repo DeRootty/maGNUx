@@ -1,0 +1,67 @@
+name: GCC 16.1.0 — traducción íntegra
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'tools/traduccion-gcc/**'
+      - '.github/workflows/gcc-translation.yml'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'audit = sin API; translate = consume API'
+        type: choice
+        options: [audit, translate]
+        default: audit
+      max_calls:
+        description: 'Máximo de peticiones API por ejecución (1–50)'
+        type: number
+        default: 5
+  schedule:
+    - cron: '17 3 * * *'
+permissions:
+  contents: read
+concurrency:
+  group: gcc-16-1-es
+  cancel-in-progress: false
+jobs:
+  audit:
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'audit')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - run: python3 -m pip install -r tools/traduccion-gcc/requirements.txt
+      - run: python3 tools/traduccion-gcc/translate.py selftest
+      - run: python3 tools/traduccion-gcc/translate.py audit
+  translate:
+    if: github.ref == 'refs/heads/master' && ((github.event_name == 'workflow_dispatch' && inputs.mode == 'translate') || (github.event_name == 'schedule' && vars.GCC_TRANSLATION_AUTO == 'true'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: master
+      - run: python3 -m pip install -r tools/traduccion-gcc/requirements.txt
+      - run: sudo apt-get update && sudo apt-get install -y pandoc
+      - run: python3 tools/traduccion-gcc/translate.py selftest
+      - name: Traducir lote acotado
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GCC_TRANSLATION_MODEL: ${{ vars.GCC_TRANSLATION_MODEL }}
+          MAX_CALLS: ${{ inputs.max_calls || 5 }}
+        run: python3 tools/traduccion-gcc/translate.py translate --max-calls "$MAX_CALLS"
+      - name: Guardar progreso incluso si falla un lote posterior
+        if: always()
+        run: |
+          path=docs/laboratorios/gentoo/aula-gcc/manual/automatizado
+          if [ ! -d "$path" ]; then exit 0; fi
+          git add -- "$path"
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "docs(gcc): avance automático de traducción (borrador)"
+          git push origin HEAD:master

@@ -22,6 +22,10 @@ No se pretende inferir todavía una arquitectura semiótica ni una gramática pa
 | [Edición técnica anterior](../../../gcc/README.md) | Material comentado e histórico de consulta, no se computa como traducción íntegra del manual. |
 | [Protocolo de traducción y control](protocolo.md) | Inventario, procedencia, terminología, revisión y criterio de completitud. |
 
+## Automatización de la traducción íntegra
+
+[Motor documental y GitHub Actions](../../../../tools/traduccion-gcc/README.md). Traducción por lotes con reanudación, inventario de cobertura y revisión posterior. Los borradores automáticos se mantienen separados de la traducción editorial ya publicada. La ejecución de pago requiere configuración explícita de una clave API; no se anuncia una traducción finalizada.
+
 ## Resultado que perseguimos
 
 ```text
