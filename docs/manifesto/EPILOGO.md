@@ -4,7 +4,7 @@
 > [⬆ Subir a sección](README.md) · [📚 Índice docs](../README.md) · [🏠 Inicio](../../README.md) · [Manifiesto](01-manifiesto.md)
 
 **Autor del manifiesto:** Derootty  
-**Fecha de revisión:** 27 de noviembre de 2026 (tercera revisión; constitución de dominios)  
+**Fecha de revisión:** 27 de noviembre de 2026 (cuarta revisión; asignación semiótica y homeostasis computacional)  
 **Estado:** documento abierto, provisional y sujeto a futuras revisiones.
 
 ---
@@ -132,6 +132,16 @@ El autor asigna a Alfa la función de diagnosticar si la versión compilada, con
 
 **Deriva.** La teoría diferencia arranque del kernel, levantamiento de distribución, habilitación administrativa, habilitación de usuario y revelado de sesión. El Adminland y el Userland quedan como dominios arquitectónicos diferenciados, no como nuevas autoridades ni espacios de privilegio nativos ya existentes en Linux. La realización mediante initramfs, supervisores o cambios de arquitectura sigue abierta. Véanse el [manifiesto](01-manifiesto.md), [los estratos](../arquitectura/03-estratos.md) y [el inicio estratificado](../arquitectura/04-inicio-sistema.md).
 
+#### Del dominio habilitado al significado de sus recursos
+
+**Evidencia: C para los postulados y las aportaciones del diálogo del 27 de noviembre; D para la presente incorporación documental.**
+
+**Postulados del autor.** Se delimita ADMIN por sus competencias de instalación, configuración y ejecución de servicios, gestión de usuarios, grupos, permisos y registros, dentro de límites comunicativos y de estabilidad. El autor precisa que la asignación de RAM debe ser semiótica para que el sistema sepa dónde mirar conceptualmente. Propone Apache como ejemplo: la capacidad del servicio pertenece a Adminland y el consumo de las webs, webapps, API y dependencias de backend se atribuye a Userland. Plantea además Alfa como posible evolución de la ciberseguridad del endpoint.
+
+**Aportación asistida.** Se distingue direccionamiento material de semiótico, administración de infraestructura de actividad consumidora, y gestión material de sockets de su atribución funcional. Se precisan los límites de los recursos compartidos y la falta de correspondencia unívoca entre socket y aplicación. Se introduce el concepto de **homeostasis computacional** como extensión de la hélice de continuidad, diferenciándolo de una superioridad ya demostrada frente a EDR/XDR.
+
+**Deriva.** La segmentación de memoria que motivó las primeras exploraciones de maGNUx adquiere una justificación semiótico-contractual. Alfa podría orientar el diagnóstico hacia la autoridad y actividad competentes, distinguiendo amenazas, desequilibrios, fallos operativos e insuficiencias arquitectónicas. El direccionamiento semiótico, el revelado del RAW y la evidencia de continuidad se articulan como un programa de investigación común, sin conferir a Alfa soberanía ni sustituir controles independientes. Quedan abiertas la gramática de referencias, la atribución de recursos compartidos y su validación comparativa. Véanse [Dernel](../identidad/09-dernel.md), [Hélice y Alfa](04-helice-alfa-continuidad.md) y [la especificación de observabilidad](../propuesta-tecnica/04-alfa-observabilidad-spec.md).
+
 ## 3. Sentido orgánico de la evolución
 
 El itinerario de maGNUx puede sintetizarse en la siguiente secuencia conceptual:
@@ -148,7 +158,7 @@ Esta secuencia no sustituye la primera ni altera la primacía material del silic
 
 La gestión de recursos condujo a la pregunta por la legitimidad de su uso; esta, a la identidad y la soberanía; la coexistencia de autoridades, a los contratos; la emergencia de nuevas dinámicas, a sus límites de sostenibilidad; y la necesidad de interpretar esos límites, a la capa semiótica y a Alfa.
 
-En ese recorrido, la inteligencia artificial sistémica no se introduce como una finalidad autónoma ni como una autoridad superior. Se postula como una capacidad accesoria que puede aportar evidencia al estudio de la continuidad del sistema.
+En ese recorrido, la inteligencia artificial sistémica no se introduce como una finalidad autónoma ni como una autoridad superior. Se postula como una capacidad accesoria que puede aportar evidencia al estudio de la continuidad del sistema. La memoria, punto de partida de la investigación, vuelve a ocupar un lugar central: su atribución semiótica enlaza la competencia con la actividad que consume los recursos y proporciona a Alfa un itinerario conceptual de diagnóstico. La homeostasis computacional reúne esta línea con la seguridad y la suficiencia de versión, como hipótesis por contrastar.
 
 ## 4. Autoría y papel del diálogo asistido
 

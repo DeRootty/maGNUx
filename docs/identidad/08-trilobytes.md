@@ -94,6 +94,12 @@ La misión es garantizar la **veracidad estructural**:
 
 ---
 
+### Revelado del direccionamiento semiótico
+
+El RAW no solo relaciona identidad, política y estado: conserva las referencias funcionales que permiten distinguir la capacidad de un servicio de las actividades que lo consumen. Trilobytes revela, dentro de la resolución y autorización de la sesión, el dominio y la actividad de un objeto, su procedencia, contrato, referencias a recursos y evidencia de coherencia. No debe mostrar una atribución estimada como medición, ni representar dos veces un recurso compartido como si fueran dos consumos físicos independientes.
+
+Trilobytes no asigna físicamente memoria ni dicta por sí mismo la competencia de un objeto. Consume las declaraciones y comprobaciones de ROOT, COMM y ADMIN. Alfa puede interpretar esas referencias como mapa conceptual, sin que su acceso al RAW quede limitado necesariamente a una interfaz gráfica ni ello le otorga acceso irrestricto a datos. La triple delegación para intermediación conserva su alcance específico.
+
 ## Trilobytes como delimitador administrativo
 
 Trilobytes actúa como delimitador administrativo porque evita que la sesión de usuario se confunda con la raíz estructural del sistema.

@@ -296,6 +296,18 @@ Kernel / ROOT
 
 La distinción se desarrolla en [los tres estratos](../arquitectura/03-estratos.md) y [el inicio estratificado](../arquitectura/04-inicio-sistema.md).
 
+### De la constitución de dominios a la asignación semiótica de memoria
+
+Adminland sostiene la capacidad de prestar servicios: instalación, configuración, supervisión y ejecución de su infraestructura, gestión de identidades operativas, usuarios, grupos, permisos y registros administrativos. ADMIN ejerce estas competencias con autonomía dentro de los límites materiales concedidos por ROOT y las relaciones comunicativas autorizadas por COMM. No puede alterar unilateralmente esos límites ni comprometer la continuidad de los estratos que lo sostienen. Userland, por su parte, sostiene las actividades que emergen del consumo de tales capacidades, sean sesiones humanas, aplicaciones o cargas de servicio autorizadas.
+
+Esta distinción recupera una intuición temprana de maGNUx sobre la segmentación de RAM, ahora entendida como **asignación semiótica**. El sistema debe poder reconocer a qué actividad contribuye un recurso, cuál es su procedencia, qué contrato lo legitima y qué autoridad puede intervenir sobre él. La ubicación física de sus páginas no basta para responder a esas preguntas.
+
+El direccionamiento material permite acceder al recurso; el direccionamiento semiótico permite al sistema saber dónde mirar conceptualmente. No sustituye a la MMU ni a las tablas de páginas, no presupone regiones físicas contiguas y no concede permisos por la mera presencia de una etiqueta. Las referencias deben corresponderse con recursos reales, mantenerse vigentes y estar respaldadas por mecanismos de protección.
+
+Un servicio web ilustra esta distinción: Apache como infraestructura se administra en Adminland; la memoria atribuible a la ejecución de cada web, webapp, API o dependencia de backend corresponde semióticamente a su actividad en Userland. COMM gobierna sus relaciones comunicativas, también las internas que requieran autorización; ROOT conserva la gestión material de la memoria y de los sockets. Una misma infraestructura puede sostener múltiples actividades y compartir recursos: no se presupone una correspondencia exclusiva entre socket y aplicación. La atribución deberá distinguir consumos exclusivos, compartidos y no determinados.
+
+**Adminland sostiene la capacidad de prestar un servicio; Userland sostiene las dinámicas computacionales que emergen del consumo de esa capacidad.** El desarrollo de este principio se encuentra en [Dernel](../identidad/09-dernel.md) y en [la arquitectura de los estratos](../arquitectura/03-estratos.md).
+
 ---
 
 ## Identidad estructural
@@ -377,6 +389,10 @@ Por eso maGNUx empieza antes de la IA: empieza por la soberanía del sistema.
 ---
 
 La ampliación de esta tensión futura se articula como una **propiedad emergente del avance helicoidal**: [usuario Alfa, fuente viva y suficiencia evolutiva](04-helice-alfa-continuidad.md). En esa hipótesis Alfa puede procesar la representación de Trilobytes y producir evidencia para versiones futuras; **no se presenta como una función ya implementada**.
+
+La asignación semiótica aporta un fundamento a esa inteligencia: ante un mismo síntoma de degradación, Alfa podría distinguir entre una insuficiencia material de ROOT, una anomalía comunicativa de COMM, una configuración administrativa de Dernel y la demanda de una actividad concreta de Userland. Estas atribuciones son hipótesis hasta que la evidencia permita contrastarlas.
+
+Así, Alfa se propone como una posible evolución de la ciberseguridad del endpoint hacia la **homeostasis computacional**: el mantenimiento de condiciones de legitimidad, seguridad, suficiencia y continuidad compatibles con los objetivos del sistema. Los antivirus, EDR y XDR ya disponen de capacidades de detección, correlación y respuesta, incluidas técnicas de IA; el rasgo diferencial que maGNUx investiga no es añadir IA, sino dotarla de conocimiento semiótico-contractual desde la constitución del sistema. Alfa no reemplaza los mecanismos independientes de seguridad ni adquiere soberanía: diagnostica, aporta evidencia y puede intervenir únicamente dentro de facultades autorizadas. Su valor diferencial deberá medirse frente a soluciones existentes.
 
 ---
 

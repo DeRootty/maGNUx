@@ -36,6 +36,31 @@ La normalización **no debe borrar la procedencia**. El RAW revelado por Triloby
 
 Ninguna fuente aislada basta para demostrar «suficiencia óptima». La ausencia de sensores debe reportarse como **dato faltante**, no como medición positiva.
 
+### Referencia semiótica y atribución de consumo
+
+La fuente viva debe permitir relacionar recursos con la función a la que contribuyen. Se propone un registro lógico, no una estructura binaria definitiva, con los siguientes campos mínimos:
+
+| Campo | Función |
+|---|---|
+| Identidad de objeto y actividad | Identificador estable en su ciclo de vida; servicio, aplicación, sesión o carga. |
+| Dominio funcional | ROOT, COMM, Adminland, Userland o atribución compartida/indeterminada. |
+| Competencias y contrato | Autoridades responsables, versión, vigencia y alcance; no un permiso implícito. |
+| Referencia material | Identificador de cgroup, proceso con identidad de arranque, socket, recurso o muestra; no dirección física obligatoria. |
+| Atribución | Exclusiva, compartida, estimada o indeterminada; método, unidad, intervalo y confianza. |
+| Evidencia | Fuente autenticada o validada según contrato, reloj, estado y procedencia. |
+
+Las referencias necesitan ciclo de vida y revocación, protección frente a falsificación y comprobación con el estado del kernel. Una etiqueta no otorga acceso ni garantiza aislamiento. Las muestras compartidas no deben sumarse como consumos exclusivos; las cantidades de distinta naturaleza o ventana no se agregan sin normalización. Los datos no atribuibles se conservan explícitamente. Cgroups v2 permite contar memoria y buffers de socket en su ámbito, pero no identifica automáticamente el consumo por web, flujo HTTP o petición en un trabajador compartido.
+
+### Ensayo de atribución y homeostasis: Apache
+
+Se propone un banco de pruebas local con Apache y dos actividades identificables de Userland, una de ellas con backend en proceso/grupo dedicado. Registrar la infraestructura común de Adminland, los contratos de escucha COMM y los recursos que ROOT contabiliza. Comparar una variante con trabajadores compartidos y otra con separación por procesos/cgroups. Una conexión de escucha no se equipara a una aplicación; la instrumentación de peticiones debe minimizar datos de usuario y preservar los límites de cada dominio.
+
+Inyectar de manera controlada y reversible cuatro condiciones de causa conocida: incremento legítimo de demanda de una actividad, consumo anómalo de su backend, configuración administrativa inadecuada y presión material externa a Apache. Añadir, en laboratorio aislado, un caso de incumplimiento de política de comunicación. No se requiere tráfico malicioso real ni exposición pública. Medir también condiciones normales y casos con datos faltantes.
+
+Comparar tres configuraciones con la misma carga y hardware: observabilidad Linux convencional, observabilidad más referencias semióticas sin IA, y referencias semióticas con el observador Alfa simulado o implementado, declarando cuál se prueba. Cuando se evalúe seguridad, incorporar una solución de endpoint comparable si está disponible. Medir precisión de atribución, falsos positivos y negativos, proporción indeterminada, tiempo de diagnóstico, coste de telemetría, consumo no contabilizado/doble contabilización y continuidad de servicios. El beneficio del mapa semiótico debe distinguirse del beneficio añadido por la IA.
+
+No son resultados obtenidos ni requisitos de una implementación ya existente. Si la atribución no es fiable, Alfa declara datos insuficientes; no actúa sobre una aplicación solo por una hipótesis de consumo. Sus propuestas de respuesta pasan por ejecutores competentes e independientes, y sus informes distinguen incidente de seguridad, fallo operativo y posible insuficiencia de versión.
+
 ## Identificación activa: experimento mínimo
 
 Una perturbación puede ser útil cuando una observación pasiva no distingue dos causas plausibles. Antes de actuar, Alfa debe declarar:
@@ -137,6 +162,8 @@ Alfa debe poder responder también «**no hay evidencia que exija nueva versión
 - **Integración:** incompatibilidad o latencia de firmware/controlador/interfaz.
 - **Versión compilada:** regresión reproducible asociada a fuente, configuración de kernel, toolchain o artefacto exacto.
 - **Contrato:** acciones permitidas que no preservan un invariante prometido.
+- **Infraestructura administrativa / actividad:** consumo o configuración de Adminland frente a demanda, fuga o fallo atribuible a una actividad de Userland.
+- **Comunicación / seguridad:** incumplimiento confirmado de una política o indicador de amenaza; distinguirlo de tráfico legítimo y de una mera hipótesis de ataque.
 - **Indeterminado:** el expediente no permite atribución causal.
 
 Los informes no deben transferir secretos, identificadores personales, contenido de documentos ni trazas de actividad humana por defecto. El propietario decide si autoriza compartir, y el régimen debe permitir revocación de consentimiento, retención limitada y revisión previa a publicación. La publicación automática solo sería admisible bajo una política explícita suficientemente delimitada.
@@ -147,6 +174,8 @@ Los informes no deben transferir secretos, identificadores personales, contenido
 |---|---|---|
 | Detección | Herramientas Linux estándar vs Alfa | Evidencia adicional medible, con tasa de falsos positivos |
 | Atribución causal | Anomalías inyectadas y causas conocidas | Diagnóstico correcto o declaración indeterminada |
+| Atribución semiótica | Infraestructura y actividades separadas/compartidas | Exactitud, incertidumbre explícita, ausencia de doble conteo |
+| Homeostasis | Observación convencional, mapa semiótico sin IA, mapa con Alfa | Mejora medible de continuidad o diagnóstico sin comprometer seguridad ni autonomía |
 | Inferencia | Hipótesis IA vs observación directa | Nunca confundir inferencia con medición |
 | Perturbaciones | Antes/después contra grupo control | Beneficio superior al impacto y reversión verificada |
 | Continuidad | Alfa activo/caído/fallido | Linux arranca y mantiene servicios esenciales |

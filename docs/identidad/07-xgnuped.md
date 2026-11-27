@@ -218,6 +218,10 @@ La identidad comunicativa conecta con:
 
 Sin identidad comunicativa, el sistema puede ejecutar. Pero no puede explicar de forma fiable qué ejecutó, desde dónde y bajo qué legitimidad.
 
+La constitución semiótica de las comunicaciones exige que xGNUpeD permita identificar los canales y objetos comunicativos que habilita: extremos, alcance local o externo, identidad funcional, capacidades y contrato aplicable. COMM gobierna las condiciones de comunicación, no toda la operación que utiliza un canal. Una autorización de escucha local puede concederse por anticipado; exponer el servicio o cambiar su alcance exige respetar el contrato COMM. El socket y sus buffers permanecen materialmente bajo el kernel; su consumo puede atribuirse a una actividad de Userland o a infraestructura compartida de Adminland según la evidencia, sin convertir esa atribución en un permiso.
+
+La procedencia de las referencias deberá poder verificarse y su revocación propagarse. El diseño no presupone que una dirección IP, puerto o descriptor identifique por sí solo una aplicación. Esta distinción conecta con [la atribución de recursos en Dernel](09-dernel.md).
+
 ---
 
 ## Las cuatro propiedades como matriz

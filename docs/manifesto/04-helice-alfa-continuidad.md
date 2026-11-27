@@ -40,6 +40,28 @@ La conclusión «esta versión es insuficiente» requiere evidencia comparativa:
 
 La suficiencia no exige maximizar potencia permanentemente. Exige un funcionamiento **óptimo para los objetivos declarados**, equilibrando respuesta, estabilidad, seguridad, energía y mantenimiento.
 
+## De la asignación semiótica a la homeostasis computacional
+
+La capacidad de carga del ecosistema no se explica únicamente mediante agregados de CPU o memoria. El mismo servicio puede sostener varias actividades con identidades y contratos diferentes. La asignación semiótica de recursos propuesta en [los estratos](../arquitectura/03-estratos.md) permite orientar la investigación por finalidad y competencia, sin confundir el mapa conceptual con las direcciones físicas ni con un permiso de acceso.
+
+Ante un aumento de consumo de Apache, Alfa podría considerar causas concurrentes o alternativas:
+
+| Ámbito de investigación | Hipótesis a contrastar |
+|---|---|
+| ROOT | Presión material, límites de memoria o anomalía de gestión del kernel. |
+| COMM | Tráfico anómalo, exposición no autorizada o agotamiento de recursos de comunicación. |
+| Adminland | Configuración, supervisión o dimensionamiento incorrecto de la infraestructura del servicio. |
+| Userland | Demanda legítima excepcional, fuga de memoria de una webapp o dependencia de backend. |
+| Continuidad | Insuficiencia o regresión reproducible de la versión compilada bajo las condiciones declaradas. |
+
+La asignación semiótica orienta dónde mirar, no demuestra por sí misma dónde está la causa. Las hipótesis pueden coexistir. Alfa debe comprobar alternativas, conservar incertidumbre y proponer una respuesta al ejecutor competente; no convertir una correlación o una etiqueta en un veredicto.
+
+Esta función amplía la perspectiva de la ciberseguridad del endpoint. Antivirus, EDR y XDR ya pueden reconocer amenazas, analizar comportamientos, correlacionar telemetría y responder; no son etapas mutuamente excluyentes ni tecnología que Alfa haya superado. La hipótesis de maGNUx consiste en incorporar al diagnóstico el conocimiento de la propia constitución del sistema: identidad, competencia, contrato, capacidades, estado y continuidad.
+
+En analogía con la regulación de condiciones internas de un organismo, se denomina **homeostasis computacional** al horizonte de conservar condiciones compatibles con la continuidad, legitimidad y objetivos declarados del sistema frente a perturbaciones internas o externas. Alfa sería un colaborador en esa regulación: observa, interpreta, contrasta, promueve intervenciones autorizadas y devuelve evidencia a ingeniería. No es el único mecanismo de regulación, no adquiere autoridad soberana ni sustituye garantías deterministas de seguridad. Tampoco equivale a inmovilidad: una transformación legítima puede exigir un nuevo equilibrio, una nueva versión o cambios de contrato.
+
+El valor de esta propuesta frente a herramientas existentes es una pregunta experimental. Debe considerar tanto detección de amenazas como falsas alarmas, diagnóstico de fallos no maliciosos, continuidad, coste de observación y riesgo de que el propio observador sea comprometido.
+
 ## RAW, Trilobytes y el límite de resolución
 
 Trilobytes **revela o renderiza la composición resultante de las capas interactuantes**. La expresión RAW no designa bytes sin procesar procedentes directamente de cada transistor, sino el **estado de máquina observable con su procedencia**, antes de que Alfa lo enriquezca mediante interpretación e inferencia. Esa representación puede incluir mediciones físicas, contadores, políticas, eventos y estados derivados; cada fuente debe distinguirse.
@@ -137,7 +159,7 @@ triage → reproducciones → cambios → pruebas → nueva compilación
     ↺ continuidad evaluada en el nuevo despliegue
 ~~~
 
-La **fuente viva** incluye telemetría de CPU, presión de memoria y E/S, frecuencia y temperatura cuando el hardware las exponga, eventos de almacenamiento, estado de NPU/GPU, políticas, dependencias, contratos y demandas observables de sesión. Cada dato debe declarar su procedencia, resolución temporal y grado de confianza. Las inferencias de Alfa llevan etiqueta propia.
+La **fuente viva** incluye telemetría de CPU, presión de memoria y E/S, frecuencia y temperatura cuando el hardware las exponga, eventos de almacenamiento, estado de NPU/GPU, políticas, dependencias, contratos y demandas observables de sesión. Cada dato debe declarar su procedencia, resolución temporal y grado de confianza. Las referencias semióticas deberán añadir la identidad funcional, actividad, dominio, contrato aplicable y método de atribución del recurso; los consumos compartidos o indeterminados no se deben ocultar. Las inferencias de Alfa llevan etiqueta propia.
 
 Para DevOps/SRE esto genera una conexión practicable con observabilidad, gestión de configuración, regresiones, incidentes, presupuestos de error y versionado reproducible. El informe mínimo debe responder:
 
@@ -162,6 +184,8 @@ maGNUx no presenta estas capacidades como software terminado. La siguiente etapa
 5. Si las perturbaciones controladas permiten identificar causas reales y evitan decisiones basadas en correlaciones falsas.
 6. Si los informes generados permiten reproducir fallos y orientar mejoras de compilación/versionado.
 7. Si el usuario puede distinguir en todo momento **dato medido, estado derivado e inferencia**.
+8. Si la atribución semiótica mejora la localización de causas entre infraestructura y actividad, sin doble contabilidad, pérdida de aislamiento o sobrecoste desproporcionado.
+9. Si Alfa aporta valor medible frente a observabilidad convencional y mecanismos de seguridad de endpoint en detección, precisión causal, tiempos de respuesta y continuidad, bajo las mismas condiciones.
 
 Estas pruebas deberán compararse con un sistema Linux convencional bien configurado. Una tesis que no admita resultados negativos no proporciona una hoja de ingeniería.
 

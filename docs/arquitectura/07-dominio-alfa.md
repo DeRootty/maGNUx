@@ -93,6 +93,12 @@ La precarga de seL4 tiene como objetivo dar soporte estable a Alfa, **no reempla
 
 El modo ROOT puro de mantenimiento debe seguir disponible como ruta excepcional prevista. Un fallo de seL4, NPU o GPU **no debe destruir por defecto el inicio básico de Linux**: se registra causa, se declara el estado Alfa caído y se respetan políticas de recuperación.
 
+## Acceso semiótico del dominio Alfa
+
+La constitución temprana de Alfa no implica acceso irrestricto al espacio de direcciones de Linux. Las referencias semióticas a recursos ROOT, COMM, Adminland y Userland deben exponerse mediante interfaces autorizadas y verificables que preserven la procedencia de datos, los límites del contrato y la revocación. Una referencia conceptual a un objeto no habilita leer su memoria material. La NPU o el dominio de control no adquieren permisos de DMA por la sola necesidad de inferencia.
+
+La [hipótesis de homeostasis computacional](../manifesto/04-helice-alfa-continuidad.md) distingue entre diagnóstico y ejecución de respuestas. La eventual detección de amenazas o desequilibrios se somete a controles independientes de Alfa; su fallo o compromiso no debe desactivar las garantías esenciales de ROOT, COMM y ADMIN. El [contrato de observabilidad](../propuesta-tecnica/04-alfa-observabilidad-spec.md) detalla cómo ensayar la atribución semiótica antes de trasladarla al dominio especializado.
+
 ## Riesgos y límites de seguridad
 
 - El soporte de seL4 y sus **garantías verificadas** dependen de arquitectura, plataforma, características y configuración concretas.

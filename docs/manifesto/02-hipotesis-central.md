@@ -285,7 +285,9 @@ Un sistema maGNUx debería poder responder, como mínimo:
 | ¿Qué autoridad concede operación? | Dernel. |
 | ¿Qué coherencia verifica sesión? | Trilobytes. |
 | ¿Qué comunica estados y eventos? | COMM / Kommu. |
-| ¿Qué usa el usuario? | ADMIN / Guest. |
+| ¿Qué usa el usuario? | Userland / Guest habilitado por Dernel. |
+| ¿A qué actividad contribuye un recurso y quién puede gobernarlo? | Referencias semióticas, contratos y evidencia de ROOT, COMM y ADMIN. |
+| ¿Qué amenaza la continuidad y cómo se contrasta? | Alfa, cuando esté disponible y autorizado, con verificaciones independientes. |
 
 ---
 
@@ -328,7 +330,9 @@ licencia Dernel
 y coherencia Trilobytes.
 ```
 
-Ese es el punto de partida del resto de la documentación.
+Ese es el punto de partida del resto de la documentación. La habilitación del Adminland y del Userland permite distinguir entre las capacidades que un servicio ofrece y las actividades que las consumen. El contrato de continuidad deberá conservar esa distinción incluso cuando ambas utilicen un mismo proceso, espacio de memoria o canal de comunicación.
+
+Se postula un direccionamiento semiótico que relacione identidad funcional, finalidad, procedencia material, competencia, contrato y estado de los recursos. La atribución no se confunde con la asignación física ni sustituye los mecanismos de control de acceso. Una consecuencia verificable de la hipótesis sería que el sistema pudiera explicar con mayor precisión qué actividad origina un consumo o una anomalía y a qué autoridad corresponde resolverla, sin degradar el aislamiento ni exceder su presupuesto de recursos. Véanse [los estratos](../arquitectura/03-estratos.md) y [la continuidad de Alfa](04-helice-alfa-continuidad.md).
 
 ---
 

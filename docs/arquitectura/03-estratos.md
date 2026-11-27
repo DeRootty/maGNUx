@@ -203,6 +203,25 @@ pero su uso no agota su soberanía.
 
 ---
 
+### Perímetro de Adminland y Userland
+
+ADMIN administra el ciclo de vida de servicios y aplicaciones, identidades operativas, usuarios, grupos, permisos, configuración, dependencias y acceso autorizado a logs. Puede ejecutar cambios dentro de cuotas y capacidades concedidas. COMM gobierna las relaciones comunicativas, no solamente Internet: una escucha local o un IPC puede estar preautorizado por su contrato sin exigir una decisión nueva para cada operación. ROOT conserva el control material y los límites que protegen la estabilidad y las reservas de los estratos.
+
+| Objeto o actividad | Atribución funcional | Límite |
+|---|---|---|
+| Infraestructura de un servicio y su supervisión | Adminland | Contratos ROOT y COMM |
+| Trabajo de una aplicación o sesión, también sin usuario interactivo | Userland | Licencia operativa de Dernel |
+| Política de escucha, alcance y exposición de un canal | COMM | Recursos y protección de ROOT |
+| Páginas, buffers de kernel y objetos de socket | ROOT en su gestión material; consumo atribuible a la actividad | Contabilidad y protección efectivas |
+
+### Direccionamiento semiótico de RAM
+
+La pertenencia de un recurso no viene determinada exclusivamente por el proceso que lo crea, sino por la función a cuya existencia contribuye. Una referencia semiótica debe relacionar el objeto lógico, su dominio, actividad, autoridades competentes, contrato vigente y evidencia de su respaldo material. Debe conservar esa relación al cambiar la ubicación de las páginas o al reutilizarse un identificador; la identidad y el ciclo de vida no se reducen a un PID o a una dirección.
+
+No se prescribe particionar físicamente la RAM. MMU, espacios de direcciones, cgroups v2, namespaces y políticas de acceso son mecanismos candidatos, cada uno con garantías diferentes. La clasificación semiótica no es un aislamiento en sí misma; la contabilidad no equivale a control de acceso. Las páginas compartidas, cachés y recursos de kernel requieren reglas explícitas de atribución que eviten dobles conteos y distingan el consumo no atribuible. Los registros persistentes siguen necesitando almacenamiento.
+
+Este planteamiento se concreta con el [ejemplo de Apache](../identidad/09-dernel.md) y el [contrato experimental de observabilidad](../propuesta-tecnica/04-alfa-observabilidad-spec.md).
+
 ## Dominios de autoridad
 
 ROOT se expresa mediante dominios de autoridad que después se desarrollan en el bloque de identidad:

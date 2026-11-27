@@ -100,6 +100,29 @@ Su tarea es responder:
 
 ---
 
+### Adminland sostiene la capacidad; Userland consume la capacidad
+
+Dernel administra la instalación y retirada de software, la configuración, supervisión y ejecución de servicios, la gestión de usuarios y grupos, permisos ordinarios, dependencias y registros administrativos. Puede modificar propiedades de ejecución y distribuir cuotas dentro de los límites ROOT y COMM previamente concedidos. El hecho de que una acción sea administrativa no le autoriza a ampliar su exposición de red, modificar políticas comunicativas o disponer de reservas materiales fuera de contrato. Userland incluye actividades no interactivas y servicios de aplicación: no equivale únicamente a la sesión de una persona.
+
+#### Caso constitutivo: Apache
+
+Un servidor Apache puede sostener una web, una webapp, una API y sus dependencias de backend. No todo lo que consume Apache pertenece semióticamente a Adminland por el hecho de ejecutarse en sus procesos.
+
+| Recurso o relación | Atribución propuesta |
+|---|---|
+| Proceso maestro, configuración y supervisión del servicio | Adminland |
+| Capacidad de escucha y política de exposición | COMM, con ejecución material ROOT |
+| Peticiones, trabajo de aplicación y memoria exclusiva de sus backends | Userland, por identidad de actividad |
+| Buffers atribuibles a conexiones o peticiones | Consumo de la actividad correspondiente; gestión material ROOT |
+| Trabajadores, cachés, librerías y conexiones compartidas | Infraestructura o consumo compartido según función y evidencia; sin atribución exclusiva ficticia |
+| Registros administrativos y de actividad | Acceso y retención bajo contratos distintos según finalidad y sensibilidad |
+
+Un socket de escucha puede atender múltiples virtual hosts; una conexión persistente puede servir distintas peticiones y HTTP/2 puede multiplexar flujos. El destino funcional puede conocerse después de establecer la conexión. Por ello no se deduce una aplicación a partir de cada socket sin instrumentación y contexto. La clasificación podrá ser provisional, actualizarse o quedar indeterminada.
+
+Dernel mantiene la licencia y los límites administrativos y operativos de cada actividad. El sistema podría ensayar esta separación mediante procesos o grupos de trabajadores dedicados, cgroups v2 y telemetría de servicio; los recursos compartidos no se vuelven separables automáticamente. Una referencia semiótica debe describir la actividad y el contrato que la legitiman, enlazar con evidencia verificable y distinguir recursos medidos de estimaciones. El acceso a logs no implica acceso indiscriminado a datos de otros dominios.
+
+La separación se desarrolla en [los estratos](../arquitectura/03-estratos.md) y proporciona a Alfa un mapa conceptual para investigar la causa de anomalías sin confundir infraestructura con demanda.
+
 ## Dernel run time y Dernel guest
 
 El Dernel se divide conceptualmente en dos áreas:
