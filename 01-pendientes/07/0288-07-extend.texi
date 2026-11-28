@@ -1,0 +1,260 @@
+@c GCC 16.1.0 | BLOQUE 0288 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 19081-19336 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+The following take an @code{int} argument and return no result:
+@example
+void __builtin_arc_vendrec (int);
+void __builtin_arc_vrec (int);
+void __builtin_arc_vrecrun (int);
+void __builtin_arc_vrun (int);
+@end example
+
+The following take a @code{__v8hi} argument and two @code{int}
+arguments and return a @code{__v8hi} result.  The second argument must
+be a 3-bit compile time constants, indicating one the registers I0-I7,
+and the third argument must be an 8-bit compile time constant.
+
+@emph{Note:} Although the equivalent hardware instructions do not take
+an SIMD register as an operand, these builtins overwrite the relevant
+bits of the @code{__v8hi} register provided as the first argument with
+the value loaded from the @code{[Ib, u8]} location in the SDM.
+
+@example
+__v8hi __builtin_arc_vld32 (__v8hi, const int, const int);
+__v8hi __builtin_arc_vld32wh (__v8hi, const int, const int);
+__v8hi __builtin_arc_vld32wl (__v8hi, const int, const int);
+__v8hi __builtin_arc_vld64 (__v8hi, const int, const int);
+@end example
+
+The following take two @code{int} arguments and return a @code{__v8hi}
+result.  The first argument must be a 3-bit compile time constants,
+indicating one the registers I0-I7, and the second argument must be an
+8-bit compile time constant.
+
+@example
+__v8hi __builtin_arc_vld128 (const int, const int);
+__v8hi __builtin_arc_vld64w (const int, const int);
+@end example
+
+The following take a @code{__v8hi} argument and two @code{int}
+arguments and return no result.  The second argument must be a 3-bit
+compile time constants, indicating one the registers I0-I7, and the
+third argument must be an 8-bit compile time constant.
+
+@example
+void __builtin_arc_vst128 (__v8hi, const int, const int);
+void __builtin_arc_vst64 (__v8hi, const int, const int);
+@end example
+
+The following take a @code{__v8hi} argument and three @code{int}
+arguments and return no result.  The second argument must be a 3-bit
+compile-time constant, identifying the 16-bit sub-register to be
+stored, the third argument must be a 3-bit compile time constants,
+indicating one the registers I0-I7, and the fourth argument must be an
+8-bit compile time constant.
+
+@example
+void __builtin_arc_vst16_n (__v8hi, const int, const int, const int);
+void __builtin_arc_vst32_n (__v8hi, const int, const int, const int);
+@end example
+
+The following built-in functions are available on systems that uses
+@option{-mmpy-option=6} or higher.
+
+@example
+__v2hi __builtin_arc_dmach (__v2hi, __v2hi);
+__v2hi __builtin_arc_dmachu (__v2hi, __v2hi);
+__v2hi __builtin_arc_dmpyh (__v2hi, __v2hi);
+__v2hi __builtin_arc_dmpyhu (__v2hi, __v2hi);
+__v2hi __builtin_arc_vaddsub2h (__v2hi, __v2hi);
+__v2hi __builtin_arc_vsubadd2h (__v2hi, __v2hi);
+@end example
+
+The following built-in functions are available on systems that uses
+@option{-mmpy-option=7} or higher.
+
+@example
+__v2si __builtin_arc_vmac2h (__v2hi, __v2hi);
+__v2si __builtin_arc_vmac2hu (__v2hi, __v2hi);
+__v2si __builtin_arc_vmpy2h (__v2hi, __v2hi);
+__v2si __builtin_arc_vmpy2hu (__v2hi, __v2hi);
+@end example
+
+The following built-in functions are available on systems that uses
+@option{-mmpy-option=8} or higher.
+
+@example
+long long __builtin_arc_qmach (__v4hi, __v4hi);
+long long __builtin_arc_qmachu (__v4hi, __v4hi);
+long long __builtin_arc_qmpyh (__v4hi, __v4hi);
+long long __builtin_arc_qmpyhu (__v4hi, __v4hi);
+long long __builtin_arc_dmacwh (__v2si, __v2hi);
+long long __builtin_arc_dmacwhu (__v2si, __v2hi);
+_v2si __builtin_arc_vaddsub (__v2si, __v2si);
+_v2si __builtin_arc_vsubadd (__v2si, __v2si);
+_v4hi __builtin_arc_vaddsub4h (__v4hi, __v4hi);
+_v4hi __builtin_arc_vsubadd4h (__v4hi, __v4hi);
+@end example
+
+@node Arm C Language Extensions (ACLE)
+@subsection Arm C Language Extensions (ACLE)
+
+GCC implements extensions for C and C++ as described in the Arm C Language
+Extensions (ACLE) specification, which can be found at
+@uref{https://arm-software.github.io/acle/main/}.
+
+As a part of ACLE, GCC implements extensions for Arm Vector extensions
+as described in the Arm C Language Extensions Specification.  The complete
+list of Arm Vector extension intrinsics is available at
+@uref{https://arm-software.github.io/acle/main/}.
+The built-in intrinsics for the Arm vector extensions are available when
+the respective extensions are enabled.
+
+Not all aspects of ACLE are supported.  Support for each feature of the ACLE
+is determined with the @code{__ARM_FEATURE_@var{X}} macros.
+
+See @ref{ARM Options} and @ref{AArch64 Options} for more information on the
+availability of extensions.
+
+@node ARM Floating Point Status and Control Intrinsics
+@subsection ARM Floating Point Status and Control Intrinsics
+
+These built-in functions are available for the ARM family of
+processors with floating-point unit.
+
+@smallexample
+unsigned int __builtin_arm_get_fpscr ();
+void __builtin_arm_set_fpscr (unsigned int);
+@end smallexample
+
+@node ARM ARMv8-M Security Extensions
+@subsection ARM ARMv8-M Security Extensions
+
+GCC implements the ARMv8-M Security Extensions as described in the ARMv8-M
+Security Extensions: Requirements on Development Tools Engineering
+Specification, which can be found at
+@uref{https://developer.arm.com/documentation/ecm0359818/latest/}.
+
+As part of the Security Extensions GCC implements two new function attributes:
+@code{cmse_nonsecure_entry} and @code{cmse_nonsecure_call}.
+
+As part of the Security Extensions GCC implements the intrinsics below.  FPTR
+is used here to mean any function pointer type.
+
+@smallexample
+cmse_address_info_t cmse_TT (void *);
+cmse_address_info_t cmse_TT_fptr (FPTR);
+cmse_address_info_t cmse_TTT (void *);
+cmse_address_info_t cmse_TTT_fptr (FPTR);
+cmse_address_info_t cmse_TTA (void *);
+cmse_address_info_t cmse_TTA_fptr (FPTR);
+cmse_address_info_t cmse_TTAT (void *);
+cmse_address_info_t cmse_TTAT_fptr (FPTR);
+void * cmse_check_address_range (void *, size_t, int);
+typeof(p) cmse_nsfptr_create (FPTR p);
+intptr_t cmse_is_nsfptr (FPTR);
+int cmse_nonsecure_caller (void);
+@end smallexample
+
+@node AVR Built-in Functions
+@subsection AVR Built-in Functions
+
+For each built-in function for AVR, there is an equally named,
+uppercase built-in macro defined. That way users can easily query if
+or if not a specific built-in is implemented or not. For example, if
+@code{__builtin_avr_nop} is available the macro
+@code{__BUILTIN_AVR_NOP} is defined to @code{1} and undefined otherwise.
+
+@defbuiltin{void __builtin_avr_nop (void)}
+@defbuiltinx{void __builtin_avr_sei (void)}
+@defbuiltinx{void __builtin_avr_cli (void)}
+@defbuiltinx{void __builtin_avr_sleep (void)}
+@defbuiltinx{void __builtin_avr_wdr (void)}
+@defbuiltinx{uint8_t __builtin_avr_swap (uint8_t)}
+@defbuiltinx{uint16_t __builtin_avr_fmul (uint8_t, uint8_t)}
+@defbuiltinx{int16_t __builtin_avr_fmuls (int8_t, int8_t)}
+@defbuiltinx{int16_t __builtin_avr_fmulsu (int8_t, uint8_t)}
+
+These built-in functions map to the respective machine
+instruction, i.e.@: @code{nop}, @code{sei}, @code{cli}, @code{sleep},
+@code{wdr}, @code{swap}, @code{fmul}, @code{fmuls}
+resp. @code{fmulsu}. The three @code{fmul*} built-ins are implemented
+as library call if no hardware multiplier is available.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_avr_delay_cycles (uint32_t @var{ticks})}
+Delay execution for @var{ticks} cycles. Note that this
+built-in does not take into account the effect of interrupts that
+might increase delay time. @var{ticks} must be a compile-time
+integer constant; delays with a variable number of cycles are not supported.
+@enddefbuiltin
+
+@defbuiltin{uint8_t __builtin_avr_insert_bits (uint32_t @var{map}, uint8_t @var{bits}, uint8_t @var{val})}
+Insert bits from @var{bits} into @var{val} and return the resulting
+value. The nibbles of @var{map} determine how the insertion is
+performed: Let @var{X} be the @var{n}-th nibble of @var{map}
+@enumerate
+@item If @var{X} is @code{0xf},
+then the @var{n}-th bit of @var{val} is returned unaltered.
+
+@item If X is in the range 0@dots{}7,
+then the @var{n}-th result bit is set to the @var{X}-th bit of @var{bits}
+
+@item If X is in the range 8@dots{}@code{0xe},
+then the @var{n}-th result bit is undefined.
+@end enumerate
+
+@noindent
+One typical use case for this built-in is adjusting input and
+output values to non-contiguous port layouts. Some examples:
+
+@smallexample
+// same as val, bits is unused
+__builtin_avr_insert_bits (0xffffffff, bits, val);
+@end smallexample
+
+@smallexample
+// same as bits, val is unused
+__builtin_avr_insert_bits (0x76543210, bits, val);
+@end smallexample
+
+@smallexample
+// same as rotating bits by 4
+__builtin_avr_insert_bits (0x32107654, bits, 0);
+@end smallexample
+
+@smallexample
+// high nibble of result is the high nibble of val
+// low nibble of result is the low nibble of bits
+__builtin_avr_insert_bits (0xffff3210, bits, val);
+@end smallexample
+
+@smallexample
+// reverse the bit order of bits
+__builtin_avr_insert_bits (0x01234567, bits, 0);
+@end smallexample
+@enddefbuiltin
+
+@defbuiltin{uint8_t __builtin_avr_mask1 (uint8_t @var{mask}, uint8_t @var{offs})}
+Rotate the 8-bit constant value @var{mask} by an offset of @var{offs},
+where @var{mask} is in @{ 0x01, 0xfe, 0x7f, 0x80 @}.
+This built-in can be used as an alternative to 8-bit expressions like
+@code{1 << offs} when their computation consumes too much
+time, and @var{offs} is known to be in the range 0@dots{}7.
+@example
+__builtin_avr_mask1 (1, offs)      // same like  1 << offs
+__builtin_avr_mask1 (~1, offs)     // same like  ~(1 << offs)
+__builtin_avr_mask1 (0x80, offs)   // same like  0x80 >> offs
+__builtin_avr_mask1 (~0x80, offs)  // same like  ~(0x80 >> offs)
+@end example
+The open coded C versions take at least @code{5 + 4 * @var{offs}} cycles
+(and 5 instructions), whereas the built-in takes 7 cycles and instructions
+(8 cycles and instructions in the case of @code{@var{mask} = 0x7f}).
+@enddefbuiltin
+
+@defbuiltin{void __builtin_avr_nops (uint16_t @var{count})}
+Insert @var{count} @code{NOP} instructions.
+The number of instructions must be a compile-time integer constant.
+@enddefbuiltin
+

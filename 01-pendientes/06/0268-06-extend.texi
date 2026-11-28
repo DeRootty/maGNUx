@@ -1,0 +1,300 @@
+@c GCC 16.1.0 | BLOQUE 0268 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 14545-14840 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Hex Floats
+@subsection Hex Floats
+@cindex hex floats
+
+ISO C99 and ISO C++17 support floating-point numbers written not only in
+the usual decimal notation, such as @code{1.55e1}, but also numbers such as
+@code{0x1.fp3} written in hexadecimal format.  As a GNU extension, GCC
+supports this in C90 mode (except in some cases when strictly
+conforming) and in C++98, C++11 and C++14 modes.  In that format the
+@samp{0x} hex introducer and the @samp{p} or @samp{P} exponent field are
+mandatory.  The exponent is a decimal number that indicates the power of
+2 by which the significant part is multiplied.  Thus @samp{0x1.f} is
+@tex
+$1 {15\over16}$,
+@end tex
+@ifnottex
+1 15/16,
+@end ifnottex
+@samp{p3} multiplies it by 8, and the value of @code{0x1.fp3}
+is the same as @code{1.55e1}.
+
+Unlike for floating-point numbers in the decimal notation the exponent
+is always required in the hexadecimal notation.  Otherwise the compiler
+would not be able to resolve the ambiguity of, e.g., @code{0x1.f}.  This
+could mean @code{1.0f} or @code{1.9375} since @samp{f} is also the
+extension for floating-point constants of type @code{float}.
+
+@node Binary constants
+@subsection Binary Constants using the @samp{0b} Prefix
+@cindex Binary constants using the @samp{0b} prefix
+
+Integer constants can be written as binary constants, consisting of a
+sequence of @samp{0} and @samp{1} digits, prefixed by @samp{0b} or
+@samp{0B}.  This is particularly useful in environments that operate a
+lot on the bit level (like microcontrollers).
+
+The following statements are identical:
+
+@smallexample
+i =       42;
+i =     0x2a;
+i =      052;
+i = 0b101010;
+@end smallexample
+
+The type of these constants follows the same rules as for octal or
+hexadecimal integer constants, so suffixes like @samp{L} or @samp{UL}
+can be applied.
+
+@node Dollar Signs
+@subsection Dollar Signs in Identifier Names
+@cindex $
+@cindex dollar signs in identifier names
+@cindex identifier names, dollar signs in
+
+In GNU C, you may normally use dollar signs in identifier names.
+This is because many traditional C implementations allow such identifiers.
+However, dollar signs in identifiers are not supported on a few target
+machines, typically because the target assembler does not allow them.
+
+@node Character Escapes
+@subsection The Character @key{ESC} in Constants
+
+You can use the sequence @samp{\e} in a string or character constant to
+stand for the ASCII character @key{ESC}.
+
+@node Raw String Literals
+@subsection Raw String Literals
+@cindex raw string literals
+@cindex string literals, raw
+
+The C++11 standard added syntax for raw string literals prefixed
+with @samp{R}.  This syntax allows you to use an arbitrary delimiter
+sequence instead of escaping special characters within the string.
+For example, these string constants are all equivalent:
+
+@smallexample
+const char *s1 = "\\";
+const char *s2 = R"(\)";
+const char *s3 = R"foo(\)foo";
+@end smallexample
+
+As an extension, GCC also accepts raw string literals in C with
+@option{-std=gnu99} or later.
+
+@node Alternate Keywords
+@subsection Alternate Keywords
+@cindex alternate keywords
+@cindex keywords, alternate
+
+@option{-ansi} and the various @option{-std} options disable certain
+keywords that are GNU C extensions.
+Specifically, the keywords @code{asm}, @code{typeof} and
+@code{inline} are not available in programs compiled with
+@option{-ansi} or a @option{-std=} option specifying an ISO standard that
+doesn't define the keyword.  This causes trouble when you want to use
+these extensions in a header file that can be included in programs that may
+be compiled with with such options.
+
+The way to solve these problems is to put @samp{__} at the beginning and
+end of each problematical keyword.  For example, use @code{__asm__}
+instead of @code{asm}, and @code{__inline__} instead of @code{inline}.
+
+Other C compilers won't accept these alternative keywords; if you want to
+compile with another compiler, you can define the alternate keywords as
+macros to replace them with the customary keywords.  It looks like this:
+
+@smallexample
+#ifndef __GNUC__
+#define __asm__ asm
+#endif
+@end smallexample
+
+@findex __extension__
+@opindex pedantic
+@option{-pedantic} and other options cause warnings for many GNU C extensions.
+You can suppress such warnings using the keyword @code{__extension__}.
+Specifically:
+
+@itemize @bullet
+@item
+Writing @code{__extension__} before an expression prevents warnings
+about extensions within that expression.
+
+@item
+In C, writing:
+
+@smallexample
+[[__extension__ @dots{}]]
+@end smallexample
+
+suppresses warnings about using @samp{[[]]} attributes in C versions
+that predate C23@.
+@end itemize
+
+@code{__extension__} has no effect aside from this.
+
+@node Function Names
+@subsection Function Names as Strings
+@cindex @code{__func__} identifier
+@cindex @code{__FUNCTION__} identifier
+@cindex @code{__PRETTY_FUNCTION__} identifier
+
+GCC provides three magic constants that hold the name of the current
+function as a string.  In C++11 and later modes, all three are treated
+as constant expressions and can be used in @code{constexpr} constexts.
+The first of these constants is @code{__func__}, which is part of
+the C99 standard:
+
+The identifier @code{__func__} is implicitly declared by the translator
+as if, immediately following the opening brace of each function
+definition, the declaration
+
+@smallexample
+static const char __func__[] = "function-name";
+@end smallexample
+
+@noindent
+appeared, where function-name is the name of the lexically-enclosing
+function.  This name is the unadorned name of the function.  As an
+extension, at file (or, in C++, namespace scope), @code{__func__}
+evaluates to the empty string.
+
+@code{__FUNCTION__} is another name for @code{__func__}, provided for
+backward compatibility with old versions of GCC.
+
+In C, @code{__PRETTY_FUNCTION__} is yet another name for
+@code{__func__}, except that at file scope (or, in C++, namespace scope),
+it evaluates to the string @code{"top level"}.  In addition, in C++,
+@code{__PRETTY_FUNCTION__} contains the signature of the function as
+well as its bare name.  For example, this program:
+
+@smallexample
+extern "C" int printf (const char *, ...);
+
+class a @{
+ public:
+  void sub (int i)
+    @{
+      printf ("__FUNCTION__ = %s\n", __FUNCTION__);
+      printf ("__PRETTY_FUNCTION__ = %s\n", __PRETTY_FUNCTION__);
+    @}
+@};
+
+int
+main (void)
+@{
+  a ax;
+  ax.sub (0);
+  return 0;
+@}
+@end smallexample
+
+@noindent
+gives this output:
+
+@smallexample
+__FUNCTION__ = sub
+__PRETTY_FUNCTION__ = void a::sub(int)
+@end smallexample
+
+These identifiers are variables, not preprocessor macros, and may not
+be used to initialize @code{char} arrays or be concatenated with string
+literals.
+
+@node Semantic Extensions
+@section Extensions to C Semantics
+
+GNU C defines useful behavior for some constructs that are not allowed or
+well-defined in standard C.
+
+@menu
+* Function Prototypes::    Prototype declarations and old-style definitions.
+* Pointer Arith::          Arithmetic on @code{void}-pointers and function pointers.
+* Variadic Pointer Args::  Pointer arguments to variadic functions.
+* Pointers to Arrays::     Pointers to arrays with qualifiers work as expected.
+* Const and Volatile Functions:: GCC interprets these specially in C.
+@end menu
+
+@node Function Prototypes
+@subsection Prototypes and Old-Style Function Definitions
+@cindex function prototype declarations
+@cindex old-style function definitions
+@cindex promotion of formal parameters
+
+GNU C extends ISO C to allow a function prototype to override a later
+old-style non-prototype definition.  Consider the following example:
+
+@smallexample
+/* @r{Use prototypes unless the compiler is old-fashioned.}  */
+#ifdef __STDC__
+#define P(x) x
+#else
+#define P(x) ()
+#endif
+
+/* @r{Prototype function declaration.}  */
+int isroot P((uid_t));
+
+/* @r{Old-style function definition.}  */
+int
+isroot (x)   /* @r{??? lossage here ???} */
+     uid_t x;
+@{
+  return x == 0;
+@}
+@end smallexample
+
+Suppose the type @code{uid_t} happens to be @code{short}.  ISO C does
+not allow this example, because subword arguments in old-style
+non-prototype definitions are promoted.  Therefore in this example the
+function definition's argument is really an @code{int}, which does not
+match the prototype argument type of @code{short}.
+
+This restriction of ISO C makes it hard to write code that is portable
+to traditional C compilers, because the programmer does not know
+whether the @code{uid_t} type is @code{short}, @code{int}, or
+@code{long}.  Therefore, in cases like these GNU C allows a prototype
+to override a later old-style definition.  More precisely, in GNU C, a
+function prototype argument type overrides the argument type specified
+by a later old-style definition if the former type is the same as the
+latter type before promotion.  Thus in GNU C the above example is
+equivalent to the following:
+
+@smallexample
+int isroot (uid_t);
+
+int
+isroot (uid_t x)
+@{
+  return x == 0;
+@}
+@end smallexample
+
+@noindent
+GNU C++ does not support old-style function definitions, so this
+extension is irrelevant.
+
+@node Pointer Arith
+@subsection Arithmetic on @code{void}- and Function-Pointers
+@cindex void pointers, arithmetic
+@cindex void, size of pointer to
+@cindex function pointers, arithmetic
+@cindex function, size of pointer to
+
+In GNU C, addition and subtraction operations are supported on pointers to
+@code{void} and on pointers to functions.  This is done by treating the
+size of a @code{void} or of a function as 1.
+
+A consequence of this is that @code{sizeof} is also allowed on @code{void}
+and on function types, and returns 1.
+
+@opindex Wpointer-arith
+The option @option{-Wpointer-arith} requests a warning if these extensions
+are used.
+

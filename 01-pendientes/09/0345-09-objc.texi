@@ -1,0 +1,249 @@
+@c GCC 16.1.0 | BLOQUE 0345 | 09
+@c Fuente: gcc/doc/objc.texi | blob: b87f9db480a6d8249f896ed06885d9b908aec710
+@c Lineas originales: 583-827 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Garbage Collection
+@section Garbage Collection
+
+This section is specific for the GNU Objective-C runtime.  If you are
+using a different runtime, you can skip it.
+
+Support for garbage collection with the GNU runtime has been added by
+using a powerful conservative garbage collector, known as the
+Boehm-Demers-Weiser conservative garbage collector.
+
+To enable the support for it you have to configure the compiler using
+an additional argument, @w{@option{--enable-objc-gc}}.  This will
+build the boehm-gc library, and build an additional runtime library
+which has several enhancements to support the garbage collector.  The
+new library has a new name, @file{libobjc_gc.a} to not conflict with
+the non-garbage-collected library.
+
+When the garbage collector is used, the objects are allocated using the
+so-called typed memory allocation mechanism available in the
+Boehm-Demers-Weiser collector.  This mode requires precise information on
+where pointers are located inside objects.  This information is computed
+once per class, immediately after the class has been initialized.
+
+There is a new runtime function @code{class_ivar_set_gcinvisible()}
+which can be used to declare a so-called @dfn{weak pointer}
+reference.  Such a pointer is basically hidden for the garbage collector;
+this can be useful in certain situations, especially when you want to
+keep track of the allocated objects, yet allow them to be
+collected.  This kind of pointers can only be members of objects, you
+cannot declare a global pointer as a weak reference.  Every type which is
+a pointer type can be declared a weak pointer, including @code{id},
+@code{Class} and @code{SEL}.
+
+Here is an example of how to use this feature.  Suppose you want to
+implement a class whose instances hold a weak pointer reference; the
+following class does this:
+
+@smallexample
+
+@@interface WeakPointer : Object
+@{
+    const void* weakPointer;
+@}
+
+- initWithPointer:(const void*)p;
+- (const void*)weakPointer;
+@@end
+
+
+@@implementation WeakPointer
+
++ (void)initialize
+@{
+  if (self == objc_lookUpClass ("WeakPointer"))
+    class_ivar_set_gcinvisible (self, "weakPointer", YES);
+@}
+
+- initWithPointer:(const void*)p
+@{
+  weakPointer = p;
+  return self;
+@}
+
+- (const void*)weakPointer
+@{
+  return weakPointer;
+@}
+
+@@end
+
+@end smallexample
+
+Weak pointers are supported through a new type character specifier
+represented by the @samp{!} character.  The
+@code{class_ivar_set_gcinvisible()} function adds or removes this
+specifier to the string type description of the instance variable named
+as argument.
+
+@c =========================================================================
+@node Constant string objects
+@section Constant String Objects
+
+GNU Objective-C provides constant string objects that are generated
+directly by the compiler.  You declare a constant string object by
+prefixing a C constant string with the character @samp{@@}:
+
+@smallexample
+  id myString = @@"this is a constant string object";
+@end smallexample
+
+The constant string objects are by default instances of the
+@code{NXConstantString} class which is provided by the GNU Objective-C
+runtime.  To get the definition of this class you must include the
+@file{objc/NXConstStr.h} header file.
+
+User defined libraries may want to implement their own constant string
+class.  To be able to support them, the GNU Objective-C compiler provides
+a new command line options @option{-fconstant-string-class=@var{class-name}}.
+The provided class should adhere to a strict structure, the same
+as @code{NXConstantString}'s structure:
+
+@smallexample
+
+@@interface MyConstantStringClass
+@{
+  Class isa;
+  char *c_string;
+  unsigned int len;
+@}
+@@end
+
+@end smallexample
+
+@code{NXConstantString} inherits from @code{Object}; user class
+libraries may choose to inherit the customized constant string class
+from a different class than @code{Object}.  There is no requirement in
+the methods the constant string class has to implement, but the final
+ivar layout of the class must be the compatible with the given
+structure.
+
+When the compiler creates the statically allocated constant string
+object, the @code{c_string} field will be filled by the compiler with
+the string; the @code{length} field will be filled by the compiler with
+the string length; the @code{isa} pointer will be filled with
+@code{NULL} by the compiler, and it will later be fixed up automatically
+at runtime by the GNU Objective-C runtime library to point to the class
+which was set by the @option{-fconstant-string-class} option when the
+object file is loaded (if you wonder how it works behind the scenes, the
+name of the class to use, and the list of static objects to fixup, are
+stored by the compiler in the object file in a place where the GNU
+runtime library will find them at runtime).
+
+As a result, when a file is compiled with the
+@option{-fconstant-string-class} option, all the constant string objects
+will be instances of the class specified as argument to this option.  It
+is possible to have multiple compilation units referring to different
+constant string classes, neither the compiler nor the linker impose any
+restrictions in doing this.
+
+@c =========================================================================
+@node compatibility_alias
+@section @code{compatibility_alias}
+
+The keyword @code{@@compatibility_alias} allows you to define a class name
+as equivalent to another class name.  For example:
+
+@smallexample
+@@compatibility_alias WOApplication GSWApplication;
+@end smallexample
+
+tells the compiler that each time it encounters @code{WOApplication} as
+a class name, it should replace it with @code{GSWApplication} (that is,
+@code{WOApplication} is just an alias for @code{GSWApplication}).
+
+There are some constraints on how this can be used---
+
+@itemize @bullet
+
+@item @code{WOApplication} (the alias) must not be an existing class;
+
+@item @code{GSWApplication} (the real class) must be an existing class.
+
+@end itemize
+
+@c =========================================================================
+@node Exceptions
+@section Exceptions
+
+GNU Objective-C provides exception support built into the language, as
+in the following example:
+
+@smallexample
+  @@try @{
+    @dots{}
+       @@throw expr;
+    @dots{}
+  @}
+  @@catch (AnObjCClass *exc) @{
+    @dots{}
+      @@throw expr;
+    @dots{}
+      @@throw;
+    @dots{}
+  @}
+  @@catch (AnotherClass *exc) @{
+    @dots{}
+  @}
+  @@catch (id allOthers) @{
+    @dots{}
+  @}
+  @@finally @{
+    @dots{}
+      @@throw expr;
+    @dots{}
+  @}
+@end smallexample
+
+The @code{@@throw} statement may appear anywhere in an Objective-C or
+Objective-C++ program; when used inside of a @code{@@catch} block, the
+@code{@@throw} may appear without an argument (as shown above), in
+which case the object caught by the @code{@@catch} will be rethrown.
+
+Note that only (pointers to) Objective-C objects may be thrown and
+caught using this scheme.  When an object is thrown, it will be caught
+by the nearest @code{@@catch} clause capable of handling objects of
+that type, analogously to how @code{catch} blocks work in C++ and
+Java.  A @code{@@catch(id @dots{})} clause (as shown above) may also
+be provided to catch any and all Objective-C exceptions not caught by
+previous @code{@@catch} clauses (if any).
+
+The @code{@@finally} clause, if present, will be executed upon exit
+from the immediately preceding @code{@@try @dots{} @@catch} section.
+This will happen regardless of whether any exceptions are thrown,
+caught or rethrown inside the @code{@@try @dots{} @@catch} section,
+analogously to the behavior of the @code{finally} clause in Java.
+
+There are several caveats to using the new exception mechanism:
+
+@itemize @bullet
+@item
+The @option{-fobjc-exceptions} command line option must be used when
+compiling Objective-C files that use exceptions.
+
+@item
+With the GNU runtime, exceptions are always implemented as ``native''
+exceptions and it is recommended that the @option{-fexceptions} and
+@option{-shared-libgcc} options are used when linking.
+
+@item
+With the NeXT runtime, although currently designed to be binary
+compatible with @code{NS_HANDLER}-style idioms provided by the
+@code{NSException} class, the new exceptions can only be used on Mac
+OS X 10.3 (Panther) and later systems, due to additional functionality
+needed in the NeXT Objective-C runtime.
+
+@item
+As mentioned above, the new exceptions do not support handling
+types other than Objective-C objects.   Furthermore, when used from
+Objective-C++, the Objective-C exception model does not interoperate with C++
+exceptions at this time.  This means you cannot @code{@@throw} an exception
+from Objective-C and @code{catch} it in C++, or vice versa
+(i.e., @code{throw @dots{} @@catch}).
+@end itemize
+
+@c =========================================================================

@@ -1,0 +1,227 @@
+@c GCC 16.1.0 | BLOQUE 0280 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 17173-17395 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+Note that the C++11 standard allows for the memory order parameter to be
+determined at run time rather than at compile time.  These built-in
+functions map any run-time value to @code{__ATOMIC_SEQ_CST} rather
+than invoke a runtime library call or inline a switch statement.  This is
+standard compliant, safe, and the simplest approach for now.
+
+The memory order parameter is a signed int, but only the lower 16 bits are
+reserved for the memory order.  The remainder of the signed int is reserved
+for target use and should be 0.  Use of the predefined atomic values
+ensures proper usage.
+
+@anchor{x86 specific memory model extensions for transactional memory}
+@cindex x86 transactional memory extensions
+@cindex transactional memory extensions for x86
+The x86 architecture supports additional memory ordering modifiers
+to mark critical sections for hardware lock elision.
+These modifiers can be bitwise or'ed with a standard memory order to
+atomic intrinsics.
+
+@table @code
+@item __ATOMIC_HLE_ACQUIRE
+Start lock elision on a lock variable.
+Memory order must be @code{__ATOMIC_ACQUIRE} or stronger.
+@item __ATOMIC_HLE_RELEASE
+End lock elision on a lock variable.
+Memory order must be @code{__ATOMIC_RELEASE} or stronger.
+@end table
+
+When a lock acquire fails, it is required for good performance to abort
+the transaction quickly. This can be done with a @code{_mm_pause}.
+
+@smallexample
+#include <immintrin.h> // For _mm_pause
+
+int lockvar;
+
+/* Acquire lock with lock elision */
+while (__atomic_exchange_n(&lockvar, 1, __ATOMIC_ACQUIRE|__ATOMIC_HLE_ACQUIRE))
+    _mm_pause(); /* Abort failed transaction */
+...
+/* Free lock with lock elision */
+__atomic_store_n(&lockvar, 0, __ATOMIC_RELEASE|__ATOMIC_HLE_RELEASE);
+@end smallexample
+
+@defbuiltin{@var{type} __atomic_load_n (@var{type} *@var{ptr}, int @var{memorder})}
+This built-in function implements an atomic load operation.  It returns the
+contents of @code{*@var{ptr}}.
+
+The valid memory order variants are
+@code{__ATOMIC_RELAXED}, @code{__ATOMIC_SEQ_CST}, @code{__ATOMIC_ACQUIRE},
+and @code{__ATOMIC_CONSUME}.
+
+@enddefbuiltin
+
+@defbuiltin{void __atomic_load (@var{type} *@var{ptr}, @var{type} *@var{ret}, int @var{memorder})}
+This is the generic version of an atomic load.  It returns the
+contents of @code{*@var{ptr}} in @code{*@var{ret}}.
+
+@enddefbuiltin
+
+@defbuiltin{void __atomic_store_n (@var{type} *@var{ptr}, @var{type} @var{val}, int @var{memorder})}
+This built-in function implements an atomic store operation.  It writes 
+@code{@var{val}} into @code{*@var{ptr}}.  
+
+The valid memory order variants are
+@code{__ATOMIC_RELAXED}, @code{__ATOMIC_SEQ_CST}, and @code{__ATOMIC_RELEASE}.
+
+@enddefbuiltin
+
+@defbuiltin{void __atomic_store (@var{type} *@var{ptr}, @var{type} *@var{val}, int @var{memorder})}
+This is the generic version of an atomic store.  It stores the value
+of @code{*@var{val}} into @code{*@var{ptr}}.
+
+@enddefbuiltin
+
+@defbuiltin{@var{type} __atomic_exchange_n (@var{type} *@var{ptr}, @var{type} @var{val}, int @var{memorder})}
+This built-in function implements an atomic exchange operation.  It writes
+@var{val} into @code{*@var{ptr}}, and returns the previous contents of
+@code{*@var{ptr}}.
+
+All memory order variants are valid.
+
+@enddefbuiltin
+
+@defbuiltin{void __atomic_exchange (@var{type} *@var{ptr}, @var{type} *@var{val}, @var{type} *@var{ret}, int @var{memorder})}
+This is the generic version of an atomic exchange.  It stores the
+contents of @code{*@var{val}} into @code{*@var{ptr}}. The original value
+of @code{*@var{ptr}} is copied into @code{*@var{ret}}.
+
+@enddefbuiltin
+
+@defbuiltin{bool __atomic_compare_exchange_n (@var{type} *@var{ptr}, @var{type} *@var{expected}, @var{type} @var{desired}, bool @var{weak}, int @var{success_memorder}, int @var{failure_memorder})}
+This built-in function implements an atomic compare and exchange operation.
+This compares the contents of @code{*@var{ptr}} with the contents of
+@code{*@var{expected}}. If equal, the operation is a @emph{read-modify-write}
+operation that writes @var{desired} into @code{*@var{ptr}}.  If they are not
+equal, the operation is a @emph{read} and the current contents of
+@code{*@var{ptr}} are written into @code{*@var{expected}}.  @var{weak} is @code{true}
+for weak compare_exchange, which may fail spuriously, and @code{false} for
+the strong variation, which never fails spuriously.  Many targets
+only offer the strong variation and ignore the parameter.  When in doubt, use
+the strong variation.
+
+If @var{desired} is written into @code{*@var{ptr}} then @code{true} is returned
+and memory is affected according to the
+memory order specified by @var{success_memorder}.  There are no
+restrictions on what memory order can be used here.
+
+Otherwise, @code{false} is returned and memory is affected according
+to @var{failure_memorder}. This memory order cannot be
+@code{__ATOMIC_RELEASE} nor @code{__ATOMIC_ACQ_REL}.  It also cannot be a
+stronger order than that specified by @var{success_memorder}.
+
+@enddefbuiltin
+
+@defbuiltin{bool __atomic_compare_exchange (@var{type} *@var{ptr}, @var{type} *@var{expected}, @var{type} *@var{desired}, bool @var{weak}, int @var{success_memorder}, int @var{failure_memorder})}
+This built-in function implements the generic version of
+@code{__atomic_compare_exchange}.  The function is virtually identical to
+@code{__atomic_compare_exchange_n}, except the desired value is also a
+pointer.
+
+@enddefbuiltin
+
+@defbuiltin{@var{type} __atomic_add_fetch (@var{type} *@var{ptr}, @var{type} @var{val}, int @var{memorder})}
+@defbuiltinx{@var{type} __atomic_sub_fetch (@var{type} *@var{ptr}, @var{type} @var{val}, int @var{memorder})}
+@defbuiltinx{@var{type} __atomic_and_fetch (@var{type} *@var{ptr}, @var{type} @var{val}, int @var{memorder})}
+@defbuiltinx{@var{type} __atomic_xor_fetch (@var{type} *@var{ptr}, @var{type} @var{val}, int @var{memorder})}
+@defbuiltinx{@var{type} __atomic_or_fetch (@var{type} *@var{ptr}, @var{type} @var{val}, int @var{memorder})}
+@defbuiltinx{@var{type} __atomic_nand_fetch (@var{type} *@var{ptr}, @var{type} @var{val}, int @var{memorder})}
+These built-in functions perform the operation suggested by the name, and
+return the result of the operation.  Operations on pointer arguments are
+performed as if the operands were of the @code{uintptr_t} type.  That is,
+they are not scaled by the size of the type to which the pointer points.
+
+@smallexample
+@{ *ptr @var{op}= val; return *ptr; @}
+@{ *ptr = ~(*ptr & val); return *ptr; @} // nand
+@end smallexample
+
+The object pointed to by the first argument must be of integer or pointer
+type.  It must not be a boolean type.  All memory orders are valid.
+
+@enddefbuiltin
+
+@defbuiltin{@var{type} __atomic_fetch_add (@var{type} *@var{ptr}, @var{type} @var{val}, int @var{memorder})}
+@defbuiltinx{@var{type} __atomic_fetch_sub (@var{type} *@var{ptr}, @var{type} @var{val}, int @var{memorder})}
+@defbuiltinx{@var{type} __atomic_fetch_and (@var{type} *@var{ptr}, @var{type} @var{val}, int @var{memorder})}
+@defbuiltinx{@var{type} __atomic_fetch_xor (@var{type} *@var{ptr}, @var{type} @var{val}, int @var{memorder})}
+@defbuiltinx{@var{type} __atomic_fetch_or (@var{type} *@var{ptr}, @var{type} @var{val}, int @var{memorder})}
+@defbuiltinx{@var{type} __atomic_fetch_nand (@var{type} *@var{ptr}, @var{type} @var{val}, int @var{memorder})}
+These built-in functions perform the operation suggested by the name, and
+return the value that had previously been in @code{*@var{ptr}}.  Operations
+on pointer arguments are performed as if the operands were of
+the @code{uintptr_t} type.  That is, they are not scaled by the size of
+the type to which the pointer points.
+
+@smallexample
+@{ tmp = *ptr; *ptr @var{op}= val; return tmp; @}
+@{ tmp = *ptr; *ptr = ~(*ptr & val); return tmp; @} // nand
+@end smallexample
+
+The same constraints on arguments apply as for the corresponding
+@code{__atomic_op_fetch} built-in functions.  All memory orders are valid.
+
+@enddefbuiltin
+
+@defbuiltin{bool __atomic_test_and_set (void *@var{ptr}, int @var{memorder})}
+
+This built-in function performs an atomic test-and-set operation on
+the byte at @code{*@var{ptr}}.  The byte is set to some implementation
+defined nonzero ``set'' value and the return value is @code{true} if and only
+if the previous contents were ``set''.
+It should be only used for operands of type @code{bool} or @code{char}. For 
+other types only part of the value may be set.
+
+All memory orders are valid.
+
+@enddefbuiltin
+
+@defbuiltin{void __atomic_clear (bool *@var{ptr}, int @var{memorder})}
+
+This built-in function performs an atomic clear operation on
+@code{*@var{ptr}}.  After the operation, @code{*@var{ptr}} contains 0.
+It should be only used for operands of type @code{bool} or @code{char} and 
+in conjunction with @code{__atomic_test_and_set}.
+For other types it may only clear partially. If the type is not @code{bool}
+prefer using @code{__atomic_store}.
+
+The valid memory order variants are
+@code{__ATOMIC_RELAXED}, @code{__ATOMIC_SEQ_CST}, and
+@code{__ATOMIC_RELEASE}.
+
+@enddefbuiltin
+
+@defbuiltin{void __atomic_thread_fence (int @var{memorder})}
+
+This built-in function acts as a synchronization fence between threads
+based on the specified memory order.
+
+All memory orders are valid.
+
+@enddefbuiltin
+
+@defbuiltin{void __atomic_signal_fence (int @var{memorder})}
+
+This built-in function acts as a synchronization fence between a thread
+and signal handlers based in the same thread.
+
+All memory orders are valid.
+
+@enddefbuiltin
+
+@defbuiltin{bool __atomic_always_lock_free (size_t @var{size},  void *@var{ptr})}
+
+This built-in function returns @code{true} if objects of @var{size} bytes always
+generate lock-free atomic instructions for the target architecture.
+@var{size} must resolve to a compile-time constant and the result also
+resolves to a compile-time constant.
+
+@var{ptr} is an optional pointer to the object that may be used to determine
+alignment.  A value of 0 indicates typical alignment should be used.  The 
+compiler may also ignore this parameter.
+

@@ -1,0 +1,241 @@
+@c GCC 16.1.0 | BLOQUE 0353 | 11
+@c Fuente: gcc/doc/gcov.texi | blob: 7080f7c4a2a425fd68d595c0634da86252a3b364
+@c Lineas originales: 1115-1351 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@smallexample
+$ gcov -t --prime-paths-source tmp
+        -:    0:Source:tmp.cpp
+        -:    0:Graph:tmp.gcno
+        -:    0:Data:tmp.gcda
+        -:    0:Runs:1
+        -:    1:#include <stdio.h>
+        -:    2:
+paths covered 4 of 15
+path 1:
+BB  2:           3:int main ()
+BB  2:           6:  total = 0;
+BB  2:           8:  for (i = 0; i < 10; i++)
+BB  4: (false)   8:  for (i = 0; i < 10; i++)
+BB  5: (true)   11:  int v = total > 100 ? 1 : 2;
+BB  6:          11:  int v = total > 100 ? 1 : 2;
+BB  8: (true)   13:  if (total != 45 && v == 1)
+BB  9: (true)   13:  if (total != 45 && v == 1)
+BB 10:          14:    printf ("Failure\n");
+BB 12:          17:  return 0;
+@end smallexample
+
+In this mode, gcov will print details on the missing paths.  The first
+column lists the sequence of basic blocks (BB).  The second column is
+the decision to take at that line if there is one.  The final columns
+are the line number and the line itself.  This is useful for
+understanding the paths, in particular those that are hard to cover or
+even unreachable.  Lines may be repeated, for example the @code{for}
+loop, if the same line is a part of multiple basic blocks.  This mode is
+intended for humans and good at understanding what code is exercised
+under testing or for given inputs.  This output is quite verbose, and
+for focusing on specific functions it can be combined with the filters
+@option{--include} and @option{--exclude}.
+
+A denser output is available with @option{--prime-paths-lines}, which
+looks like this:
+
+@smallexample
+        -:    0:Source:tmp.cpp
+        -:    0:Graph:tmp.gcno
+        -:    0:Data:tmp.gcda
+        -:    0:Runs:1
+        -:    1:#include <stdio.h>
+        -:    2:
+paths covered 4 of 15
+path  1 not covered: lines 8 8(false) 11(true) 11 13(true) 13(true) 14 17
+path  2 not covered: lines 8 8(false) 11(true) 11 13(true) 13(false) 16 17
+path  3 not covered: lines 8 8(false) 11(true) 11 13(false) 16 17
+path  4 not covered: lines 8 8(false) 11(false) 11 13(true) 13(true) 14 17
+path  5 not covered: lines 8 8(false) 11(false) 11 13(true) 13(false) 16 17
+path  6 not covered: lines 8 8(false) 11(false) 11 13(false) 16 17
+path  8 not covered: lines 9 8(false) 11(true) 11 13(true) 13(true) 14 17
+path  9 not covered: lines 9 8(false) 11(true) 11 13(true) 13(false) 16 17
+path 10 not covered: lines 9 8(false) 11(true) 11 13(false) 16 17
+path 11 not covered: lines 9 8(false) 11(false) 11 13(true) 13(true) 14 17
+path 12 not covered: lines 9 8(false) 11(false) 11 13(true) 13(false) 16 17
+        1:    3:int main ()
+        -:    4:@{
+@end smallexample
+
+In this mode, every missing path is expanded using the lines and
+decisions like @option{--prime-paths-source} but printed on a single
+line.  This mode provides a good overview over the paths and for
+tracking how different tests and inputs exercises the code.
+
+The execution counts are cumulative.  If the example program were
+executed again without removing the @file{.gcda} file, the count for the
+number of times each line in the source was executed would be added to
+the results of the previous run(s).  This is potentially useful in
+several ways.  For example, it could be used to accumulate data over a
+number of program runs as part of a test verification suite, or to
+provide more accurate long-term information over a large number of
+program runs.
+
+The data in the @file{.gcda} files is saved immediately before the program
+exits.  For each source file compiled with @option{-fprofile-arcs}, the
+profiling code first attempts to read in an existing @file{.gcda} file; if
+the file doesn't match the executable (differing number of basic block
+counts) it will ignore the contents of the file.  It then adds in the
+new execution counts and finally writes the data to the file.
+
+You can report on a subset of functions by using @option{--include}
+and @option{--exclude}.  This is very useful when combined with
+@option{--stdout} trying to understand behavior and coverage for a
+particular function by running a test, looking at @command{gcov}
+output, testing another input, and running @command{gcov} again.
+
+@smallexample
+$ gcov -m --stdout --include inc tmp
+        -:    0:Source:tmp.cpp
+        -:    0:Graph:tmp.gcno
+        -:    0:Data:tmp.gcda
+        -:    0:Runs:1
+       2*:    8:  void inc () @{ b++; @}
+------------------
+Foo<char>::inc():
+    #####:    8:  void inc () @{ b++; @}
+------------------
+Foo<int>::inc():
+        2:    8:  void inc () @{ b++; @}
+------------------
+@end smallexample
+
+@command{gcov} will match on mangled names by default, which you can
+control with the @option{-M} flag.  Note that matching and reporting
+are independent, so you can match on mangled names while printing
+demangled names, and vice versa.  To report on the @code{int}
+instantiation of @code{Foo} matching on mangled and demangled names:
+
+@smallexample
+$ gcov -t -m -M tmp --include 'Foo<int>'
+        -:    0:Source:tmp.cpp
+        -:    0:Graph:tmp.gcno
+        -:    0:Data:tmp.gcda
+        -:    0:Runs:1
+        1:    7:  Foo(): b (1000) @{@}
+        2:    8:  void inc () @{ b++; @}
+@end smallexample
+
+@smallexample
+$ gcov -t -m tmp --include 'FooIi'
+        -:    0:Source:tmp.cpp
+        -:    0:Graph:tmp.gcno
+        -:    0:Data:tmp.gcda
+        -:    0:Runs:1
+        1:    7:  Foo(): b (1000) @{@}
+        2:    8:  void inc () @{ b++; @}
+@end smallexample
+
+The arguments to @option{--include} and @option{--exclude} are
+extended regular expressions (like @command{grep -E}), so the pattern
+@code{in.?} matches both @code{inc} and @code{main}.  If used with
+@option{-M} then all @code{int} instantiations of @code{Foo} would
+match too.  @option{--include} and @option{--exclude} can be used
+multiple times, and if a name matches multiple filters it is the last
+one to match which takes preference.  For example, to match
+@code{main} and the @code{int} instatiation of @code{inc}, while
+omitting the @code{Foo} constructor:
+
+@smallexample
+$ gcov -t -m -M --include in --exclude Foo --include '<int>::inc' tmp
+        -:    0:Source:tmp.cpp
+        -:    0:Graph:tmp.gcno
+        -:    0:Data:tmp.gcda
+        -:    0:Runs:1
+        2:    8:  void inc () @{ b++; @}
+        1:   18:main (void)
+        -:   19:@{
+        -:   20:  int i, total;
+        1:   21:  Foo<int> counter;
+        -:   22:
+        1:   23:  counter.inc();
+        1:   24:  counter.inc();
+        1:   25:  total = 0;
+        -:   26:
+       11:   27:  for (i = 0; i < 10; i++)
+       10:   28:    total += i;
+        -:   29:
+       1*:   30:  int v = total > 100 ? 1 : 2;
+        -:   31:
+        1:   32:  if (total != 45)
+    #####:   33:    printf ("Failure\n");
+        -:   34:  else
+        1:   35:    printf ("Success\n");
+        1:   36:  return 0;
+@end smallexample
+
+@node Gcov and Optimization
+@section Using @command{gcov} with GCC Optimization
+
+If you plan to use @command{gcov} to help optimize your code, you must
+first compile your program with a special GCC option
+@samp{--coverage}.  Aside from that, you can use any
+other GCC options; but if you want to prove that every single line
+in your program was executed, you should not compile with optimization
+at the same time.  On some machines the optimizer can eliminate some
+simple code lines by combining them with other lines.  For example, code
+like this:
+
+@smallexample
+if (a != b)
+  c = 1;
+else
+  c = 0;
+@end smallexample
+
+@noindent
+can be compiled into one instruction on some machines.  In this case,
+there is no way for @command{gcov} to calculate separate execution counts
+for each line because there isn't separate code for each line.  Hence
+the @command{gcov} output looks like this if you compiled the program with
+optimization:
+
+@smallexample
+      100:   12:if (a != b)
+      100:   13:  c = 1;
+      100:   14:else
+      100:   15:  c = 0;
+@end smallexample
+
+The output shows that this block of code, combined by optimization,
+executed 100 times.  In one sense this result is correct, because there
+was only one instruction representing all four of these lines.  However,
+the output does not indicate how many times the result was 0 and how
+many times the result was 1.
+
+Inlineable functions can create unexpected line counts.  Line counts are
+shown for the source code of the inlineable function, but what is shown
+depends on where the function is inlined, or if it is not inlined at all.
+
+If the function is not inlined, the compiler must emit an out of line
+copy of the function, in any object file that needs it.  If
+@file{fileA.o} and @file{fileB.o} both contain out of line bodies of a
+particular inlineable function, they will also both contain coverage
+counts for that function.  When @file{fileA.o} and @file{fileB.o} are
+linked together, the linker will, on many systems, select one of those
+out of line bodies for all calls to that function, and remove or ignore
+the other.  Unfortunately, it will not remove the coverage counters for
+the unused function body.  Hence when instrumented, all but one use of
+that function will show zero counts.
+
+If the function is inlined in several places, the block structure in
+each location might not be the same.  For instance, a condition might
+now be calculable at compile time in some instances.  Because the
+coverage of all the uses of the inline function will be shown for the
+same source lines, the line counts themselves might seem inconsistent.
+
+Long-running applications can use the @code{__gcov_reset} and @code{__gcov_dump}
+facilities to restrict profile collection to the program region of
+interest. Calling @code{__gcov_reset(void)} will clear all run-time profile
+counters to zero, and calling @code{__gcov_dump(void)} will cause the profile
+information collected at that point to be dumped to @file{.gcda} output files.
+Instrumented applications use a static destructor with priority 99
+to invoke the @code{__gcov_dump} function. Thus @code{__gcov_dump}
+is executed after all user defined static destructors,
+as well as handlers registered with @code{atexit}.
+

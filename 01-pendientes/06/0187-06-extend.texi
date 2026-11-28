@@ -1,0 +1,251 @@
+@c GCC 16.1.0 | BLOQUE 0187 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 2695-2941 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+This example uses the @code{deprecated} enumerator attribute to indicate the
+@code{oldval} enumerator is deprecated:
+
+@smallexample
+enum E @{
+  oldval __attribute__((deprecated)),
+  newval
+@};
+
+int
+fn (void)
+@{
+  return oldval;
+@}
+@end smallexample
+
+The optional @var{msg}
+argument, which must be a string, is printed in the warning if
+present.
+The @var{msg} string is affected by the setting of
+the @option{-fmessage-length} option.
+Control characters in the @var{msg} string are replaced with
+escape sequences, and if the @option{-fmessage-length} option is set
+to 0 (its default value) then any newline characters are ignored.
+
+@atindex @code{designated_init}
+@item designated_init
+This attribute may only be applied to structure types.
+
+It indicates that any initialization of an object of this type must
+use designated initializers rather than positional initializers.  The
+intent of this attribute is to allow the programmer to indicate that a
+structure's layout may change, and that therefore relying on
+positional initialization will result in future breakage.
+
+GCC emits warnings based on this attribute by default; use
+@option{-Wno-designated-init} to suppress them.
+
+@atindex @code{error}
+@atindex @code{warning}
+@cindex functions that are supposed to be optimized away
+@item error ("@var{message}")
+@itemx warning ("@var{message}")
+This attribute applies to functions.
+
+If the @code{error} or @code{warning} attribute 
+is used on a function declaration and a call to such a function
+is not eliminated through dead code elimination or other optimizations, 
+an error or warning (respectively) that includes @var{message} is diagnosed.  
+This is useful
+for compile-time checking, especially together with @code{__builtin_constant_p}
+and inline functions where checking the inline function arguments is not
+possible through @code{extern char [(condition) ? 1 : -1];} tricks.
+
+While it is possible to leave the function undefined and thus invoke
+a link failure (to define the function with
+a message in @code{.gnu.warning*} section),
+when using these attributes the problem is diagnosed
+earlier and with exact location of the call even in presence of inline
+functions or when not emitting debugging information.
+
+@atindex @code{expected_throw}
+@cindex functions that are expected to throw exceptions
+@item expected_throw
+This attribute applies to functions.
+
+It tells the compiler the function
+is more likely to raise or propagate an exception than to return, loop
+forever, or terminate the program.
+
+This hint is mostly ignored by the compiler.  The only effect is when
+it's applied to @code{noreturn} functions and
+@samp{-fharden-control-flow-redundancy} is enabled, and
+@samp{-fhardcfr-check-noreturn-calls=not-always} is not overridden.
+
+@atindex @code{externally_visible}
+@item externally_visible
+This attribute applies to global variables and functions.
+
+It nullifies
+the effect of the @option{-fwhole-program} command-line option, so the
+object remains visible outside the current compilation unit.
+
+If @option{-fwhole-program} is used together with @option{-flto} and 
+@command{gold} is used as the linker plugin, 
+@code{externally_visible} attributes are automatically added to functions 
+(not variables yet due to a current @command{gold} issue)
+that are accessed outside of LTO objects according to resolution file
+produced by @command{gold}.
+For other linkers that cannot generate resolution file,
+explicit @code{externally_visible} attributes are still necessary.
+
+@atindex @code{fallthrough}
+@cindex fallthrough in switch statements
+@cindex switch statement fallthrough
+@item fallthrough
+This statement attribute can appear only as an attribute declaration.
+
+The @code{fallthrough} attribute serves as a
+fallthrough statement.  It hints to the compiler that a statement
+that falls through to another case label, or user-defined label
+in a switch statement is intentional and thus the
+@option{-Wimplicit-fallthrough} warning must not trigger.  The
+fallthrough attribute may appear at most once in each attribute
+list, and may not be mixed with other attributes.  It can only
+be used in a switch statement (the compiler issues an error
+otherwise), after a preceding statement and before a logically
+succeeding case label, or user-defined label.
+
+This example uses the @code{fallthrough} statement attribute to indicate that
+the @option{-Wimplicit-fallthrough} warning should not be emitted:
+
+@smallexample
+switch (cond)
+  @{
+  case 1:
+    bar (1);
+    __attribute__((fallthrough));
+  case 2:
+    @dots{}
+  @}
+@end smallexample
+
+@atindex @code{fd_arg}
+@atindex @code{fd_arg_read}
+@atindex @code{fd_arg_write}
+@cindex functions that take file descriptor arguments
+@item fd_arg (@var{N})
+@itemx fd_arg_read (@var{N})
+@itemx fd_arg_write (@var{N})
+These attributes may be applied to functions that take an open
+file descriptor at referenced argument @var{N}.
+
+The @code{fd_arg} attribute
+indicates that the passed file descriptor must not have been closed.
+Therefore, when the analyzer is enabled with @option{-fanalyzer}, the
+analyzer may emit a @option{-Wanalyzer-fd-use-after-close} diagnostic
+if it detects a code path in which a function with this attribute is
+called with a closed file descriptor.
+
+The attribute also indicates that the file descriptor must have been
+checked for validity before usage. Therefore, analyzer may emit a
+@option{-Wanalyzer-fd-use-without-check} diagnostic if it detects a
+code path in
+which a function with this attribute is called with a file descriptor that has
+not been checked for validity.
+
+The @code{fd_arg_read} attribute is identical to @code{fd_arg},
+but with the additional
+requirement that the function might read from the file descriptor,
+and thus, the file
+descriptor must not have been opened as write-only.
+
+The analyzer may emit a @option{-Wanalyzer-access-mode-mismatch}
+diagnostic if it detects a code path in which a function with this
+attribute is called on a file descriptor opened with @code{O_WRONLY}.
+
+Similarly, the @code{fd_arg_write} attribute is identical to @code{fd_arg}
+except that the
+analyzer may emit a @option{-Wanalyzer-access-mode-mismatch} diagnostic if
+it detects a code path in which a function with this attribute is called on a
+file descriptor opened with @code{O_RDONLY}.
+
+@cindex @code{flag_enum} type attribute
+@item flag_enum
+This attribute may be applied to an enumerated type.
+
+It indicates
+that its enumerators are used in bitwise operations, so e.g. @option{-Wswitch}
+should not warn about a @code{case} that corresponds to a bitwise
+combination of enumerators.
+
+@atindex @code{flatten}
+@cindex inlining
+@cindex function inlining
+@item flatten
+This attribute applies to functions.
+
+Generally, inlining into a function is limited.  For a function marked with
+this attribute, every call inside this function is inlined including the
+calls such inlining introduces to the function (but not recursive calls
+to the function itself), if possible.
+Functions declared with attribute @code{noinline} and similar are not
+inlined.  Whether the function itself is considered for inlining depends
+on its size and the current inlining parameters.
+
+@atindex @code{format}
+@cindex functions with @code{printf}, @code{scanf}, @code{strftime} or @code{strfmon} style arguments
+@cindex functions that have format string arguments
+@opindex Wformat
+@item format (@var{archetype}, @var{string-index}, @var{first-to-check})
+The @code{format} attribute applies to functions.
+
+It specifies that the function takes @code{printf},
+@code{scanf}, @code{strftime} or @code{strfmon} style arguments that
+should be type-checked against a format string.  For example, the
+declaration:
+
+@smallexample
+[[gnu::format (printf, 2, 3)]]
+extern int
+my_printf (void *my_object, const char *my_format, ...);
+@end smallexample
+
+@noindent
+causes the compiler to check the arguments in calls to @code{my_printf}
+for consistency with the @code{printf} style format string argument
+@code{my_format}.
+
+The parameter @var{archetype} determines how the format string is
+interpreted.
+Valid archetypes include @code{printf}, @code{scanf}, @code{strftime},
+@code{gnu_printf}, @code{gnu_scanf}, @code{gnu_strftime} or
+@code{strfmon}.  (You can also use @code{__printf__},
+@code{__scanf__}, @code{__strftime__} or @code{__strfmon__}.)
+@var{archetype} values such as @code{printf} refer to the formats accepted
+by the system's C runtime library,
+while values prefixed with @samp{gnu_} always refer
+to the formats accepted by the GNU C Library.
+
+@anchor{Target Format Checks}
+On MinGW and Microsoft Windows targets, @code{ms_printf},
+@code{ms_scanf}, and @code{ms_strftime} are also present.  Values
+prefixed with @samp{ms_} refer to the formats accepted by the
+@file{msvcrt.dll} library.
+
+@anchor{Solaris Format Checks}
+Solaris targets also support the @code{cmn_err} (or @code{__cmn_err__})
+archetype.
+@code{cmn_err} accepts a subset of the standard @code{printf}
+conversions, and the two-argument @code{%b} conversion for displaying
+bit-fields.  See the Solaris man page for @code{cmn_err} for more information.
+
+@anchor{Darwin Format Checks}
+Darwin targets also support the @code{CFString} (or
+@code{__CFString__}) archetype in the @code{format} attribute.
+Declarations with this archetype are parsed for correct syntax
+and argument types.  However, parsing of the format string itself and
+validating arguments against it in calls to such functions is currently
+not performed.
+
+For Objective-C dialects, @code{NSString} (or @code{__NSString__}) is
+recognized in the same context.  Declarations including these format attributes
+are parsed for correct syntax, however the result of checking of such format
+strings is not yet defined, and is not carried out by this version of the
+compiler.
+

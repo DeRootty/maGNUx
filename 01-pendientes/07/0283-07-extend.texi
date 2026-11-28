@@ -1,0 +1,239 @@
+@c GCC 16.1.0 | BLOQUE 0283 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 17764-17998 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Other Builtins
+@section Other Built-in Functions Provided by GCC
+
+This section documents miscellaneous built-in functions available in GCC.
+
+
+@defbuiltin{bool __builtin_has_attribute (@var{type-or-expression}, @var{attribute})}
+The @code{__builtin_has_attribute} function evaluates to an integer constant
+expression equal to @code{true} if the symbol or type referenced by
+the @var{type-or-expression} argument has been declared with
+the @var{attribute} referenced by the second argument.  For
+an @var{type-or-expression} argument that does not reference a symbol,
+since attributes do not apply to expressions the built-in consider
+the type of the argument.  Neither argument is evaluated.
+The @var{type-or-expression} argument is subject to the same
+restrictions as the argument to @code{typeof} (@pxref{Typeof}).  The
+@var{attribute} argument is an attribute name optionally followed by
+a comma-separated list of arguments enclosed in parentheses.  Both forms
+of attribute names---with and without double leading and trailing
+underscores---are recognized.  @xref{Attribute Syntax}, for details.
+When no attribute arguments are specified for an attribute that expects
+one or more arguments the function returns @code{true} if
+@var{type-or-expression} has been declared with the attribute regardless
+of the attribute argument values.  Arguments provided for an attribute
+that expects some are validated and matched up to the provided number.
+The function returns @code{true} if all provided arguments match.  For
+example, the first call to the function below evaluates to @code{true}
+because @code{x} is declared with the @code{aligned} attribute but
+the second call evaluates to @code{false} because @code{x} is declared
+@code{aligned (8)} and not @code{aligned (4)}.
+
+@smallexample
+__attribute__ ((aligned (8))) int x;
+_Static_assert (__builtin_has_attribute (x, aligned), "aligned");
+_Static_assert (!__builtin_has_attribute (x, aligned (4)), "aligned (4)");
+@end smallexample
+
+Due to a limitation the @code{__builtin_has_attribute} function returns
+@code{false} for the @code{mode} attribute even if the type or variable
+referenced by the @var{type-or-expression} argument was declared with one.
+The function is also not supported with labels, and in C with enumerators.
+
+Note that unlike the @code{__has_attribute} preprocessor operator which
+is suitable for use in @code{#if} preprocessing directives
+@code{__builtin_has_attribute} is an intrinsic function that is not
+recognized in such contexts.
+
+@enddefbuiltin
+
+@defbuiltin{@var{type} __builtin_speculation_safe_value (@var{type} @var{val}, @var{type} @var{failval})}
+
+This built-in function can be used to help mitigate against unsafe
+speculative execution.  @var{type} may be any integral type or any
+pointer type.
+
+@enumerate
+@item
+If the CPU is not speculatively executing the code, then @var{val}
+is returned.
+@item
+If the CPU is executing speculatively then either:
+@itemize
+@item
+The function may cause execution to pause until it is known that the
+code is no-longer being executed speculatively (in which case
+@var{val} can be returned, as above); or
+@item
+The function may use target-dependent speculation tracking state to cause
+@var{failval} to be returned when it is known that speculative
+execution has incorrectly predicted a conditional branch operation.
+@end itemize
+@end enumerate
+
+The second argument, @var{failval}, is optional and defaults to zero
+if omitted.
+
+GCC defines the preprocessor macro
+@code{__HAVE_BUILTIN_SPECULATION_SAFE_VALUE} for targets that have been
+updated to support this builtin.
+
+The built-in function can be used where a variable appears to be used in a
+safe way, but the CPU, due to speculative execution may temporarily ignore
+the bounds checks.  Consider, for example, the following function:
+
+@smallexample
+int array[500];
+int f (unsigned untrusted_index)
+@{
+  if (untrusted_index < 500)
+    return array[untrusted_index];
+  return 0;
+@}
+@end smallexample
+
+If the function is called repeatedly with @code{untrusted_index} less
+than the limit of 500, then a branch predictor will learn that the
+block of code that returns a value stored in @code{array} will be
+executed.  If the function is subsequently called with an
+out-of-range value it will still try to execute that block of code
+first until the CPU determines that the prediction was incorrect
+(the CPU will unwind any incorrect operations at that point).
+However, depending on how the result of the function is used, it might be
+possible to leave traces in the cache that can reveal what was stored
+at the out-of-bounds location.  The built-in function can be used to
+provide some protection against leaking data in this way by changing
+the code to:
+
+@smallexample
+int array[500];
+int f (unsigned untrusted_index)
+@{
+  if (untrusted_index < 500)
+    return array[__builtin_speculation_safe_value (untrusted_index)];
+  return 0;
+@}
+@end smallexample
+
+The built-in function will either cause execution to stall until the
+conditional branch has been fully resolved, or it may permit
+speculative execution to continue, but using 0 instead of
+@code{untrusted_value} if that exceeds the limit.
+
+If accessing any memory location is potentially unsafe when speculative
+execution is incorrect, then the code can be rewritten as
+
+@smallexample
+int array[500];
+int f (unsigned untrusted_index)
+@{
+  if (untrusted_index < 500)
+    return *__builtin_speculation_safe_value (&array[untrusted_index], NULL);
+  return 0;
+@}
+@end smallexample
+
+which will cause a @code{NULL} pointer to be used for the unsafe case.
+
+@enddefbuiltin
+
+@defbuiltin{int __builtin_types_compatible_p (@var{type1}, @var{type2})}
+
+You can use the built-in function @code{__builtin_types_compatible_p} to
+determine whether two types are the same.
+
+This built-in function returns 1 if the unqualified versions of the
+types @var{type1} and @var{type2} (which are types, not expressions) are
+compatible, 0 otherwise.  The result of this built-in function can be
+used in integer constant expressions.
+
+This built-in function ignores top level qualifiers (e.g., @code{const},
+@code{volatile}).  For example, @code{int} is equivalent to @code{const
+int}.
+
+The type @code{int[]} and @code{int[5]} are compatible.  On the other
+hand, @code{int} and @code{char *} are not compatible, even if the size
+of their types, on the particular architecture are the same.  Also, the
+amount of pointer indirection is taken into account when determining
+similarity.  Consequently, @code{short *} is not similar to
+@code{short **}.  Furthermore, two types that are typedefed are
+considered compatible if their underlying types are compatible.
+
+An @code{enum} type is not considered to be compatible with another
+@code{enum} type even if both are compatible with the same integer
+type; this is what the C standard specifies.
+For example, @code{enum @{foo, bar@}} is not similar to
+@code{enum @{hot, dog@}}.
+
+You typically use this function in code whose execution varies
+depending on the arguments' types.  For example:
+
+@smallexample
+#define foo(x)                                                  \
+  (@{                                                           \
+    typeof (x) tmp = (x);                                       \
+    if (__builtin_types_compatible_p (typeof (x), long double)) \
+      tmp = foo_long_double (tmp);                              \
+    else if (__builtin_types_compatible_p (typeof (x), double)) \
+      tmp = foo_double (tmp);                                   \
+    else if (__builtin_types_compatible_p (typeof (x), float))  \
+      tmp = foo_float (tmp);                                    \
+    else                                                        \
+      abort ();                                                 \
+    tmp;                                                        \
+  @})
+@end smallexample
+
+@emph{Note:} This construct is only available for C@.
+
+@enddefbuiltin
+
+@defbuiltin{@var{type} __builtin_choose_expr (@var{const_exp}, @var{exp1}, @var{exp2})}
+
+You can use the built-in function @code{__builtin_choose_expr} to
+evaluate code depending on the value of a constant expression.  This
+built-in function returns @var{exp1} if @var{const_exp}, which is an
+integer constant expression, is nonzero.  Otherwise it returns @var{exp2}.
+
+Like the @samp{? :} operator, this built-in function does not evaluate the
+expression that is not chosen.  For example, if @var{const_exp} evaluates to
+@code{true}, @var{exp2} is not evaluated even if it has side effects.  On the
+other hand, @code{__builtin_choose_expr} differs from @samp{? :} in that the
+first operand must be a compile-time constant, and the other operands are not
+subject to the @samp{? :} type constraints and promotions.
+
+This built-in function can return an lvalue if the chosen argument is an
+lvalue.
+
+If @var{exp1} is returned, the return type is the same as @var{exp1}'s
+type.  Similarly, if @var{exp2} is returned, its return type is the same
+as @var{exp2}.
+
+Example:
+
+@smallexample
+#define foo(x)                                                    \
+  __builtin_choose_expr (                                         \
+    __builtin_types_compatible_p (typeof (x), double),            \
+    foo_double (x),                                               \
+    __builtin_choose_expr (                                       \
+      __builtin_types_compatible_p (typeof (x), float),           \
+      foo_float (x),                                              \
+      /* @r{The void expression results in a compile-time error}  \
+         @r{when assigning the result to something.}  */          \
+      (void)0))
+@end smallexample
+
+@emph{Note:} This construct is only available for C@.  Furthermore, the
+unused expression (@var{exp1} or @var{exp2} depending on the value of
+@var{const_exp}) may still generate syntax errors.  This may change in
+future revisions.
+
+@enddefbuiltin
+
+@defbuiltin{@var{type} __builtin_tgmath (@var{functions}, @var{arguments})}
+

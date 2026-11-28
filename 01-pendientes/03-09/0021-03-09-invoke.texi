@@ -1,0 +1,230 @@
+@c GCC 16.1.0 | BLOQUE 0021 | 03-09
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 6566-6791 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Warning Options
+@section Options to Request or Suppress Warnings
+@cindex options to control warnings
+@cindex warning messages
+@cindex messages, warning
+@cindex suppressing warnings
+
+Warnings are diagnostic messages that report constructions that
+are not inherently erroneous but that are risky or suggest there
+may have been an error.
+
+The following language-independent options do not enable specific
+warnings but control the kinds of diagnostics produced by GCC@.
+
+@table @gcctabopt
+@cindex syntax checking
+@opindex fsyntax-only
+@opindex fno-syntax-only
+@item -fsyntax-only
+Check the code for syntax errors, but don't do anything beyond that.
+
+@opindex fmax-errors
+@item -fmax-errors=@var{n}
+Limits the maximum number of error messages to @var{n}, at which point
+GCC bails out rather than attempting to continue processing the source
+code.  If @var{n} is 0 (the default), there is no limit on the number
+of error messages produced.  If @option{-Wfatal-errors} is also
+specified, then @option{-Wfatal-errors} takes precedence over this
+option.
+
+@opindex w
+@opindex no-warnings
+@item -w
+@itemx --no-warnings
+Inhibit all warning messages.
+
+@opindex Werror
+@opindex Wno-error
+@item -Werror
+Turn all warnings into errors.
+
+@opindex Werror=
+@opindex Wno-error=
+@item -Werror=
+Turn the specified warning into an error.  The specifier for a warning
+is appended; for example @option{-Werror=switch} turns the warnings
+controlled by @option{-Wswitch} into errors.  This switch takes a
+negative form, to be used to negate @option{-Werror} for specific
+warnings; for example @option{-Wno-error=switch} makes
+@option{-Wswitch} warnings not be errors, even when @option{-Werror}
+is in effect.
+
+The warning message for each controllable warning includes the
+option that controls the warning.  That option can then be used with
+@option{-Werror=} and @option{-Wno-error=} as described above.
+(Printing of the option in the warning message can be disabled using the
+@option{-fno-diagnostics-show-option} flag.)
+
+Note that specifying @option{-Werror=}@var{foo} automatically implies
+@option{-W}@var{foo}.  However, @option{-Wno-error=}@var{foo} does not
+imply anything.
+
+@opindex Wfatal-errors
+@opindex Wno-fatal-errors
+@item -Wfatal-errors
+This option causes the compiler to abort compilation on the first error
+occurred rather than trying to keep going and printing further error
+messages.
+
+@end table
+
+You can request many specific warnings with options beginning with
+@samp{-W}, for example @option{-Wunused-variable} to request warnings on
+declarations of variables that are never used.
+Each of these specific warning options also
+has a negative form beginning with @samp{-Wno-} to turn off warnings; for
+example, @option{-Wno-unused-variable}.  This manual lists only one of the
+two forms, whichever is not the default.  For further
+language-specific options also refer to @ref{C++ Dialect Options} and
+@ref{Objective-C and Objective-C++ Dialect Options}.
+Additional warnings can be produced by enabling the static analyzer;
+@xref{Static Analyzer Options}.
+
+Some options, such as @option{-Wall} and @option{-Wextra}, turn on other
+options, such as @option{-Wunused}, which may turn on further options,
+such as @option{-Wunused-variable}. The combined effect of positive and
+negative forms is that more specific options have priority over less
+specific ones, independently of their position in the command line. For
+options of the same specificity, the last one takes effect. Options
+enabled or disabled via pragmas (@pxref{Diagnostic Pragmas}) take effect
+as if they appeared at the end of the command line.
+
+When an unrecognized warning option is requested (e.g.,
+@option{-Wunknown-warning}), GCC gives an error stating
+that the option is not recognized.  However, if the @option{-Wno-} form
+is used, the behavior is slightly different: no diagnostic is
+produced for @option{-Wno-unknown-warning} unless other diagnostics
+are being produced.  This allows the use of new @option{-Wno-} options
+with old compilers, but if something goes wrong, the compiler
+warns that an unrecognized option is present.
+
+The effectiveness of some warnings depends on optimizations also being
+enabled. For example, @option{-Wsuggest-final-types} is more effective
+with link-time optimization.  Some other warnings may
+not be issued at all unless optimization is enabled.  While optimization
+in general improves the efficacy of warnings about control and data-flow
+problems, in some cases it may also cause false positives.
+
+@table @gcctabopt
+@opindex pedantic
+@opindex Wpedantic
+@opindex Wno-pedantic
+@item -Wpedantic
+@itemx -pedantic
+@itemx --pedantic
+Issue all the warnings demanded by strict ISO C and ISO C++;
+diagnose all programs that use forbidden extensions, and some other
+programs that do not follow ISO C and ISO C++.  This follows the version
+of the ISO C or C++ standard specified by any @option{-std} option used.
+
+Valid ISO C and ISO C++ programs should compile properly with or without
+this option (though a rare few require @option{-ansi} or a
+@option{-std} option specifying the version of the standard)@.  However,
+without this option, certain GNU extensions and traditional C and C++
+features are supported as well.  With this option, they are diagnosed
+(or rejected with @option{-pedantic-errors}).
+
+@option{-Wpedantic} does not cause warning messages for use of the
+alternate keywords whose names begin and end with @samp{__}.  This alternate
+format can also be used to disable warnings for non-ISO @samp{__intN} types,
+i.e. @samp{__intN__}.
+Pedantic warnings are also disabled in the expression that follows
+@code{__extension__}.  However, only system header files should use
+these escape routes; application programs should avoid them.
+@xref{Alternate Keywords}.
+
+Some warnings about non-conforming programs are controlled by options
+other than @option{-Wpedantic}; in many cases they are implied by
+@option{-Wpedantic} but can be disabled separately by their specific
+option, e.g. @option{-Wpedantic -Wno-pointer-sign}.
+
+Where the standard specified with @option{-std} represents a GNU
+extended dialect of C, such as @samp{gnu90} or @samp{gnu99}, there is a
+corresponding @dfn{base standard}, the version of ISO C on which the GNU
+extended dialect is based.  Warnings from @option{-Wpedantic} are given
+where they are required by the base standard.  (It does not make sense
+for such warnings to be given only for features not in the specified GNU
+C dialect, since by definition the GNU dialects of C include all
+features the compiler supports with the given option, and there would be
+nothing to warn about.)
+
+@opindex pedantic-errors
+@item -pedantic-errors
+@itemx --pedantic-errors
+Give an error whenever the @dfn{base standard} (see @option{-Wpedantic})
+requires a diagnostic, in some cases where there is undefined behavior
+at compile-time and in some other cases that do not prevent compilation
+of programs that are valid according to the standard. This is not
+equivalent to @option{-Werror=pedantic}: the latter option is unlikely to be
+useful, as it only makes errors of the diagnostics that are controlled by
+@option{-Wpedantic}, whereas this option also affects required diagnostics that
+are always enabled or controlled by options other than @option{-Wpedantic}.
+
+If you want the required diagnostics that are warnings by default to
+be errors instead, but don't also want to enable the @option{-Wpedantic}
+diagnostics, you can specify @option{-pedantic-errors -Wno-pedantic}
+(or @option{-pedantic-errors -Wno-error=pedantic} to enable them but
+only as warnings).
+
+Some required diagnostics are errors by default, but can be reduced to
+warnings using @option{-fpermissive} or their specific warning option,
+e.g. @option{-Wno-error=narrowing}.
+
+Some diagnostics for non-ISO practices are controlled by specific
+warning options other than @option{-Wpedantic}, but are also made
+errors by @option{-pedantic-errors}.  For instance:
+
+@gccoptlist{
+-Wattributes @r{(for standard attributes)}
+-Wchanges-meaning @r{(C++)}
+-Wcomma-subscript @r{(C++23 or later)}
+-Wdeclaration-after-statement @r{(C90 or earlier)}
+-Welaborated-enum-base @r{(C++11 or later)}
+-Wimplicit-int @r{(C99 or later)}
+-Wimplicit-function-declaration @r{(C99 or later)}
+-Wincompatible-pointer-types
+-Wint-conversion
+-Wlong-long @r{(C90 or earlier)}
+-Wmain
+-Wnarrowing @r{(C++11 or later)}
+-Wpointer-arith
+-Wpointer-sign
+-Wincompatible-pointer-types
+-Wregister @r{(C++17 or later)}
+-Wvla @r{(C90 or earlier)}
+-Wwrite-strings @r{(C++11 or later)}
+}
+
+@opindex fpermissive
+@opindex fno-permissive
+@item -fpermissive
+Downgrade some required diagnostics about nonconformant code from
+errors to warnings.  Thus, using @option{-fpermissive} allows some
+nonconforming code to compile.  Some C++ diagnostics are controlled
+only by this flag, but it also downgrades some C and C++ diagnostics
+that have their own flag:
+
+@gccoptlist{
+-Wabbreviated-auto-in-template-arg @r{(C++ and Objective-C++ only)}
+-Wdeclaration-missing-parameter-type @r{(C and Objective-C only)}
+-Wimplicit-function-declaration @r{(C and Objective-C only)}
+-Wimplicit-int @r{(C and Objective-C only)}
+-Wincompatible-pointer-types @r{(C and Objective-C only)}
+-Wint-conversion @r{(C and Objective-C only)}
+-Wnarrowing @r{(C++ and Objective-C++ only)}
+-Wreturn-mismatch @r{(C and Objective-C only)}
+-Wtemplate-body @r{(C++ and Objective-C++ only)}
+}
+
+The @option{-fpermissive} option is the default for historic C language
+modes (@option{-std=c89}, @option{-std=gnu89}, @option{-std=c90},
+@option{-std=gnu90}).
+
+@opindex Wall
+@opindex Wno-all
+@opindex all-warnings

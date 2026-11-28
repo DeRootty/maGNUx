@@ -1,0 +1,314 @@
+@c GCC 16.1.0 | BLOQUE 0149 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 33396-33705 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node SH Options
+@subsection SH Options
+
+These @samp{-m} options are defined for the SH implementations:
+
+@table @gcctabopt
+@opindex m1
+@item -m1
+Generate code for the SH1.
+
+@opindex m2
+@item -m2
+Generate code for the SH2.
+
+@opindex m2e
+@item -m2e
+Generate code for the SH2e.
+
+@opindex m2a-nofpu
+@item -m2a-nofpu
+Generate code for the SH2a without FPU, or for a SH2a-FPU in such a way
+that the floating-point unit is not used.
+
+@opindex m2a-single-only
+@item -m2a-single-only
+Generate code for the SH2a-FPU, in such a way that no double-precision
+floating-point operations are used.
+
+@opindex m2a-single
+@item -m2a-single
+Generate code for the SH2a-FPU assuming the floating-point unit is in
+single-precision mode by default.
+
+@opindex m2a
+@item -m2a
+Generate code for the SH2a-FPU assuming the floating-point unit is in
+double-precision mode by default.
+
+@opindex m3
+@item -m3
+Generate code for the SH3.
+
+@opindex m3e
+@item -m3e
+Generate code for the SH3e.
+
+@opindex m4-nofpu
+@item -m4-nofpu
+Generate code for the SH4 without a floating-point unit.
+
+@opindex m4-single-only
+@item -m4-single-only
+Generate code for the SH4 with a floating-point unit that only
+supports single-precision arithmetic.
+
+@opindex m4-single
+@item -m4-single
+Generate code for the SH4 assuming the floating-point unit is in
+single-precision mode by default.
+
+@opindex m4
+@item -m4
+Generate code for the SH4.
+
+@opindex m4-100
+@item -m4-100
+Generate code for SH4-100.
+
+@opindex m4-100-nofpu
+@item -m4-100-nofpu
+Generate code for SH4-100 in such a way that the
+floating-point unit is not used.
+
+@opindex m4-100-single
+@item -m4-100-single
+Generate code for SH4-100 assuming the floating-point unit is in
+single-precision mode by default.
+
+@opindex m4-100-single-only
+@item -m4-100-single-only
+Generate code for SH4-100 in such a way that no double-precision
+floating-point operations are used.
+
+@opindex m4-200
+@item -m4-200
+Generate code for SH4-200.
+
+@opindex m4-200-nofpu
+@item -m4-200-nofpu
+Generate code for SH4-200 without in such a way that the
+floating-point unit is not used.
+
+@opindex m4-200-single
+@item -m4-200-single
+Generate code for SH4-200 assuming the floating-point unit is in
+single-precision mode by default.
+
+@opindex m4-200-single-only
+@item -m4-200-single-only
+Generate code for SH4-200 in such a way that no double-precision
+floating-point operations are used.
+
+@opindex m4-300
+@item -m4-300
+Generate code for SH4-300.
+
+@opindex m4-300-nofpu
+@item -m4-300-nofpu
+Generate code for SH4-300 without in such a way that the
+floating-point unit is not used.
+
+@opindex m4-300-single
+@item -m4-300-single
+Generate code for SH4-300 in such a way that no double-precision
+floating-point operations are used.
+
+@opindex m4-300-single-only
+@item -m4-300-single-only
+Generate code for SH4-300 in such a way that no double-precision
+floating-point operations are used.
+
+@opindex m4-340
+@item -m4-340
+Generate code for SH4-340 (no MMU, no FPU).
+
+@opindex m4-400
+@item -m4-400
+Generate code for SH4-400 (no MMU, no FPU).
+
+@opindex m4-500
+@item -m4-500
+Generate code for SH4-500 (no FPU).  Passes @option{-isa=sh4-nofpu} to the
+assembler.
+
+@opindex m4a-nofpu
+@item -m4a-nofpu
+Generate code for the SH4al-dsp, or for a SH4a in such a way that the
+floating-point unit is not used.
+
+@opindex m4a-single-only
+@item -m4a-single-only
+Generate code for the SH4a, in such a way that no double-precision
+floating-point operations are used.
+
+@opindex m4a-single
+@item -m4a-single
+Generate code for the SH4a assuming the floating-point unit is in
+single-precision mode by default.
+
+@opindex m4a
+@item -m4a
+Generate code for the SH4a.
+
+@opindex m4al
+@item -m4al
+Same as @option{-m4a-nofpu}, except that it implicitly passes
+@option{-dsp} to the assembler.  GCC doesn't generate any DSP
+instructions at the moment.
+
+@opindex mb
+@item -mb
+Compile code for the processor in big-endian mode.
+
+@opindex ml
+@item -ml
+Compile code for the processor in little-endian mode.
+
+@opindex mdalign
+@item -mdalign
+Align doubles at 64-bit boundaries.  Note that this changes the calling
+conventions, and thus some functions from the standard C library do
+not work unless you recompile it first with @option{-mdalign}.
+
+@opindex mrelax
+@item -mrelax
+Shorten some address references at link time, when possible; uses the
+linker option @option{-relax}.
+
+@opindex mbigtable
+@item -mbigtable
+Use 32-bit offsets in @code{switch} tables.  The default is to use
+16-bit offsets.
+
+@opindex mbitops
+@item -mbitops
+Enable the use of bit manipulation instructions on SH2A.
+
+@opindex mfmovd
+@item -mfmovd
+Enable the use of the instruction @code{fmovd}.  Check @option{-mdalign} for
+alignment constraints.
+
+@opindex mrenesas
+@opindex mno-renesas
+@item -mrenesas
+@itemx -mno-renesas
+Comply with the calling conventions defined by Renesas.  The default for all
+targets of the SH toolchain is @option{-mno-renesas}, which uses the
+calling conventions defined for GCC before the Renesas conventions were
+available.
+
+@opindex mnomacsave
+@item -mnomacsave
+Mark the @code{MAC} register as call-clobbered, even if
+@option{-mrenesas} is given.
+
+@opindex mieee
+@opindex mno-ieee
+@item -mieee
+@itemx -mno-ieee
+Control the IEEE compliance of floating-point comparisons, which affects the
+handling of cases where the result of a comparison is unordered.  By default
+@option{-mieee} is implicitly enabled.  If @option{-ffinite-math-only} is
+enabled @option{-mno-ieee} is implicitly set, which results in faster
+floating-point greater-equal and less-equal comparisons.  The implicit settings
+can be overridden by specifying either @option{-mieee} or @option{-mno-ieee}.
+
+@opindex minline-ic_invalidate
+@opindex mno-inline-ic_invalidate
+@item -minline-ic_invalidate
+@itemx -mno-inline-ic_invalidate
+Inline code to invalidate instruction cache entries after setting up
+nested function trampolines.
+This option has no effect if @option{-musermode} is in effect and the
+selected code generation option (e.g.@: @option{-m4}) does not allow
+the use of the @code{icbi} instruction.
+If the selected code generation option does not allow the use of the
+@code{icbi}
+instruction, and @option{-musermode} is not in effect, the inlined code
+manipulates the instruction cache address array directly with an associative
+write.  This not only requires privileged mode at run time, but it also
+fails if the cache line had been mapped via the TLB and has become unmapped.
+
+@opindex misize
+@item -misize
+Dump instruction size and location in the assembly code.
+
+@opindex matomic-model=@var{model}
+@item -matomic-model=@var{model}
+Sets the model of atomic operations and additional parameters as a
+comma-separated list.  For details on the atomic built-in functions see
+@ref{__atomic Builtins}.  The following models and parameters are supported:
+
+@table @samp
+
+@item none
+Disable compiler generated atomic sequences and emit library calls for atomic
+operations.  This is the default if the target is not @code{sh*-*-linux*}.
+
+@item soft-gusa
+Generate GNU/Linux-compatible gUSA software atomic sequences for the atomic
+built-in functions.  The generated atomic sequences require additional support
+from the interrupt/exception handling code of the system and are only suitable
+for SH3* and SH4* single-core systems.  This option is enabled by default when
+the target is @code{sh*-*-linux*} and SH3* or SH4*.  When the target is SH4A,
+this option also partially utilizes the hardware atomic instructions
+@code{movli.l} and @code{movco.l} to create more efficient code, unless
+@samp{strict} is specified.
+
+@item soft-tcb
+Generate software atomic sequences that use a variable in the thread control
+block.  This is a variation of the gUSA sequences which can also be used on
+SH1* and SH2* targets.  The generated atomic sequences require additional
+support from the interrupt/exception handling code of the system and are only
+suitable for single-core systems.  When using this model,
+the @samp{gbr-offset=} parameter has to be specified as well.
+
+@item soft-imask
+Generate software atomic sequences that temporarily disable interrupts by
+setting @code{SR.IMASK = 1111}.  This model works only when the program runs
+in privileged mode and is only suitable for single-core systems.  Additional
+support from the interrupt/exception handling code of the system is not
+required.  This model is enabled by default when the target is
+@code{sh*-*-linux*} and SH1* or SH2*.
+
+@item hard-llcs
+Generate hardware atomic sequences using the @code{movli.l} and @code{movco.l}
+instructions only.  This is only available on SH4A and is suitable for
+multi-core systems.
+Since the hardware instructions support only 32-bit atomic
+variables, access to 8- or 16-bit variables is emulated with 32-bit accesses.
+Code compiled with this option is also compatible with other software
+atomic model interrupt/exception handling systems if executed on an SH4A
+system.  Additional support from the interrupt/exception handling code of the
+system is not required for this model.
+
+@item gbr-offset=
+This parameter specifies the offset in bytes of the variable in the thread
+control block structure that should be used by the generated atomic sequences
+when the @samp{soft-tcb} model has been selected.  For other models this
+parameter is ignored.  The specified value must be an integer multiple of four
+and in the range 0-1020.
+
+@item strict
+This parameter prevents mixed usage of multiple atomic models, even if they
+are compatible, and makes the compiler generate atomic sequences of the
+specified model only.
+
+@end table
+
+@opindex mtas
+@item -mtas
+Generate the @code{tas.b} opcode for @code{__atomic_test_and_set}.
+Notice that depending on the particular hardware and software configuration
+this can degrade overall performance due to the operand cache line flushes
+that are implied by the @code{tas.b} instruction.  On multi-core SH4A
+processors the @code{tas.b} instruction must be used with caution since it
+can result in data corruption for certain cache configurations.
+
+@opindex mprefergot

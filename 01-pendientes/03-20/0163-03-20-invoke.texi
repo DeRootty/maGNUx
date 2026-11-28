@@ -1,0 +1,265 @@
+@c GCC 16.1.0 | BLOQUE 0163 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 37078-37338 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -mindirect-branch=@var{choice}
+Convert indirect call and jump with @var{choice}.  The default is
+@samp{keep}, which keeps indirect call and jump unmodified.
+@samp{thunk} converts indirect call and jump to call and return thunk.
+@samp{thunk-inline} converts indirect call and jump to inlined call
+and return thunk.  @samp{thunk-extern} converts indirect call and jump
+to external call and return thunk provided in a separate object file.
+You can control this behavior for a specific function by using the
+function attribute @code{indirect_branch}.  @xref{x86 Attributes}.
+
+Note that @option{-mcmodel=large} is incompatible with
+@option{-mindirect-branch=thunk} and
+@option{-mindirect-branch=thunk-extern} since the thunk function may
+not be reachable in the large code model.
+
+Note that @option{-mindirect-branch=thunk-extern} is compatible with
+@option{-fcf-protection=branch} since the external thunk can be made
+to enable control-flow check.
+
+@opindex mfunction-return
+@item -mfunction-return=@var{choice}
+Convert function return with @var{choice}.  The default is @samp{keep},
+which keeps function return unmodified.  @samp{thunk} converts function
+return to call and return thunk.  @samp{thunk-inline} converts function
+return to inlined call and return thunk.  @samp{thunk-extern} converts
+function return to external call and return thunk provided in a separate
+object file.  You can control this behavior for a specific function by
+using the function attribute @code{function_return}.
+@xref{x86 Attributes}.
+
+Note that @option{-mindirect-return=thunk-extern} is compatible with
+@option{-fcf-protection=branch} since the external thunk can be made
+to enable control-flow check.
+
+Note that @option{-mcmodel=large} is incompatible with
+@option{-mfunction-return=thunk} and
+@option{-mfunction-return=thunk-extern} since the thunk function may
+not be reachable in the large code model.
+
+
+@opindex mindirect-branch-register
+@opindex mno-indirect-branch-register
+@item -mindirect-branch-register
+Force indirect call and jump via register.
+
+@opindex mharden-sls
+@item -mharden-sls=@var{choice}
+Generate code to mitigate against straight line speculation (SLS) with
+@var{choice}.  The default is @samp{none} which disables all SLS
+hardening.  @samp{return} enables SLS hardening for function returns.
+@samp{indirect-jmp} enables SLS hardening for indirect jumps.
+@samp{all} enables all SLS hardening.
+
+@opindex mindirect-branch-cs-prefix
+@opindex mno-indirect-branch-cs-prefix
+@item -mindirect-branch-cs-prefix
+Add CS prefix to call and jmp to indirect thunk with branch target in
+r8-r15 registers, so that the call and jmp instruction length is 6 bytes.
+This allows them to potentially be replaced with @samp{lfence; call *%r8-r15}
+or @samp{lfence; jmp *%r8-r15} at run time.
+
+@opindex mapx-inline-asm-use-gpr32
+@opindex mno-apx-inline-asm-use-gpr32
+@item -mapx-inline-asm-use-gpr32
+By default, EGPR usage is disabled in inline asm constraints as GCC cannot
+be aware of whether the asm instructions support GP32 or not.
+If your inline asm can handle EGPR, use @option{-mapx-inline-asm-use-gpr32}.
+
+@opindex mgather
+@opindex mno-gather
+@opindex mscatter
+@opindex mno-scatter
+@item -mgather
+@itemx -mscatter
+Enable vectorization for gather and scatter instructions, respectively.
+@end table
+
+These @samp{-m} switches are supported in addition to the above
+on x86-64 processors in 64-bit environments.
+
+@table @gcctabopt
+@opindex m32
+@opindex m64
+@opindex mx32
+@opindex m16
+@item -m32
+@itemx -m64
+@itemx -mx32
+@itemx -m16
+Generate code for a 16-bit, 32-bit or 64-bit environment.
+The @option{-m32} option sets @code{int}, @code{long}, and pointer types
+to 32 bits, and
+generates code that runs in 32-bit mode.
+
+The @option{-m64} option sets @code{int} to 32 bits and @code{long} and pointer
+types to 64 bits, and generates code for the x86-64 architecture.
+For Darwin only the @option{-m64} option also turns off the @option{-fno-pic}
+and @option{-mdynamic-no-pic} options.
+
+The @option{-mx32} option sets @code{int}, @code{long}, and pointer types
+to 32 bits, and
+generates code for the x86-64 architecture.
+
+The @option{-m16} option is the same as @option{-m32}, except for that
+it outputs the @code{.code16gcc} assembly directive at the beginning of
+the assembly output so that the binary can run in 16-bit mode.
+
+@opindex miamcu
+@opindex mno-iamcu
+@item -miamcu
+The @option{-miamcu} option generates code that conforms to Intel MCU
+psABI.  It requires the @option{-m32} option to be turned on.
+
+@opindex mno-red-zone
+@opindex mred-zone
+@item -mno-red-zone
+Do not use a so-called ``red zone'' for x86-64 code.  The red zone is mandated
+by the x86-64 ABI; it is a 128-byte area beyond the location of the
+stack pointer that is not modified by signal or interrupt handlers
+and therefore can be used for temporary data without adjusting the stack
+pointer.  The flag @option{-mno-red-zone} disables this red zone.
+
+@opindex mcmodel=
+@opindex mcmodel=small
+@item -mcmodel=small
+Generate code for the small code model: the program and its symbols must
+be linked in the lower 2 GB of the address space.  Pointers are 64 bits.
+Programs can be statically or dynamically linked.  This is the default
+code model.
+
+@opindex mcmodel=kernel
+@item -mcmodel=kernel
+Generate code for the kernel code model.  The kernel runs in the
+negative 2 GB of the address space.
+This model has to be used for Linux kernel code.
+
+@opindex mcmodel=medium
+@item -mcmodel=medium
+Generate code for the medium model: the program is linked in the lower 2
+GB of the address space.  Small symbols are also placed there.  Symbols
+with sizes larger than @option{-mlarge-data-threshold} are put into
+large data or BSS sections and can be located above 2GB.  Programs can
+be statically or dynamically linked.
+
+@opindex mcmodel=large
+@item -mcmodel=large
+Generate code for the large model.  This model makes no assumptions
+about addresses and sizes of sections.
+
+@opindex maddress-mode=long
+@item -maddress-mode=long
+Generate code for long address mode.  This is only supported for 64-bit
+and x32 environments.  It is the default address mode for 64-bit
+environments.
+
+@opindex maddress-mode=short
+@item -maddress-mode=short
+Generate code for short address mode.  This is only supported for 32-bit
+and x32 environments.  It is the default address mode for 32-bit and
+x32 environments.
+
+@opindex mneeded
+@opindex mno-needed
+@item -mneeded
+@itemx -mno-needed
+Emit GNU_PROPERTY_X86_ISA_1_NEEDED GNU property for Linux target to
+indicate the micro-architecture ISA level required to execute the binary.
+
+@opindex mno-direct-extern-access
+@opindex mdirect-extern-access
+@item -mno-direct-extern-access
+Without @option{-fpic} or @option{-fPIC}, always use the GOT pointer
+to access external symbols.  With @option{-fpic} or @option{-fPIC},
+treat access to protected symbols as local symbols.  The default is
+@option{-mdirect-extern-access}.
+
+@strong{Warning:} shared libraries compiled with
+@option{-mno-direct-extern-access} and executable compiled with
+@option{-mdirect-extern-access} may not be binary compatible if
+protected symbols are used in shared libraries and executable.
+
+@opindex munroll-only-small-loops
+@opindex mno-unroll-only-small-loops
+@item -munroll-only-small-loops
+@itemx -mno-unroll-only-small-loops
+Controls conservative small loop unrolling.  It is enabled by default with
+@option{-O2}, and unrolls loops with less than 4 instructions by 1 time.
+This gives better utilization of the instruction decoding pipeline on modern
+processors.  You can disable this with @option{-mno-unroll-only-small-loops},
+and it is also disabled if the more general options @option{-funroll-loops}
+or @option{-funroll-all-loops} are either enabled or explicitly disabled.
+
+@opindex mdispatch-scheduler
+@item -mdispatch-scheduler
+Enable instruction scheduling.  This is only supported on @samp{bdver1},
+@samp{bdver2}, @samp{bdver3}, @samp{bdver4}, and @samp{znver1} processors and
+additionally requires @option{-fschedule-insns -fsched-pressure}.
+
+@opindex mlam
+@item -mlam=@var{choice}
+LAM(linear-address masking) allows special bits in the pointer to be used
+for metadata. The default is @samp{none}. With @samp{u48}, pointer bits in
+positions 62:48 can be used for metadata; With @samp{u57}, pointer bits in
+positions 62:57 can be used for metadata.
+@end table
+
+@node x86 Windows Options
+@subsection x86 Windows Options
+@cindex x86 Windows Options
+@cindex Windows Options for x86
+
+@xref{Cygwin and MinGW Options}.
+
+@node Xstormy16 Options
+@subsection Xstormy16 Options
+@cindex Xstormy16 Options
+
+These options are defined for Xstormy16:
+
+@table @gcctabopt
+@opindex msim
+@item -msim
+Choose startup files and linker script suitable for the simulator.
+@end table
+
+@node Xtensa Options
+@subsection Xtensa Options
+@cindex Xtensa Options
+
+These options are supported for Xtensa targets:
+
+@table @gcctabopt
+@opindex mconst16
+@opindex mno-const16
+@item -mconst16
+@itemx -mno-const16
+Enable or disable use of @code{CONST16} instructions for loading
+constant values.  When enabled, @code{CONST16} instructions are always
+used in place of the standard @code{L32R} instructions.  The use of
+@code{CONST16} is enabled by default only if the @code{L32R} instruction
+is not available.
+
+@opindex mserialize-volatile
+@opindex mno-serialize-volatile
+@item -mserialize-volatile
+@itemx -mno-serialize-volatile
+When this option is enabled, GCC inserts @code{MEMW} instructions before
+@code{volatile} memory references to guarantee sequential consistency.
+The default is @option{-mserialize-volatile}.  Use
+@option{-mno-serialize-volatile} to omit the @code{MEMW} instructions.
+
+@opindex mforce-no-pic
+@opindex mno-force-no-pic
+@item -mforce-no-pic
+@itemx -mno-force-no-pic
+For targets like GNU/Linux, where all user-mode Xtensa code must be
+position-independent code (PIC), this option disables PIC for compiling
+kernel code.
+
+@opindex mtext-section-literals
+@opindex mno-text-section-literals

@@ -1,0 +1,263 @@
+@c GCC 16.1.0 | BLOQUE 0128 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 29541-29799 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -mlong-calls
+@itemx -mno-long-calls
+Disable (do not disable) use of the @code{jal} instruction.  Calling
+functions using @code{jal} is more efficient but requires the caller
+and callee to be in the same 256 megabyte segment.
+
+This option has no effect on abicalls code.  The default is
+@option{-mno-long-calls}.
+
+@opindex mmad
+@opindex mno-mad
+@item -mmad
+@itemx -mno-mad
+Enable (disable) use of the @code{mad}, @code{madu} and @code{mul}
+instructions, as provided by the R4650 ISA@.
+
+@opindex mimadd
+@opindex mno-imadd
+@item -mimadd
+@itemx -mno-imadd
+Enable (disable) use of the @code{madd} and @code{msub} integer
+instructions.  The default is @option{-mimadd} on architectures
+that support @code{madd} and @code{msub} except for the 74k
+architecture where it was found to generate slower code.
+
+@opindex mfused-madd
+@opindex mno-fused-madd
+@item -mfused-madd
+@itemx -mno-fused-madd
+Enable (disable) use of the floating-point multiply-accumulate
+instructions, when they are available.  The default is
+@option{-mfused-madd}.
+
+On the R8000 CPU when multiply-accumulate instructions are used,
+the intermediate product is calculated to infinite precision
+and is not subject to the FCSR Flush to Zero bit.  This may be
+undesirable in some circumstances.  On other processors the result
+is numerically identical to the equivalent computation using
+separate multiply, add, subtract and negate instructions.
+
+@opindex nocpp
+@item -nocpp
+Tell the MIPS assembler to not run its preprocessor over user
+assembler files (with a @samp{.s} suffix) when assembling them.
+
+@opindex mfix-24k
+@opindex mno-fix-24k
+@item -mfix-24k
+@itemx -mno-fix-24k
+Work around the 24K E48 (lost data on stores during refill) errata.
+The workarounds are implemented by the assembler rather than by GCC@.
+
+@opindex mfix-r4000
+@opindex mno-fix-r4000
+@item -mfix-r4000
+@itemx -mno-fix-r4000
+Work around certain R4000 CPU errata:
+@itemize @minus
+@item
+A double-word or a variable shift may give an incorrect result if executed
+immediately after starting an integer division.
+@item
+A double-word or a variable shift may give an incorrect result if executed
+while an integer multiplication is in progress.
+@item
+An integer division may give an incorrect result if started in a delay slot
+of a taken branch or a jump.
+@end itemize
+
+@opindex mfix-r4400
+@opindex mno-fix-r4400
+@item -mfix-r4400
+@itemx -mno-fix-r4400
+Work around certain R4400 CPU errata:
+@itemize @minus
+@item
+A double-word or a variable shift may give an incorrect result if executed
+immediately after starting an integer division.
+@end itemize
+
+@opindex mfix-r10000
+@opindex mno-fix-r10000
+@item -mfix-r10000
+@itemx -mno-fix-r10000
+Work around certain R10000 errata:
+@itemize @minus
+@item
+@code{ll}/@code{sc} sequences may not behave atomically on revisions
+prior to 3.0.  They may deadlock on revisions 2.6 and earlier.
+@end itemize
+
+This option can only be used if the target architecture supports
+branch-likely instructions.  @option{-mfix-r10000} is the default when
+@option{-march=r10000} is used; @option{-mno-fix-r10000} is the default
+otherwise.
+
+@opindex mfix-r5900
+@opindex mno-fix-r5900
+@item -mfix-r5900
+@itemx -mno-fix-r5900
+Do not attempt to schedule the preceding instruction into the delay slot
+of a branch instruction placed at the end of a short loop of six
+instructions or fewer and always schedule a @code{nop} instruction there
+instead.  The short loop bug under certain conditions causes loops to
+execute only once or twice, due to a hardware bug in the R5900 chip.  The
+workaround is implemented by the assembler rather than by GCC@.
+
+@opindex mfix-rm7000
+@opindex mno-fix-rm7000
+@item -mfix-rm7000
+@itemx -mno-fix-rm7000
+Work around the RM7000 @code{dmult}/@code{dmultu} errata.  The
+workarounds are implemented by the assembler rather than by GCC@.
+
+@opindex mfix-vr4120
+@opindex mno-fix-vr4120
+@item -mfix-vr4120
+@itemx -mno-fix-vr4120
+Work around certain VR4120 errata:
+@itemize @minus
+@item
+@code{dmultu} does not always produce the correct result.
+@item
+@code{div} and @code{ddiv} do not always produce the correct result if one
+of the operands is negative.
+@end itemize
+The workarounds for the division errata rely on special functions in
+@file{libgcc.a}.  At present, these functions are only provided by
+the @code{mips64vr*-elf} configurations.
+
+Other VR4120 errata require a NOP to be inserted between certain pairs of
+instructions.  These errata are handled by the assembler, not by GCC itself.
+
+@opindex mfix-vr4130
+@opindex mno-fix-vr4130
+@item -mfix-vr4130
+@itemx -mno-fix-vr4130
+Work around the VR4130 @code{mflo}/@code{mfhi} errata.  The
+workarounds are implemented by the assembler rather than by GCC,
+although GCC avoids using @code{mflo} and @code{mfhi} if the
+VR4130 @code{macc}, @code{macchi}, @code{dmacc} and @code{dmacchi}
+instructions are available instead.
+
+@opindex mfix-sb1
+@opindex mno-fix-sb1
+@item -mfix-sb1
+@itemx -mno-fix-sb1
+Work around certain SB-1 CPU core errata.
+(This flag currently works around the SB-1 revision 2
+``F1'' and ``F2'' floating-point errata.)
+
+@opindex mfix4300
+@opindex mno-fix4300
+@item -mfix4300
+@itemx -mno-fix4300
+Work around a bug in early VR4300 silicon that causes multiplies with
+certain operands to corrupt immediately following multiplies.
+
+@opindex mr10k-cache-barrier
+@item -mr10k-cache-barrier=@var{setting}
+Specify whether GCC should insert cache barriers to avoid the
+side effects of speculation on R10K processors.
+
+In common with many processors, the R10K tries to predict the outcome
+of a conditional branch and speculatively executes instructions from
+the ``taken'' branch.  It later aborts these instructions if the
+predicted outcome is wrong.  However, on the R10K, even aborted
+instructions can have side effects.
+
+This problem only affects kernel stores and, depending on the system,
+kernel loads.  As an example, a speculatively-executed store may load
+the target memory into cache and mark the cache line as dirty, even if
+the store itself is later aborted.  If a DMA operation writes to the
+same area of memory before the ``dirty'' line is flushed, the cached
+data overwrites the DMA-ed data.  See the R10K processor manual
+for a full description, including other potential problems.
+
+One workaround is to insert cache barrier instructions before every memory
+access that might be speculatively executed and that might have side
+effects even if aborted.  @option{-mr10k-cache-barrier=@var{setting}}
+controls GCC's implementation of this workaround.  It assumes that
+aborted accesses to any byte in the following regions does not have
+side effects:
+
+@enumerate
+@item
+the memory occupied by the current function's stack frame;
+
+@item
+the memory occupied by an incoming stack argument;
+
+@item
+the memory occupied by an object with a link-time-constant address.
+@end enumerate
+
+It is the kernel's responsibility to ensure that speculative
+accesses to these regions are indeed safe.
+
+If the input program contains a function declaration such as:
+
+@smallexample
+void foo (void);
+@end smallexample
+
+then the implementation of @code{foo} must allow @code{j foo} and
+@code{jal foo} to be executed speculatively.  GCC honors this
+restriction for functions it compiles itself.  It expects non-GCC
+functions (such as hand-written assembly code) to do the same.
+
+The option has three forms:
+
+@table @gcctabopt
+@item -mr10k-cache-barrier=load-store
+Insert a cache barrier before a load or store that might be
+speculatively executed and that might have side effects even
+if aborted.
+
+@item -mr10k-cache-barrier=store
+Insert a cache barrier before a store that might be speculatively
+executed and that might have side effects even if aborted.
+
+@item -mr10k-cache-barrier=none
+Disable the insertion of cache barriers.  This is the default setting.
+@end table
+
+@opindex mflush-func
+@opindex mno-flush-func
+@item -mflush-func=@var{func}
+@itemx -mno-flush-func
+Specifies the function to call to flush the I and D caches, or to not
+call any such function.  If called, the function must take the same
+arguments as the common @code{_flush_func}, that is, the address of the
+memory range for which the cache is being flushed, the size of the
+memory range, and the number 3 (to flush both caches).  The default
+depends on the target GCC was configured for, but commonly is either
+@code{_flush_func} or @code{__cpu_flush}.
+
+@opindex mbranch-cost
+@item -mbranch-cost=@var{num}
+Set the cost of branches to roughly @var{num} ``simple'' instructions.
+This cost is only a heuristic and is not guaranteed to produce
+consistent results across releases.  A zero cost redundantly selects
+the default, which is based on the @option{-mtune} setting.
+
+@opindex mbranch-likely
+@opindex mno-branch-likely
+@item -mbranch-likely
+@itemx -mno-branch-likely
+Enable or disable use of Branch Likely instructions, regardless of the
+default for the selected architecture.  By default, Branch Likely
+instructions may be generated if they are supported by the selected
+architecture.  An exception is for the MIPS32 and MIPS64 architectures
+and processors that implement those architectures; for those, Branch
+Likely instructions are not be generated by default because the MIPS32
+and MIPS64 architectures specifically deprecate their use.
+
+@opindex mcompact-branches=never
+@opindex mcompact-branches=optimal
+@opindex mcompact-branches=always

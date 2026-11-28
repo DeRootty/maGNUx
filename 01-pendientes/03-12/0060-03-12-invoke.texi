@@ -1,0 +1,209 @@
+@c GCC 16.1.0 | BLOQUE 0060 | 03-12
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 15284-15488 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+You can control this behavior for a specific variable by using the variable
+attribute @code{uninitialized} standard attribute (@pxref{Common Attributes})
+or the C++26 @code{[[indeterminate]]}.
+
+@opindex fvect-cost-model
+@opindex fno-vect-cost-model
+@item -fvect-cost-model=@var{model}
+Alter the cost model used for vectorization.  The @var{model} argument
+should be one of @samp{unlimited}, @samp{dynamic}, @samp{cheap} or
+@samp{very-cheap}.
+With the @samp{unlimited} model the vectorized code-path is assumed
+to be profitable while with the @samp{dynamic} model a runtime check
+guards the vectorized code-path to enable it only for iteration
+counts that will likely execute faster than when executing the original
+scalar loop.  The @samp{cheap} model disables vectorization of
+loops where doing so would be cost prohibitive for example due to
+required runtime checks for data dependence or alignment but otherwise
+is equal to the @samp{dynamic} model.  The @samp{very-cheap} model disables
+vectorization of loops when any runtime check for data dependence or alignment
+is required, it also disables vectorization of epilogue loops but otherwise is
+equal to the @samp{cheap} model.
+
+The default cost model depends on other optimization flags and is
+either @samp{dynamic} or @samp{cheap}.
+
+@opindex fsimd-cost-model
+@item -fsimd-cost-model=@var{model}
+Alter the cost model used for vectorization of loops marked with the OpenMP
+simd directive.  The @var{model} argument should be one of
+@samp{unlimited}, @samp{dynamic}, @samp{cheap}.  All values of @var{model}
+have the same meaning as described in @option{-fvect-cost-model} and by
+default a cost model defined with @option{-fvect-cost-model} is used.
+
+@opindex ftree-vrp
+@opindex fno-tree-vrp
+@item -ftree-vrp
+Perform Value Range Propagation on trees.  This is similar to the
+constant propagation pass, but instead of values, ranges of values are
+propagated.  This allows the optimizers to remove unnecessary range
+checks like array bound checks and null pointer checks.  This is
+enabled by default at @option{-O2} and higher.  Null pointer check
+elimination is only done if @option{-fdelete-null-pointer-checks} is
+enabled.
+
+@opindex fsplit-paths
+@opindex fno-split-paths
+@item -fsplit-paths
+Split paths leading to loop backedges.  This can improve dead code
+elimination and common subexpression elimination.  This is enabled by
+default at @option{-O3} and above.
+
+@opindex fsplit-ivs-in-unroller
+@opindex fno-split-ivs-in-unroller
+@item -fsplit-ivs-in-unroller
+Enables expression of values of induction variables in later iterations
+of the unrolled loop using the value in the first iteration.  This breaks
+long dependency chains, thus improving efficiency of the scheduling passes.
+
+A combination of @option{-fweb} and CSE is often sufficient to obtain the
+same effect.  However, that is not reliable in cases where the loop body
+is more complicated than a single basic block.  It also does not work at all
+on some architectures due to restrictions in the CSE pass.
+
+This optimization is enabled by default.
+
+@opindex fvariable-expansion-in-unroller
+@opindex fno-variable-expansion-in-unroller
+@item -fvariable-expansion-in-unroller
+With this option, the compiler creates multiple copies of some
+local variables when unrolling a loop, which can result in superior code.
+
+This optimization is enabled by default for PowerPC targets, but disabled
+by default otherwise.
+
+@opindex fpartial-inlining
+@opindex fno-partial-inlining
+@item -fpartial-inlining
+Inline parts of functions.  This option has any effect only
+when inlining itself is turned on by the @option{-finline-functions}
+or @option{-finline-small-functions} options.
+
+Enabled at levels @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex fpredictive-commoning
+@opindex fno-predictive-commoning
+@item -fpredictive-commoning
+Perform predictive commoning optimization, i.e., reusing computations
+(especially memory loads and stores) performed in previous
+iterations of loops.
+
+This option is enabled at level @option{-O3}.
+It is also enabled by @option{-fprofile-use} and @option{-fauto-profile}.
+
+@opindex fprefetch-loop-arrays
+@opindex fno-prefetch-loop-arrays
+@item -fprefetch-loop-arrays
+If supported by the target machine, generate instructions to prefetch
+memory to improve the performance of loops that access large arrays.
+
+This option may generate better or worse code; results are highly
+dependent on the structure of loops within the source code.
+
+Disabled at level @option{-Os}.
+
+@opindex fno-printf-return-value
+@opindex fprintf-return-value
+@item -fno-printf-return-value
+Do not substitute constants for known return value of formatted output
+functions such as @code{sprintf}, @code{snprintf}, @code{vsprintf}, and
+@code{vsnprintf} (but not @code{printf} of @code{fprintf}).  This
+transformation allows GCC to optimize or even eliminate branches based
+on the known return value of these functions called with arguments that
+are either constant, or whose values are known to be in a range that
+makes determining the exact return value possible.  For example, when
+@option{-fprintf-return-value} is in effect, both the branch and the
+body of the @code{if} statement (but not the call to @code{snprint})
+can be optimized away when @code{i} is a 32-bit or smaller integer
+because the return value is guaranteed to be at most 8.
+
+@smallexample
+char buf[9];
+if (snprintf (buf, "%08x", i) >= sizeof buf)
+  @dots{}
+@end smallexample
+
+The @option{-fprintf-return-value} option relies on other optimizations
+and yields best results with @option{-O2} and above.  It works in tandem
+with the @option{-Wformat-overflow} and @option{-Wformat-truncation}
+options.  The @option{-fprintf-return-value} option is enabled by default.
+
+@opindex fno-peephole
+@opindex fpeephole
+@opindex fno-peephole2
+@opindex fpeephole2
+@item -fno-peephole
+@itemx -fno-peephole2
+Disable any machine-specific peephole optimizations.  The difference
+between @option{-fno-peephole} and @option{-fno-peephole2} is in how they
+are implemented in the compiler; some targets use one, some use the
+other, a few use both.
+
+@option{-fpeephole} is enabled by default.
+@option{-fpeephole2} enabled at levels @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex fno-guess-branch-probability
+@opindex fguess-branch-probability
+@item -fno-guess-branch-probability
+Do not guess branch probabilities using heuristics.
+
+GCC uses heuristics to guess branch probabilities if they are
+not provided by profiling feedback (@option{-fprofile-arcs}).  These
+heuristics are based on the control flow graph.  If some branch probabilities
+are specified by @code{__builtin_expect}, then the heuristics are
+used to guess branch probabilities for the rest of the control flow graph,
+taking the @code{__builtin_expect} info into account.  The interactions
+between the heuristics and @code{__builtin_expect} can be complex, and in
+some cases, it may be useful to disable the heuristics so that the effects
+of @code{__builtin_expect} are easier to understand.
+
+It is also possible to specify expected probability of the expression
+with @code{__builtin_expect_with_probability} built-in function.
+
+The default is @option{-fguess-branch-probability} at levels
+@option{-O}, @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex freorder-blocks
+@opindex fno-reorder-blocks
+@item -freorder-blocks
+Reorder basic blocks in the compiled function in order to reduce number of
+taken branches and improve code locality.
+
+Enabled at levels @option{-O1}, @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex freorder-blocks-algorithm
+@opindex fno-reorder-blocks-algorithm
+@item -freorder-blocks-algorithm=@var{algorithm}
+Use the specified algorithm for basic block reordering.  The
+@var{algorithm} argument can be @samp{simple}, which does not increase
+code size (except sometimes due to secondary effects like alignment),
+or @samp{stc}, the ``software trace cache'' algorithm, which tries to
+put all often executed code together, minimizing the number of branches
+executed by making extra copies of code.
+
+The default is @samp{simple} at levels @option{-O1}, @option{-Os}, and
+@samp{stc} at levels @option{-O2}, @option{-O3}.
+
+@opindex freorder-blocks-and-partition
+@opindex fno-reorder-blocks-and-partition
+@item -freorder-blocks-and-partition
+In addition to reordering basic blocks in the compiled function, in order
+to reduce number of taken branches, partitions hot and cold basic blocks
+into separate sections of the assembly and @file{.o} files, to improve
+paging and cache locality performance.
+
+This optimization is automatically turned off in the presence of
+exception handling or unwind tables (on targets using setjump/longjump or target specific scheme), for linkonce sections, for functions with a user-defined
+section attribute and on any architecture that does not support named
+sections.  When @option{-fsplit-stack} is used this option is not
+enabled by default (to avoid linker errors), but may be enabled
+explicitly (if using a working linker).
+
+Enabled for x86 at levels @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex freorder-functions
+@opindex fno-reorder-functions

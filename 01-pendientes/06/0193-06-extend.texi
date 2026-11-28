@@ -1,0 +1,237 @@
+@c GCC 16.1.0 | BLOQUE 0193 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 4144-4376 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item packed
+This attribute can be attached to a @code{struct}, @code{union}, or
+C++ @code{class} definition, to a member of one, or to an @code{enum}
+definition.
+
+The @code{packed} attribute on a structure member specifies that the
+member should have
+the smallest possible alignment---one bit for a bit-field and one byte
+otherwise, unless a larger value is specified with the @code{aligned}
+attribute.  The attribute does not apply to non-member objects.
+
+For example in the structure below, the member array @code{x} is packed
+so that it immediately follows @code{a} with no intervening padding:
+
+@smallexample
+struct foo
+@{
+  char a;
+  int x[2] __attribute__ ((packed));
+@};
+@end smallexample
+
+@emph{Note:} The 4.1, 4.2 and 4.3 series of GCC ignored the
+@code{packed} attribute on bit-fields of type @code{char}.  This was
+fixed in GCC 4.4 but the change could lead to differences in the
+structure layout.  See the documentation of
+@option{-Wpacked-bitfield-compat} for more information.
+
+Applied to a @code{struct}, @code{union}, or C++ @code{class} definition
+as a whole, it specifies that each of its members (other
+than zero-width
+bit-fields) is placed to minimize the memory required.  This is equivalent
+to specifying the @code{packed} attribute on each of the members.
+
+In the following example @code{struct my_packed_struct}'s members are
+packed closely together, but the internal layout of its @code{s} member
+is not packed---to do that, @code{struct my_unpacked_struct} needs to
+be packed too.
+
+@smallexample
+struct my_unpacked_struct
+@{
+  char c;
+  int i;
+@};
+
+struct [[gnu::__packed__]] my_packed_struct
+@{
+  char c;
+  int  i;
+  struct my_unpacked_struct s;
+  @};
+@end smallexample
+
+@opindex fshort-enums
+When attached to an @code{enum}
+indicates that the smallest integral type should be used to represent the type.
+Specifying the @option{-fshort-enums} flag on the command line
+is equivalent to specifying the @code{packed}
+attribute on all @code{enum} definitions.
+
+You may only specify the @code{packed} attribute on the definition
+of an @code{enum}, @code{struct}, @code{union}, or @code{class},
+not on a @code{typedef} that does not also define the enumerated type,
+structure, union, or class.
+
+@atindex @code{patchable_function_entry}
+@cindex extra NOP instructions at the function entry point
+@cindex functions that have patchable entries
+@item patchable_function_entry
+This attribute applies to functions.
+
+In case the target's text segment can be made writable at run time by
+any means, padding the function entry with a number of NOPs can be
+used to provide a universal tool for instrumentation.
+
+The @code{patchable_function_entry} function attribute can be used to
+change the number of NOPs to any desired value.  The two-value syntax
+is the same as for the command-line switch
+@option{-fpatchable-function-entry=N,M}, generating @var{N} NOPs, with
+the function entry point before the @var{M}th NOP instruction.
+@var{M} defaults to 0 if omitted e.g.@: function entry point is before
+the first NOP.
+
+If patchable function entries are enabled globally using the command-line
+option @option{-fpatchable-function-entry=N,M}, then you must disable
+instrumentation on all functions that are part of the instrumentation
+framework with the attribute @code{patchable_function_entry (0)}
+to prevent recursion.
+
+@atindex @code{persistent}
+@cindex persistent data
+@item persistent
+This attribute applies to variables.
+
+Any variables with the @code{persistent} attribute are not initialized by
+the C runtime startup code, but instead are initialized by the program
+loader.  This enables the value of the variable to persist
+between processor resets.
+
+This attribute is specific to ELF targets and relies on the linker
+script to place the sections with the @code{.persistent} prefix in the
+right location.  Specifically, some type of non-volatile, writable
+memory is required.
+
+@atindex @code{pure}
+@cindex functions that have no side effects
+@item pure
+This attribute applies to functions.
+
+Calls to functions that have no observable effects on the state of
+the program other than to return a value may lend themselves to optimizations
+such as common subexpression elimination.  Declaring such functions with
+the @code{pure} attribute allows GCC to avoid emitting some calls in repeated
+invocations of the function with the same argument values.
+
+The @code{pure} attribute prohibits a function from modifying the state
+of the program that is observable by means other than inspecting
+the function's return value.  However, functions declared with the @code{pure}
+attribute can safely read any non-volatile objects, and modify the value of
+objects in a way that does not affect their return value or the observable
+state of the program.
+
+For example,
+
+@smallexample
+int hash (char *) __attribute__ ((pure));
+@end smallexample
+
+@noindent
+tells GCC that subsequent calls to the function @code{hash} with the same
+string can be replaced by the result of the first call provided the state
+of the program observable by @code{hash}, including the contents of the array
+itself, does not change in between.  Even though @code{hash} takes a non-const
+pointer argument it must not modify the array it points to, or any other object
+whose value the rest of the program may depend on.  However, the caller may
+safely change the contents of the array between successive calls to
+the function (doing so disables the optimization).  The restriction also
+applies to member objects referenced by the @code{this} pointer in C++
+non-static member functions.
+
+Some common examples of pure functions are @code{strlen} or @code{memcmp}.
+Interesting non-pure functions are functions with infinite loops or those
+depending on volatile memory or other system resource, that may change between
+consecutive calls (such as the standard C @code{feof} function in
+a multithreading environment).
+
+The @code{pure} attribute imposes similar but looser restrictions on
+a function's definition than the @code{const} attribute: @code{pure}
+allows the function to read any non-volatile memory, even if it changes
+in between successive invocations of the function.  Declaring the same
+function with both the @code{pure} and the @code{const} attribute is
+diagnosed.  Because a pure function cannot have any observable side
+effects it does not make sense for such a function to return @code{void}.
+Declaring such a function is diagnosed.
+
+@atindex @code{reproducible}
+@cindex functions that have no side effects
+@item reproducible
+This attribute applies to function types.
+
+This attribute is a GNU counterpart of the C23 @code{[[reproducible]]}
+attribute, used to specify function pointers to effectless and idempotent
+functions according to the C23 definition.
+
+Unlike the standard C23 attribute it can be also specified in attributes
+which appertain to function declarations and applies to the their function
+type even in that case.
+
+Reproducible functions without pointer or reference arguments or which do
+not modify objects referenced by those pointer/reference arguments are
+similar to functions with the @code{pure} attribute, except that
+@code{pure} attribute also requires finiteness.  So, both functions with
+@code{pure} and with @code{reproducible} attributes can be optimized by common
+subexpression elimination if the global state or anything reachable through
+the pointer/reference arguments isn't modified, but only functions with
+@code{pure} attribute can be optimized by dead code elimination if their
+result is
+unused or is used only by dead code.  Reproducible functions without pointer
+or reference arguments with @code{void} return type are diagnosed because
+they can't store any results and don't have other observable side-effects
+either.
+
+Reproducible functions with pointer or reference arguments can store
+additional results through those pointers or references or references to
+pointers.
+
+@atindex @code{retain}
+@cindex linker garbage collection
+@item retain
+This attribute applies to functions and variables.
+
+For ELF targets that support the GNU or FreeBSD OSABIs, this attribute
+protects the function or variable it applies to
+from linker garbage collection.  To support this behavior,
+functions and variables that have not been placed in specific sections
+(e.g. by the @code{section} attribute, or the @code{-ffunction-sections}
+or @code{-fdata-sections} options) are placed in new, unique sections.
+
+This additional functionality requires Binutils version 2.36 or later.
+
+@atindex @code{returns_nonnull}
+@item returns_nonnull
+This attribute applies to functions returning a pointer type.
+
+The @code{returns_nonnull} attribute specifies that the function
+return value should be a non-null pointer.  For instance, the declaration:
+
+@smallexample
+[[gnu::returns_nonnull]]
+extern void *mymalloc (size_t len);
+@end smallexample
+
+@noindent
+lets the compiler optimize callers based on the knowledge
+that the return value will never be null.
+
+@atindex @code{returns_twice}
+@cindex functions that return more than once
+@item returns_twice
+This attribute applies to functions.
+
+The @code{returns_twice} attribute tells the compiler that a function may
+return more than one time.  The compiler ensures that all registers
+are dead before calling such a function and emits a warning about
+the variables that may be clobbered after the second return from the
+function.  Examples of such functions are @code{setjmp} and @code{vfork}.
+The @code{longjmp}-like counterpart of such function, if any, might need
+to be marked with the @code{noreturn} attribute.
+
+@atindex @code{scalar_storage_order}
+@cindex endianness
+@cindex byte order

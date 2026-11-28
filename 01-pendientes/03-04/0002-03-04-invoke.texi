@@ -1,0 +1,222 @@
+@c GCC 16.1.0 | BLOQUE 0002 | 03-04
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 2728-2945 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -fcond-mismatch
+Allow conditional expressions with mismatched types in the second and
+third arguments.  The value of such an expression is void.  This option
+is not supported for C++.
+
+@opindex ffreestanding
+@opindex fno-freestanding
+@cindex hosted environment
+@item -ffreestanding
+
+Assert that compilation targets a freestanding environment.  This
+implies @option{-fno-builtin}.  A freestanding environment
+is one in which the standard library may not exist, and program startup may
+not necessarily be at @code{main}.  The most obvious example is an OS kernel.
+This is equivalent to @option{-fno-hosted}.
+
+@xref{Standards,,Language Standards Supported by GCC}, for details of
+freestanding and hosted environments.
+
+@opindex fgimple
+@opindex fno-gimple
+@item -fgimple
+
+Enable parsing of function definitions marked with @code{__GIMPLE}.
+This is an experimental feature that allows unit testing of GIMPLE
+passes.
+
+@opindex fgnu-tm
+@opindex fno-gnu-tm
+@item -fgnu-tm
+When the option @option{-fgnu-tm} is specified, the compiler
+generates code for the Linux variant of Intel's current Transactional
+Memory ABI specification document (Revision 1.1, May 6 2009).  This is
+an experimental feature whose interface may change in future versions
+of GCC, as the official specification changes.  Please note that not
+all architectures are supported for this feature.
+
+For more information on GCC's support for transactional memory,
+@xref{Enabling libitm,,The GNU Transactional Memory Library,libitm,GNU
+Transactional Memory Library}.
+
+Note that the transactional memory feature is not supported with
+non-call exceptions (@option{-fnon-call-exceptions}).
+
+@opindex fgnu89-inline
+@opindex fno-gnu89-inline
+@item -fgnu89-inline
+The option @option{-fgnu89-inline} tells GCC to use the traditional
+GNU semantics for @code{inline} functions when in C99 mode.
+@xref{Inline,,An Inline Function is As Fast As a Macro}.
+Using this option is roughly equivalent to adding the
+@code{gnu_inline} function attribute to all inline functions
+(@pxref{Common Attributes}).
+
+The option @option{-fno-gnu89-inline} explicitly tells GCC to use the
+C99 semantics for @code{inline} when in C99 or gnu99 mode (i.e., it
+specifies the default behavior).
+This option is not supported in @option{-std=c90} or
+@option{-std=gnu90} mode.
+
+The preprocessor macros @code{__GNUC_GNU_INLINE__} and
+@code{__GNUC_STDC_INLINE__} may be used to check which semantics are
+in effect for @code{inline} functions.  @xref{Common Predefined
+Macros,,,cpp,The C Preprocessor}.
+
+@opindex fhosted
+@opindex fno-hosted
+@cindex hosted environment
+@item -fhosted
+
+Assert that compilation targets a hosted environment.  This implies
+@option{-fbuiltin}.  A hosted environment is one in which the
+entire standard library is available, and in which @code{main} has a return
+type of @code{int}.  Examples are nearly everything except a kernel.
+This is equivalent to @option{-fno-freestanding}.
+
+@opindex flax-vector-conversions
+@opindex fno-lax-vector-conversions
+@item -flax-vector-conversions
+Allow implicit conversions between vectors with differing numbers of
+elements and/or incompatible element types.  This option should not be
+used for new code.
+
+@opindex fms-extensions
+@opindex fno-ms-extensions
+@item -fms-extensions
+Accept some non-standard constructs used in Microsoft header files.
+
+In C++ code, this allows member names in structures to be similar
+to previous types declarations.
+
+@smallexample
+typedef int UOW;
+struct ABC @{
+  UOW UOW;
+@};
+@end smallexample
+
+Some cases of unnamed fields in structures and unions are only
+accepted with this option.  @xref{Unnamed Fields,,Unnamed struct/union
+fields within structs/unions}, for details.
+
+Note that this option is off for all targets except for x86
+targets using ms-abi.
+
+@opindex fpermitted-flt-eval-methods
+@opindex fpermitted-flt-eval-methods=c11
+@opindex fpermitted-flt-eval-methods=ts-18661-3
+@item -fpermitted-flt-eval-methods=@var{style}
+ISO/IEC TS 18661-3 defines new permissible values for
+@code{FLT_EVAL_METHOD} that indicate that operations and constants with
+a semantic type that is an interchange or extended format should be
+evaluated to the precision and range of that type.  These new values are
+a superset of those permitted under C99/C11, which does not specify the
+meaning of other positive values of @code{FLT_EVAL_METHOD}.  As such, code
+conforming to C11 may not have been written expecting the possibility of
+the new values.
+
+@option{-fpermitted-flt-eval-methods} specifies whether the compiler
+should allow only the values of @code{FLT_EVAL_METHOD} specified in C99/C11,
+or the extended set of values specified in ISO/IEC TS 18661-3.
+
+@var{style} is either @code{c11} or @code{ts-18661-3} as appropriate.
+
+The default when in a standards compliant mode (@option{-std=c11} or similar)
+is @option{-fpermitted-flt-eval-methods=c11}.  The default when in a GNU
+dialect (@option{-std=gnu11} or similar) is
+@option{-fpermitted-flt-eval-methods=ts-18661-3}.
+
+@opindex fdeps-
+The @samp{-fdeps-*} options are used to extract structured dependency
+information for a source.  This involves determining what resources provided by
+other source files will be required to compile the source as well as what
+resources are provided by the source.  This information can be used to add
+required dependencies between compilation rules of dependent sources based on
+their contents rather than requiring such information be reflected within the
+build tools as well.
+
+@opindex fdeps-file
+@item -fdeps-file=@var{file}
+Where to write structured dependency information.
+
+@opindex fdeps-format
+@item -fdeps-format=@var{format}
+The format to use for structured dependency information. @samp{p1689r5} is the
+only supported format right now.  Note that when this argument is specified, the
+output of @samp{-MF} is stripped of some information (namely C++ modules) so
+that it does not use extended makefile syntax not understood by most tools.
+
+@opindex fdeps-target
+@item -fdeps-target=@var{file}
+Analogous to @option{-MT} but for structured dependency information.  This
+indicates the target which will ultimately need any required resources and
+provide any resources extracted from the source that may be required by other
+sources.
+
+@opindex fplan9-extensions
+@opindex fno-plan9-extensions
+@item -fplan9-extensions
+Accept some non-standard constructs used in Plan 9 code.
+
+This enables @option{-fms-extensions}, permits passing pointers to
+structures with anonymous fields to functions that expect pointers to
+elements of the type of the field, and permits referring to anonymous
+fields declared using a typedef.  @xref{Unnamed Fields,,Unnamed
+struct/union fields within structs/unions}, for details.  This is only
+supported for C, not C++.
+
+@opindex fsigned-bitfields
+@opindex funsigned-bitfields
+@opindex fno-signed-bitfields
+@opindex fno-unsigned-bitfields
+@item -fsigned-bitfields
+@itemx -funsigned-bitfields
+@itemx -fno-signed-bitfields
+@itemx -fno-unsigned-bitfields
+These options control whether a bit-field is signed or unsigned, when the
+declaration does not use either @code{signed} or @code{unsigned}.  By
+default, such a bit-field is signed, because this is consistent: the
+basic integer types such as @code{int} are signed types.
+
+@anchor{@code{char} type signedness}
+@cindex @code{char} type signedness
+@cindex signedness of @code{char} type
+@opindex fsigned-char
+@opindex fno-signed-char
+@opindex funsigned-char
+@opindex fno-unsigned-char
+@item -fsigned-char
+@itemx -funsigned-char
+@option{-fsigned-char} lets the type @code{char} be signed,
+like @code{signed char}, while @option{-funsigned-char} lets
+the type @code{char} be unsigned, like @code{unsigned char}.
+
+Note that @option{-fsigned-char}
+is equivalent to @option{-fno-unsigned-char}, which is
+the negative form of @option{-funsigned-char}.  Likewise, the option
+@option{-fno-signed-char} is equivalent to @option{-funsigned-char}.
+
+Each target supported by GCC has a default for what @code{char} should
+be, which is typically specified in the processor-specific ABI
+document for that target.  It is either like @code{unsigned char} by
+default or like @code{signed char} by default.
+
+Ideally, a portable program should always use @code{signed char} or
+@code{unsigned char} when it depends on the signedness of an object.
+But many programs have been written to use plain @code{char} and
+expect it to be signed, or expect it to be unsigned, depending on the
+machines they were written for.  These options let you
+make such a program work with the opposite default.
+
+The type @code{char} is always a distinct type from each of
+@code{signed char} or @code{unsigned char}, even though its behavior
+is always just like one of those two.
+
+@opindex fstrict-flex-arrays
+@opindex fno-strict-flex-arrays
+@opindex fstrict-flex-arrays=@var{level}

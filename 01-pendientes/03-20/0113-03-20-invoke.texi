@@ -1,0 +1,315 @@
+@c GCC 16.1.0 | BLOQUE 0113 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 25186-25496 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -mpdebug
+Enable CRIS-specific verbose debug-related information in the assembly
+code.  This option also has the effect of turning off the @samp{#NO_APP}
+formatted-code indicator to the assembler at the beginning of the
+assembly file.
+
+@opindex mcc-init
+@opindex mno-cc-init
+@item -mcc-init
+Do not use condition-code results from previous instruction; always emit
+compare and test instructions before use of condition codes.
+
+@opindex mno-side-effects
+@opindex mside-effects
+@item -mno-side-effects
+Do not emit instructions with side effects in addressing modes other than
+post-increment.
+
+@opindex mstack-align
+@opindex mno-stack-align
+@opindex mdata-align
+@opindex mno-data-align
+@opindex mconst-align
+@opindex mno-const-align
+@item -mstack-align
+@itemx -mno-stack-align
+@itemx -mdata-align
+@itemx -mno-data-align
+@itemx -mconst-align
+@itemx -mno-const-align
+These options (@samp{no-} options) arrange (eliminate arrangements) for the
+stack frame, individual data and constants to be aligned for the maximum
+single data access size for the chosen CPU model.  The default is to
+arrange for 32-bit alignment.  ABI details such as structure layout are
+not affected by these options.
+
+@opindex m32-bit
+@opindex m16-bit
+@opindex m8-bit
+@item -m32-bit
+@itemx -m16-bit
+@itemx -m8-bit
+Similar to the stack- data- and const-align options above, these options
+arrange for stack frame, writable data and constants to all be 32-bit,
+16-bit or 8-bit aligned.  The default is 32-bit alignment.
+
+@opindex mno-prologue-epilogue
+@opindex mprologue-epilogue
+@item -mno-prologue-epilogue
+@itemx -mprologue-epilogue
+With @option{-mno-prologue-epilogue}, the normal function prologue and
+epilogue which set up the stack frame are omitted and no return
+instructions or return sequences are generated in the code.  Use this
+option only together with visual inspection of the compiled code: no
+warnings or errors are generated when call-saved registers must be saved,
+or storage for local variables needs to be allocated.
+
+@opindex mbest-lib-options
+@opindex moverride-best-lib-options
+@item -mbest-lib-options
+@itemx -moverride-best-lib-options
+@option{-mbest-lib-options} selects the most feature-enabling options
+allowed by other options.  This option has no @samp{no-} form, but
+@option{-moverride-best-lib-options} disables it regardless of the relative
+order of the two options on the command line.
+
+@opindex mtrap-using-break8
+@opindex mno-trap-using-break8
+@item -mtrap-using-break8
+Emit traps as @samp{break 8}.  This is the default for CRIS v3 and up.  If
+disabled, calls to @code{abort} are used instead.
+
+@opindex mtrap-unaligned-atomic
+@opindex mno-trap-unaligned-atomic
+@item -mtrap-unaligned-atomic
+Emit checks causing @samp{break 8} instructions to execute when
+applying atomic builtins on misaligned memory.
+
+@opindex munaligned-atomic-may-use-library
+@opindex mno-unaligned-atomic-may-use-library
+@item -munaligned-atomic-may-use-library
+Handle atomic builtins that may be applied to unaligned data by calling
+library functions.  This option overrides @option{-mtrap-unaligned-atomic}.
+
+@opindex sim
+@item -sim
+This option arranges
+to link with input-output functions from a simulator library.  Code,
+initialized data and zero-initialized data are allocated consecutively.
+
+@opindex sim2
+@item -sim2
+Like @option{-sim}, but pass linker options to locate initialized data at
+0x40000000 and zero-initialized data at 0x80000000.
+@end table
+
+@node C-SKY Options
+@subsection C-SKY Options
+@cindex C-SKY Options
+
+GCC supports these options when compiling for C-SKY V2 processors.
+
+@table @gcctabopt
+
+@opindex march=
+@item -march=@var{arch}
+Specify the C-SKY target architecture.  Valid values for @var{arch} are:
+@samp{ck801}, @samp{ck802}, @samp{ck803}, @samp{ck807}, and @samp{ck810}.
+The default is @samp{ck810}.
+
+@opindex mcpu=
+@item -mcpu=@var{cpu}
+Specify the C-SKY target processor.  Valid values for @var{cpu} are:
+@samp{ck801}, @samp{ck801t},
+@samp{ck802}, @samp{ck802t}, @samp{ck802j},
+@samp{ck803}, @samp{ck803h}, @samp{ck803t}, @samp{ck803ht},
+@samp{ck803f}, @samp{ck803fh}, @samp{ck803e}, @samp{ck803eh},
+@samp{ck803et}, @samp{ck803eht}, @samp{ck803ef}, @samp{ck803efh},
+@samp{ck803ft}, @samp{ck803eft}, @samp{ck803efht}, @samp{ck803r1},
+@samp{ck803hr1}, @samp{ck803tr1}, @samp{ck803htr1}, @samp{ck803fr1},
+@samp{ck803fhr1}, @samp{ck803er1}, @samp{ck803ehr1}, @samp{ck803etr1},
+@samp{ck803ehtr1}, @samp{ck803efr1}, @samp{ck803efhr1}, @samp{ck803ftr1},
+@samp{ck803eftr1}, @samp{ck803efhtr1},
+@samp{ck803s}, @samp{ck803st}, @samp{ck803se}, @samp{ck803sf},
+@samp{ck803sef}, @samp{ck803seft},
+@samp{ck807e}, @samp{ck807ef}, @samp{ck807}, @samp{ck807f},
+@samp{ck810e}, @samp{ck810et}, @samp{ck810ef}, @samp{ck810eft},
+@samp{ck810}, @samp{ck810v}, @samp{ck810f}, @samp{ck810t}, @samp{ck810fv},
+@samp{ck810tv}, @samp{ck810ft}, and @samp{ck810ftv}.
+
+@opindex mbig-endian
+@opindex mlittle-endian
+@item -mbig-endian
+@itemx -mlittle-endian
+
+Select big- or little-endian code.  The default is little-endian.
+
+@opindex mfloat-abi
+@item -mfloat-abi=@var{name}
+Specifies which floating-point ABI to use.  Permissible values
+are: @samp{soft}, @samp{softfp} and @samp{hard}.
+
+Specifying @samp{soft} causes GCC to generate output containing
+library calls for floating-point operations.
+@samp{softfp} allows the generation of code using hardware floating-point
+instructions, but still uses the soft-float calling conventions.
+@samp{hard} allows generation of floating-point instructions
+and uses FPU-specific calling conventions.
+
+The default depends on the specific target configuration.  Note that
+the hard-float and soft-float ABIs are not link-compatible; you must
+compile your entire program with the same ABI, and link with a
+compatible set of libraries.
+
+@opindex mdouble-float
+@opindex mno-double-float
+@item -mdouble-float
+@itemx -mno-double-float
+When @option{-mhard-float} is in effect, enable generation of
+double-precision float instructions.  This is the default except
+when compiling for CK803.
+
+@opindex mfdivdu
+@opindex mno-fdivdu
+@item -mfdivdu
+@itemx -mno-fdivdu
+When @option{-mhard-float} is in effect, enable generation of
+@code{frecipd}, @code{fsqrtd}, and @code{fdivd} instructions.
+This is the default except when compiling for CK803.
+
+@opindex mfpu=
+@item -mfpu=@var{fpu}
+Select the floating-point processor.  This option can only be used with
+@option{-mhard-float}.
+Values for @var{fpu} are
+@samp{fpv2_sf} (equivalent to @samp{-mno-double-float -mno-fdivdu}),
+@samp{fpv2} (@samp{-mdouble-float -mno-divdu}), and
+@samp{fpv2_divd} (@samp{-mdouble-float -mdivdu}).
+
+@opindex melrw
+@opindex mno-elrw
+@item -melrw
+@itemx -mno-elrw
+Enable the extended @code{lrw} instruction.  This option defaults to on
+for CK801 and off otherwise.
+
+@opindex mistack
+@opindex mno-istack
+@item -mistack
+@itemx -mno-istack
+Enable interrupt stack instructions; the default is off.
+
+The @option{-mistack} option is required to handle the
+@code{interrupt} and @code{isr} function attributes
+(@pxref{C-SKY Attributes}).
+
+@opindex mmp
+@opindex mno-mp
+@item -mmp
+@itemx -mno-mp
+Enable multiprocessor instructions; the default is off.
+
+@opindex mcp
+@opindex mno-cp
+@item -mcp
+@itemx -mno-cp
+Enable coprocessor instructions; the default is off.
+
+@opindex mcache
+@opindex mno-cache
+@item -mcache
+@itemx -mno-cache
+Enable coprocessor instructions; the default is off.
+
+@opindex msecurity
+@opindex mno-security
+@item -msecurity
+@itemx -mno-security
+Enable C-SKY security instructions; the default is off.
+
+@opindex mtrust
+@opindex mno-trust
+@item -mtrust
+@itemx -mno-trust
+Enable C-SKY trust instructions; the default is off.
+
+@opindex mdsp
+@opindex mno-dsp
+@opindex medsp
+@opindex mno-edsp
+@opindex mvdsp
+@opindex mno-vdsp
+@item -mdsp
+@itemx -mno-dsp
+@itemx -medsp
+@itemx -mno-edsp
+@itemx -mvdsp
+@itemx -mno-vdsp
+Enable C-SKY DSP, Enhanced DSP, or Vector DSP instructions, respectively.
+All of these options default to off.
+
+@opindex mdiv
+@opindex mno-div
+@item -mdiv
+@itemx -mno-div
+Generate divide instructions.  Default is off.
+
+@opindex msmart
+@opindex mno-smart
+@item -msmart
+@itemx -mno-smart
+Generate code for Smart Mode, using only registers numbered 0-7 to allow
+use of 16-bit instructions.  This option is ignored for CK801 where this
+is the required behavior, and it defaults to on for CK802.
+For other targets, the default is off.
+
+@opindex mhigh-registers
+@opindex mno-high-registers
+@item -mhigh-registers
+@itemx -mno-high-registers
+Generate code using the high registers numbered 16-31.  This option
+is not supported on CK801, CK802, or CK803, and is enabled by default
+for other processors.
+
+@opindex manchor
+@opindex mno-anchor
+@item -manchor
+@itemx -mno-anchor
+Generate code using global anchor symbol addresses.
+
+@opindex mpushpop
+@opindex mno-pushpop
+@item -mpushpop
+@itemx -mno-pushpop
+Generate code using @code{push} and @code{pop} instructions.  This option
+defaults to on.
+
+@opindex mmultiple-stld
+@opindex mno-multiple-stld
+@item -mmultiple-stld
+@itemx -mno-multiple-stld
+Generate code using @code{stm} and @code{ldm} instructions.  This option
+isn't supported on CK801 but is enabled by default on other processors.
+
+@opindex mconstpool
+@opindex mno-constpool
+@item -mconstpool
+@itemx -mno-constpool
+Create constant pools in the compiler instead of deferring it to the
+assembler.  This option is the default and required for correct code
+generation on CK801 and CK802, and is optional on other processors.
+
+@opindex mstack-size
+@opindex mno-stack-size
+@item -mstack-size
+@itemx -mno-stack-size
+Emit @code{.stack_size} directives for each function in the assembly
+output.  This option defaults to off.
+
+@opindex mccrt
+@opindex mno-ccrt
+@item -mccrt
+@itemx -mno-ccrt
+Generate code for the C-SKY compiler runtime instead of libgcc.  This
+option defaults to off.
+
+@opindex mbranch-cost=
+@item -mbranch-cost=@var{n}
+Set the branch costs to roughly @code{n} instructions.  The default is 1.
+
+@opindex msched-prolog

@@ -1,0 +1,346 @@
+@c GCC 16.1.0 | BLOQUE 0331 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 28902-29243 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item haswell
+Intel Core i7 Haswell CPU.
+
+@item broadwell
+Intel Core i7 Broadwell CPU.
+
+@item skylake
+Intel Core i7 Skylake CPU.
+
+@item skylake-avx512
+Intel Core i7 Skylake AVX512 CPU.
+
+@item cannonlake
+Intel Core i7 Cannon Lake CPU.
+
+@item icelake-client
+Intel Core i7 Ice Lake Client CPU.
+
+@item icelake-server
+Intel Core i7 Ice Lake Server CPU.
+
+@item cascadelake
+Intel Core i7 Cascadelake CPU.
+
+@item tigerlake
+Intel Core i7 Tigerlake CPU.
+
+@item cooperlake
+Intel Core i7 Cooperlake CPU.
+
+@item sapphirerapids
+Intel Core i7 sapphirerapids CPU.
+
+@item alderlake
+Intel Core i7 Alderlake CPU.
+
+@item rocketlake
+Intel Core i7 Rocketlake CPU.
+
+@item graniterapids
+Intel Core i7 graniterapids CPU.
+
+@item graniterapids-d
+Intel Core i7 graniterapids D CPU.
+
+@item arrowlake
+Intel Core i7 Arrow Lake CPU.
+
+@item arrowlake-s
+Intel Core i7 Arrow Lake S CPU.
+
+@item pantherlake
+Intel Core i7 Panther Lake CPU.
+
+@item diamondrapids
+Intel Core i7 Diamond Rapids CPU.
+
+@item novalake
+Intel Core i7 Nova Lake CPU.
+
+@item bonnell
+Intel Atom Bonnell CPU.
+
+@item silvermont
+Intel Atom Silvermont CPU.
+
+@item goldmont
+Intel Atom Goldmont CPU.
+
+@item goldmont-plus
+Intel Atom Goldmont Plus CPU.
+
+@item tremont
+Intel Atom Tremont CPU.
+
+@item sierraforest
+Intel Atom Sierra Forest CPU.
+
+@item grandridge
+Intel Atom Grand Ridge CPU.
+
+@item clearwaterforest
+Intel Atom Clearwater Forest CPU.
+
+@item lujiazui
+ZHAOXIN lujiazui CPU.
+
+@item yongfeng
+ZHAOXIN yongfeng CPU.
+
+@item shijidadao
+ZHAOXIN shijidadao CPU.
+
+@item amdfam10h
+AMD Family 10h CPU.
+
+@item barcelona
+AMD Family 10h Barcelona CPU.
+
+@item shanghai
+AMD Family 10h Shanghai CPU.
+
+@item istanbul
+AMD Family 10h Istanbul CPU.
+
+@item btver1
+AMD Family 14h CPU.
+
+@item amdfam15h
+AMD Family 15h CPU.
+
+@item bdver1
+AMD Family 15h Bulldozer version 1.
+
+@item bdver2
+AMD Family 15h Bulldozer version 2.
+
+@item bdver3
+AMD Family 15h Bulldozer version 3.
+
+@item bdver4
+AMD Family 15h Bulldozer version 4.
+
+@item btver2
+AMD Family 16h CPU.
+
+@item amdfam17h
+AMD Family 17h CPU.
+
+@item znver1
+AMD Family 17h Zen version 1.
+
+@item znver2
+AMD Family 17h Zen version 2.
+
+@item amdfam19h
+AMD Family 19h CPU.
+
+@item znver3
+AMD Family 19h Zen version 3.
+
+@item znver4
+AMD Family 19h Zen version 4.
+
+@item amdfam1ah
+AMD Family 1ah CPU.
+
+@item znver5
+AMD Family 1ah Zen version 5.
+
+@item znver6
+AMD Family 1ah Zen version 6.
+@end table
+
+Here is an example:
+@smallexample
+if (__builtin_cpu_is ("corei7"))
+  @{
+     do_corei7 (); // Core i7 specific implementation.
+  @}
+else
+  @{
+     do_generic (); // Generic implementation.
+  @}
+@end smallexample
+@enddefbuiltin
+
+@defbuiltin{int __builtin_cpu_supports (const char *@var{feature})}
+This function returns a positive integer if the run-time CPU
+supports @var{feature}
+and returns @code{0} otherwise. The following features can be detected:
+
+@table @samp
+@item cmov
+CMOV instruction.
+@item mmx
+MMX instructions.
+@item popcnt
+POPCNT instruction.
+@item sse
+SSE instructions.
+@item sse2
+SSE2 instructions.
+@item sse3
+SSE3 instructions.
+@item ssse3
+SSSE3 instructions.
+@item sse4.1
+SSE4.1 instructions.
+@item sse4.2
+SSE4.2 instructions.
+@item avx
+AVX instructions.
+@item avx2
+AVX2 instructions.
+@item sse4a
+SSE4A instructions.
+@item fma4
+FMA4 instructions.
+@item xop
+XOP instructions.
+@item fma
+FMA instructions.
+@item avx512f
+AVX512F instructions.
+@item bmi
+BMI instructions.
+@item bmi2
+BMI2 instructions.
+@item aes
+AES instructions.
+@item pclmul
+PCLMUL instructions.
+@item avx512vl
+AVX512VL instructions.
+@item avx512bw
+AVX512BW instructions.
+@item avx512dq
+AVX512DQ instructions.
+@item avx512cd
+AVX512CD instructions.
+@item avx512vbmi
+AVX512VBMI instructions.
+@item avx512ifma
+AVX512IFMA instructions.
+@item avx512vpopcntdq
+AVX512VPOPCNTDQ instructions.
+@item avx512vbmi2
+AVX512VBMI2 instructions.
+@item gfni
+GFNI instructions.
+@item vpclmulqdq
+VPCLMULQDQ instructions.
+@item avx512vnni
+AVX512VNNI instructions.
+@item avx512bitalg
+AVX512BITALG instructions.
+@item x86-64
+Baseline x86-64 microarchitecture level (as defined in x86-64 psABI).
+@item x86-64-v2
+x86-64-v2 microarchitecture level.
+@item x86-64-v3
+x86-64-v3 microarchitecture level.
+@item x86-64-v4
+x86-64-v4 microarchitecture level.
+
+
+@end table
+
+Here is an example:
+@smallexample
+if (__builtin_cpu_supports ("popcnt"))
+  @{
+     asm("popcnt %1,%0" : "=r"(count) : "rm"(n) : "cc");
+  @}
+else
+  @{
+     count = generic_countbits (n); //generic implementation.
+  @}
+@end smallexample
+@enddefbuiltin
+
+The following built-in functions are made available by @option{-mmmx}.
+All of them generate the machine instruction that is part of the name.
+
+@smallexample
+v8qi __builtin_ia32_paddb (v8qi, v8qi);
+v4hi __builtin_ia32_paddw (v4hi, v4hi);
+v2si __builtin_ia32_paddd (v2si, v2si);
+v8qi __builtin_ia32_psubb (v8qi, v8qi);
+v4hi __builtin_ia32_psubw (v4hi, v4hi);
+v2si __builtin_ia32_psubd (v2si, v2si);
+v8qi __builtin_ia32_paddsb (v8qi, v8qi);
+v4hi __builtin_ia32_paddsw (v4hi, v4hi);
+v8qi __builtin_ia32_psubsb (v8qi, v8qi);
+v4hi __builtin_ia32_psubsw (v4hi, v4hi);
+v8qi __builtin_ia32_paddusb (v8qi, v8qi);
+v4hi __builtin_ia32_paddusw (v4hi, v4hi);
+v8qi __builtin_ia32_psubusb (v8qi, v8qi);
+v4hi __builtin_ia32_psubusw (v4hi, v4hi);
+v4hi __builtin_ia32_pmullw (v4hi, v4hi);
+v4hi __builtin_ia32_pmulhw (v4hi, v4hi);
+di __builtin_ia32_pand (di, di);
+di __builtin_ia32_pandn (di,di);
+di __builtin_ia32_por (di, di);
+di __builtin_ia32_pxor (di, di);
+v8qi __builtin_ia32_pcmpeqb (v8qi, v8qi);
+v4hi __builtin_ia32_pcmpeqw (v4hi, v4hi);
+v2si __builtin_ia32_pcmpeqd (v2si, v2si);
+v8qi __builtin_ia32_pcmpgtb (v8qi, v8qi);
+v4hi __builtin_ia32_pcmpgtw (v4hi, v4hi);
+v2si __builtin_ia32_pcmpgtd (v2si, v2si);
+v8qi __builtin_ia32_punpckhbw (v8qi, v8qi);
+v4hi __builtin_ia32_punpckhwd (v4hi, v4hi);
+v2si __builtin_ia32_punpckhdq (v2si, v2si);
+v8qi __builtin_ia32_punpcklbw (v8qi, v8qi);
+v4hi __builtin_ia32_punpcklwd (v4hi, v4hi);
+v2si __builtin_ia32_punpckldq (v2si, v2si);
+v8qi __builtin_ia32_packsswb (v4hi, v4hi);
+v4hi __builtin_ia32_packssdw (v2si, v2si);
+v8qi __builtin_ia32_packuswb (v4hi, v4hi);
+
+v4hi __builtin_ia32_psllw (v4hi, v4hi);
+v2si __builtin_ia32_pslld (v2si, v2si);
+v1di __builtin_ia32_psllq (v1di, v1di);
+v4hi __builtin_ia32_psrlw (v4hi, v4hi);
+v2si __builtin_ia32_psrld (v2si, v2si);
+v1di __builtin_ia32_psrlq (v1di, v1di);
+v4hi __builtin_ia32_psraw (v4hi, v4hi);
+v2si __builtin_ia32_psrad (v2si, v2si);
+v4hi __builtin_ia32_psllwi (v4hi, int);
+v2si __builtin_ia32_pslldi (v2si, int);
+v1di __builtin_ia32_psllqi (v1di, int);
+v4hi __builtin_ia32_psrlwi (v4hi, int);
+v2si __builtin_ia32_psrldi (v2si, int);
+v1di __builtin_ia32_psrlqi (v1di, int);
+v4hi __builtin_ia32_psrawi (v4hi, int);
+v2si __builtin_ia32_psradi (v2si, int);
+@end smallexample
+
+The following built-in functions are made available either with
+@option{-msse}, or with @option{-m3dnowa}.  All of them generate
+the machine instruction that is part of the name.
+
+@smallexample
+v4hi __builtin_ia32_pmulhuw (v4hi, v4hi);
+v8qi __builtin_ia32_pavgb (v8qi, v8qi);
+v4hi __builtin_ia32_pavgw (v4hi, v4hi);
+v1di __builtin_ia32_psadbw (v8qi, v8qi);
+v8qi __builtin_ia32_pmaxub (v8qi, v8qi);
+v4hi __builtin_ia32_pmaxsw (v4hi, v4hi);
+v8qi __builtin_ia32_pminub (v8qi, v8qi);
+v4hi __builtin_ia32_pminsw (v4hi, v4hi);
+int __builtin_ia32_pmovmskb (v8qi);
+void __builtin_ia32_maskmovq (v8qi, v8qi, char *);
+void __builtin_ia32_movntq (di *, di);
+void __builtin_ia32_sfence (void);
+@end smallexample
+
+The following built-in functions are available when @option{-msse} is used.
+All of them generate the machine instruction that is part of the name.
+

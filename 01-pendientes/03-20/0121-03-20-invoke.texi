@@ -1,0 +1,262 @@
+@c GCC 16.1.0 | BLOQUE 0121 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 27584-27841 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item lp64s
+Uses 64-bit general purpose registers and no floating-point
+registers for parameter passing.  Data model is LP64, where @samp{int}
+is 32 bits, while @samp{long int} and pointers are 64 bits.
+@end table
+
+@opindex mfpu
+@item -mfpu=@var{fpu-type}
+Generate code for the specified FPU type, which can be one of:
+@table @samp
+@item 64
+Allow the use of hardware floating-point instructions for 32-bit
+and 64-bit operations.
+@item 32
+Allow the use of hardware floating-point instructions for 32-bit
+operations.
+@item none
+@item 0
+Prevent the use of hardware floating-point instructions.
+@end table
+
+@opindex msimd
+@item -msimd=@var{simd-type}
+Enable generation of LoongArch SIMD instructions for vectorization
+and via builtin functions.  The value can be one of:
+@table @samp
+@item lasx
+Enable generating instructions from the 256-bit LoongArch Advanced
+SIMD Extension (LASX) and the 128-bit LoongArch SIMD Extension (LSX).
+@item lsx
+Enable generating instructions from the 128-bit LoongArch SIMD
+Extension (LSX).
+@item none
+No LoongArch SIMD instruction may be generated.
+@end table
+
+@opindex msoft-float
+@item -msoft-float
+Force @option{-mfpu=none} and prevent the use of floating-point
+registers for parameter passing.  This option may change the target
+ABI.
+
+@opindex msingle-float
+@item -msingle-float
+Force @option{-mfpu=32} and allow the use of 32-bit floating-point
+registers for parameter passing.  This option may change the target
+ABI.
+
+@opindex mdouble-float
+@item -mdouble-float
+Force @option{-mfpu=64} and allow the use of 32/64-bit floating-point
+registers for parameter passing.  This option may change the target
+ABI.
+
+@opindex mlasx
+@opindex mno-lasx
+@opindex mlsx
+@opindex mno-lsx
+@item -mlasx
+@itemx -mno-lasx
+@item -mlsx
+@itemx -mno-lsx
+Incrementally adjust the scope of the SIMD extensions (none / LSX / LASX)
+that can be used by the compiler for code generation.  Enabling LASX with
+@option{-mlasx} automatically enables LSX,
+and disabling LSX with @option{-mno-lsx}
+automatically disables LASX.  These driver-only options act upon the final
+@option{-msimd} configuration state and make incremental changes in the order
+they appear on the GCC driver's command line, deriving the final / canonicalized
+@option{-msimd} option that is passed to the compiler proper.
+
+@opindex mbranch-cost
+@item -mbranch-cost=@var{n}
+Set the cost of branches to roughly @var{n} instructions.
+
+@opindex maddr-reg-reg-cost
+@item -maddr-reg-reg-cost=@var{n}
+Set the cost of ADDRESS_REG_REG to the value calculated by @var{n}.
+
+@opindex mcheck-zero-division
+@opindex mno-check-zero-division
+@item -mcheck-zero-division
+@itemx -mno-check-zero-divison
+Trap (do not trap) on integer division by zero.  The default is
+@option{-mcheck-zero-division} for @option{-O0} or @option{-Og}, and
+@option{-mno-check-zero-division} for other optimization levels.
+
+@opindex mbreak-code
+@item -mbreak-code=@var{code}
+Emit a @code{break} @var{code} instruction for irrecoverable traps
+from @code{__builtin_trap} or inserted by the compiler (for example
+an erroneous path isolated with
+@option{-fisolate-erroneous-paths-dereference}), or an
+@code{amswap.w $r0, $r1, $r0} instruction which will cause the hardware
+to trigger an Instruction Not-defined Exception if @var{code} is negative
+or greater than 32767.  The default is -1, meaning to use the
+@code{amswap.w} instruction.
+
+@opindex mcond-move-int
+@opindex mno-cond-move-int
+@item -mcond-move-int
+@itemx -mno-cond-move-int
+Conditional moves for integral data in general-purpose registers
+are enabled (disabled).  The default is @option{-mcond-move-int}.
+
+@opindex mcond-move-float
+@opindex mno-cond-move-float
+@item -mcond-move-float
+@itemx -mno-cond-move-float
+Conditional moves for floating-point registers are enabled (disabled).
+The default is @option{-mcond-move-float}.
+
+@opindex mmemcpy
+@opindex mno-memcpy
+@item -mmemcpy
+@itemx -mno-memcpy
+Force (do not force) the use of @code{memcpy} for non-trivial block moves.
+The default is @option{-mno-memcpy}, which allows GCC to inline most
+constant-sized copies.  Setting optimization level to @option{-Os} also
+forces the use of @code{memcpy}, but @option{-mno-memcpy} may override this
+behavior if explicitly specified, regardless of the order these options on
+the command line.
+
+@opindex mstrict-align
+@opindex mno-strict-align
+@item -mstrict-align
+@itemx -mno-strict-align
+Avoid or allow generating memory accesses that may not be aligned on a natural
+object boundary as described in the architecture specification. The default is
+@option{-mno-strict-align}.
+
+@opindex G
+@item -G @var{num}
+Put global and static data smaller than @var{num} bytes into a small data
+section.  The default value is 0.
+
+@opindex mmax-inline-memcpy-size
+@item -mmax-inline-memcpy-size=@var{n}
+Inline all block moves (such as calls to @code{memcpy} or structure copies)
+less than or equal to @var{n} bytes.  The default value of @var{n} is 1024.
+
+@opindex mcmodel=
+@item -mcmodel=@var{code-model}
+Set the code model to one of:
+@table @samp
+@item tiny-static (Not implemented yet)
+@item tiny (Not implemented yet)
+
+@item normal
+The text segment must be within 128MB addressing space.  The data segment must
+be within 2GB addressing space.
+
+@item medium
+The text segment and data segment must be within 2GB addressing space.
+This is the default code model unless GCC has been configured with
+@option{--with-cmodel=} specifying a different default code model.
+
+@item large (Not implemented yet)
+
+@item extreme
+This mode does not limit the size of the code segment and data segment.
+The @option{-mcmodel=extreme} option is incompatible with @option{-fplt}
+and/or @option{-mexplicit-relocs=none}.
+@end table
+
+@opindex mexplicit-relocs
+@opindex mno-explicit-relocs
+@item -mexplicit-relocs=@var{style}
+@itemx -mexplicit-relocs
+@itemx -mno-explicit-relocs
+Set when to use assembler relocation operators when dealing with symbolic
+addresses.  The alternative is to use assembler macros instead, which may
+limit instruction scheduling but allow linker relaxation.
+With @option{-mexplicit-relocs=none}, the assembler macros are always used;
+with @option{-mexplicit-relocs=always}, the assembler relocation operators
+are always used; and with @option{-mexplicit-relocs=auto} the compiler uses
+the relocation operators where linker relaxation is impossible to
+improve the code quality, and macros elsewhere.
+
+The default
+value for the option is determined with the assembler capability detected
+during GCC build-time and the setting of @option{-mrelax}:
+@option{-mexplicit-relocs=none} if the assembler does not support
+relocation operators at all,
+@option{-mexplicit-relocs=always} if the assembler supports relocation
+operators but @option{-mrelax} is not enabled,
+@option{-mexplicit-relocs=auto} if the assembler supports relocation
+operators and @option{-mrelax} is enabled.
+
+For backward compatibility, @option{-mexplicit-relocs} is equivalent to
+@option{-mexplicit-relocs=always}, while @option{-mno-explicit-relocs} is
+equivalent to @option{-mexplicit-relocs=none}.
+
+@opindex mdirect-extern-access
+@item -mdirect-extern-access
+@itemx -mno-direct-extern-access
+Control use of the GOT to access external symbols.  The default is
+@option{-mno-direct-extern-access}: the GOT is used for external symbols with
+default visibility, but not used for other external symbols.
+
+With @option{-mdirect-extern-access}, the GOT is not used and all external
+symbols are PC-relatively addressed.  It is @strong{only} suitable for
+environments where no dynamic link is performed, like firmwares, OS
+kernels, executables linked with @option{-static} or @option{-static-pie}.
+@option{-mdirect-extern-access} is not compatible with @option{-fPIC} or
+@option{-fpic}.
+
+@opindex mrelax
+@opindex mno-relax
+@item -mrelax
+@itemx -mno-relax
+Take (do not take) advantage of linker relaxations.  If
+@option{-mpass-mrelax-to-as} is enabled, this option is also passed to
+the assembler.  The default is determined during GCC build-time by
+detecting corresponding assembler support:
+@option{-mrelax} if the assembler supports both the @option{-mrelax}
+option and the conditional branch relaxation (it's required or the
+@code{.align} directives and conditional branch instructions in the
+assembly code outputted by GCC may be rejected by the assembler because
+of a relocation overflow), @option{-mno-relax} otherwise.
+
+@opindex mpass-mrelax-to-as
+@opindex mno-pass-mrelax-to-as
+@item -mpass-mrelax-to-as
+@itemx -mno-pass-mrelax-to-as
+Pass (do not pass) the @option{-mrelax} or @option{-mno-relax} option
+to the assembler.  The default is determined during GCC build-time by
+detecting corresponding assembler support:
+@option{-mpass-mrelax-to-as} if the assembler supports the
+@option{-mrelax} option, @option{-mno-pass-mrelax-to-as} otherwise.
+This option is mostly useful for debugging, or interoperation with
+assemblers different from the build-time one.
+
+@opindex mrecip
+@item -mrecip
+This option enables use of the reciprocal estimate and reciprocal square
+root estimate instructions with additional Newton-Raphson steps to increase
+precision instead of doing a divide or square root and divide for
+floating-point arguments.
+These instructions are generated only when @option{-funsafe-math-optimizations}
+is enabled together with @option{-ffinite-math-only} and
+@option{-fno-trapping-math}.
+This option is off by default. Before you can use this option, you must sure the
+target CPU supports the @code{frecipe} and @code{frsqrte} instructions.
+Note that while the throughput of the sequence is higher than the throughput of
+the non-reciprocal instruction, the precision of the sequence can be decreased
+by up to 2 ulp (i.e. the inverse of 1.0 equals 0.99999994).
+
+@opindex mrecip=opt
+@item -mrecip=@var{opt}
+This option controls which reciprocal estimate instructions
+may be used.  @var{opt} is a comma-separated list of options, which may
+be preceded by a @samp{!} to invert the option:
+
+@table @samp
+@item all
+Enable all estimate instructions.
+

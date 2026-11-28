@@ -1,0 +1,237 @@
+@c GCC 16.1.0 | BLOQUE 0284 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 17999-18231 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+The built-in function @code{__builtin_tgmath}, available only for C
+and Objective-C, calls a function determined according to the rules of
+@code{<tgmath.h>} macros.  It is intended to be used in
+implementations of that header, so that expansions of macros from that
+header only expand each of their arguments once, to avoid problems
+when calls to such macros are nested inside the arguments of other
+calls to such macros; in addition, it results in better diagnostics
+for invalid calls to @code{<tgmath.h>} macros than implementations
+using other GNU C language features.  For example, the @code{pow}
+type-generic macro might be defined as:
+
+@smallexample
+#define pow(a, b) __builtin_tgmath (powf, pow, powl, \
+                                    cpowf, cpow, cpowl, a, b)
+@end smallexample
+
+The arguments to @code{__builtin_tgmath} are at least two pointers to
+functions, followed by the arguments to the type-generic macro (which
+will be passed as arguments to the selected function).  All the
+pointers to functions must be pointers to prototyped functions, none
+of which may have variable arguments, and all of which must have the
+same number of parameters; the number of parameters of the first
+function determines how many arguments to @code{__builtin_tgmath} are
+interpreted as function pointers, and how many as the arguments to the
+called function.
+
+The types of the specified functions must all be different, but
+related to each other in the same way as a set of functions that may
+be selected between by a macro in @code{<tgmath.h>}.  This means that
+the functions are parameterized by a floating-point type @var{t},
+different for each such function.  The function return types may all
+be the same type, or they may be @var{t} for each function, or they
+may be the real type corresponding to @var{t} for each function (if
+some of the types @var{t} are complex).  Likewise, for each parameter
+position, the type of the parameter in that position may always be the
+same type, or may be @var{t} for each function (this case must apply
+for at least one parameter position), or may be the real type
+corresponding to @var{t} for each function.
+
+The standard rules for @code{<tgmath.h>} macros are used to find a
+common type @var{u} from the types of the arguments for parameters
+whose types vary between the functions; complex integer types (a GNU
+extension) are treated like the complex type corresponding to the real
+floating type that would be chosen for the corresponding real integer type.
+If the function return types vary, or are all the same integer type,
+the function called is the one for which @var{t} is @var{u}, and it is
+an error if there is no such function.  If the function return types
+are all the same floating-point type, the type-generic macro is taken
+to be one of those from TS 18661 that rounds the result to a narrower
+type; if there is a function for which @var{t} is @var{u}, it is
+called, and otherwise the first function, if any, for which @var{t}
+has at least the range and precision of @var{u} is called, and it is
+an error if there is no such function.
+
+@enddefbuiltin
+
+@defbuiltin{int __builtin_constant_p (@var{exp})}
+You can use the built-in function @code{__builtin_constant_p} to
+determine if the expression @var{exp} is known to be constant at
+compile time and hence that GCC can perform constant-folding on expressions
+involving that value.  The argument of the function is the expression to test.
+The expression is not evaluated, side-effects are discarded.  The function
+returns the integer 1 if the argument is known to be a compile-time
+constant and 0 if it is not known to be a compile-time constant.
+Any expression that has side-effects makes the function return 0.
+A return of 0 does not indicate that the expression is @emph{not} a constant,
+but merely that GCC cannot prove it is a constant within the constraints
+of the active set of optimization options.
+
+You typically use this function in an embedded application where
+memory is a critical resource.  If you have some complex calculation,
+you may want it to be folded if it involves constants, but need to call
+a function if it does not.  For example:
+
+@smallexample
+#define Scale_Value(X)      \
+  (__builtin_constant_p (X) \
+  ? ((X) * SCALE + OFFSET) : Scale (X))
+@end smallexample
+
+You may use this built-in function in either a macro or an inline
+function.  However, if you use it in an inlined function and pass an
+argument of the function as the argument to the built-in, GCC
+never returns 1 when you call the inline function with a string constant
+or compound literal (@pxref{Compound Literals}) and does not return 1
+when you pass a constant numeric value to the inline function unless you
+specify the @option{-O} option.
+
+You may also use @code{__builtin_constant_p} in initializers for static
+data.  For instance, you can write
+
+@smallexample
+static const int table[] = @{
+   __builtin_constant_p (EXPRESSION) ? (EXPRESSION) : -1,
+   /* @r{@dots{}} */
+@};
+@end smallexample
+
+@noindent
+This is an acceptable initializer even if @var{EXPRESSION} is not a
+constant expression, including the case where
+@code{__builtin_constant_p} returns 1 because @var{EXPRESSION} can be
+folded to a constant but @var{EXPRESSION} contains operands that are
+not otherwise permitted in a static initializer (for example,
+@code{0 && foo ()}).  GCC must be more conservative about evaluating the
+built-in in this case, because it has no opportunity to perform
+optimization.
+@enddefbuiltin
+
+@defbuiltin{bool __builtin_is_constant_evaluated (void)}
+The @code{__builtin_is_constant_evaluated} function is available only
+in C++.  The built-in is intended to be used by implementations of
+the @code{std::is_constant_evaluated} C++ function.  Programs should make
+use of the latter function rather than invoking the built-in directly.
+
+The main use case of the built-in is to determine whether a @code{constexpr}
+function is being called in a @code{constexpr} context.  A call to
+the function evaluates to a core constant expression with the value
+@code{true} if and only if it occurs within the evaluation of an expression
+or conversion that is manifestly constant-evaluated as defined in the C++
+standard.  Manifestly constant-evaluated contexts include constant-expressions,
+the conditions of @code{constexpr if} statements, constraint-expressions, and
+initializers of variables usable in constant expressions.   For more details
+refer to the latest revision of the C++ standard.
+@enddefbuiltin
+
+@defbuiltin{@var{type} __builtin_counted_by_ref (@var{ptr})}
+The built-in function @code{__builtin_counted_by_ref} checks whether the array
+object pointed by the pointer @var{ptr} has another object associated with it
+that represents the number of elements in the array object through the
+@code{counted_by} attribute (i.e. the counted-by object). If so, returns a
+pointer to the corresponding counted-by object.
+If such counted-by object does not exist, returns a null pointer.
+
+This built-in function is only available in C for now.
+
+The argument @var{ptr} must be a pointer to an flexible array or a pointer
+inside a structure.
+The @var{type} of the returned value is a pointer type pointing to the
+corresponding type of the counted-by object or a void pointer type in case
+of a null pointer being returned.
+
+For example:
+
+@smallexample
+struct foo1 @{
+  int counter;
+  struct bar1 array[] __attribute__((counted_by (counter)));
+@} *p;
+
+struct foo2 @{
+  struct bar2 *pointer __attribute__((counted_by (counter2)));
+  int counter2;
+@} *p2;
+
+struct foo3 @{
+  int other;
+  struct bar3 array[];
+@} *p3;
+
+@end smallexample
+
+@noindent
+the following call to the built-in
+
+@smallexample
+__builtin_counted_by_ref (p->array)
+@end smallexample
+
+@noindent
+returns:
+
+@smallexample
+&p->counter with type @code{int *}.
+@end smallexample
+
+@smallexample
+__builtin_counted_by_ref (p2->pointer)
+@end smallexample
+
+@noindent
+returns:
+
+@smallexample
+&p2->counter2 with type @code{int *}.
+@end smallexample
+
+
+@noindent
+However, the following call to the built-in
+
+@smallexample
+__builtin_counted_by_ref (p3->array)
+@end smallexample
+
+@noindent
+returns a null pointer to @code{void}.
+
+@enddefbuiltin
+
+@defbuiltin{void __builtin_clear_padding (@var{ptr})}
+The built-in function @code{__builtin_clear_padding} function clears
+padding bits inside of the object representation of object pointed by
+@var{ptr}, which has to be a pointer.  The value representation of the
+object is not affected.  The type of the object is assumed to be the type
+the pointer points to.  Inside of a union, the only cleared bits are
+bits that are padding bits for all the union members.
+
+This built-in-function is useful if the padding bits of an object might
+have indeterminate values and the object representation needs to be
+bitwise compared to some other object, for example for atomic operations.
+
+For C++, @var{ptr} argument type should be pointer to trivially-copyable
+type, unless the argument is address of a variable or parameter, because
+otherwise it isn't known if the type isn't just a base class whose padding
+bits are reused or laid out differently in a derived class.
+@enddefbuiltin
+
+@defbuiltin{@var{type} __builtin_bit_cast (@var{type}, @var{arg})}
+The @code{__builtin_bit_cast} function is available only
+in C++.  The built-in is intended to be used by implementations of
+the @code{std::bit_cast} C++ template function.  Programs should make
+use of the latter function rather than invoking the built-in directly.
+
+This built-in function allows reinterpreting the bits of the @var{arg}
+argument as if it had type @var{type}.  @var{type} and the type of the
+@var{arg} argument need to be trivially copyable types with the same size.
+When manifestly constant-evaluated, it performs extra diagnostics required
+for @code{std::bit_cast} and returns a constant expression if @var{arg}
+is a constant expression.  For more details
+refer to the latest revision of the C++ standard.
+@enddefbuiltin
+

@@ -1,0 +1,481 @@
+@c GCC 16.1.0 | BLOQUE 0241 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 2499-2975 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+@item Rra
+Matches the return address if it can be replaced with the link register.
+
+@item Rcc
+Matches the integer condition code register.
+
+@item Sra
+Matches the return address if it is in a stack slot.
+
+@item Cfm
+Matches control register values to switch fp mode, which are encapsulated in
+@code{UNSPEC_FP_MODE}.
+@end table
+
+@item FRV---@file{config/frv/frv.h}
+@table @code
+@item a
+Register in the class @code{ACC_REGS} (@code{acc0} to @code{acc7}).
+
+@item b
+Register in the class @code{EVEN_ACC_REGS} (@code{acc0} to @code{acc7}).
+
+@item c
+Register in the class @code{CC_REGS} (@code{fcc0} to @code{fcc3} and
+@code{icc0} to @code{icc3}).
+
+@item d
+Register in the class @code{GPR_REGS} (@code{gr0} to @code{gr63}).
+
+@item e
+Register in the class @code{EVEN_REGS} (@code{gr0} to @code{gr63}).
+Odd registers are excluded not in the class but through the use of a machine
+mode larger than 4 bytes.
+
+@item f
+Register in the class @code{FPR_REGS} (@code{fr0} to @code{fr63}).
+
+@item h
+Register in the class @code{FEVEN_REGS} (@code{fr0} to @code{fr63}).
+Odd registers are excluded not in the class but through the use of a machine
+mode larger than 4 bytes.
+
+@item l
+Register in the class @code{LR_REG} (the @code{lr} register).
+
+@item q
+Register in the class @code{QUAD_REGS} (@code{gr2} to @code{gr63}).
+Register numbers not divisible by 4 are excluded not in the class but through
+the use of a machine mode larger than 8 bytes.
+
+@item t
+Register in the class @code{ICC_REGS} (@code{icc0} to @code{icc3}).
+
+@item u
+Register in the class @code{FCC_REGS} (@code{fcc0} to @code{fcc3}).
+
+@item v
+Register in the class @code{ICR_REGS} (@code{cc4} to @code{cc7}).
+
+@item w
+Register in the class @code{FCR_REGS} (@code{cc0} to @code{cc3}).
+
+@item x
+Register in the class @code{QUAD_FPR_REGS} (@code{fr0} to @code{fr63}).
+Register numbers not divisible by 4 are excluded not in the class but through
+the use of a machine mode larger than 8 bytes.
+
+@item z
+Register in the class @code{SPR_REGS} (@code{lcr} and @code{lr}).
+
+@item A
+Register in the class @code{QUAD_ACC_REGS} (@code{acc0} to @code{acc7}).
+
+@item B
+Register in the class @code{ACCG_REGS} (@code{accg0} to @code{accg7}).
+
+@item C
+Register in the class @code{CR_REGS} (@code{cc0} to @code{cc7}).
+
+@item G
+Floating point constant zero
+
+@item I
+6-bit signed integer constant
+
+@item J
+10-bit signed integer constant
+
+@item L
+16-bit signed integer constant
+
+@item M
+16-bit unsigned integer constant
+
+@item N
+12-bit signed integer constant that is negative---i.e.@: in the
+range of @minus{}2048 to @minus{}1
+
+@item O
+Constant zero
+
+@item P
+12-bit signed integer constant that is greater than zero---i.e.@: in the
+range of 1 to 2047.
+
+@end table
+
+@item FT32---@file{config/ft32/constraints.md}
+@table @code
+@item A
+An absolute address
+
+@item B
+An offset address
+
+@item W
+A register indirect memory operand
+
+@item e
+An offset address.
+
+@item f
+An offset address.
+
+@item O
+The constant zero or one
+
+@item I
+A 16-bit signed constant (@minus{}32768 @dots{} 32767)
+
+@item w
+A bitfield mask suitable for bext or bins
+
+@item x
+An inverted bitfield mask suitable for bext or bins
+
+@item L
+A 16-bit unsigned constant, multiple of 4 (0 @dots{} 65532)
+
+@item S
+A 20-bit signed constant (@minus{}524288 @dots{} 524287)
+
+@item b
+A constant for a bitfield width (1 @dots{} 16)
+
+@item KA
+A 10-bit signed constant (@minus{}512 @dots{} 511)
+
+@end table
+
+@item Hewlett-Packard PA-RISC---@file{config/pa/pa.h}
+@table @code
+@item a
+General register 1
+
+@item f
+Floating point register
+
+@item q
+Shift amount register
+
+@item x
+Floating point register (deprecated)
+
+@item y
+Upper floating point register (32-bit), floating point register (64-bit)
+
+@item Z
+Any register
+
+@item I
+Signed 11-bit integer constant
+
+@item J
+Signed 14-bit integer constant
+
+@item K
+Integer constant that can be deposited with a @code{zdepi} instruction
+
+@item L
+Signed 5-bit integer constant
+
+@item M
+Integer constant 0
+
+@item N
+Integer constant that can be loaded with a @code{ldil} instruction
+
+@item O
+Integer constant whose value plus one is a power of 2
+
+@item P
+Integer constant that can be used for @code{and} operations in @code{depi}
+and @code{extru} instructions
+
+@item S
+Integer constant 31
+
+@item U
+Integer constant 63
+
+@item G
+Floating-point constant 0.0
+
+@item A
+A @code{lo_sum} data-linkage-table memory operand
+
+@item Q
+A memory operand that can be used as the destination operand of an
+integer store instruction
+
+@item R
+A scaled or unscaled indexed memory operand
+
+@item T
+A memory operand for floating-point loads and stores
+
+@item W
+A register indirect memory operand
+@end table
+
+@item Intel IA-64---@file{config/ia64/ia64.h}
+@table @code
+@item a
+General register @code{r0} to @code{r3} for @code{addl} instruction
+
+@item b
+Branch register
+
+@item c
+Predicate register (@samp{c} as in ``conditional'')
+
+@item d
+Application register residing in M-unit
+
+@item e
+Application register residing in I-unit
+
+@item f
+Floating-point register
+
+@item m
+Memory operand.  If used together with @samp{<} or @samp{>},
+the operand can have postincrement and postdecrement which
+require printing with @samp{%Pn} on IA-64.
+
+@item G
+Floating-point constant 0.0 or 1.0
+
+@item I
+14-bit signed integer constant
+
+@item J
+22-bit signed integer constant
+
+@item K
+8-bit signed integer constant for logical instructions
+
+@item L
+8-bit adjusted signed integer constant for compare pseudo-ops
+
+@item M
+6-bit unsigned integer constant for shift counts
+
+@item N
+9-bit signed integer constant for load and store postincrements
+
+@item O
+The constant zero
+
+@item P
+0 or @minus{}1 for @code{dep} instruction
+
+@item Q
+Non-volatile memory for floating-point loads and stores
+
+@item R
+Integer constant in the range 1 to 4 for @code{shladd} instruction
+
+@item S
+Memory operand except postincrement and postdecrement.  This is
+now roughly the same as @samp{m} when not used together with @samp{<}
+or @samp{>}.
+@end table
+
+@item M32C---@file{config/m32c/m32c.cc}
+@table @code
+@item Rsp
+@itemx Rfb
+@itemx Rsb
+@samp{$sp}, @samp{$fb}, @samp{$sb}.
+
+@item Rcr
+Any control register, when they're 16 bits wide (nothing if control
+registers are 24 bits wide)
+
+@item Rcl
+Any control register, when they're 24 bits wide.
+
+@item R0w
+@itemx R1w
+@itemx R2w
+@itemx R3w
+$r0, $r1, $r2, $r3.
+
+@item R02
+$r0 or $r2, or $r2r0 for 32 bit values.
+
+@item R13
+$r1 or $r3, or $r3r1 for 32 bit values.
+
+@item Rdi
+A register that can hold a 64 bit value.
+
+@item Rhl
+$r0 or $r1 (registers with addressable high/low bytes)
+
+@item R23
+$r2 or $r3
+
+@item Raa
+Address registers
+
+@item Raw
+Address registers when they're 16 bits wide.
+
+@item Ral
+Address registers when they're 24 bits wide.
+
+@item Rqi
+Registers that can hold QI values.
+
+@item Rad
+Registers that can be used with displacements ($a0, $a1, $sb).
+
+@item Rsi
+Registers that can hold 32 bit values.
+
+@item Rhi
+Registers that can hold 16 bit values.
+
+@item Rhc
+Registers chat can hold 16 bit values, including all control
+registers.
+
+@item Rra
+$r0 through R1, plus $a0 and $a1.
+
+@item Rfl
+The flags register.
+
+@item Rmm
+The memory-based pseudo-registers $mem0 through $mem15.
+
+@item Rpi
+Registers that can hold pointers (16 bit registers for r8c, m16c; 24
+bit registers for m32cm, m32c).
+
+@item Rpa
+Matches multiple registers in a PARALLEL to form a larger register.
+Used to match function return values.
+
+@item Is3
+@minus{}8 @dots{} 7
+
+@item IS1
+@minus{}128 @dots{} 127
+
+@item IS2
+@minus{}32768 @dots{} 32767
+
+@item IU2
+0 @dots{} 65535
+
+@item In4
+@minus{}8 @dots{} @minus{}1 or 1 @dots{} 8
+
+@item In5
+@minus{}16 @dots{} @minus{}1 or 1 @dots{} 16
+
+@item In6
+@minus{}32 @dots{} @minus{}1 or 1 @dots{} 32
+
+@item IM2
+@minus{}65536 @dots{} @minus{}1
+
+@item Ilb
+An 8 bit value with exactly one bit set.
+
+@item Ilw
+A 16 bit value with exactly one bit set.
+
+@item Sd
+The common src/dest memory addressing modes.
+
+@item Sa
+Memory addressed using $a0 or $a1.
+
+@item Si
+Memory addressed with immediate addresses.
+
+@item Ss
+Memory addressed using the stack pointer ($sp).
+
+@item Sf
+Memory addressed using the frame base register ($fb).
+
+@item Ss
+Memory addressed using the small base register ($sb).
+
+@item S1
+$r1h
+@end table
+
+@item LoongArch---@file{config/loongarch/constraints.md}
+@table @code
+@item f
+A floating-point or vector register (if available).
+@item k
+A memory operand whose address is formed by a base register and
+(optionally scaled) index register.
+@item l
+A signed 16-bit constant.
+@item m
+A memory operand whose address is formed by a base register and offset
+that is suitable for use in instructions with the same addressing mode
+as @code{st.w} and @code{ld.w}.
+@item q
+A general-purpose register except for $r0 and $r1 (for the csrxchg
+instruction)
+@item I
+A signed 12-bit constant (for arithmetic instructions).
+@item K
+An unsigned 12-bit constant (for logic instructions).
+@item M
+A constant that cannot be loaded using @code{lui}, @code{addiu}
+or @code{ori}.
+@item N
+A constant in the range -65535 to -1 (inclusive).
+@item O
+A signed 15-bit constant.
+@item P
+A constant in the range 1 to 65535 (inclusive).
+@item R
+An address that can be used in a non-macro load or store.
+@item ZB
+An address that is held in a general-purpose register.
+The offset is zero.
+@item ZC
+A memory operand whose address is formed by a base register and offset
+that is suitable for use in instructions with the same addressing mode
+as @code{ll.w} and @code{sc.w}.
+@end table
+
+@item MicroBlaze---@file{config/microblaze/constraints.md}
+@table @code
+@item d
+A general register (@code{r0} to @code{r31}).
+
+@item z
+A status register (@code{rmsr}, @code{$fcc1} to @code{$fcc7}).
+
+@end table
+
+@item MIPS---@file{config/mips/constraints.md}
+@table @code
+@item d
+A general-purpose register.  This is equivalent to @code{r} unless
+generating MIPS16 code, in which case the MIPS16 register set is used.
+
+@item f
+A floating-point register (if available).
+
+@item h
+Formerly the @code{hi} register.  This constraint is no longer supported.
+

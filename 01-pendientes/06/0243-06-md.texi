@@ -1,0 +1,106 @@
+@c GCC 16.1.0 | BLOQUE 0243 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 3279-3380 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+@end table
+
+@item PDP-11---@file{config/pdp11/constraints.md}
+@table @code
+@item a
+Floating point registers AC0 through AC3.  These can be loaded from/to
+memory with a single instruction.
+
+@item d
+Odd numbered general registers (R1, R3, R5).  These are used for
+16-bit multiply operations.
+
+@item D
+A memory reference that is encoded within the opcode, but not
+auto-increment or auto-decrement.
+
+@item f
+Any of the floating point registers (AC0 through AC5).
+
+@item G
+Floating point constant 0.
+
+@item h
+Floating point registers AC4 and AC5.  These cannot be loaded from/to
+memory with a single instruction.
+
+@item I
+An integer constant that fits in 16 bits.
+
+@item J
+An integer constant whose low order 16 bits are zero.
+
+@item K
+An integer constant that does not meet the constraints for codes
+@samp{I} or @samp{J}.
+
+@item L
+The integer constant 1.
+
+@item M
+The integer constant @minus{}1.
+
+@item N
+The integer constant 0.
+
+@item O
+Integer constants 0 through 3; shifts by these
+amounts are handled as multiple single-bit shifts rather than a single
+variable-length shift.
+
+@item Q
+A memory reference which requires an additional word (address or
+offset) after the opcode.
+
+@item R
+A memory reference that is encoded within the opcode.
+
+@end table
+
+@item PowerPC and IBM RS6000---@file{config/rs6000/constraints.md}
+@table @code
+@item r
+A general purpose register (GPR), @code{r0}@dots{}@code{r31}.
+
+@item b
+A base register.  Like @code{r}, but @code{r0} is not allowed, so
+@code{r1}@dots{}@code{r31}.
+
+@item f
+A floating point register (FPR), @code{f0}@dots{}@code{f31}.
+
+@item d
+A floating point register.  This is the same as @code{f} nowadays;
+historically @code{f} was for single-precision and @code{d} was for
+double-precision floating point.
+
+@item v
+An Altivec vector register (VR), @code{v0}@dots{}@code{v31}.
+
+@item wa
+A VSX register (VSR), @code{vs0}@dots{}@code{vs63}.  This is either an
+FPR (@code{vs0}@dots{}@code{vs31} are @code{f0}@dots{}@code{f31}) or a VR
+(@code{vs32}@dots{}@code{vs63} are @code{v0}@dots{}@code{v31}).
+
+When using @code{wa}, you should use the @code{%x} output modifier, so that
+the correct register number is printed.  For example:
+
+@smallexample
+asm ("xvadddp %x0,%x1,%x2"
+     : "=wa" (v1)
+     : "wa" (v2), "wa" (v3));
+@end smallexample
+
+You should not use @code{%x} for @code{v} operands:
+
+@smallexample
+asm ("xsaddqp %0,%1,%2"
+     : "=v" (v1)
+     : "v" (v2), "v" (v3));
+@end smallexample
+

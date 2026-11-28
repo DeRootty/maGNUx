@@ -1,0 +1,260 @@
+@c GCC 16.1.0 | BLOQUE 0327 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 27841-28096 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_extract_b (uint32_t, uint6_t)
+Generated assembler @code{cv.extract.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_extractu_h (uint32_t, uint6_t)
+Generated assembler @code{cv.extractu.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_extractu_b (uint32_t, uint6_t)
+Generated assembler @code{cv.extractu.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_insert_h (uint32_t, uint32_t)
+Generated assembler @code{cv.insert.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_insert_b (uint32_t, uint32_t)
+Generated assembler @code{cv.insert.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_shuffle_h (uint32_t, uint32_t)
+Generated assembler @code{cv.shuffle.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_shuffle_b (uint32_t, uint32_t)
+Generated assembler @code{cv.shuffle.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_shuffle_sci_h (uint32_t, uint4_t)
+Generated assembler @code{cv.shuffle.sci.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_shufflei0_sci_b (uint32_t, uint4_t)
+Generated assembler @code{cv.shufflei0.sci.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_shufflei1_sci_b (uint32_t, uint4_t)
+Generated assembler @code{cv.shufflei1.sci.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_shufflei2_sci_b (uint32_t, uint4_t)
+Generated assembler @code{cv.shufflei2.sci.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_shufflei3_sci_b (uint32_t, uint4_t)
+Generated assembler @code{cv.shufflei3.sci.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_shuffle2_h (uint32_t, uint32_t, uint32_t)
+Generated assembler @code{cv.shuffle2.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_shuffle2_b (uint32_t, uint32_t, uint32_t)
+Generated assembler @code{cv.shuffle2.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_packlo_h (uint32_t, uint32_t)
+Generated assembler @code{cv.pack}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_packhi_h (uint32_t, uint32_t)
+Generated assembler @code{cv.pack.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_packhi_b (uint32_t, uint32_t, uint32_t)
+Generated assembler @code{cv.packhi.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_packlo_b (uint32_t, uint32_t, uint32_t)
+Generated assembler @code{cv.packlo.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpeq_h (uint32_t, uint32_t)
+Generated assembler @code{cv.cmpeq.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpeq_b (uint32_t, uint32_t)
+Generated assembler @code{cv.cmpeq.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpeq_sc_h (uint32_t, int16_t)
+Generated assembler @code{cv.cmpeq.sc.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpeq_sc_h (uint32_t, int6_t)
+Generated assembler @code{cv.cmpeq.sci.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpeq_sc_b (uint32_t, int8_t)
+Generated assembler @code{cv.cmpeq.sc.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpeq_sc_b (uint32_t, int6_t)
+Generated assembler @code{cv.cmpeq.sci.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpne_h (uint32_t, uint32_t)
+Generated assembler @code{cv.cmpne.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpne_b (uint32_t, uint32_t)
+Generated assembler @code{cv.cmpne.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpne_sc_h (uint32_t, int16_t)
+Generated assembler @code{cv.cmpne.sc.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpne_sc_h (uint32_t, int6_t)
+Generated assembler @code{cv.cmpne.sci.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpne_sc_b (uint32_t, int8_t)
+Generated assembler @code{cv.cmpne.sc.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpne_sc_b (uint32_t, int6_t)
+Generated assembler @code{cv.cmpne.sci.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpgt_h (uint32_t, uint32_t)
+Generated assembler @code{cv.cmpgt.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpgt_b (uint32_t, uint32_t)
+Generated assembler @code{cv.cmpgt.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpgt_sc_h (uint32_t, int16_t)
+Generated assembler @code{cv.cmpgt.sc.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpgt_sc_h (uint32_t, int6_t)
+Generated assembler @code{cv.cmpgt.sci.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpgt_sc_b (uint32_t, int8_t)
+Generated assembler @code{cv.cmpgt.sc.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpgt_sc_b (uint32_t, int6_t)
+Generated assembler @code{cv.cmpgt.sci.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpge_h (uint32_t, uint32_t)
+Generated assembler @code{cv.cmpge.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpge_b (uint32_t, uint32_t)
+Generated assembler @code{cv.cmpge.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpge_sc_h (uint32_t, int16_t)
+Generated assembler @code{cv.cmpge.sc.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpge_sc_h (uint32_t, int6_t)
+Generated assembler @code{cv.cmpge.sci.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpge_sc_b (uint32_t, int8_t)
+Generated assembler @code{cv.cmpge.sc.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpge_sc_b (uint32_t, int6_t)
+Generated assembler @code{cv.cmpge.sci.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmplt_h (uint32_t, uint32_t)
+Generated assembler @code{cv.cmplt.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmplt_b (uint32_t, uint32_t)
+Generated assembler @code{cv.cmplt.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmplt_sc_h (uint32_t, int16_t)
+Generated assembler @code{cv.cmplt.sc.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmplt_sc_h (uint32_t, int6_t)
+Generated assembler @code{cv.cmplt.sci.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmplt_sc_b (uint32_t, int8_t)
+Generated assembler @code{cv.cmplt.sc.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmplt_sc_b (uint32_t, int6_t)
+Generated assembler @code{cv.cmplt.sci.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmple_h (uint32_t, uint32_t)
+Generated assembler @code{cv.cmple.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmple_b (uint32_t, uint32_t)
+Generated assembler @code{cv.cmple.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmple_sc_h (uint32_t, int16_t)
+Generated assembler @code{cv.cmple.sc.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmple_sc_h (uint32_t, int6_t)
+Generated assembler @code{cv.cmple.sci.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmple_sc_b (uint32_t, int8_t)
+Generated assembler @code{cv.cmple.sc.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmple_sc_b (uint32_t, int6_t)
+Generated assembler @code{cv.cmple.sci.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpgtu_h (uint32_t, uint32_t)
+Generated assembler @code{cv.cmpgtu.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpgtu_b (uint32_t, uint32_t)
+Generated assembler @code{cv.cmpgtu.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpgtu_sc_h (uint32_t, uint16_t)
+Generated assembler @code{cv.cmpgtu.sc.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpgtu_sc_h (uint32_t, uint6_t)
+Generated assembler @code{cv.cmpgtu.sci.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpgtu_sc_b (uint32_t, uint8_t)
+Generated assembler @code{cv.cmpgtu.sc.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpgtu_sc_b (uint32_t, uint6_t)
+Generated assembler @code{cv.cmpgtu.sci.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpgeu_h (uint32_t, uint32_t)
+Generated assembler @code{cv.cmpgeu.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpgeu_b (uint32_t, uint32_t)
+Generated assembler @code{cv.cmpgeu.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpgeu_sc_h (uint32_t, uint16_t)
+Generated assembler @code{cv.cmpgeu.sc.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpgeu_sc_h (uint32_t, uint6_t)
+Generated assembler @code{cv.cmpgeu.sci.h}
+@end deftypefn
+

@@ -1,0 +1,222 @@
+@c GCC 16.1.0 | BLOQUE 0104 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 23663-23880 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item +nodsp
+Disable the DSP instructions on @samp{cortex-m33}, @samp{cortex-m35p},
+@samp{cortex-m52}, @samp{cortex-m55} and @samp{cortex-m85}.
+Also disable the M-Profile Vector Extension (MVE) integer and
+single precision floating-point instructions on
+@samp{cortex-m52}, @samp{cortex-m55} and @samp{cortex-m85}.
+
+@item +nopacbti
+Disable the Pointer Authentication and Branch Target Identification Extension
+on @samp{cortex-m52} and @samp{cortex-m85}.
+
+@item +nomve
+Disable the M-Profile Vector Extension (MVE) integer and single precision
+floating-point instructions on @samp{cortex-m52}, @samp{cortex-m55} and
+@samp{cortex-m85}.
+
+@item +nomve.fp
+Disable the M-Profile Vector Extension (MVE) single precision floating-point
+instructions on @samp{cortex-m52}, @samp{cortex-m55} and @samp{cortex-m85}.
+
+@item +cdecp0, +cdecp1, ... , +cdecp7
+Enable the Custom Datapath Extension (CDE) on selected coprocessors according
+to the numbers given in the options in the range 0 to 7 on @samp{cortex-m52},
+@samp{cortex-m55}, @samp{cortex-m85} and @samp{star-mc1}.
+
+@item  +nofp
+Disables the floating-point instructions on @samp{arm9e},
+@samp{arm946e-s}, @samp{arm966e-s}, @samp{arm968e-s}, @samp{arm10e},
+@samp{arm1020e}, @samp{arm1022e}, @samp{arm926ej-s},
+@samp{arm1026ej-s}, @samp{cortex-r5}, @samp{cortex-r7}, @samp{cortex-r8},
+@samp{cortex-m4}, @samp{cortex-m7}, @samp{cortex-m33}, @samp{cortex-m35p},
+@samp{cortex-m52}, @samp{cortex-m55} and @samp{cortex-m85}.
+Disables the floating-point and SIMD instructions on
+@samp{generic-armv7-a}, @samp{cortex-a5}, @samp{cortex-a7},
+@samp{cortex-a8}, @samp{cortex-a9}, @samp{cortex-a12},
+@samp{cortex-a15}, @samp{cortex-a17}, @samp{cortex-a15.cortex-a7},
+@samp{cortex-a17.cortex-a7}, @samp{cortex-a32}, @samp{cortex-a35},
+@samp{cortex-a53} and @samp{cortex-a55}.
+
+@item +nofp.dp
+Disables the double-precision component of the floating-point instructions
+on @samp{cortex-r5}, @samp{cortex-r7}, @samp{cortex-r8}, @samp{cortex-r52},
+@samp{cortex-r52plus} and @samp{cortex-m7}.
+
+@item +nosimd
+Disables the SIMD (but not floating-point) instructions on
+@samp{generic-armv7-a}, @samp{cortex-a5}, @samp{cortex-a7}
+and @samp{cortex-a9}.
+
+@item +crypto
+Enables the cryptographic instructions on @samp{cortex-a32},
+@samp{cortex-a35}, @samp{cortex-a53}, @samp{cortex-a55}, @samp{cortex-a57},
+@samp{cortex-a72}, @samp{cortex-a73}, @samp{cortex-a75}, @samp{exynos-m1},
+@samp{xgene1}, @samp{cortex-a57.cortex-a53}, @samp{cortex-a72.cortex-a53},
+@samp{cortex-a73.cortex-a35}, @samp{cortex-a73.cortex-a53} and
+@samp{cortex-a75.cortex-a55}.
+@end table
+
+Additionally the @samp{generic-armv7-a} pseudo target defaults to
+VFPv3 with 16 double-precision registers.  It supports the following
+extension options: @samp{mp}, @samp{sec}, @samp{vfpv3-d16},
+@samp{vfpv3}, @samp{vfpv3-d16-fp16}, @samp{vfpv3-fp16},
+@samp{vfpv4-d16}, @samp{vfpv4}, @samp{neon}, @samp{neon-vfpv3},
+@samp{neon-fp16}, @samp{neon-vfpv4}.  The meanings are the same as for
+the extensions to @option{-march=armv7-a}.
+
+@option{-mcpu=generic-@var{arch}} is also permissible, and is
+equivalent to @option{-march=@var{arch} -mtune=generic-@var{arch}}.
+See @option{-mtune} for more information.
+
+@option{-mcpu=native} causes the compiler to auto-detect the CPU
+of the build computer.  At present, this feature is only supported on
+GNU/Linux, and not all architectures are recognized.  If the auto-detect
+is unsuccessful the option has no effect.
+
+@option{-mcpu=unset} causes the compiler to ignore any
+@option{-mcpu=@dots{}} options that appear earlier on the command line
+and behave as if the option was never passed.  This is useful to avoid
+warnings about conflicting CPU and architecture options when the two
+produce different architecture specifications.
+
+@opindex mfpu
+@item -mfpu=@var{name}
+This specifies what floating-point hardware (or hardware emulation) is
+available on the target.  Permissible names are: @samp{auto}, @samp{vfpv2},
+@samp{vfpv3},
+@samp{vfpv3-fp16}, @samp{vfpv3-d16}, @samp{vfpv3-d16-fp16}, @samp{vfpv3xd},
+@samp{vfpv3xd-fp16}, @samp{neon-vfpv3}, @samp{neon-fp16}, @samp{vfpv4},
+@samp{vfpv4-d16}, @samp{fpv4-sp-d16}, @samp{neon-vfpv4},
+@samp{fpv5-d16}, @samp{fpv5-sp-d16},
+@samp{fp-armv8}, @samp{neon-fp-armv8} and @samp{crypto-neon-fp-armv8}.
+Note that @samp{neon} is an alias for @samp{neon-vfpv3} and @samp{vfp}
+is an alias for @samp{vfpv2}.
+
+The setting @samp{auto} is the default and is special.  It causes the
+compiler to select the floating-point and Advanced SIMD instructions
+based on the settings of @option{-mcpu} and @option{-march}.
+
+If the selected floating-point hardware includes the NEON extension
+(e.g.@: @option{-mfpu=neon}), note that floating-point
+operations are not generated by GCC's auto-vectorization pass unless
+@option{-funsafe-math-optimizations} is also specified.  This is
+because NEON hardware does not fully implement the IEEE 754 standard for
+floating-point arithmetic (in particular denormal values are treated as
+zero), so the use of NEON instructions may lead to a loss of precision.
+
+You can also set the fpu name at function level by using the @code{target("fpu=")} function attributes (@pxref{ARM Attributes}) or pragmas (@pxref{Function Specific Option Pragmas}).
+
+@opindex mfp16-format
+@item -mfp16-format=@var{name}
+Specify the format of the @code{__fp16} half-precision floating-point type.
+Permissible names are @samp{none}, @samp{ieee}, and @samp{alternative};
+the default is @samp{none}, in which case the @code{__fp16} type is not
+defined.  @xref{Half-Precision}, for more information.
+
+@opindex mstructure-size-boundary
+@item -mstructure-size-boundary=@var{n}
+The sizes of all structures and unions are rounded up to a multiple
+of the number of bits set by this option.  Permissible values are 8, 32
+and 64.  The default value varies for different toolchains.  For the COFF
+targeted toolchain the default value is 8.  A value of 64 is only allowed
+if the underlying ABI supports it.
+
+Specifying a larger number can produce faster, more efficient code, but
+can also increase the size of the program.  Different values are potentially
+incompatible.  Code compiled with one value cannot necessarily expect to
+work with code or libraries compiled with another value, if they exchange
+information using structures or unions.
+
+This option is deprecated.
+
+@opindex mabort-on-noreturn
+@opindex mno-abort-on-noreturn
+@item -mabort-on-noreturn
+Generate a call to the function @code{abort} at the end of a
+@code{noreturn} function.  It is executed if the function tries to
+return.
+
+@opindex mlong-calls
+@opindex mno-long-calls
+@item -mlong-calls
+@itemx -mno-long-calls
+Tells the compiler to perform function calls by first loading the
+address of the function into a register and then performing a subroutine
+call on this register.  This switch is needed if the target function
+lies outside of the 64-megabyte addressing range of the offset-based
+version of subroutine call instruction.
+
+Even if this switch is enabled, not all function calls are turned
+into long calls.  The heuristic is that static functions, functions
+that have the @code{short_call} attribute, functions that are inside
+the scope of a @code{#pragma no_long_calls} directive, and functions whose
+definitions have already been compiled within the current compilation
+unit are not turned into long calls.  The exceptions to this rule are
+that weak function definitions, functions with the @code{long_call}
+attribute or the @code{section} attribute, and functions that are within
+the scope of a @code{#pragma long_calls} directive are always
+turned into long calls.
+
+This feature is not enabled by default.  Specifying
+@option{-mno-long-calls} restores the default behavior, as does
+placing the function calls within the scope of a @code{#pragma
+long_calls_off} directive.  Note these switches have no effect on how
+the compiler generates code to handle function calls via function
+pointers.
+
+@opindex msingle-pic-base
+@opindex mno-single-pic-base
+@item -msingle-pic-base
+Treat the register used for PIC addressing as read-only, rather than
+loading it in the prologue for each function.  The runtime system is
+responsible for initializing this register with an appropriate value
+before execution begins.
+
+@opindex mpic-register
+@item -mpic-register=@var{reg}
+Specify the register to be used for PIC addressing.
+For standard PIC base case, the default is any suitable register
+determined by compiler.  For single PIC base case, the default is
+@samp{R9} if target is EABI based or stack-checking is enabled,
+otherwise the default is @samp{R10}.
+
+@opindex mpic-data-is-text-relative
+@opindex mno-pic-data-is-text-relative
+@item -mpic-data-is-text-relative
+Assume that the displacement between the text and data segments is fixed
+at static link time.  This permits using PC-relative addressing
+operations to access data known to be in the data segment.  For
+non-VxWorks RTP targets, this option is enabled by default.  When
+disabled on such targets, it will enable @option{-msingle-pic-base} by
+default.
+
+@opindex mpoke-function-name
+@opindex mno-poke-function-name
+@item -mpoke-function-name
+Write the name of each function into the text section, directly
+preceding the function prologue.  The generated code is similar to this:
+
+@smallexample
+     t0
+         .ascii "arm_poke_function_name", 0
+         .align
+     t1
+         .word 0xff000000 + (t1 - t0)
+     arm_poke_function_name
+         mov     ip, sp
+         stmfd   sp!, @{fp, ip, lr, pc@}
+         sub     fp, ip, #4
+@end smallexample
+
+When performing a stack backtrace, code can inspect the value of
+@code{pc} stored at @code{fp + 0}.  If the trace function then looks at
+location @code{pc - 12} and the top 8 bits are set, then we know that
+there is a function name embedded immediately preceding this location
+and has length @code{((pc[-3]) & 0xff000000)}.
+
+@opindex marm
+@opindex mthumb

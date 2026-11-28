@@ -1,0 +1,46 @@
+@c GCC 16.1.0 | BLOQUE 0042 | 03-09
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 11487-11528 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -Woverlength-strings
+Warn about string constants that are longer than the ``minimum
+maximum'' length specified in the C standard.  Modern compilers
+generally allow string constants that are much longer than the
+standard's minimum limit, but very portable programs should avoid
+using longer strings.
+
+The limit applies @emph{after} string constant concatenation, and does
+not count the trailing NUL@.  In C90, the limit was 509 characters; in
+C99, it was raised to 4095.  C++98 does not specify a normative
+minimum maximum, so we do not diagnose overlength strings in C++@.
+
+This option is implied by @option{-Wpedantic}, and can be disabled with
+@option{-Wno-overlength-strings}.
+
+@opindex Wunsuffixed-float-constants
+@opindex Wno-unsuffixed-float-constants
+@item -Wunsuffixed-float-constants @r{(C and Objective-C only)}
+
+Issue a warning for any floating constant that does not have
+a suffix.  When used together with @option{-Wsystem-headers} it
+warns about such constants in system header files.  This can be useful
+when preparing code to use with the @code{FLOAT_CONST_DECIMAL64} pragma
+from the decimal floating-point extension to C99.
+
+@opindex Wlto-type-mismatch
+@opindex Wno-lto-type-mismatch
+@item -Wno-lto-type-mismatch
+
+During the link-time optimization, do not warn about type mismatches in
+global declarations from different compilation units.
+Requires @option{-flto} to be enabled.  Enabled by default.
+
+@opindex Wdesignated-init
+@opindex Wno-designated-init
+@item -Wno-designated-init @r{(C and Objective-C only)}
+Suppress warnings when a positional initializer is used to initialize
+a structure that has been marked with the @code{designated_init}
+attribute.
+
+@end table
+

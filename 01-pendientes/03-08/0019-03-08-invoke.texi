@@ -1,0 +1,234 @@
+@c GCC 16.1.0 | BLOQUE 0019 | 03-08
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 6106-6335 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -fdiagnostics-path-format=@var{KIND}
+Specify how to print paths of control-flow events for diagnostics that
+have such a path associated with them.
+
+@var{KIND} is @samp{none}, @samp{separate-events}, or @samp{inline-events},
+the default.
+
+@samp{none} means to not print diagnostic paths.
+
+@samp{separate-events} means to print a separate ``note'' diagnostic for
+each event within the diagnostic.  For example:
+
+@smallexample
+test.c:29:5: error: passing NULL as argument 1 to 'PyList_Append' which requires a non-NULL parameter
+test.c:25:10: note: (1) when 'PyList_New' fails, returning NULL
+test.c:27:3: note: (2) when 'i < count'
+test.c:29:5: note: (3) when calling 'PyList_Append', passing NULL from (1) as argument 1
+@end smallexample
+
+@samp{inline-events} means to print the events ``inline'' within the source
+code.  This view attempts to consolidate the events into runs of
+sufficiently-close events, printing them as labelled ranges within the source.
+
+For example, the same events as above might be printed as:
+
+@smallexample
+  'test': events 1-3
+   25 |   list = PyList_New(0);
+      |          ^~~~~~~~~~~~~
+      |          |
+      |          (1) when 'PyList_New' fails, returning NULL
+   26 |
+   27 |   for (i = 0; i < count; i++) @{
+      |   ~~~
+      |   |
+      |   (2) when 'i < count'
+   28 |     item = PyLong_FromLong(random());
+   29 |     PyList_Append(list, item);
+      |     ~~~~~~~~~~~~~~~~~~~~~~~~~
+      |     |
+      |     (3) when calling 'PyList_Append', passing NULL from (1) as argument 1
+@end smallexample
+
+Interprocedural control flow is shown by grouping the events by stack frame,
+and using indentation to show how stack frames are nested, pushed, and popped.
+
+For example:
+
+@smallexample
+  'test': events 1-2
+    |
+    |  133 | @{
+    |      | ^
+    |      | |
+    |      | (1) entering 'test'
+    |  134 |   boxed_int *obj = make_boxed_int (i);
+    |      |                    ~~~~~~~~~~~~~~~~~~
+    |      |                    |
+    |      |                    (2) calling 'make_boxed_int'
+    |
+    +--> 'make_boxed_int': events 3-4
+           |
+           |  120 | @{
+           |      | ^
+           |      | |
+           |      | (3) entering 'make_boxed_int'
+           |  121 |   boxed_int *result = (boxed_int *)wrapped_malloc (sizeof (boxed_int));
+           |      |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           |      |                                    |
+           |      |                                    (4) calling 'wrapped_malloc'
+           |
+           +--> 'wrapped_malloc': events 5-6
+                  |
+                  |    7 | @{
+                  |      | ^
+                  |      | |
+                  |      | (5) entering 'wrapped_malloc'
+                  |    8 |   return malloc (size);
+                  |      |          ~~~~~~~~~~~~~
+                  |      |          |
+                  |      |          (6) calling 'malloc'
+                  |
+    <-------------+
+    |
+ 'test': event 7
+    |
+    |  138 |   free_boxed_int (obj);
+    |      |   ^~~~~~~~~~~~~~~~~~~~
+    |      |   |
+    |      |   (7) calling 'free_boxed_int'
+    |
+(etc)
+@end smallexample
+
+@opindex fdiagnostics-show-path-depths
+@opindex fno-diagnostics-show-path-depths
+@item -fdiagnostics-show-path-depths
+This option provides additional information when printing control-flow paths
+associated with a diagnostic.
+
+If this is option is provided then the stack depth will be printed for
+each run of events within @option{-fdiagnostics-path-format=inline-events}.
+If provided with @option{-fdiagnostics-path-format=separate-events}, then
+the stack depth and function declaration will be appended when printing
+each event.
+
+This is intended for use by GCC developers and plugin developers when
+debugging diagnostics that report interprocedural control flow.
+
+@opindex fno-show-column
+@opindex fshow-column
+@item -fno-show-column
+Do not print column numbers in diagnostics.  This may be necessary if
+diagnostics are being scanned by a program that does not understand the
+column numbers, such as @command{dejagnu}.
+
+@opindex fdiagnostics-column-unit
+@item -fdiagnostics-column-unit=@var{UNIT}
+Select the units for the column number.  This affects traditional diagnostics
+(in the absence of @option{-fno-show-column}).
+
+The default @var{UNIT}, @samp{display}, considers the number of display
+columns occupied by each character.  This may be larger than the number
+of bytes required to encode the character, in the case of tab
+characters, or it may be smaller, in the case of multibyte characters.
+For example, the character ``GREEK SMALL LETTER PI (U+03C0)'' occupies one
+display column, and its UTF-8 encoding requires two bytes; the character
+``SLIGHTLY SMILING FACE (U+1F642)'' occupies two display columns, and
+its UTF-8 encoding requires four bytes.
+
+Setting @var{UNIT} to @samp{byte} changes the column number to the raw byte
+count in all cases, as was traditionally output by GCC prior to version 11.1.0.
+
+@opindex fdiagnostics-column-origin
+@item -fdiagnostics-column-origin=@var{ORIGIN}
+Select the origin for column numbers, i.e. the column number assigned to the
+first column.  The default value of 1 corresponds to traditional GCC
+behavior and to the GNU style guide.  Some utilities may perform better with an
+origin of 0; any non-negative value may be specified.
+
+@opindex fdiagnostics-escape-format
+@item -fdiagnostics-escape-format=@var{FORMAT}
+When GCC prints pertinent source lines for a diagnostic it normally attempts
+to print the source bytes directly.  However, some diagnostics relate to encoding
+issues in the source file, such as malformed UTF-8, or issues with Unicode
+normalization.  These diagnostics are flagged so that GCC will escape bytes
+that are not printable ASCII when printing their pertinent source lines.
+
+This option controls how such bytes should be escaped.
+
+The default @var{FORMAT}, @samp{unicode} displays Unicode characters that
+are not printable ASCII in the form @samp{<U+XXXX>}, and bytes that do not
+correspond to a Unicode character validly-encoded in UTF-8-encoded will be
+displayed as hexadecimal in the form @samp{<XX>}.
+
+For example, a source line containing the string @samp{before} followed by the
+Unicode character U+03C0 (``GREEK SMALL LETTER PI'', with UTF-8 encoding
+0xCF 0x80) followed by the byte 0xBF (a stray UTF-8 trailing byte), followed by
+the string @samp{after} will be printed for such a diagnostic as:
+
+@smallexample
+ before<U+03C0><BF>after
+@end smallexample
+
+Setting @var{FORMAT} to @samp{bytes} will display all non-printable-ASCII bytes
+in the form @samp{<XX>}, thus showing the underlying encoding of non-ASCII
+Unicode characters.  For the example above, the following will be printed:
+
+@smallexample
+ before<CF><80><BF>after
+@end smallexample
+
+@opindex fdiagnostics-text-art-charset
+@item -fdiagnostics-text-art-charset=@var{CHARSET}
+Some diagnostics can contain ``text art'' diagrams: visualizations created
+from text, intended to be viewed in a monospaced font.
+
+This option selects which characters should be used for printing such
+diagrams, if any.  @var{CHARSET} is @samp{none}, @samp{ascii}, @samp{unicode},
+or @samp{emoji}.
+
+The @samp{none} value suppresses the printing of such diagrams.
+The @samp{ascii} value will ensure that such diagrams are pure ASCII
+(``ASCII art'').  The @samp{unicode} value will allow for conservative use of
+unicode drawing characters (such as box-drawing characters).  The @samp{emoji}
+value further adds the possibility of emoji in the output (such as emitting
+U+26A0 WARNING SIGN followed by U+FE0F VARIATION SELECTOR-16 to select the
+emoji variant of the character).
+
+The default is @samp{emoji}, except when the environment variable @env{LANG}
+is set to @samp{C}, in which case the default is @samp{ascii}.
+
+@opindex fno-diagnostics-show-nesting
+@opindex fdiagnostics-show-nesting
+@item -fno-diagnostics-show-nesting
+Some GCC diagnostics have an internal tree-like structure of nested
+sub-diagnostics, such as for problems when instantiating C++ templates.
+
+By default GCC uses indentation and bullet points in its text output to
+show the nesting structure of these diagnostics, moves location
+information to separate lines to make the structure clearer, and
+eliminates redundant repeated information.
+
+Selecting @option{-fno-diagnostics-show-nesting} suppresses this
+indentation, reformatting, and elision, restoring an older `look'' for the
+diagnostics.
+
+@opindex fno-diagnostics-show-nesting-locations
+@opindex fdiagnostics-show-nesting-locations
+@item -fno-diagnostics-show-nesting-locations
+
+When @option{fdiagnostics-show-nesting} is enabled, file names and
+line- and column- numbers are displayed on separate lines from the
+messages.  This location information can be disabled altogether with
+@option{-fno-diagnostics-show-nesting-locations}.
+This option exists for use by GCC developers, for writing DejaGnu test cases.
+
+@opindex fdiagnostics-show-nesting-levels
+@opindex fno-diagnostics-show-nesting-levels
+@item -fdiagnostics-show-nesting-levels
+When @option{fdiagnostics-show-nesting} is enabled, use
+@option{fdiagnostics-show-nesting-levels} to also display numbers
+showing the depth of the nesting.
+This option exists for use by GCC developers for debugging nested
+diagnostics, but may be of use to plugin authors.
+
+@opindex fdiagnostics-format
+@opindex fdiagnostics-format=text
+@opindex fdiagnostics-format=sarif-stderr
+@opindex fdiagnostics-format=sarif-file

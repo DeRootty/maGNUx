@@ -1,0 +1,256 @@
+@c GCC 16.1.0 | BLOQUE 0186 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 2443-2694 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item constructor
+@itemx destructor
+@itemx constructor (@var{priority})
+@itemx destructor (@var{priority})
+These attributes apply to functions.
+
+The @code{constructor} attribute causes the function to be called
+automatically before execution enters @code{main ()}.  Similarly, the
+@code{destructor} attribute causes the function to be called
+automatically after @code{main ()} completes or @code{exit ()} is
+called.  Functions with these attributes are useful for
+initializing data that is used implicitly during the execution of
+the program.
+
+On most targets the attributes also accept an integer argument to
+specify a priority to control the order in which constructor and
+destructor functions are run.  The @var{priority} argument is a
+constant integral expression bounded between 101 and 65535 inclusive;
+priorities 0-100 are reserved for use by the compiler and its runtime
+libraries.
+A constructor with a smaller priority number runs before a constructor with
+a larger priority number; the opposite relationship holds for destructors.
+So, if you have a constructor that
+allocates a resource and a destructor that deallocates the same
+resource, both functions typically have the same priority.
+Note without an argument, the @var{priority} argument is equivalent to
+65535.
+
+The order in which constructors for C++ objects with static storage
+duration are invoked relative to functions decorated with attribute
+@code{constructor} is normally unspecified.  You can use
+attribute @code{init_priority} (@pxref{C++ Attributes}) on the
+declarations of namespace-scope C++ objects to impose a specific
+ordering; the @var{priority} for the @code{init_priority} attribute
+has the same effect as the @var{priority} for the @code{constructor}
+attribute.
+
+Using the argument form of the @code{constructor} and
+@code{destructor} attributes on targets where the feature is not
+supported is rejected with an error.  Only a few targets (typically
+those not using ELF object format, or the GNU linker) reject this
+usage.
+
+When multiple attributes of this type is supplied, the last one
+is what sets the priority.
+
+@atindex @code{copy}
+@item copy
+@itemx copy (@var{name})
+The @code{copy} attribute can appear on function, variable, and type
+declarations.
+
+It applies the set of attributes with which
+@var{name} has been declared to the declaration of the function, variable,
+or type to which the attribute is applied.  The attribute is designed for
+libraries that define aliases or function resolvers that are expected
+to specify the same set of attributes as their targets.  The @code{copy}
+attribute can be used with functions, variables, or types.  However,
+the kind of symbol to which the attribute is applied (either function
+or variable) must match the kind of symbol to which the argument refers.
+The @code{copy} attribute copies only syntactic and semantic attributes
+but not attributes that affect a symbol's linkage or visibility such as
+@code{alias}, @code{visibility}, or @code{weak}.  The @code{deprecated}
+and @code{target_clones} attribute are also not copied.
+
+For example, the @var{StrongAlias} macro below makes use of the @code{alias}
+and @code{copy} attributes to define an alias named @var{alloc} for function
+@var{allocate} declared with attributes @var{alloc_size}, @var{malloc}, and
+@var{nothrow}.  Thanks to the @code{__typeof__} operator the alias has
+the same type as the target function.  As a result of the @code{copy}
+attribute the alias also shares the same attributes as the target.
+
+@smallexample
+#define StrongAlias(TargetFunc, AliasDecl)  \
+  extern __typeof__ (TargetFunc) AliasDecl  \
+    __attribute__ ((alias (#TargetFunc), copy (TargetFunc)));
+
+extern __attribute__ ((alloc_size (1), malloc, nothrow))
+  void* allocate (size_t);
+StrongAlias (allocate, alloc);
+@end smallexample
+
+As another example, suppose @code{struct A} below is defined in some
+third-party library header to have the alignment requirement @code{N} and
+to force a warning whenever a variable of the type is not so aligned
+due to attribute @code{packed}.  Specifying the @code{copy} attribute
+on the definition on the unrelated @code{struct B} has the effect of
+copying all relevant attributes from the type referenced by the pointer
+expression to @code{struct B}.
+
+@smallexample
+struct __attribute__ ((aligned (N), warn_if_not_aligned (N)))
+A @{ /* @r{@dots{}} */ @};
+struct __attribute__ ((copy ( (struct A *)0)) B @{ /* @r{@dots{}} */ @};
+@end smallexample
+
+@atindex @code{counted_by}
+@cindex flexible array members
+@item counted_by (@var{count})
+The @code{counted_by} attribute may be attached to a C99 flexible array
+member or a pointer field of a structure.
+
+It indicates that the number
+of the elements of the array that is held by the flexible array member
+field, or is pointed to by the pointer field, is given by the field
+named by the identifer @var{count} in the same structure as the
+flexible array member or the pointer field.
+
+This attribute is available only in C for now.
+In C++ this attribute is ignored.
+
+GCC may use this information to improve detection of object size information
+for such structures and provide better results in compile-time diagnostics
+and runtime features like the array bound sanitizer and
+the @code{__builtin_dynamic_object_size}.
+
+For instance, the following code:
+
+@smallexample
+struct P @{
+  size_t count;
+  char other;
+  [[gnu::counted_by (count)]] char array[];
+@} *p;
+@end smallexample
+
+@noindent
+specifies that the @code{array} is a flexible array member whose number
+of elements is given by the field @code{count} in the same structure.
+
+@smallexample
+struct PP @{
+  size_t count2;
+  char other1;
+  [[gnu::counted_by (count2)]] char *array2;
+  int other2;
+@} *pp;
+@end smallexample
+
+@noindent
+specifies that the @code{array2} is an array that is pointed by the
+pointer field, and its number of elements is given by the field
+@code{count2} in the same structure.
+
+The field that represents the number of the elements should have an
+integer type.  Otherwise, the compiler reports an error and ignores
+the attribute.
+
+When the field that represents the number of the elements is assigned a
+negative integer value, the compiler treats the value as zero.
+
+The @code{counted_by} attribute is not allowed for a pointer to function,
+or a pointer to a structure or union that includes a flexible array member.
+However, it is allowed for a pointer to non-void incomplete structure
+or union types, as long as the type could be completed before the first
+reference to the pointer.
+
+The attribute is allowed for a pointer to @code{void}.  However,
+warnings will be issued for such cases when @option{-Wpointer-arith} is
+specified.  When this attribute is applied on a pointer to @code{void},
+the size of each element of this pointer array is treated as 1.
+
+An explicit @code{counted_by} annotation defines a relationship between
+two objects, @code{p->array} and @code{p->count}, and there are the
+following requirements on the relationship between this pair:
+
+@itemize @bullet
+@item
+@code{p->count} must be initialized before the first reference to
+@code{p->array};
+
+@item
+@code{p->array} has @emph{at least} @code{p->count} number of elements
+available all the time.  This relationship must hold even after any of
+these related objects are updated during the program.
+@end itemize
+
+In addition to the above requirements, there is one more requirement
+between this pair if and only if @code{p->array} is an array that is
+pointed by the pointer field:
+
+@code{p->array} and @code{p->count} can only be changed by changing the
+whole structure at the same time.
+
+It's the programmer's responsibility to make sure the above requirements to
+be kept all the time.  Otherwise the compiler reports warnings and
+the results of the array bound sanitizer and the
+@code{__builtin_dynamic_object_size} built-in are undefined.
+
+One important feature of the attribute is that a reference to the flexible
+array member field uses the latest value assigned to the field that
+represents the number of the elements before that reference.  For example,
+
+@smallexample
+  p->count = val1;
+  p->array[20] = 0;  // ref1 to p->array
+  p->count = val2;
+  p->array[30] = 0;  // ref2 to p->array
+@end smallexample
+
+@noindent
+In the above, @code{ref1} uses @code{val1} as the number of the elements in
+@code{p->array}, and @code{ref2} uses @code{val2} as the number of elements
+in @code{p->array}.
+
+Note, however, the above feature is not valid for the pointer field.
+
+@atindex @code{deprecated}
+@cindex deprecated entities
+@item deprecated
+@itemx deprecated (@var{msg})
+This attribute can appear on function, variable, type, or enumerator
+declarations.
+
+The @code{deprecated} attribute results in a warning if the entity
+it applies to
+is used anywhere in the source file.  This is useful when identifying
+functions that are expected to be removed in a future version of a
+program.  The warning also includes the location of the declaration
+of the deprecated entity, to enable users to easily find further
+information about why it is deprecated, or what they should
+do instead.  Note that the warnings only occurs for uses:
+
+@smallexample
+int old_fn () __attribute__ ((deprecated));
+int old_fn ();
+int (*fn_ptr)() = old_fn;
+@end smallexample
+
+@noindent
+results in a warning on line 3 but not line 2.  The optional @var{msg}
+argument, which must be a string, is printed in the warning if
+present.
+
+When applied to a type, warnings only occur for uses and also only if
+the type is being applied to an identifier that itself is not being
+declared as deprecated.
+@smallexample
+typedef int T1 __attribute__ ((deprecated));
+T1 x;
+typedef T1 T2;
+T2 y;
+typedef T1 T3 __attribute__ ((deprecated));
+T3 z __attribute__ ((deprecated));
+@end smallexample
+
+@noindent
+results in a warning on line 2 and 3 but not lines 4, 5, or 6.  No
+warning is issued for line 4 because @code{T2} is not explicitly
+deprecated.  Line 5 has no warning because @code{T3} is explicitly
+deprecated.  Similarly for line 6.
+

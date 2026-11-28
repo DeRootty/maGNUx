@@ -1,0 +1,216 @@
+@c GCC 16.1.0 | BLOQUE 0069 | 03-13
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 17291-17502 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+When compiling with @option{-fsanitize=address}, you should also
+use @option{-g} to produce more meaningful output.
+To get more accurate stack traces, it is possible to use options such as
+@option{-O0}, @option{-O1}, or @option{-Og} (which, for instance, prevent
+most function inlining), @option{-fno-optimize-sibling-calls} (which prevents
+optimizing sibling and tail recursive calls; this option is implicit for
+@option{-O0}, @option{-O1}, or @option{-Og}), or @option{-fno-ipa-icf} (which
+disables Identical Code Folding for functions).
+Using @option{-fno-omit-frame-pointer} also improves stack traces.
+Since multiple runs of the
+program may yield backtraces with different addresses due to ASLR (Address
+Space Layout Randomization), it may be desirable to turn ASLR off.  On Linux,
+this can be achieved with @samp{setarch `uname -m` -R ./prog}.
+
+@opindex fsanitize=kernel-address
+@item -fsanitize=kernel-address
+Enable AddressSanitizer for Linux kernel.
+See @uref{https://github.com/google/kernel-sanitizers} for more details.
+
+@opindex fsanitize=hwaddress
+@item -fsanitize=hwaddress
+Enable Hardware-assisted AddressSanitizer, which uses a hardware ability to
+ignore the top byte of a pointer to allow the detection of memory errors with
+a low memory overhead.
+Memory access instructions are instrumented to detect out-of-bounds and
+use-after-free bugs.
+The option enables @option{-fsanitize-address-use-after-scope}.
+See
+@uref{https://clang.llvm.org/docs/HardwareAssistedAddressSanitizerDesign.html}
+for more details.  The run-time behavior can be influenced using the
+@env{HWASAN_OPTIONS} environment variable.  When set to @code{help=1},
+the available options are shown at startup of the instrumented program.
+The option cannot be combined with @option{-fsanitize=thread} or
+@option{-fsanitize=address}, and is currently only available on AArch64.
+
+@opindex fsanitize=kernel-hwaddress
+@item -fsanitize=kernel-hwaddress
+Enable Hardware-assisted AddressSanitizer for compilation of the Linux kernel.
+Similar to @option{-fsanitize=kernel-address} but using an alternate
+instrumentation method, and similar to @option{-fsanitize=hwaddress} but with
+instrumentation differences necessary for compiling the Linux kernel.
+These differences are to avoid hwasan library initialization calls and to
+account for the stack pointer having a different value in its top byte.
+
+@emph{Note:} This option has different defaults than
+@option{-fsanitize=hwaddress}.
+Instrumenting the stack and alloca calls are not on by default.
+Using a random frame tag is not implemented for kernel instrumentation.
+
+@opindex fsanitize=memtag-stack
+@item -fsanitize=memtag-stack
+Use Memory Tagging Extension instructions instead of instrumentation
+to allow the detection of memory errors.  Similar to HWASAN, it is
+also a probabilistic method.  This option is available only on those
+AArch64 architectures that support Memory Tagging Extensions.
+
+@opindex fsanitize=pointer-compare
+@item -fsanitize=pointer-compare
+Instrument comparison operation (<, <=, >, >=) with pointer operands.
+The option must be combined with either @option{-fsanitize=kernel-address} or
+@option{-fsanitize=address}
+The option cannot be combined with @option{-fsanitize=thread}.
+Note: By default the check is disabled at run time.  To enable it,
+add @code{detect_invalid_pointer_pairs=2} to the environment variable
+@env{ASAN_OPTIONS}. Using @code{detect_invalid_pointer_pairs=1} detects
+invalid operation only when both pointers are non-null.
+
+@opindex fsanitize=pointer-subtract
+@item -fsanitize=pointer-subtract
+Instrument subtraction with pointer operands.
+The option must be combined with either @option{-fsanitize=kernel-address} or
+@option{-fsanitize=address}
+The option cannot be combined with @option{-fsanitize=thread}.
+Note: By default the check is disabled at run time.  To enable it,
+add @code{detect_invalid_pointer_pairs=2} to the environment variable
+@env{ASAN_OPTIONS}. Using @code{detect_invalid_pointer_pairs=1} detects
+invalid operation only when both pointers are non-null.
+
+@opindex fsanitize=shadow-call-stack
+@item -fsanitize=shadow-call-stack
+Enable ShadowCallStack, a security enhancement mechanism used to protect
+programs against return address overwrites (e.g. stack buffer overflows.)
+It works by saving a function's return address to a separately allocated
+shadow call stack in the function prologue and restoring the return address
+from the shadow call stack in the function epilogue.  Instrumentation only
+occurs in functions that need to save the return address to the stack.
+
+Currently it only supports the aarch64 platform.  It is specifically
+designed for linux kernels that enable the CONFIG_SHADOW_CALL_STACK option.
+For the user space programs, runtime support is not currently provided
+in libc and libgcc.  Users who want to use this feature in user space need
+to provide their own support for the runtime.  It should be noted that
+this may cause the ABI rules to be broken.
+
+On aarch64, the instrumentation makes use of the platform register @code{x18}.
+This generally means that any code that may run on the same thread as code
+compiled with ShadowCallStack must be compiled with the flag
+@option{-ffixed-x18}, otherwise functions compiled without
+@option{-ffixed-x18} might clobber @code{x18} and so corrupt the shadow
+stack pointer.
+
+Also, because there is no userspace runtime support, code compiled with
+ShadowCallStack cannot use exception handling.  Use @option{-fno-exceptions}
+to turn off exceptions.
+
+See @uref{https://clang.llvm.org/docs/ShadowCallStack.html} for more
+details.
+
+@opindex fsanitize=thread
+@item -fsanitize=thread
+Enable ThreadSanitizer, a fast data race detector.
+Memory access instructions are instrumented to detect
+data race bugs.  See @uref{https://github.com/google/sanitizers/wiki#threadsanitizer} for more
+details. The run-time behavior can be influenced using the @env{TSAN_OPTIONS}
+environment variable; see
+@url{https://github.com/google/sanitizers/wiki/ThreadSanitizerFlags} for a list of
+supported options.
+The option cannot be combined with @option{-fsanitize=address},
+@option{-fsanitize=leak}.
+
+When compiling with @option{-fsanitize=thread}, you should also use
+@option{-g} to produce more meaningful output.
+
+Note that sanitized atomic builtins cannot throw exceptions when
+operating on invalid memory addresses with non-call exceptions
+(@option{-fnon-call-exceptions}).
+
+@opindex fsanitize=leak
+@item -fsanitize=leak
+Enable LeakSanitizer, a memory leak detector.
+This option only matters for linking of executables.
+The executable is linked against a library that overrides @code{malloc}
+and other allocator functions.  See
+@uref{https://github.com/google/sanitizers/wiki/AddressSanitizerLeakSanitizer} for more
+details.  The run-time behavior can be influenced using the
+@env{LSAN_OPTIONS} environment variable.
+The option cannot be combined with @option{-fsanitize=thread}.
+
+@opindex fsanitize=undefined
+@item -fsanitize=undefined
+Enable UndefinedBehaviorSanitizer, a fast undefined behavior detector.
+Various computations are instrumented to detect undefined behavior
+at runtime.  See @uref{https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html} for more details.   The run-time behavior can be influenced using the
+@env{UBSAN_OPTIONS} environment variable.  Current suboptions are:
+
+@table @gcctabopt
+
+@opindex fsanitize=shift
+@item -fsanitize=shift
+This option enables checking that the result of a shift operation is
+not undefined.  Note that what exactly is considered undefined differs
+slightly between C and C++, as well as between ISO C90 and C99, etc.
+This option has two suboptions, @option{-fsanitize=shift-base} and
+@option{-fsanitize=shift-exponent}.
+
+@opindex fsanitize=shift-exponent
+@item -fsanitize=shift-exponent
+This option enables checking that the second argument of a shift operation
+is not negative and is smaller than the precision of the promoted first
+argument.
+
+@opindex fsanitize=shift-base
+@item -fsanitize=shift-base
+If the second argument of a shift operation is within range, check that the
+result of a shift operation is not undefined.  Note that what exactly is
+considered undefined differs slightly between C and C++, as well as between
+ISO C90 and C99, etc.
+
+@opindex fsanitize=integer-divide-by-zero
+@item -fsanitize=integer-divide-by-zero
+Detect integer division by zero.
+
+@opindex fsanitize=unreachable
+@item -fsanitize=unreachable
+With this option, the compiler turns the @code{__builtin_unreachable}
+call into a diagnostics message call instead.  When reaching the
+@code{__builtin_unreachable} call, the behavior is undefined.
+
+@opindex fsanitize=vla-bound
+@item -fsanitize=vla-bound
+This option instructs the compiler to check that the size of a variable
+length array is positive.
+
+@opindex fsanitize=null
+@item -fsanitize=null
+This option enables pointer checking.  Particularly, the application
+built with this option turned on will issue an error message when it
+tries to dereference a NULL pointer, or if a reference (possibly an
+rvalue reference) is bound to a NULL pointer, or if a method is invoked
+on an object pointed by a NULL pointer.
+
+@opindex fsanitize=return
+@item -fsanitize=return
+This option enables return statement checking.  Programs
+built with this option turned on will issue an error message
+when the end of a non-void function is reached without actually
+returning a value.  This option works in C++ only.
+
+@opindex fsanitize=signed-integer-overflow
+@item -fsanitize=signed-integer-overflow
+This option enables signed integer overflow checking.  We check that
+the result of @code{+}, @code{*}, and both unary and binary @code{-}
+does not overflow in the signed arithmetics.  This also detects
+@code{INT_MIN / -1} signed division.  Note, integer promotion
+rules must be taken into account.  That is, the following is not an
+overflow:
+@smallexample
+signed char a = SCHAR_MAX;
+a++;
+@end smallexample
+
+@opindex fsanitize=bounds

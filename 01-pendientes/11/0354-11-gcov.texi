@@ -1,0 +1,200 @@
+@c GCC 16.1.0 | BLOQUE 0354 | 11
+@c Fuente: gcc/doc/gcov.texi | blob: 7080f7c4a2a425fd68d595c0634da86252a3b364
+@c Lineas originales: 1352-1547 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+If an executable loads a dynamic shared object via dlopen functionality,
+@option{-Wl,--dynamic-list-data} is needed to dump all profile data.
+
+Profiling run-time library reports various errors related to profile
+manipulation and profile saving.  Errors are printed into standard error output
+or @samp{GCOV_ERROR_FILE} file, if environment variable is used.
+In order to terminate immediately after an errors occurs
+set @samp{GCOV_EXIT_AT_ERROR} environment variable.
+That can help users to find profile clashing which leads
+to a misleading profile.
+
+@c man end
+
+@node Gcov Data Files
+@section Brief Description of @command{gcov} Data Files
+
+@command{gcov} uses two files for profiling.  The names of these files
+are derived from the original @emph{object} file by substituting the
+file suffix with either @file{.gcno}, or @file{.gcda}.  The files
+contain coverage and profile data stored in a platform-independent format.
+The @file{.gcno} files are placed in the same directory as the object
+file.  By default, the @file{.gcda} files are also stored in the same
+directory as the object file, but the GCC @option{-fprofile-dir} option
+may be used to store the @file{.gcda} files in a separate directory.
+
+The @file{.gcno} notes file is generated when the source file is compiled
+with the GCC @option{-ftest-coverage} option.  It contains information to
+reconstruct the basic block graphs and assign source line numbers to
+blocks.
+
+The @file{.gcda} count data file is generated when a program containing
+object files built with the GCC @option{-fprofile-arcs} option is executed.
+A separate @file{.gcda} file is created for each object file compiled with
+this option.  It contains arc transition counts, value profile counts, and
+some summary information.
+
+It is not recommended to access the coverage files directly.
+Consumers should use the intermediate format that is provided
+by @command{gcov} tool via @option{--json-format} option.
+
+@node Cross-profiling
+@section Data File Relocation to Support Cross-Profiling
+
+Running the program will cause profile output to be generated.  For each
+source file compiled with @option{-fprofile-arcs}, an accompanying @file{.gcda}
+file will be placed in the object file directory. That implicitly requires
+running the program on the same system as it was built or having the same
+absolute directory structure on the target system. The program will try
+to create the needed directory structure, if it is not already present.
+
+To support cross-profiling, a program compiled with @option{-fprofile-arcs}
+can relocate the data files based on two environment variables:
+
+@itemize @bullet
+@item
+GCOV_PREFIX contains the prefix to add to the absolute paths
+in the object file. Prefix can be absolute, or relative.  The
+default is no prefix.
+
+@item
+GCOV_PREFIX_STRIP indicates the how many initial directory names to strip off
+the hardwired absolute paths. Default value is 0.
+
+@emph{Note:} If GCOV_PREFIX_STRIP is set without GCOV_PREFIX is undefined,
+ then a relative path is made out of the hardwired absolute paths.
+@end itemize
+
+For example, if the object file @file{/user/build/foo.o} was built with
+@option{-fprofile-arcs}, the final executable will try to create the data file
+@file{/user/build/foo.gcda} when running on the target system.  This will
+fail if the corresponding directory does not exist and it is unable to create
+it.  This can be overcome by, for example, setting the environment as
+@samp{GCOV_PREFIX=/target/run} and @samp{GCOV_PREFIX_STRIP=1}.  Such a
+setting will name the data file @file{/target/run/build/foo.gcda}.
+
+You must move the data files to the expected directory tree in order to
+use them for profile directed optimizations (@option{-fprofile-use}), or to
+use the @command{gcov} tool.
+
+@node Freestanding Environments
+@section Profiling and Test Coverage in Freestanding Environments
+
+In case your application runs in a hosted environment such as GNU/Linux, then
+this section is likely not relevant to you.  This section is intended for
+application developers targeting freestanding environments (for example
+embedded systems) with limited resources.  In particular, systems or test cases
+which do not support constructors/destructors or the C library file I/O.  In
+this section, the @dfn{target system} runs your application instrumented for
+profiling or test coverage.  You develop and analyze your application on the
+@dfn{host system}.  We now provide an overview how profiling and test coverage
+can be obtained in this scenario followed by a tutorial which can be exercised
+on the host system.  Finally, some system initialization caveats are listed.
+
+@subsection Overview
+
+For an application instrumented for profiling or test coverage, the compiler
+generates some global data structures which are updated by instrumentation code
+while the application runs.  These data structures are called the @dfn{gcov
+information}.  Normally, when the application exits, the gcov information is
+stored to @file{.gcda} files.  There is one file per translation unit
+instrumented for profiling or test coverage.  The function
+@code{__gcov_exit()}, which stores the gcov information to a file, is called by
+a global destructor function for each translation unit instrumented for
+profiling or test coverage.  It runs at process exit.  In a global constructor
+function, the @code{__gcov_init()} function is called to register the gcov
+information of a translation unit in a global list.  In some situations, this
+procedure does not work.  Firstly, if you want to profile the global
+constructor or exit processing of an operating system, the compiler generated
+functions may conflict with the test objectives.  Secondly, you may want to
+test early parts of the system initialization or abnormal program behaviour
+which do not allow a global constructor or exit processing.  Thirdly, you need
+a filesystem to store the files.
+
+The @option{-fprofile-info-section} GCC option enables you to use profiling and
+test coverage in freestanding environments.  This option disables the use of
+global constructors and destructors for the gcov information.  Instead, a
+pointer to the gcov information is stored in a special linker input section for
+each translation unit which is compiled with this option.  By default, the
+section name is @code{.gcov_info}.  The gcov information is statically
+initialized.  The pointers to the gcov information from all translation units
+of an executable can be collected by the linker in a contiguous memory block.
+For the GNU linker, the below linker script output section definition can be
+used to achieve this:
+
+@smallexample
+  .gcov_info      :
+  @{
+    PROVIDE (__gcov_info_start = .);
+    KEEP (*(.gcov_info))
+    PROVIDE (__gcov_info_end = .);
+  @}
+@end smallexample
+
+The linker will provide two global symbols, @code{__gcov_info_start} and
+@code{__gcov_info_end}, which define the start and end of the array of pointers
+to gcov information blocks, respectively.  The @code{KEEP ()} directive is
+required to prevent a garbage collection of the pointers.  They are not
+directly referenced by anything in the executable.  The section may be placed
+in a read-only memory area.
+
+In order to transfer the profiling and test coverage data from the target to
+the host system, the application has to provide a function to produce a
+reliable in order byte stream from the target to the host.  The byte stream may
+be compressed and encoded using error detection and correction codes to meet
+application-specific requirements.  The GCC provided @file{libgcov} target
+library provides two functions, @code{__gcov_info_to_gcda()} and
+@code{__gcov_filename_to_gcfn()}, to generate a byte stream from a gcov
+information bock.  The functions are declared in @code{#include <gcov.h>}.  The
+byte stream can be deserialized by the @command{merge-stream} subcommand of the
+@command{gcov-tool} to create or update @file{.gcda} files in the host
+filesystem for the instrumented application.
+
+@subsection Tutorial
+
+This tutorial should be exercised on the host system.  We will build a program
+instrumented for test coverage.  The program runs an application and dumps the
+gcov information to @file{stderr} encoded as a printable character stream.  The
+application simply decodes such character streams from @file{stdin} and writes
+the decoded character stream to @file{stdout} (warning: this is binary data).
+The decoded character stream is consumed by the @command{merge-stream}
+subcommand of the @command{gcov-tool} to create or update the @file{.gcda}
+files.
+
+To get started, create an empty directory.  Change into the new directory.
+Then you will create the following three files in this directory
+
+@enumerate
+@item
+@file{app.h} - a header file included by @file{app.c} and @file{main.c},
+
+@item
+@file{app.c} - a source file which contains an example application, and
+
+@item
+@file{main.c} - a source file which contains the program main function and code
+to dump the gcov information.
+@end enumerate
+
+Firstly, create the header file @file{app.h} with the following content:
+
+@smallexample
+static const unsigned char a = 'a';
+
+static inline unsigned char *
+encode (unsigned char c, unsigned char buf[2])
+@{
+  buf[0] = c % 16 + a;
+  buf[1] = (c / 16) % 16 + a;
+  return buf;
+@}
+
+extern void application (void);
+@end smallexample
+
+Secondly, create the source file @file{app.c} with the following content:
+

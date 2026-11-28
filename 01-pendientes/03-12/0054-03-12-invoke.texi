@@ -1,0 +1,253 @@
+@c GCC 16.1.0 | BLOQUE 0054 | 03-12
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 13836-14084 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -fmerge-constants
+Attempt to merge identical constants (string constants and floating-point
+constants) across compilation units.
+
+This option is the default for optimized compilation if the assembler and
+linker support it.  Use @option{-fno-merge-constants} to inhibit this
+behavior.
+
+Enabled at levels @option{-O1}, @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex fmerge-all-constants
+@opindex fno-merge-all-constants
+@item -fmerge-all-constants
+Attempt to merge identical constants and identical variables.
+
+This option implies @option{-fmerge-constants}.  In addition to
+@option{-fmerge-constants} this considers e.g.@: even constant initialized
+arrays or initialized constant variables with integral or floating-point
+types.  Languages like C or C++ require each variable, including multiple
+instances of the same variable in recursive calls, to have distinct locations,
+so using this option results in non-conforming
+behavior.
+
+@opindex fmodulo-sched
+@opindex fno-modulo-sched
+@item -fmodulo-sched
+Perform swing modulo scheduling immediately before the first scheduling
+pass.  This pass looks at innermost loops and reorders their
+instructions by overlapping different iterations.
+
+@opindex fmodulo-sched-allow-regmoves
+@opindex fno-modulo-sched-allow-regmoves
+@item -fmodulo-sched-allow-regmoves
+Perform more aggressive SMS-based modulo scheduling with register moves
+allowed.  By setting this flag certain anti-dependences edges are
+deleted, which triggers the generation of reg-moves based on the
+life-range analysis.  This option is effective only with
+@option{-fmodulo-sched} enabled.
+
+@opindex fno-branch-count-reg
+@opindex fbranch-count-reg
+@item -fno-branch-count-reg
+Disable the optimization pass that scans for opportunities to use
+``decrement and branch'' instructions on a count register instead of
+instruction sequences that decrement a register, compare it against zero, and
+then branch based upon the result.  This option is only meaningful on
+architectures that support such instructions, which include x86, PowerPC,
+IA-64 and S/390.  Note that the @option{-fno-branch-count-reg} option
+doesn't remove the decrement and branch instructions from the generated
+instruction stream introduced by other optimization passes.
+
+The default is @option{-fbranch-count-reg} at @option{-O1} and higher,
+except for @option{-Og}.
+
+@opindex fno-function-cse
+@opindex ffunction-cse
+@item -fno-function-cse
+Do not put function addresses in registers; make each instruction that
+calls a constant function contain the function's address explicitly.
+
+This option results in less efficient code, but some strange hacks
+that alter the assembler output may be confused by the optimizations
+performed when this option is not used.
+
+The default is @option{-ffunction-cse}
+
+@opindex ffuse-ops-with-volatile-access
+@opindex fno-fuse-ops-with-volatile-access
+@item -ffuse-ops-with-volatile-access
+Allow limited optimization of operations with volatile memory access
+when doing so does not change the semantics outlined in
+@xref{Volatiles,,When is a Volatile Object Accessed?}.
+
+The default is @option{-ffuse-ops-with-volatile-access}
+
+@opindex fno-zero-initialized-in-bss
+@opindex fzero-initialized-in-bss
+@item -fno-zero-initialized-in-bss
+If the target supports a BSS section, GCC by default puts variables that
+are initialized to zero into BSS@.  This can save space in the resulting
+code.
+
+This option turns off this behavior because some programs explicitly
+rely on variables going to the data section---e.g., so that the
+resulting executable can find the beginning of that section and/or make
+assumptions based on that.
+
+The default is @option{-fzero-initialized-in-bss} except in Ada.
+
+@opindex fthread-jumps
+@opindex fno-thread-jumps
+@item -fthread-jumps
+Perform optimizations that check to see if a jump branches to a
+location where another comparison subsumed by the first is found.  If
+so, the first branch is redirected to either the destination of the
+second branch or a point immediately following it, depending on whether
+the condition is known to be true or false.
+
+Enabled at levels @option{-O1}, @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex fsplit-wide-types
+@opindex fno-split-wide-types
+@item -fsplit-wide-types
+When using a type that occupies multiple registers, such as @code{long
+long} on a 32-bit system, split the registers apart and allocate them
+independently.  This normally generates better code for those types,
+but may make debugging more difficult.
+
+Enabled at levels @option{-O1}, @option{-O2}, @option{-O3},
+@option{-Os}.
+
+@opindex fsplit-wide-types-early
+@opindex fno-split-wide-types-early
+@item -fsplit-wide-types-early
+Fully split wide types early, instead of very late.
+This option has no effect unless @option{-fsplit-wide-types} is turned on.
+
+This is the default on some targets.
+
+@opindex fcse-follow-jumps
+@opindex fno-cse-follow-jumps
+@item -fcse-follow-jumps
+In common subexpression elimination (CSE), scan through jump instructions
+when the target of the jump is not reached by any other path.  For
+example, when CSE encounters an @code{if} statement with an
+@code{else} clause, CSE follows the jump when the condition
+tested is false.
+
+Enabled at levels @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex fcse-skip-blocks
+@item -fcse-skip-blocks
+This is similar to @option{-fcse-follow-jumps}, but causes CSE to
+follow jumps that conditionally skip over blocks.  When CSE
+encounters a simple @code{if} statement with no else clause,
+@option{-fcse-skip-blocks} causes CSE to follow the jump around the
+body of the @code{if}.
+
+Enabled at levels @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex frerun-cse-after-loop
+@opindex fno-rerun-cse-after-loop
+@item -frerun-cse-after-loop
+Re-run common subexpression elimination after loop optimizations are
+performed.
+
+Enabled at levels @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex fgcse
+@opindex fno-gcse
+@item -fgcse
+Perform a global common subexpression elimination pass.
+This pass also performs global constant and copy propagation.
+
+@emph{Note:} When compiling a program using computed gotos, a GCC
+extension, you may get better run-time performance if you disable
+the global common subexpression elimination pass by adding
+@option{-fno-gcse} to the command line.
+
+Enabled at levels @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex fgcse-lm
+@opindex fno-gcse-lm
+@item -fgcse-lm
+When @option{-fgcse-lm} is enabled, global common subexpression elimination
+attempts to move loads that are only killed by stores into themselves.  This
+allows a loop containing a load/store sequence to be changed to a load outside
+the loop, and a copy/store within the loop.
+
+Enabled by default when @option{-fgcse} is enabled.
+
+@opindex fgcse-sm
+@opindex fno-gcse-sm
+@item -fgcse-sm
+When @option{-fgcse-sm} is enabled, a store motion pass is run after
+global common subexpression elimination.  This pass attempts to move
+stores out of loops.  When used in conjunction with @option{-fgcse-lm},
+loops containing a load/store sequence can be changed to a load before
+the loop and a store after the loop.
+
+Not enabled at any optimization level.
+
+@opindex fgcse-las
+@opindex fno-gcse-las
+@item -fgcse-las
+When @option{-fgcse-las} is enabled, the global common subexpression
+elimination pass eliminates redundant loads that come after stores to the
+same memory location (both partial and full redundancies).
+
+Not enabled at any optimization level.
+
+@opindex fgcse-after-reload
+@opindex fno-gcse-after-reload
+@item -fgcse-after-reload
+When @option{-fgcse-after-reload} is enabled, a redundant load elimination
+pass is performed after reload.  The purpose of this pass is to clean up
+redundant spilling.
+
+Enabled by @option{-O3}, @option{-fprofile-use} and @option{-fauto-profile}.
+
+@opindex faggressive-loop-optimizations
+@opindex fno-aggressive-loop-optimizations
+@item -faggressive-loop-optimizations
+This option tells the loop optimizer to use language constraints to
+derive bounds for the number of iterations of a loop.  This assumes that
+loop code does not invoke undefined behavior by for example causing signed
+integer overflows or out-of-bound array accesses.  The bounds for the
+number of iterations of a loop are used to guide loop unrolling and peeling
+and loop exit test optimizations.
+This option is enabled by default.
+
+@opindex funconstrained-commons
+@opindex fno-unconstrained-commons
+@item -funconstrained-commons
+This option tells the compiler that variables declared in common blocks
+(e.g.@: Fortran) may later be overridden with longer trailing arrays. This
+prevents certain optimizations that depend on knowing the array bounds.
+
+@opindex fcrossjumping
+@opindex fno-crossjumping
+@item -fcrossjumping
+Perform cross-jumping transformation.
+This transformation unifies equivalent code and saves code size.  The
+resulting code may or may not perform better than without cross-jumping.
+
+Enabled at levels @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex fauto-inc-dec
+@opindex fno-auto-inc-dec
+@item -fauto-inc-dec
+Combine increments or decrements of addresses with memory accesses.
+This pass is always skipped on architectures that do not have
+instructions to support this.  Enabled by default at @option{-O1} and
+higher on architectures that support this.
+
+@opindex fdce
+@opindex fno-dce
+@item -fdce
+Perform dead code elimination (DCE) on RTL@.
+Enabled by default at @option{-O1} and higher.
+
+@opindex fdse
+@opindex fno-dse
+@item -fdse
+Perform dead store elimination (DSE) on RTL@.
+Enabled by default at @option{-O1} and higher.
+
+@opindex fif-conversion
+@opindex fno-if-conversion

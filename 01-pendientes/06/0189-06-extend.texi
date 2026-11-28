@@ -1,0 +1,235 @@
+@c GCC 16.1.0 | BLOQUE 0189 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 3140-3370 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+Users of @option{-ftrivial-auto-var-init} should be aware that the bit
+patterns used as initializers are @emph{not} converted to
+@code{hardbool} types, so using a @code{hardbool} variable that is
+implicitly initialized by the @option{-ftrivial-auto-var-init} may trap
+if the representations values chosen for @code{false} and @code{true} do
+not match the initializer.
+
+Since this is a language extension only available in C, interoperation
+with other languages may pose difficulties.  It should interoperate with
+Ada Booleans defined with the same size and equivalent representation
+clauses, and with enumerations or other languages' integral types that
+correspond to C's chosen integral type.
+
+@atindex @code{ifunc}
+@cindex indirect functions
+@cindex functions that are dynamically resolved
+@item ifunc ("@var{resolver}")
+This attribute applies to functions.
+
+The @code{ifunc} attribute is used to mark a function as an indirect
+function using the STT_GNU_IFUNC symbol type extension to the ELF
+standard.  This allows the resolution of the symbol value to be
+determined dynamically at load time, and an optimized version of the
+routine to be selected for the particular processor or other system
+characteristics determined then.  To use this attribute, first define
+the implementation functions available, and a resolver function that
+returns a pointer to the selected implementation function.  The
+implementation functions' declarations must match the API of the
+function being implemented.  The resolver should be declared to
+be a function taking no arguments and returning a pointer to
+a function of the same type as the implementation.  For example:
+
+@smallexample
+void *my_memcpy (void *dst, const void *src, size_t len)
+@{
+  @dots{}
+  return dst;
+@}
+
+static void * (*resolve_memcpy (void))(void *, const void *, size_t)
+@{
+  return my_memcpy; // we will just always select this routine
+@}
+@end smallexample
+
+@noindent
+The exported header file declaring the function the user calls would
+contain:
+
+@smallexample
+extern void *memcpy (void *, const void *, size_t);
+@end smallexample
+
+@noindent
+allowing the user to call @code{memcpy} as a regular function, unaware of
+the actual implementation.  Finally, the indirect function needs to be
+defined in the same translation unit as the resolver function:
+
+@smallexample
+void *memcpy (void *, const void *, size_t)
+     __attribute__ ((ifunc ("resolve_memcpy")));
+@end smallexample
+
+In C++, the @code{ifunc} attribute takes a string that is the mangled name
+of the resolver function.  A C++ resolver for a non-static member function
+of class @code{C} should be declared to return a pointer to a non-member
+function taking pointer to @code{C} as the first argument, followed by
+the same arguments as of the implementation function.  G++ checks
+the signatures of the two functions and issues
+a @option{-Wattribute-alias} warning for mismatches.  To suppress a warning
+for the necessary cast from a pointer to the implementation member function
+to the type of the corresponding non-member function use
+the @option{-Wno-pmf-conversions} option.  For example:
+
+@smallexample
+class S
+@{
+private:
+  int debug_impl (int);
+  int optimized_impl (int);
+
+  typedef int Func (S*, int);
+
+  static Func* resolver ();
+public:
+
+  int interface (int);
+@};
+
+int S::debug_impl (int) @{ /* @r{@dots{}} */ @}
+int S::optimized_impl (int) @{ /* @r{@dots{}} */ @}
+
+S::Func* S::resolver ()
+@{
+  int (S::*pimpl) (int)
+    = getenv ("DEBUG") ? &S::debug_impl : &S::optimized_impl;
+
+  // Cast triggers -Wno-pmf-conversions.
+  return reinterpret_cast<Func*>(pimpl);
+@}
+
+int S::interface (int) __attribute__ ((ifunc ("_ZN1S8resolverEv")));
+@end smallexample
+
+Indirect functions cannot be weak.  Binutils version 2.20.1 or higher
+and GNU C Library version 2.11.1 are required to use this feature.
+
+@atindex @code{interrupt_handler}
+@atindex @code{interrupt}
+@cindex interrupt handlers
+@cindex functions that handle interrupts
+@item interrupt
+@itemx interrupt_handler
+These attributes apply to functions.
+
+Many GCC back ends support attributes to indicate that a function is
+an interrupt handler, which tells the compiler to generate function
+entry and exit sequences that differ from those from regular
+functions.  The exact syntax and behavior are target-specific;
+refer to the following subsections for details.
+
+@atindex @code{leaf}
+@item leaf
+This attribute applies to functions.
+
+Calls to external functions with this attribute must return to the
+current compilation unit only by return or by exception handling.  In
+particular, a leaf function is not allowed to invoke callback functions
+passed to it from the current compilation unit, directly call functions
+exported by the unit, or @code{longjmp} into the unit.  Leaf functions
+might still call functions from other compilation units and thus they
+are not necessarily leaf in the sense that they contain no function
+calls at all.
+
+The attribute is intended for library functions to improve dataflow
+analysis.  The compiler takes the hint that any data not escaping the
+current compilation unit cannot be used or modified by the leaf
+function.  For example, the @code{sin} function is a leaf function, but
+@code{qsort} is not.
+
+Note that leaf functions might indirectly run a signal handler defined
+in the current compilation unit that uses static variables.  Similarly,
+when lazy symbol resolution is in effect, leaf functions might invoke
+indirect functions whose resolver function or implementation function is
+defined in the current compilation unit and uses static variables.  There
+is no standard-compliant way to write such a signal handler, resolver
+function, or implementation function, and the best that you can do is to
+remove the @code{leaf} attribute or mark all such static variables
+@code{volatile}.  Lastly, for ELF-based systems that support symbol
+interposition, care should be taken that functions defined in the
+current compilation unit do not unexpectedly interpose other symbols
+based on the defined standards mode and defined feature test macros;
+otherwise an inadvertent callback would be added.
+
+The attribute has no effect on functions defined within the current
+compilation unit.  This is to allow easy merging of multiple compilation
+units into one, for example, by using the link-time optimization.  For
+this reason the attribute is not allowed on types to annotate indirect
+calls.
+
+@atindex @code{malloc}
+@cindex functions that behave like malloc
+@item malloc
+@itemx malloc (@var{deallocator})
+@itemx malloc (@var{deallocator}, @var{ptr-index})
+This attribute applies to functions.
+
+Attribute @code{malloc} indicates that a function is @code{malloc}-like,
+i.e., that the pointer @var{P} returned by the function cannot alias any
+other pointer valid when the function returns, and moreover no
+pointers to valid objects occur in any storage addressed by @var{P}. In
+addition, GCC predicts that a function with the attribute returns
+non-null in most cases.
+
+Independently, the form of the attribute with one or two arguments
+associates @code{deallocator} as a suitable deallocation function for
+pointers returned from the @code{malloc}-like function.  @var{ptr-index}
+denotes the positional argument to which when the pointer is passed in
+calls to @code{deallocator} has the effect of deallocating it.
+
+Using the attribute with no arguments is designed to improve optimization
+by relying on the aliasing property it implies.  Functions like @code{malloc}
+and @code{calloc} have this property because they return a pointer to
+uninitialized or zeroed-out, newly obtained storage.  However, functions
+like @code{realloc} do not have this property, as they may return pointers
+to storage containing pointers to existing objects.  Additionally, since
+all such functions are assumed to return null only infrequently, callers
+can be optimized based on that assumption.
+
+Associating a function with a @var{deallocator} helps detect calls to
+mismatched allocation and deallocation functions and diagnose them under
+the control of options such as @option{-Wmismatched-dealloc}.  It also
+makes it possible to diagnose attempts to deallocate objects that were not
+allocated dynamically, by @option{-Wfree-nonheap-object}.  To indicate
+that an allocation function both satisfies the nonaliasing property and
+has a deallocator associated with it, both the plain form of the attribute
+and the one with the @var{deallocator} argument must be used.  The same
+function can be both an allocator and a deallocator.  Since inlining one
+of the associated functions but not the other could result in apparent
+mismatches, this form of attribute @code{malloc} is not accepted on inline
+functions.  For the same reason, using the attribute prevents both
+the allocation and deallocation functions from being expanded inline.
+
+For example, besides stating that the functions return pointers that do
+not alias any others, the following declarations make @code{fclose}
+a suitable deallocator for pointers returned from all functions except
+@code{popen}, and @code{pclose} as the only suitable deallocator for
+pointers returned from @code{popen}.  The deallocator functions must
+be declared before they can be referenced in the attribute.
+
+@smallexample
+int fclose (FILE*);
+int pclose (FILE*);
+
+[[gnu::malloc, gnu::malloc (fclose, 1)]]
+  FILE* fdopen (int, const char*);
+[[gnu::malloc, gnu::malloc (fclose, 1)]]
+  FILE* fopen (const char*, const char*);
+[[gnu::malloc, gnu::malloc (fclose, 1)]]
+  FILE* fmemopen(void *, size_t, const char *);
+[[gnu::malloc, gnu::malloc (fclose, 1)]]
+  FILE* popen (const char*, const char*);
+[[gnu::malloc, gnu::malloc (fclose, 1)]]
+  FILE* tmpfile (void);
+@end smallexample
+
+The warnings guarded by @option{-fanalyzer} respect allocation and
+deallocation pairs marked with the @code{malloc}.  In particular:
+
+@itemize @bullet
+

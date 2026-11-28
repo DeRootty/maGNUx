@@ -1,0 +1,30 @@
+@c GCC 16.1.0 | BLOQUE 0048 | 03-10
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 12753-12778 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -fdump-analyzer-json
+Dump a compressed JSON representation of analyzer internals to
+@file{@var{file}.analyzer.json.gz}.  The precise format is subject
+to change.
+
+@opindex fdump-analyzer-state-purge
+@item -fdump-analyzer-state-purge
+As per @option{-fdump-analyzer-supergraph}, dump a representation of the
+``supergraph'' suitable for viewing with GraphViz, but annotate the
+graph with information on what state will be purged at each node.
+The graph is written to @file{@var{file}.state-purge.dot}.
+
+@opindex fdump-analyzer-supergraph
+@item -fdump-analyzer-supergraph
+Dump representations of the ``supergraph'' suitable for viewing with
+GraphViz to @file{@var{file}.supergraph.@var{index}.@var{kind}.dot}.
+These show all of the control flow graphs in the program, at various stages
+of the analysis.  The precise set of dumps and what they show is subject
+to change.
+
+@opindex fdump-analyzer-untracked
+@item -fdump-analyzer-untracked
+Emit custom warnings with internal details intended for analyzer developers.
+
+@end table
+

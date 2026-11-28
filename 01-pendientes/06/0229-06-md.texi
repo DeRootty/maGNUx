@@ -1,0 +1,24 @@
+@c GCC 16.1.0 | BLOQUE 0229 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 1251-1270 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@ifclear INTERNALS
+@node Constraints
+@section Constraints for @code{asm} Operands
+@cindex operand constraints, @code{asm}
+@cindex constraints, @code{asm}
+@cindex @code{asm} constraints
+
+Here are specific details on what constraint letters you can use with
+@code{asm} operands.
+@end ifclear
+Constraints can say whether
+an operand may be in a register, and which kinds of register; whether the
+operand can be a memory reference, and which kinds of address; whether the
+operand may be an immediate constant, and which possible values it may
+have.  Constraints can also require two operands to match.
+Side-effects aren't allowed in operands of inline @code{asm}, unless
+@samp{<} or @samp{>} constraints are used, because there is no guarantee
+that the side effects will happen exactly once in an instruction that can update
+the addressing register.
+

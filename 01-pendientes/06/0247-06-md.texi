@@ -1,0 +1,27 @@
+@c GCC 16.1.0 | BLOQUE 0247 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 3496-3518 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+@item m
+A memory operand.
+Normally, @code{m} does not allow addresses that update the base register.
+If the @code{<} or @code{>} constraint is also used, they are allowed and
+therefore on PowerPC targets in that case it is only safe
+to use @code{m<>} in an @code{asm} statement if that @code{asm} statement
+accesses the operand exactly once.  The @code{asm} statement must also
+use @code{%U@var{<opno>}} as a placeholder for the ``update'' flag in the
+corresponding load or store instruction.  For example:
+
+@smallexample
+asm ("st%U0 %1,%0" : "=m<>" (mem) : "r" (val));
+@end smallexample
+
+is correct but:
+
+@smallexample
+asm ("st %1,%0" : "=m<>" (mem) : "r" (val));
+@end smallexample
+
+is not.
+

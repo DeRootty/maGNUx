@@ -1,0 +1,254 @@
+@c GCC 16.1.0 | BLOQUE 0061 | 03-12
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 15489-15738 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -freorder-functions
+Reorder functions in the object file in order to
+improve code locality.  Unlike @option{-fipa-reorder-for-locality} this option
+prioritises grouping all functions within a category
+(hot/normal/cold/never-executed) together.
+This is implemented by using special subsections @code{.text.hot} for most
+frequently executed functions and @code{.text.unlikely} for unlikely executed
+functions.  Reordering is done by the linker so object file format must support
+named sections and linker must place them in a reasonable way.
+
+This option isn't effective unless you either provide profile feedback
+(see @option{-fprofile-arcs} for details) or manually annotate functions with
+@code{hot} or @code{cold} attributes (@pxref{Common Attributes}).
+
+Enabled at levels @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex fstrict-aliasing
+@opindex fno-strict-aliasing
+@item -fstrict-aliasing
+Allow the compiler to assume the strictest aliasing rules applicable to
+the language being compiled.  For C (and C++), this activates
+optimizations based on the type of expressions.  In particular, accessing
+an object of one type via an expression of a different type is not allowed,
+unless the types are @dfn{compatible types}, differ only in signedness or
+qualifiers, or the expression has a character type.  Accessing scalar
+objects via a corresponding vector type is also allowed.
+
+For example, an @code{unsigned int} can alias an @code{int}, but not a
+@code{void*} or a @code{double}.  A character type may alias any other type.
+
+@anchor{Type-punning}Pay special attention to code like this:
+@smallexample
+union a_union @{
+  int i;
+  double d;
+@};
+
+int f() @{
+  union a_union t;
+  t.d = 3.0;
+  return t.i;
+@}
+@end smallexample
+The practice of reading from a different union member than the one most
+recently written to (called ``type-punning'') is common.  Even with
+@option{-fstrict-aliasing}, type-punning is allowed in C, provided the memory
+is accessed through the union type.  In ISO C++, type-punning through a union
+type is undefined behavior, but GCC supports it as an extension. So, the code
+above works as expected.  @xref{Structures unions enumerations and
+bit-fields implementation}.  However, this code might not:
+@smallexample
+int f() @{
+  union a_union t;
+  int* ip;
+  t.d = 3.0;
+  ip = &t.i;
+  return *ip;
+@}
+@end smallexample
+
+Similarly, access by taking the address, casting the resulting pointer
+and dereferencing the result has undefined behavior, even if the cast
+uses a union type, e.g.:
+@smallexample
+int f() @{
+  double d = 3.0;
+  return ((union a_union *) &d)->i;
+@}
+@end smallexample
+
+The @option{-fstrict-aliasing} option is enabled at levels
+@option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex fipa-strict-aliasing
+@opindex fno-ipa-strict-aliasing
+@item -fipa-strict-aliasing
+Controls whether rules of @option{-fstrict-aliasing} are applied across
+function boundaries.  Note that if multiple functions gets inlined into a
+single function the memory accesses are no longer considered to be crossing a
+function boundary.
+
+The @option{-fipa-strict-aliasing} option is enabled by default and is
+effective only in combination with @option{-fstrict-aliasing}.
+
+@opindex falign-functions
+@opindex fno-align-functions
+@item -falign-functions
+@itemx -falign-functions=@var{n}
+@itemx -falign-functions=@var{n}:@var{m}
+@itemx -falign-functions=@var{n}:@var{m}:@var{n2}
+@itemx -falign-functions=@var{n}:@var{m}:@var{n2}:@var{m2}
+Align the start of functions to the next power-of-two greater than or
+equal to @var{n}, skipping up to @var{m}-1 bytes.  This ensures that at
+least the first @var{m} bytes of the function can be fetched by the CPU
+without crossing an @var{n}-byte alignment boundary.
+This is an optimization of code performance and alignment is ignored for
+functions considered cold.  If alignment is required for all functions,
+use @option{-fmin-function-alignment}.
+
+If @var{m} is not specified, it defaults to @var{n}.
+
+Examples: @option{-falign-functions=32} aligns functions to the next
+32-byte boundary, @option{-falign-functions=24} aligns to the next
+32-byte boundary only if this can be done by skipping 23 bytes or less,
+@option{-falign-functions=32:7} aligns to the next
+32-byte boundary only if this can be done by skipping 6 bytes or less.
+
+The second pair of @var{n2}:@var{m2} values allows you to specify
+a secondary alignment: @option{-falign-functions=64:7:32:3} aligns to
+the next 64-byte boundary if this can be done by skipping 6 bytes or less,
+otherwise aligns to the next 32-byte boundary if this can be done
+by skipping 2 bytes or less.
+If @var{m2} is not specified, it defaults to @var{n2}.
+
+Some assemblers only support this flag when @var{n} is a power of two;
+in that case, it is rounded up.
+
+@option{-fno-align-functions} and @option{-falign-functions=1} are
+equivalent and mean that functions are not aligned.
+
+If @var{n} is not specified or is zero, use a machine-dependent default.
+The maximum allowed @var{n} option value is 65536.
+
+Enabled at levels @option{-O2}, @option{-O3}.
+
+@opindex flimit-function-alignment
+@opindex fno-limit-function-alignment
+@item -flimit-function-alignment
+If this option is enabled, the compiler tries to avoid unnecessarily
+overaligning functions. It attempts to instruct the assembler to align
+by the amount specified by @option{-falign-functions}, but not to
+skip more bytes than the size of the function.
+
+@opindex falign-labels
+@opindex fno-align-labels
+@item -falign-labels
+@itemx -falign-labels=@var{n}
+@itemx -falign-labels=@var{n}:@var{m}
+@itemx -falign-labels=@var{n}:@var{m}:@var{n2}
+@itemx -falign-labels=@var{n}:@var{m}:@var{n2}:@var{m2}
+Align all branch targets to a power-of-two boundary.
+
+Parameters of this option are analogous to the @option{-falign-functions} option.
+@option{-fno-align-labels} and @option{-falign-labels=1} are
+equivalent and mean that labels are not aligned.
+
+If @option{-falign-loops} or @option{-falign-jumps} are applicable and
+are greater than this value, then their values are used instead.
+
+If @var{n} is not specified or is zero, use a machine-dependent default
+which is very likely to be @samp{1}, meaning no alignment.
+The maximum allowed @var{n} option value is 65536.
+
+Enabled at levels @option{-O2}, @option{-O3}.
+
+@opindex falign-loops
+@opindex fno-align-loops
+@item -falign-loops
+@itemx -falign-loops=@var{n}
+@itemx -falign-loops=@var{n}:@var{m}
+@itemx -falign-loops=@var{n}:@var{m}:@var{n2}
+@itemx -falign-loops=@var{n}:@var{m}:@var{n2}:@var{m2}
+Align loops to a power-of-two boundary.  If the loops are executed
+many times, this makes up for any execution of the dummy padding
+instructions.
+This is an optimization of code performance and alignment is ignored for
+loops considered cold.
+
+If @option{-falign-labels} is greater than this value, then its value
+is used instead.
+
+Parameters of this option are analogous to the @option{-falign-functions} option.
+@option{-fno-align-loops} and @option{-falign-loops=1} are
+equivalent and mean that loops are not aligned.
+The maximum allowed @var{n} option value is 65536.
+
+If @var{n} is not specified or is zero, use a machine-dependent default.
+
+Enabled at levels @option{-O2}, @option{-O3}.
+
+@opindex falign-jumps
+@opindex fno-align-jumps
+@item -falign-jumps
+@itemx -falign-jumps=@var{n}
+@itemx -falign-jumps=@var{n}:@var{m}
+@itemx -falign-jumps=@var{n}:@var{m}:@var{n2}
+@itemx -falign-jumps=@var{n}:@var{m}:@var{n2}:@var{m2}
+Align branch targets to a power-of-two boundary, for branch targets
+where the targets can only be reached by jumping.  In this case,
+no dummy operations need be executed.
+This is an optimization of code performance and alignment is ignored for
+jumps considered cold.
+
+If @option{-falign-labels} is greater than this value, then its value
+is used instead.
+
+Parameters of this option are analogous to the @option{-falign-functions} option.
+@option{-fno-align-jumps} and @option{-falign-jumps=1} are
+equivalent and mean that loops are not aligned.
+
+If @var{n} is not specified or is zero, use a machine-dependent default.
+The maximum allowed @var{n} option value is 65536.
+
+Enabled at levels @option{-O2}, @option{-O3}.
+
+@opindex fmin-function-alignment=@var{n}
+@item -fmin-function-alignment
+Specify minimal alignment of functions to the next power-of-two greater than or
+equal to @var{n}. Unlike @option{-falign-functions} this alignment is applied
+also to all functions (even those considered cold).  The alignment is also not
+affected by @option{-flimit-function-alignment}
+
+
+@opindex fno-allocation-dce
+@opindex fallocation-dce
+@item -fno-allocation-dce
+Do not remove unused C++ allocations (using operator @code{new} and operator @code{delete})
+in dead code elimination.
+
+See also @option{-fmalloc-dce}.
+
+@opindex fallow-store-data-races
+@opindex fno-allow-store-data-races
+@item -fallow-store-data-races
+Allow the compiler to perform optimizations that may introduce new data races
+on stores, without proving that the variable cannot be concurrently accessed
+by other threads.  Does not affect optimization of local data.  It is safe to
+use this option if it is known that global data will not be accessed by
+multiple threads.
+
+Examples of optimizations enabled by @option{-fallow-store-data-races} include
+hoisting or if-conversions that may cause a value that was already in memory
+to be re-written with that same value.  Such re-writing is safe in a single
+threaded context but may be unsafe in a multi-threaded context.  Note that on
+some processors, if-conversions may be required in order to enable
+vectorization.
+
+Enabled at level @option{-Ofast}.
+
+@opindex funit-at-a-time
+@opindex fno-unit-at-a-time
+@item -funit-at-a-time
+This option is left for compatibility reasons. @option{-funit-at-a-time}
+has no effect, while @option{-fno-unit-at-a-time} implies
+@option{-fno-toplevel-reorder} and @option{-fno-section-anchors}.
+
+Enabled by default.
+
+@opindex fno-toplevel-reorder
+@opindex ftoplevel-reorder

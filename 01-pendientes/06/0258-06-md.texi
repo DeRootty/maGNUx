@@ -1,0 +1,144 @@
+@c GCC 16.1.0 | BLOQUE 0258 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 4237-4376 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+@item G
+Standard 80387 floating point constant.
+
+@item C
+SSE constant zero operand.
+
+@item e
+32-bit signed integer constant, or a symbolic reference known
+to fit that range (for immediate operands in sign-extending x86-64
+instructions).
+
+@item We
+32-bit signed integer constant, or a symbolic reference known
+to fit that range (for sign-extending conversion operations that
+require non-@code{VOIDmode} immediate operands).
+
+@item Wz
+32-bit unsigned integer constant, or a symbolic reference known
+to fit that range (for zero-extending conversion operations that
+require non-@code{VOIDmode} immediate operands).
+
+@item Wd
+128-bit integer constant where both the high and low 64-bit word
+satisfy the @code{e} constraint.
+
+@item Ws
+A symbolic reference or label reference.
+You can use the @code{%p} modifier to print the raw symbol.
+
+@item Z
+32-bit unsigned integer constant, or a symbolic reference known
+to fit that range (for immediate operands in zero-extending x86-64
+instructions).
+
+@item Tv
+VSIB address operand.
+
+@item Ts
+Address operand without segment register.
+
+@end table
+
+@item Xstormy16---@file{config/stormy16/stormy16.h}
+@table @code
+@item a
+Register r0.
+
+@item b
+Register r1.
+
+@item c
+Register r2.
+
+@item d
+Register r8.
+
+@item e
+Registers r0 through r7.
+
+@item t
+Registers r0 and r1.
+
+@item y
+The carry register.
+
+@item z
+Registers r8 and r9.
+
+@item I
+A constant between 0 and 3 inclusive.
+
+@item J
+A constant that has exactly one bit set.
+
+@item K
+A constant that has exactly one bit clear.
+
+@item L
+A constant between 0 and 255 inclusive.
+
+@item M
+A constant between @minus{}255 and 0 inclusive.
+
+@item N
+A constant between @minus{}3 and 0 inclusive.
+
+@item O
+A constant between 1 and 4 inclusive.
+
+@item P
+A constant between @minus{}4 and @minus{}1 inclusive.
+
+@item Q
+A memory reference that is a stack push.
+
+@item R
+A memory reference that is a stack pop.
+
+@item S
+A memory reference that refers to a constant address of known value.
+
+@item T
+The register indicated by Rx (not implemented yet).
+
+@item U
+A constant that is not between 2 and 15 inclusive.
+
+@item Z
+The constant 0.
+
+@end table
+
+@item Xtensa---@file{config/xtensa/constraints.md}
+@table @code
+@item a
+General-purpose 32-bit register
+
+@item b
+One-bit boolean register
+
+@item A
+MAC16 40-bit accumulator register
+
+@item I
+Signed 12-bit integer constant, for use in MOVI instructions
+
+@item J
+Signed 8-bit integer constant, for use in ADDI instructions
+
+@item K
+Integer constant valid for BccI instructions
+
+@item L
+Unsigned constant valid for BccUI instructions
+
+@end table
+
+@end table
+

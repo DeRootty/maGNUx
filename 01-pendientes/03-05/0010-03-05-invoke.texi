@@ -1,0 +1,283 @@
+@c GCC 16.1.0 | BLOQUE 0010 | 03-05
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 4395-4673 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -Wregister @r{(C++ and Objective-C++ only)}
+Warn on uses of the @code{register} storage class specifier, except
+when it is part of the GNU @ref{Explicit Register Variables} extension.
+The use of the @code{register} keyword as storage class specifier has
+been deprecated in C++11 and removed in C++17.
+Enabled by default with @option{-std=c++17}.
+
+@opindex Wreorder
+@opindex Wno-reorder
+@cindex reordering, warning
+@cindex warning for reordering of member initializers
+@item -Wreorder @r{(C++ and Objective-C++ only)}
+Warn when the order of member initializers given in the code does not
+match the order in which they must be executed.  For instance:
+
+@smallexample
+struct A @{
+  int i;
+  int j;
+  A(): j (0), i (1) @{ @}
+@};
+@end smallexample
+
+@noindent
+The compiler rearranges the member initializers for @code{i}
+and @code{j} to match the declaration order of the members, emitting
+a warning to that effect.  This warning is enabled by @option{-Wall}.
+
+@opindex Wpessimizing-move
+@opindex Wno-pessimizing-move
+@item -Wno-pessimizing-move @r{(C++ and Objective-C++ only)}
+This warning warns when a call to @code{std::move} prevents copy
+elision.  A typical scenario when copy elision can occur is when returning in
+a function with a class return type, when the expression being returned is the
+name of a non-volatile automatic object, and is not a function parameter, and
+has the same type as the function return type.
+
+@smallexample
+struct T @{
+@dots{}
+@};
+T fn()
+@{
+  T t;
+  @dots{}
+  return std::move (t);
+@}
+@end smallexample
+
+But in this example, the @code{std::move} call prevents copy elision.
+
+This warning is enabled by @option{-Wall}.
+
+@opindex Wredundant-move
+@opindex Wno-redundant-move
+@item -Wno-redundant-move @r{(C++ and Objective-C++ only)}
+This warning warns about redundant calls to @code{std::move}; that is, when
+a move operation would have been performed even without the @code{std::move}
+call.  This happens because the compiler is forced to treat the object as if
+it were an rvalue in certain situations such as returning a local variable,
+where copy elision isn't applicable.  Consider:
+
+@smallexample
+struct T @{
+@dots{}
+@};
+T fn(T t)
+@{
+  @dots{}
+  return std::move (t);
+@}
+@end smallexample
+
+Here, the @code{std::move} call is redundant.  Because G++ implements Core
+Issue 1579, another example is:
+
+@smallexample
+struct T @{ // convertible to U
+@dots{}
+@};
+struct U @{
+@dots{}
+@};
+U fn()
+@{
+  T t;
+  @dots{}
+  return std::move (t);
+@}
+@end smallexample
+In this example, copy elision isn't applicable because the type of the
+expression being returned and the function return type differ, yet G++
+treats the return value as if it were designated by an rvalue.
+
+This warning is enabled by @option{-Wextra}.
+
+@opindex Wrange-loop-construct
+@opindex Wno-range-loop-construct
+@item -Wrange-loop-construct @r{(C++ and Objective-C++ only)}
+This warning warns when a C++ range-based for-loop is creating an unnecessary
+copy.  This can happen when the range declaration is not a reference, but
+probably should be.  For example:
+
+@smallexample
+struct S @{ char arr[128]; @};
+void fn () @{
+  S arr[5];
+  for (const auto x : arr) @{ @dots{} @}
+@}
+@end smallexample
+
+It does not warn when the type being copied is a trivially-copyable type whose
+size is less than 64 bytes.
+
+This warning also warns when a loop variable in a range-based for-loop is
+initialized with a value of a different type resulting in a copy.  For example:
+
+@smallexample
+void fn() @{
+  int arr[10];
+  for (const double &x : arr) @{ @dots{} @}
+@}
+@end smallexample
+
+In the example above, in every iteration of the loop a temporary value of
+type @code{double} is created and destroyed, to which the reference
+@code{const double &} is bound.
+
+This warning is enabled by @option{-Wall}.
+
+@opindex Wredundant-tags
+@opindex Wno-redundant-tags
+@item -Wredundant-tags @r{(C++ and Objective-C++ only)}
+Warn about redundant class-key and enum-key in references to class types
+and enumerated types in contexts where the key can be eliminated without
+causing an ambiguity.  For example:
+
+@smallexample
+struct foo;
+struct foo *p;   // warn that keyword struct can be eliminated
+@end smallexample
+
+@noindent
+On the other hand, in this example there is no warning:
+
+@smallexample
+struct foo;
+void foo ();   // "hides" struct foo
+void bar (struct foo&);  // no warning, keyword struct is necessary
+@end smallexample
+
+@opindex Wsubobject-linkage
+@opindex Wno-subobject-linkage
+@item -Wno-subobject-linkage @r{(C++ and Objective-C++ only)}
+Do not warn
+if a class type has a base or a field whose type uses the anonymous
+namespace or depends on a type with no linkage.  If a type A depends on
+a type B with no or internal linkage, defining it in multiple
+translation units would be an ODR violation because the meaning of B
+is different in each translation unit.  If A only appears in a single
+translation unit, the best way to silence the warning is to give it
+internal linkage by putting it in an anonymous namespace as well.  The
+compiler doesn't give this warning for types defined in the main .C
+file, as those are unlikely to have multiple definitions.
+@option{-Wsubobject-linkage} is enabled by default.
+
+@opindex Weffc++
+@opindex Wno-effc++
+@item -Weffc++ @r{(C++ and Objective-C++ only)}
+Warn about violations of the following style guidelines from Scott Meyers'
+@cite{Effective C++} series of books:
+
+@itemize @bullet
+@item
+Define a copy constructor and an assignment operator for classes
+with dynamically-allocated memory.
+
+@item
+Prefer initialization to assignment in constructors.
+
+@item
+Have @code{operator=} return a reference to @code{*this}.
+
+@item
+Don't try to return a reference when you must return an object.
+
+@item
+Distinguish between prefix and postfix forms of increment and
+decrement operators.
+
+@item
+Never overload @code{&&}, @code{||}, or @code{,}.
+
+@end itemize
+
+This option also enables @option{-Wnon-virtual-dtor}, which is also
+one of the effective C++ recommendations.  However, the check is
+extended to warn about the lack of virtual destructor in accessible
+non-polymorphic bases classes too.
+
+When selecting this option, be aware that the standard library
+headers do not obey all of these guidelines; use @samp{grep -v}
+to filter out those warnings.
+
+@opindex Wexceptions
+@opindex Wno-exceptions
+@item -Wno-exceptions @r{(C++ and Objective-C++ only)}
+Disable the warning about the case when an exception handler is shadowed by
+another handler, which can point out a wrong ordering of exception handlers.
+
+@opindex Wsfinae-incomplete
+@opindex Wno-sfinae-incomplete
+@item -Wsfinae-incomplete @r{(C++ and Objective-C++ only)}
+Warn about a class that is found to be incomplete, or a function with
+auto return type that has not yet been deduced, in a context where
+that causes substitution failure rather than an error, and then the
+class or function is defined later in the translation unit.  This is
+problematic because template instantiations or concept checks could
+have different results if they first occur either before or after the
+definition.
+
+This warning is enabled by default.  @option{-Wsfinae-incomplete=2}
+adds a warning at the point of substitution failure, to make it easier
+to track down problems flagged by the default mode.
+
+@opindex Wstrict-null-sentinel
+@opindex Wno-strict-null-sentinel
+@item -Wstrict-null-sentinel @r{(C++ and Objective-C++ only)}
+Warn about the use of an uncasted @code{NULL} as sentinel.  When
+compiling only with GCC this is a valid sentinel, as @code{NULL} is defined
+to @code{__null}.  Although it is a null pointer constant rather than a
+null pointer, it is guaranteed to be of the same size as a pointer.
+But this use is not portable across different compilers.
+
+@opindex Wno-non-c-typedef-for-linkage
+@opindex Wnon-c-typedef-for-linkage
+@item -Wno-non-c-typedef-for-linkage @r{(C++ and Objective-C++ only)}
+Disable pedwarn for unnamed classes with a typedef name for linkage purposes
+containing C++ specific members, base classes, default member initializers
+or lambda expressions, including those on nested member classes.
+
+@smallexample
+typedef struct @{
+  int a; // non-static data members are ok
+  struct T @{ int b; @}; // member classes too
+  enum E @{ E1, E2, E3 @}; // member enumerations as well
+  int c = 42; // default member initializers are not ok
+  struct U : A @{ int c; @}; // classes with base classes are not ok
+  typedef int V; // typedef is not ok
+  using W = int; // using declaration is not ok
+  decltype([]()@{@}) x; // lambda expressions not ok
+@} S;
+@end smallexample
+
+In all these cases, the tag name S should be added after the struct keyword.
+
+@opindex Wno-non-template-friend
+@opindex Wnon-template-friend
+@item -Wno-non-template-friend @r{(C++ and Objective-C++ only)}
+Disable warnings when non-template friend functions are declared
+within a template.  In very old versions of GCC that predate implementation
+of the ISO standard, declarations such as
+@samp{friend int foo(int)}, where the name of the friend is an unqualified-id,
+could be interpreted as a particular specialization of a template
+function; the warning exists to diagnose compatibility problems,
+and is enabled by default.
+
+@opindex Wold-style-cast
+@opindex Wno-old-style-cast
+@item -Wold-style-cast @r{(C++ and Objective-C++ only)}
+Warn if an old-style (C-style) cast to a non-void type is used within
+a C++ program.  The new-style casts (@code{dynamic_cast},
+@code{static_cast}, @code{reinterpret_cast}, and @code{const_cast}) are
+less vulnerable to unintended effects and much easier to search for.
+
+@opindex Woverloaded-virtual
+@opindex Wno-overloaded-virtual
+@cindex overloaded virtual function, warning
+@cindex warning for overloaded virtual function

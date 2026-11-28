@@ -1,90 +1,45 @@
-# maGNUx
+# GCC 16.1.0 — material pendiente de traducción
 
-maGNUx es una arquitectura conceptual para el gobierno explícito del sistema operativo: identidad, autoridad, contrato, soberanía sistémica y arranque temprano.
+Paquete de trabajo para maGNUx / Zalty, 28 de noviembre de 2026.
 
-Esta rama refunde la navegación nueva con el corpus documental anterior para dejar una sola lectura principal.
+**383 fragmentos Texinfo en inglés**, numerados 0001–0383. 3.043.660 caracteres de fuente en total (sin cabeceras editoriales). Los fragmentos contienen como máximo 10.000 caracteres de fuente; su tamaño no representa un límite oficial de ChatGPT. Se añaden cuatro líneas de procedencia en cada archivo. No son manuales Texinfo autónomos ni deben compilarse individualmente.
 
-```text
-maGNUx
-→ manifiesto, arquitectura, identidad, filosofía y propuesta técnica
+## Cómo usarlo
 
-Zalty
-→ distribución GNU/Linux experimental que ensaya maGNUx sobre Linux real
+1. Descargar el ZIP de esta rama de exportación y descomprimirlo.
+2. Abrir la carpeta 01-pendientes/03-04/ y adjuntar a ChatGPT 0001-03-04-invoke.texi.
+3. Pedir: «Traduce íntegramente el bloque adjunto de GCC 16.1.0 al español técnico y a Markdown, conserva código, opciones, referencias y avisos, intégralo en el manual de maGNUx en master sin duplicar contenido y registra el punto de continuación».
+4. Tras comprobar la entrega, continuar por el siguiente número. Los inventarios TSV permiten llevar el control.
+5. Los bloques pueden empezar o terminar dentro de una sección, lista, tabla o ejemplo. No completar por conjetura una frase o estructura abierta: consultar el fragmento vecino cuando sea necesario y conservar la continuidad al integrar. No traducir los identificadores de nodos, sintaxis Texinfo, flags ni código. Los comentarios técnicos y los bloques @ignore deben mantenerse diferenciados del texto visible. Una directiva @include señala un archivo incluido; los fragmentos de ese archivo aparecen inmediatamente después, por lo que no se debe duplicar su texto.
 
-GCC ES Técnico
-→ documentación técnica en español sobre GCC, compilación y cadena de herramientas
-```
+## Alcance
 
-## Lectura única recomendada
+Se toma el índice del manual en master como referencia de lo publicado: capítulos 1–2, introducción al capítulo 3, 3.1, 3.2, 3.3 y 3.15. Su revisión humana y una auditoría de fidelidad todavía están pendientes; no se repiten en la cola.
 
-La lectura principal del repositorio empieza aquí y continúa en `docs/`:
+- 0001–0170: capítulo 3, secciones 3.4–3.14 y 3.16–3.23, incluidas las fuentes referenciadas mediante @include.
+- 0171–0342: capítulos 4–8, con las partes de md.texi aplicables al manual de usuario (se excluyen bloques condicionales INTERNALS; consultar inventario).
+- 0343–0383: capítulos 9–18, Funding Free Software, GNU Project, GPL, GFDL, colaboradores, definición de índices y revisión de la introducción general del documento.
 
-1. [Documentación maGNUx](docs/README.md)
-2. [Resumen ejecutivo](docs/propuesta-tecnica/00-resumen-ejecutivo.md)
-3. [Manifiesto](docs/manifesto/01-manifiesto.md)
-4. [Horizonte tecnológico — Arquetipar sistemas operativos](docs/manifesto/horizonte-arquetipado.md)
-4 bis. [Hélice, Alfa y evidencia del sistema vivo](docs/manifesto/04-helice-alfa-continuidad.md)
-4 ter. [Horizonte tecnológico — Identidad en transformación e IPU](docs/manifesto/05-horizonte-identidad-temporal.md)
-5. [Estratos de arquitectura](docs/arquitectura/03-estratos.md)
-6. [Inicio del sistema](docs/arquitectura/04-inicio-sistema.md)
-7. [xGNUpeD](docs/identidad/07-xgnuped.md)
-8. [Dernel](docs/identidad/09-dernel.md)
-9. [Trilobytes: coherencia y representación](docs/identidad/08-trilobytes.md)
-10. [Especificación de mediación Trilobytes](docs/propuesta-tecnica/03-trilobytes-mediacion-spec.md)
-10 bis. [Alfa: identidad, propietario y contextos terminales](docs/identidad/12-usuario-alfa.md)
-10 ter. [Dominio Alfa: seL4, NPU, GPU y arranque](docs/arquitectura/07-dominio-alfa.md)
-10 quater. [Alfa: observabilidad y evidencia DevOps](docs/propuesta-tecnica/04-alfa-observabilidad-spec.md)
-11. [Zalty](zalty/readme.md)
-12. [Initramfs de Zalty](zalty/initramfs/README.md)
-13. [Prototipo HostID v0.1](zalty/initramfs/prototipo-hostid-v0.1/README.md)
-14. [GCC ES Técnico](docs/gcc/README.md) — [Índice de unidades disponibles](docs/gcc/docs/README.md)
-14 bis. [Laboratorios de investigación](docs/laboratorios/README.md) — Gentoo, Slackware, Arch Linux y LFS (fundamento del kernel).
-15. [Epílogo y notas](docs/manifesto/EPILOGO.md) — evolución orgánica, autoría y cuestiones abiertas.
+Los índices se generan a partir de las entradas Texinfo de toda la obra: no existe un texto fuente independiente con todas las entradas ya ordenadas. Su reconstrucción y cotejo final siguen pendientes. Se mantienen los condicionales y directivas originales; no se ha compilado ni cotejado la salida completa de texi2any. Este paquete no certifica que lo anteriormente traducido sea íntegro.
 
-## Nueva base constitutiva: Commonwealth del silicio
+## Procedencia y licencia
 
-- [Volumen I — Roma, Britania y Commonwealth](docs/manifesto/volumen-i-britania-roma-commonwealth.md): historia de los dominios imperiales y su evolución.
-- [Volumen II — Commonwealth del silicio](docs/manifesto/volumen-ii-commonwealth-del-silicio.md): continuidad histórica aplicada a maGNUx; ROOT/kernel, COMM/xGNUpeD, ADMIN/Dernel, modos de mantenimiento y Trilobytes en el arranque ordinario.
+Obra de origen: *Using the GNU Compiler Collection*, GCC 16.1.0. Richard M. Stallman and the GCC Developer Community. GNU Press / Free Software Foundation. Copyright © 1988–2026 Free Software Foundation, Inc. Cada fragmento identifica su archivo, SHA de blob original y líneas inclusivas de procedencia.
 
-- [Artículo académico — Reciprocidad económica y soberanía contributiva](docs/manifesto/03-reciprocidad-economica-computacional.md): registro verificable, evaluación asistida por IA y financiación del mantenimiento del software libre.
+Fuente: https://github.com/gcc-mirror/gcc/tree/releases/gcc-16.1.0/gcc/doc
 
-La [continuidad helicoidal](docs/manifesto/horizonte-arquetipado.md) conduce ahora al [artículo sobre Alfa y el vórtice emergente](docs/manifesto/04-helice-alfa-continuidad.md), vinculado a una [propuesta comprobable para DevOps](docs/propuesta-tecnica/04-alfa-observabilidad-spec.md).
+Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.3 or any later version published by the Free Software Foundation; with the Invariant Sections being “Funding Free Software”, the Front-Cover Texts being (a) (see below), and with the Back-Cover Texts being (b) (see below). A copy of the license is included in the section entitled “GNU Free Documentation License”.
 
-## Navegación por planos
+(a) A GNU Manual
 
-| Plano | Entrada | Función |
-|---|---|---|
-| Propuesta técnica | [docs/propuesta-tecnica/](docs/propuesta-tecnica/README.md) | Síntesis ejecutiva y especificaciones iniciales. |
-| Manifiesto | [docs/manifesto/](docs/manifesto/README.md) | Sentido del proyecto, soberanía y legitimidad. |
-| Epílogo y notas | [Epílogo y notas](docs/manifesto/EPILOGO.md) | Genealogía del manifiesto y registro abierto de su evolución. |
-| Arquitectura | [docs/arquitectura/](docs/arquitectura/README.md) | Estratos, arranque, bus temprano y compatibilidad POSIX. |
-| Identidad | [docs/identidad/](docs/identidad/README.md) | xGNUpeD, Trilobytes, Dernel, Host/Guest y dominios raíz. |
-| Filosofía | [docs/filosofia/](docs/filosofia/README.md) | Unix/GNU, hormiguero, hardware y maduración. |
-| Zalty | [zalty/](zalty/readme.md) | Implementación experimental GNU/Linux de maGNUx. |
-| Initramfs | [zalty/initramfs/](zalty/initramfs/README.md) | Laboratorio de arranque temprano. |
-| GCC ES Técnico | [docs/gcc/](docs/gcc/README.md) | Traducción y documentación técnica en español sobre GCC. |
-| Laboratorios | [Índice de laboratorios](docs/laboratorios/README.md) | Gentoo en desarrollo; Slackware, Arch Linux y LFS en construcción. |
-| Corpus integrado | [docs/legacy/](docs/legacy/README.md) | Documentos históricos ya enlazados desde la navegación principal. |
+(b) You have freedom to copy and modify this GNU Manual, like GNU software. Copies published by the Free Software Foundation raise funds for GNU development.
 
-## Regla de separación
+Los archivos originales íntegros de Funding Free Software, GNU Free Documentation License, GNU General Public License y la portada/avisos del manual están en 00-referencia. Se conservan en inglés; las traducciones de Funding y licencias serán exclusivamente informativas y adicionales, nunca sustitutivas. Esta distribución de fragmentos no es una edición terminada del manual. Las marcas de segmentación son de maGNUx. No se afirma una auditoría jurídica completa.
 
-```text
-maGNUx declara.
-Zalty ensaya.
-docs/ explica el contrato.
-zalty/ lo baja a máquina.
-```
+## Carpetas
 
-## Estado de master y las ramas históricas
+- 00-referencia: fuentes originales de licencia, sección invariante y portada/macros, no la cola de traducción.
+- 01-pendientes: bloques numerados por orden.
+- 02-inventarios: registros TSV y rangos de md.texi.
 
-Esta es la rama principal `master`. La antigua rama de refundición documental ya se integró mediante el [PR #47](https://github.com/DeRootty/maGNUx/pull/47). Para la historia y el propósito de las tres ramas, consulta la [auditoría de ramas](docs/gestion-ramas.md).
-
-El criterio de esta rama es:
-
-```text
-una sola lectura,
-una sola navegación,
-varios niveles de profundidad.
-```
-
-Los documentos nuevos actúan como columna vertebral. Los documentos antiguos quedan integrados como ampliaciones temáticas dentro de cada bloque.
+Esta rama es una **exportación independiente**, no una rama de desarrollo. No fusionarla con master: su árbol contiene únicamente el paquete. Las traducciones se integran en master mediante entregas separadas.

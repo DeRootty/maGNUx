@@ -1,0 +1,270 @@
+@c GCC 16.1.0 | BLOQUE 0267 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 14279-14544 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Enum Extensions
+@subsection Extensions to @code{enum} Type Declarations
+@anchor{Incomplete Enums}
+@cindex @code{enum} extensions
+@cindex base type of an @code{enum}
+@cindex underlying type of an @code{enum}
+@cindex forward declaration of an @code{enum}
+@cindex opaque @code{enum} types
+@cindex incomplete @code{enum} types
+
+The C23 and C++11 standards added new syntax to specify the underlying
+type of an @code{enum} type.  For example,
+
+@smallexample
+enum pet : unsigned char @{ CAT, DOG, ROCK @};
+@end smallexample
+
+In GCC, this feature is supported as an extension in all older
+dialects of C and C++ as well.  For C++ dialects before C++11, use
+@option{-Wno-c++11-extensions} to silence the associated warnings.
+
+You can also forward-declare an @code{enum} type, without specifying
+its possible values.  The enumerators are supplied in a later
+redeclaration of the type, which must match the underlying type of the
+first declaration.
+
+@smallexample
+enum pet : unsigned char;
+static enum pet my_pet;
+...
+enum pet : unsigned char @{ CAT, DOG, ROCK @};
+@end smallexample
+
+Forward declaration of @code{enum} types with an explicit underlying
+type is also a feature of C++11 that is supported as an extension by
+GCC for all C dialects.  However, it's not available in C++ dialects
+prior to C++11.
+
+The C++ standard refers to a forward declaration of an @code{enum}
+with an explicit underlying type as an @dfn{opaque type}.  It is not
+considered an incomplete type, since its size is known.  That means
+you can declare variables or allocate storage using the type before
+the redeclaration, not just use pointers of that type.
+
+GCC has also traditionally supported forward declarations of
+@code{enum} types that don't include an explicit underlying type
+specification.  This results in an incomplete type, much like what you
+get if you write @code{struct foo} without describing the elements.
+You cannot allocate variables or storage using the type while it is
+incomplete.  However, you can work with pointers to that type.
+
+Forward-declaring an incomplete enum type without an explicit
+underlying type is supported as an extension in all GNU C dialects,
+but is not supported at all in GNU C++.
+
+@node Boolean Type
+@subsection Support for the @code{_Bool} Type
+@cindex boolean type
+@cindex @code{_Bool} keyword
+
+The C99 standard added @code{_Bool} as a C language keyword naming the
+boolean type.  As an extension, GNU C also recognizes @code{_Bool} in
+C90 mode as well as with @option{-std=c99} and later.
+
+C23 added @code{bool} as the preferred name of the boolean type, but
+@code{_Bool} also remains a standard keyword in the language and is
+supported as such by GCC with @option{-std=c23}.
+
+GNU C++ does not support @code{_Bool} as a keyword, but including
+@code{<stdbool.h>} defines it as a macro in terms of standard C++'s
+@code{bool} type.
+
+@node Variadic Macros
+@subsection Macros with a Variable Number of Arguments.
+@cindex variable number of arguments
+@cindex macro with variable arguments
+@cindex rest argument (in macro)
+@cindex variadic macros
+
+In the ISO C standard of 1999, a macro can be declared to accept a
+variable number of arguments much as a function can.  The syntax for
+defining the macro is similar to that of a function.  Here is an
+example:
+
+@smallexample
+#define debug(format, ...) fprintf (stderr, format, __VA_ARGS__)
+@end smallexample
+
+@noindent
+Here @samp{@dots{}} is a @dfn{variable argument}.  In the invocation of
+such a macro, it represents the zero or more tokens until the closing
+parenthesis that ends the invocation, including any commas.  This set of
+tokens replaces the identifier @code{__VA_ARGS__} in the macro body
+wherever it appears.  See the CPP manual for more information.
+
+GCC has long supported variadic macros, and used a different syntax that
+allowed you to give a name to the variable arguments just like any other
+argument.  Here is an example:
+
+@smallexample
+#define debug(format, args...) fprintf (stderr, format, args)
+@end smallexample
+
+@noindent
+This is in all ways equivalent to the ISO C example above, but arguably
+more readable and descriptive.
+
+GNU CPP has two further variadic macro extensions, and permits them to
+be used with either of the above forms of macro definition.
+
+In standard C, you are not allowed to leave the variable argument out
+entirely; but you are allowed to pass an empty argument.  For example,
+this invocation is invalid in ISO C, because there is no comma after
+the string:
+
+@smallexample
+debug ("A message")
+@end smallexample
+
+GNU CPP permits you to completely omit the variable arguments in this
+way.  In the above examples, the compiler would complain, though since
+the expansion of the macro still has the extra comma after the format
+string.
+
+To help solve this problem, CPP behaves specially for variable arguments
+used with the token paste operator, @samp{##}.  If instead you write
+
+@smallexample
+#define debug(format, ...) fprintf (stderr, format, ## __VA_ARGS__)
+@end smallexample
+
+@noindent
+and if the variable arguments are omitted or empty, the @samp{##}
+operator causes the preprocessor to remove the comma before it.  If you
+do provide some variable arguments in your macro invocation, GNU CPP
+does not complain about the paste operation and instead places the
+variable arguments after the comma.  Just like any other pasted macro
+argument, these arguments are not macro expanded.
+
+@node Conditionals
+@subsection Conditionals with Omitted Operands
+@cindex conditional expressions, extensions
+@cindex omitted middle-operands
+@cindex middle-operands, omitted
+@cindex extensions, @code{?:}
+@cindex @code{?:} extensions
+
+The middle operand in a conditional expression may be omitted.  Then
+if the first operand is nonzero, its value is the value of the conditional
+expression.
+
+Therefore, the expression
+
+@smallexample
+x ? : y
+@end smallexample
+
+@noindent
+has the value of @code{x} if that is nonzero; otherwise, the value of
+@code{y}.
+
+This example is perfectly equivalent to
+
+@smallexample
+x ? x : y
+@end smallexample
+
+@cindex side effect in @code{?:}
+@cindex @code{?:} side effect
+@noindent
+In this simple case, the ability to omit the middle operand is not
+especially useful.  When it becomes useful is when the first operand does,
+or may (if it is a macro argument), contain a side effect.  Then repeating
+the operand in the middle would perform the side effect twice.  Omitting
+the middle operand uses the value already computed without the undesirable
+effects of recomputing it.
+
+@node Case Ranges
+@subsection Case Ranges
+@cindex case ranges
+@cindex ranges in case statements
+
+You can specify a range of consecutive values in a single @code{case} label,
+like this:
+
+@smallexample
+case @var{low} ... @var{high}:
+@end smallexample
+
+@noindent
+This has the same effect as the proper number of individual @code{case}
+labels, one for each integer value from @var{low} to @var{high}, inclusive.
+
+This feature is especially useful for ranges of ASCII character codes:
+
+@smallexample
+case 'A' ... 'Z':
+@end smallexample
+
+@strong{Be careful:} Write spaces around the @code{...}, for otherwise
+it may be parsed wrong when you use it with integer values.  For example,
+write this:
+
+@smallexample
+case 1 ... 5:
+@end smallexample
+
+@noindent
+rather than this:
+
+@smallexample
+case 1...5:
+@end smallexample
+
+@node Mixed Labels and Declarations
+@subsection Mixed Declarations, Labels and Code
+@cindex mixed declarations and code
+@cindex declarations, mixed with code
+@cindex code, mixed with declarations
+
+ISO C99 and ISO C++ allow declarations and code to be freely mixed
+within compound statements.  ISO C23 allows labels to be
+placed before declarations and at the end of a compound statement.
+As an extension, GNU C also allows all this in C90 mode.  For example,
+you could do:
+
+@smallexample
+int i;
+/* @r{@dots{}} */
+i++;
+int j = i + 2;
+@end smallexample
+
+Each identifier is visible from where it is declared until the end of
+the enclosing block.
+
+@node C++ Comments
+@subsection C++ Style Comments
+@cindex @code{//}
+@cindex C++ comments
+@cindex comments, C++ style
+
+In GNU C, you may use C++ style comments, which start with @samp{//} and
+continue until the end of the line.  Many other C implementations allow
+such comments, and they are included in the 1999 C standard.  However,
+C++ style comments are not recognized if you specify an @option{-std}
+option specifying a version of ISO C before C99, or @option{-ansi}
+(equivalent to @option{-std=c90}).
+
+@node Escaped Newlines
+@subsection Slightly Looser Rules for Escaped Newlines
+@cindex escaped newlines
+@cindex newlines (escaped)
+
+The preprocessor treatment of escaped newlines is more relaxed
+than that specified by the C90 standard, which requires the newline
+to immediately follow a backslash.
+GCC's implementation allows whitespace in the form
+of spaces, horizontal and vertical tabs, and form feeds between the
+backslash and the subsequent newline.  The preprocessor issues a
+warning, but treats it as a valid escaped newline and combines the two
+lines to form a single logical line.  This works within comments and
+tokens, as well as between tokens.  Comments are @emph{not} treated as
+whitespace for the purposes of this relaxation, since they have not
+yet been replaced with spaces.
+

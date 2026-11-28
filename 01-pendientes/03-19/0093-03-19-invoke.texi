@@ -1,0 +1,248 @@
+@c GCC 16.1.0 | BLOQUE 0093 | 03-19
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 20841-21084 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -ftime-report
+Makes the compiler print some statistics to stderr about the time consumed
+by each pass when it finishes.
+
+If SARIF output of diagnostics was requested via
+@option{-fdiagnostics-format=sarif-file} or
+@option{-fdiagnostics-format=sarif-stderr} then the @option{-ftime-report}
+information is instead emitted in JSON form as part of SARIF output.  The
+precise format of this JSON data is subject to change, and the values may
+not exactly match those emitted to stderr due to being written out at a
+slightly different place within the compiler.
+
+@opindex ftime-report-details
+@opindex fno-time-report-details
+@item -ftime-report-details
+Record the time consumed by infrastructure parts separately for each pass.
+
+@opindex fira-verbose
+@item -fira-verbose=@var{n}
+Control the verbosity of the dump file for the integrated register allocator.
+The default value is 5.  If the value @var{n} is greater or equal to 10,
+the dump output is sent to stderr using the same format as @var{n} minus 10.
+
+@opindex flto-report
+@opindex fno-lto-report
+@item -flto-report
+Prints a report with internal details on the workings of the link-time
+optimizer.  The contents of this report vary from version to version.
+It is meant to be useful to GCC developers when processing object
+files in LTO mode (via @option{-flto}).
+
+Disabled by default.
+
+@opindex flto-report-wpa
+@opindex fno-lto-report-wpa
+@item -flto-report-wpa
+Like @option{-flto-report}, but only print for the WPA phase of link-time
+optimization.
+
+@opindex fmem-report
+@opindex fno-mem-report
+@item -fmem-report
+Makes the compiler print some statistics about permanent memory
+allocation when it finishes.
+
+@opindex fmem-report-wpa
+@opindex fno-mem-report-wpa
+@item -fmem-report-wpa
+Makes the compiler print some statistics about permanent memory
+allocation for the WPA phase only.
+
+@opindex fpre-ipa-mem-report
+@opindex fno-pre-ipa-mem-report
+@opindex fpost-ipa-mem-report
+@opindex fno-post-ipa-mem-report
+@item -fpre-ipa-mem-report
+@item -fpost-ipa-mem-report
+Makes the compiler print some statistics about permanent memory
+allocation before or after interprocedural optimization.
+
+@opindex fmultiflags
+@item -fmultiflags
+This option enables multilib-aware @code{TFLAGS} to be used to build
+target libraries with options different from those the compiler is
+configured to use by default, through the use of specs
+(@pxref{Spec Files,, Specifying Subprocesses and the Switches to Pass to Them,
+gccint, GNU Compiler Collection (GCC) Internals})
+set up by compiler internals, by the target, or by builders at
+configure time.
+
+Like @code{TFLAGS}, this allows the target libraries to be built for
+portable baseline environments, while the compiler defaults to more
+demanding ones.  That's useful because users can easily override the
+defaults the compiler is configured to use to build their own programs,
+if the defaults are not ideal for their target environment, whereas
+rebuilding the runtime libraries is usually not as easy or desirable.
+
+Unlike @code{TFLAGS}, the use of specs enables different flags to be
+selected for different multilibs.  The way to accomplish that is to
+build with @samp{make TFLAGS=-fmultiflags}, after configuring
+@samp{--with-specs=%@{fmultiflags:...@}}.
+
+This option is discarded by the driver once it's done processing driver
+self spec.
+
+It is also useful to check that @code{TFLAGS} are being used to build
+all target libraries, by configuring a non-bootstrap compiler
+@samp{--with-specs='%@{!fmultiflags:%emissing TFLAGS@}'} and building
+the compiler and target libraries.
+
+@opindex fprofile-report
+@opindex fno-profile-report
+@item -fprofile-report
+Makes the compiler print some statistics about consistency of the
+(estimated) profile and effect of individual passes.
+
+@opindex fstack-usage
+@item -fstack-usage
+Makes the compiler output stack usage information for the program, on a
+per-function basis.  The filename for the dump is made by appending
+@file{.su} to the @var{auxname}.  @var{auxname} is generated from the name of
+the output file, if explicitly specified and it is not an executable,
+otherwise it is the basename of the source file.  An entry is made up
+of three fields:
+
+@itemize
+@item
+The name of the function.
+@item
+A number of bytes.
+@item
+One or more qualifiers: @code{static}, @code{dynamic}, @code{bounded}.
+@end itemize
+
+The qualifier @code{static} means that the function manipulates the stack
+statically: a fixed number of bytes are allocated for the frame on function
+entry and released on function exit; no stack adjustments are otherwise made
+in the function.  The second field is this fixed number of bytes.
+
+The qualifier @code{dynamic} means that the function manipulates the stack
+dynamically: in addition to the static allocation described above, stack
+adjustments are made in the body of the function, for example to push/pop
+arguments around function calls.  If the qualifier @code{bounded} is also
+present, the amount of these adjustments is bounded at compile time and
+the second field is an upper bound of the total amount of stack used by
+the function.  If it is not present, the amount of these adjustments is
+not bounded at compile time and the second field only represents the
+bounded part.
+
+@opindex fstats
+@opindex fno-stats
+@item -fstats
+Emit statistics about front-end processing at the end of the compilation.
+This option is supported only by the C++ front end, and
+the information is generally only useful to the G++ development team.
+
+@opindex fdbg-cnt-list
+@opindex fno-dbg-cnt-list
+@item -fdbg-cnt-list
+Print the name and the counter upper bound for all debug counters.
+
+
+@opindex fdbg-cnt
+@item -fdbg-cnt=@var{counter-value-list}
+Set the internal debug counter lower and upper bound.  @var{counter-value-list}
+is a comma-separated list of @var{name}:@var{lower_bound1}-@var{upper_bound1}
+[:@var{lower_bound2}-@var{upper_bound2}...] tuples which sets
+the name of the counter and list of closed intervals.
+The @var{lower_bound} is optional and is zero
+initialized if not set.
+For example, with @option{-fdbg-cnt=dce:2-4:10-11,tail_call:10},
+@code{dbg_cnt(dce)} returns true only for second, third, fourth, tenth and
+eleventh invocation.
+For @code{dbg_cnt(tail_call)} true is returned for first 10 invocations.
+
+@opindex print-autofdo-gcov-version
+@item -print-autofdo-gcov-version
+@itemx --print-autofdo-gcov-version
+Print the current version of GCOV being used by the AutoFDO infrastructure.
+
+@opindex print-file-name
+@item -print-file-name=@var{library}
+@itemx --print-file-name=@var{library}
+@itemx --print-file-name @var{library}
+Print the full absolute name of the library file @var{library} that
+would be used when linking---and don't do anything else.  With this
+option, GCC does not compile or link anything; it just prints the
+file name.
+
+@opindex print-multi-directory
+@item -print-multi-directory
+@itemx --print-multi-directory
+Print the directory name corresponding to the multilib selected by any
+other switches present in the command line.  This directory is supposed
+to exist in @env{GCC_EXEC_PREFIX}.
+
+@opindex print-multi-lib
+@item -print-multi-lib
+@itemx --print-multi-lib
+Print the mapping from multilib directory names to compiler switches
+that enable them.  The directory name is separated from the switches by
+@samp{;}, and each switch starts with an @samp{@@} instead of the
+@samp{-}, without spaces between multiple switches.  This is supposed to
+ease shell processing.
+
+@opindex print-multi-os-directory
+@item -print-multi-os-directory
+@itemx --print-multi-os-directory
+Print the path to OS libraries for the selected
+multilib, relative to some @file{lib} subdirectory.  If OS libraries are
+present in the @file{lib} subdirectory and no multilibs are used, this is
+usually just @file{.}, if OS libraries are present in @file{lib@var{suffix}}
+sibling directories this prints e.g.@: @file{../lib64}, @file{../lib} or
+@file{../lib32}, or if OS libraries are present in @file{lib/@var{subdir}}
+subdirectories it prints e.g.@: @file{amd64}, @file{sparcv9} or @file{ev6}.
+
+@opindex print-multiarch
+@item -print-multiarch
+@itemx --print-multiarch
+Print the path to OS libraries for the selected multiarch,
+relative to some @file{lib} subdirectory.
+
+@opindex print-prog-name
+@item -print-prog-name=@var{program}
+@itemx --print-prog-name=@var{program}
+@itemx --print-prog-name @var{program}
+Like @option{-print-file-name}, but searches for a program such as @command{cpp}.
+
+@opindex print-libgcc-file-name
+@item -print-libgcc-file-name
+@itemx --print-libgcc-file-name
+Same as @option{-print-file-name=libgcc.a}.
+
+This is useful when you use @option{-nostdlib} or @option{-nodefaultlibs}
+but you do want to link with @file{libgcc.a}.  You can do:
+
+@smallexample
+gcc -nostdlib @var{files}@dots{} `gcc -print-libgcc-file-name`
+@end smallexample
+
+@opindex print-search-dirs
+@item -print-search-dirs
+@itemx --print-search-dirs
+Print the name of the configured installation directory and a list of
+program and library directories @command{gcc} searches---and don't do anything else.
+
+This is useful when @command{gcc} prints the error message
+@samp{installation problem, cannot exec cpp0: No such file or directory}.
+To resolve this you either need to put @file{cpp0} and the other compiler
+components where @command{gcc} expects to find them, or you can set the environment
+variable @env{GCC_EXEC_PREFIX} to the directory where you installed them.
+Don't forget the trailing @samp{/}.
+@xref{Environment Variables}.
+
+@opindex print-sysroot
+@item -print-sysroot
+@itemx --print-sysroot
+Print the target sysroot directory that is used during
+compilation.  This is the target sysroot specified either at configure
+time or using the @option{--sysroot} option, possibly with an extra
+suffix that depends on compilation options.  If no target sysroot is
+specified, the option prints nothing.
+
+@opindex print-sysroot-headers-suffix

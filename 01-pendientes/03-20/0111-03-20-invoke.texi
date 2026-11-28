@@ -1,0 +1,263 @@
+@c GCC 16.1.0 | BLOQUE 0111 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 24665-24923 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item __AVR_CVT__
+The code is being compiled with option @code{-mcvt} to use a
+@emph{compact vector table}.
+
+@item __AVR_XMEGA__
+The device / architecture belongs to the XMEGA family of devices.
+
+@item __AVR_HAVE_ADIW__
+The device has the @code{ADIW} and @code{SBIW} instructions.
+
+@item __AVR_HAVE_ELPM__
+The device has the @code{ELPM} instruction.
+
+@item __AVR_HAVE_ELPMX__
+The device has the @code{ELPM R@var{n},Z} and @code{ELPM
+R@var{n},Z+} instructions.
+
+@item __AVR_HAVE_LPMX__
+The device has the @code{LPM R@var{n},Z} and
+@code{LPM R@var{n},Z+} instructions.
+
+@item __AVR_HAVE_MOVW__
+The device has the @code{MOVW} instruction to perform 16-bit
+register-register moves.
+
+@item __AVR_HAVE_MUL__
+The device has a hardware multiplier.
+
+@item __AVR_HAVE_JMP_CALL__
+The device has the @code{JMP} and @code{CALL} instructions.
+This is the case for devices with more than 8@tie{}KiB of program
+memory.
+
+@item __AVR_HAVE_EIJMP_EICALL__
+@itemx __AVR_3_BYTE_PC__
+The device has the @code{EIJMP} and @code{EICALL} instructions.
+This is the case for devices with more than 128@tie{}KiB of program memory.
+This also means that the program counter
+(PC) is 3@tie{}bytes wide.
+
+@item __AVR_2_BYTE_PC__
+The program counter (PC) is 2@tie{}bytes wide. This is the case for devices
+with up to 128@tie{}KiB of program memory.
+
+@item __AVR_HAVE_8BIT_SP__
+@itemx __AVR_HAVE_16BIT_SP__
+The stack pointer (SP) register is treated as 8-bit respectively
+16-bit register by the compiler.
+The definition of these macros is affected by @option{-mtiny-stack}.
+
+@item __AVR_HAVE_SPH__
+@itemx __AVR_SP8__
+The device has the SPH (high part of stack pointer) special function
+register or has an 8-bit stack pointer, respectively.
+The definition of these macros is affected by @option{-mmcu=} and
+in the cases of @option{-mmcu=avr2} and @option{-mmcu=avr25} also
+by @option{-msp8}.
+
+@item __AVR_HAVE_RAMPD__
+@itemx __AVR_HAVE_RAMPX__
+@itemx __AVR_HAVE_RAMPY__
+@itemx __AVR_HAVE_RAMPZ__
+The device has the @code{RAMPD}, @code{RAMPX}, @code{RAMPY},
+@code{RAMPZ} special function register, respectively.
+
+@item __NO_INTERRUPTS__
+This macro reflects the @option{-mno-interrupts} command-line option.
+
+@item __AVR_ERRATA_SKIP__
+@itemx __AVR_ERRATA_SKIP_JMP_CALL__
+Some AVR devices (AT90S8515, ATmega103) must not skip 32-bit
+instructions because of a hardware erratum.  Skip instructions are
+@code{SBRS}, @code{SBRC}, @code{SBIS}, @code{SBIC} and @code{CPSE}.
+The second macro is only defined if @code{__AVR_HAVE_JMP_CALL__} is also
+set.
+
+@item __AVR_ISA_RMW__
+The device has Read-Modify-Write instructions (XCH, LAC, LAS and LAT).
+
+@item __AVR_SFR_OFFSET__=@var{offset}
+Instructions that can address I/O special function registers directly
+like @code{IN}, @code{OUT}, @code{SBI}, etc.@: may use a different
+address as if addressed by an instruction to access RAM like @code{LD}
+or @code{STS}. This offset depends on the device architecture and has
+to be subtracted from the RAM address in order to get the
+respective I/O@tie{}address.
+
+@item __AVR_SHORT_CALLS__
+The @option{-mshort-calls} command line option is set.
+
+@item __AVR_PM_BASE_ADDRESS__=@var{addr}
+Some devices support reading from flash memory by means of @code{LD*}
+instructions.  The flash memory is seen in the data address space
+at an offset of @code{__AVR_PM_BASE_ADDRESS__}.  If this macro
+is not defined, this feature is not available.  If defined,
+the address space is linear and there is no need to put
+@code{.rodata} into RAM.  This is handled by the default linker
+description file, and is currently available for
+@code{avrtiny} and @code{avrxmega3}.  Even more convenient,
+there is no need to use address spaces like @code{__flash} or
+features like attribute @code{progmem} and @code{pgm_read_*}.
+
+@item __AVR_HAVE_FLMAP__
+This macro is defined provided the following conditions are met:
+@itemize @bullet
+@item The device has the @code{NVMCTRL_CTRLB.FLMAP} bitfield.
+This applies to the AVR64* and AVR128* devices.
+@item It's not known at assembler-time which emulation will be used.
+@end itemize
+This implies the compiler was configured with GNU Binutils that implement
+@w{@uref{https://sourceware.org/PR31124,PR31124}}.
+
+@item __AVR_RODATA_IN_RAM__
+This macro is undefined when the code is compiled for a core architecture.
+
+When the code is compiled for a device, the macro is defined to@tie{}1
+when the @code{.rodata} sections for read-only data is located in RAM;
+and defined to@tie{}0, otherwise.
+
+@item __WITH_AVRLIBC__
+The compiler is configured to be used together with AVR-LibC.
+See the @option{--with-avrlibc} configure option.
+
+@item __HAVE_SIGNAL_N__
+The compiler supports the @code{signal(@var{num})} and
+@code{interrupt(@var{num})}
+@ref{AVR Attributes,,function attributes}
+with an argument @var{num} that specifies the number of the
+interrupt service routine.
+
+@item __HAVE_DOUBLE_MULTILIB__
+Defined if @option{-mdouble=} acts as a multilib option.
+
+@item __HAVE_DOUBLE32__
+@itemx __HAVE_DOUBLE64__
+Defined if the compiler supports 32-bit double resp. 64-bit double.
+The actual layout is specified by option @option{-mdouble=}.
+
+@item __DEFAULT_DOUBLE__
+The size in bits of @code{double} if @option{-mdouble=} is not set.
+To test the layout of @code{double} in a program, use the built-in
+macro @code{__SIZEOF_DOUBLE__}.
+
+@item __HAVE_LONG_DOUBLE32__
+@itemx __HAVE_LONG_DOUBLE64__
+@itemx __HAVE_LONG_DOUBLE_MULTILIB__
+@itemx __DEFAULT_LONG_DOUBLE__
+Same as above, but for @code{long double} instead of @code{double}.
+
+@item __WITH_DOUBLE_COMPARISON__
+Reflects the @code{--with-double-comparison=@{tristate|bool|libf7@}}
+@w{@uref{https://gcc.gnu.org/install/configure.html#avr,configure option}}
+and is defined to @code{2} or @code{3}.
+
+@item __WITH_LIBF7_LIBGCC__
+@itemx __WITH_LIBF7_MATH__
+@itemx __WITH_LIBF7_MATH_SYMBOLS__
+Reflects the @code{--with-libf7=@{libgcc|math|math-symbols@}}
+@w{@uref{https://gcc.gnu.org/install/configure.html#avr,configure option}}.
+
+@end table
+
+@subsubsection AVR Internal Options
+The following options are used internally by the compiler and to communicate
+between device specs files and the compiler proper. You don't need to set these
+options by hand, in particular they are not optimization options.
+Using these options in the wrong way may lead to sub-optimal or wrong code.
+They are documented for completeness, and in order to get a better
+understanding of
+@w{@uref{https://gcc.gnu.org/wiki/avr-gcc#spec-files,device specs}}
+files.
+
+@table @gcctabopt
+
+@opindex mn-flash
+@item -mn-flash=@var{num}
+Assume that the flash memory has a size of @var{num} times 64@tie{}KiB.
+This determines which @code{__flash@var{N}} address spaces are available.
+
+@opindex mflmap
+@item -mflmap
+The device has the @code{FLMAP} bit field located in special function
+register @code{NVMCTRL_CTRLB}.
+
+@opindex mrmw
+@item -mrmw
+Assume that the device supports the Read-Modify-Write
+instructions @code{XCH}, @code{LAC}, @code{LAS} and @code{LAT}.
+
+@opindex mshort-calls
+@item -mshort-calls
+
+Assume that @code{RJMP} and @code{RCALL} can target the whole
+program memory. This option is used for multilib generation and selection
+for the devices from architecture @code{avrxmega3}.
+
+@opindex mskip-bug
+@item -mskip-bug
+
+Generate code without skips (@code{CPSE}, @code{SBRS},
+@code{SBRC}, @code{SBIS}, @code{SBIC}) over 32-bit instructions.
+
+@opindex msp8
+@item -msp8
+Treat the stack pointer register as an 8-bit register,
+i.e.@: assume the high byte of the stack pointer is zero.
+This option is used by the compiler to select and
+build multilibs for architectures @code{avr2} and @code{avr25}.
+These architectures mix devices with and without @code{SPH}.
+
+@end table
+
+@node Blackfin Options
+@subsection Blackfin Options
+@cindex Blackfin Options
+
+@table @gcctabopt
+@opindex mcpu=
+@item -mcpu=@var{cpu}@r{[}-@var{sirevision}@r{]}
+Specifies the name of the target Blackfin processor.  Currently, @var{cpu}
+can be one of @samp{bf512}, @samp{bf514}, @samp{bf516}, @samp{bf518},
+@samp{bf522}, @samp{bf523}, @samp{bf524}, @samp{bf525}, @samp{bf526},
+@samp{bf527}, @samp{bf531}, @samp{bf532}, @samp{bf533},
+@samp{bf534}, @samp{bf536}, @samp{bf537}, @samp{bf538}, @samp{bf539},
+@samp{bf542}, @samp{bf544}, @samp{bf547}, @samp{bf548}, @samp{bf549},
+@samp{bf542m}, @samp{bf544m}, @samp{bf547m}, @samp{bf548m}, @samp{bf549m},
+@samp{bf561}, @samp{bf592}.
+
+The optional @var{sirevision} specifies the silicon revision of the target
+Blackfin processor.  Any workarounds available for the targeted silicon revision
+are enabled.  If @var{sirevision} is @samp{none}, no workarounds are enabled.
+If @var{sirevision} is @samp{any}, all workarounds for the targeted processor
+are enabled.  The @code{__SILICON_REVISION__} macro is defined to two
+hexadecimal digits representing the major and minor numbers in the silicon
+revision.  If @var{sirevision} is @samp{none}, the @code{__SILICON_REVISION__}
+is not defined.  If @var{sirevision} is @samp{any}, the
+@code{__SILICON_REVISION__} is defined to be @code{0xffff}.
+If this optional @var{sirevision} is not used, GCC assumes the latest known
+silicon revision of the targeted Blackfin processor.
+
+GCC defines a preprocessor macro for the specified @var{cpu}.
+For the @samp{bfin-elf} toolchain, this option causes the hardware BSP
+provided by libgloss to be linked in if @option{-msim} is not given.
+
+Without this option, @samp{bf532} is used as the processor by default.
+
+Note that support for @samp{bf561} is incomplete.  For @samp{bf561},
+only the preprocessor macro is defined.
+
+@opindex msim
+@item -msim
+Specifies that the program will be run on the simulator.  This causes
+the simulator BSP provided by libgloss to be linked in.  This option
+has effect only for @samp{bfin-elf} toolchain.
+Certain other options, such as @option{-mid-shared-library} and
+@option{-mfdpic}, imply @option{-msim}.
+
+@opindex momit-leaf-frame-pointer
+@opindex mno-omit-leaf-frame-pointer

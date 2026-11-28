@@ -1,0 +1,274 @@
+@c GCC 16.1.0 | BLOQUE 0213 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 9623-9892 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item 512
+Prefer 512-bit vector width for instructions.
+@end table
+
+@subsubheading Inlining rules
+On the x86, the inliner does not inline a
+function that has different target options than the caller, unless the
+callee has a subset of the target options of the caller.  For example
+a function declared with @code{target("sse3")} can inline a function
+with @code{target("sse2")}, since @code{-msse3} implies @code{-msse2}.
+
+Besides the basic rule, when a function specifies
+@code{target("arch=@var{ARCH}")} or @code{target("tune=@var{TUNE}")}
+attribute, the inlining rule us different. It allows inlining of
+a function with default @option{-march=x86-64} and
+@option{-mtune=generic} specified, or a function that has a subset
+of ISA features and marked with always_inline.
+@end table
+
+@atindex @code{indirect_branch}, x86
+@item indirect_branch("@var{choice}")
+This attribute applies to functions.
+
+On x86 targets, the @code{indirect_branch} attribute causes the compiler
+to convert indirect call and jump with @var{choice}.  @samp{keep}
+keeps indirect call and jump unmodified.  @samp{thunk} converts indirect
+call and jump to call and return thunk.  @samp{thunk-inline} converts
+indirect call and jump to inlined call and return thunk.
+@samp{thunk-extern} converts indirect call and jump to external call
+and return thunk provided in a separate object file.
+
+@atindex @code{function_return}, x86
+@item function_return("@var{choice}")
+This attribute applies to functions.
+
+On x86 targets, the @code{function_return} attribute causes the compiler
+to convert function return with @var{choice}.  @samp{keep} keeps function
+return unmodified.  @samp{thunk} converts function return to call and
+return thunk.  @samp{thunk-inline} converts function return to inlined
+call and return thunk.  @samp{thunk-extern} converts function return to
+external call and return thunk provided in a separate object file.
+
+@atindex @code{nocf_check}, x86
+@item nocf_check
+This attribute applies to functions and function types.
+
+The @code{nocf_check} attribute on a function is used to inform the
+compiler that the function's prologue should not be instrumented when
+compiled with the @option{-fcf-protection=branch} option.  The
+compiler assumes that the function's address is a valid target for a
+control-flow transfer.
+
+The @code{nocf_check} attribute on a type of pointer to function is
+used to inform the compiler that a call through the pointer should
+not be instrumented when compiled with the
+@option{-fcf-protection=branch} option.  The compiler assumes
+that the function's address from the pointer is a valid target for
+a control-flow transfer.  A direct function call through a function
+name is assumed to be a safe call thus direct calls are not
+instrumented by the compiler.
+
+The @code{nocf_check} attribute is applied to an object's type.
+In case of assignment of a function address or a function pointer to
+another pointer, the attribute is not carried over from the right-hand
+object's type; the type of left-hand object stays unchanged.  The
+compiler checks for @code{nocf_check} attribute mismatch and reports
+a warning in case of mismatch.
+
+@smallexample
+int foo (void) __attribute__((nocf_check));
+void (*foo1)(void) __attribute__((nocf_check));
+void (*foo2)(void);
+
+/* foo's address is assumed to be valid.  */
+int
+foo (void) 
+@{
+  /* This call site is not checked for control-flow 
+     validity.  */
+  (*foo1)();
+
+  /* A warning is issued about attribute mismatch.  */
+  foo1 = foo2; 
+
+  /* This call site is still not checked.  */
+  (*foo1)();
+
+  /* This call site is checked.  */
+  (*foo2)();
+
+  /* A warning is issued about attribute mismatch.  */
+  foo2 = foo1; 
+
+  /* This call site is still checked.  */
+  (*foo2)();
+
+  return 0;
+@}
+@end smallexample
+
+@atindex @code{cf_check}, x86
+@item cf_check
+This attribute applies to functions.
+
+The @code{cf_check} attribute on a function is used to inform the
+compiler that ENDBR instruction should be placed at the function
+entry when @option{-fcf-protection=branch} is enabled.
+
+@atindex @code{indirect_return}, x86
+@item indirect_return
+This attribute applies to functions.
+
+The @code{indirect_return} attribute can be applied to a function,
+as well as variable or type of function pointer to inform the
+compiler that the function may return via indirect branch.
+
+@atindex @code{fentry_name}, x86
+@item fentry_name("@var{name}")
+This attribute applies to functions.
+
+On x86 targets, the @code{fentry_name} attribute sets the function to
+call on function entry when function instrumentation is enabled
+with @option{-pg -mfentry}. When @var{name} is nop then a 5 byte
+nop sequence is generated.
+
+@atindex @code{fentry_section}, x86
+@item fentry_section("@var{name}")
+This attribute applies to functions.
+
+On x86 targets, the @code{fentry_section} attribute sets the name
+of the section to record function entry instrumentation calls in when
+enabled with @option{-pg -mrecord-mcount}
+
+@atindex @code{nodirect_extern_access}, x86
+@opindex mno-direct-extern-access
+@item nodirect_extern_access
+This attribute applies to functions and variables.
+
+This attribute, attached to a global variable or function, is the
+counterpart to option @option{-mno-direct-extern-access}.
+
+@atindex @code{ms_struct}, x86
+@atindex @code{gcc_struct}, x86
+@item ms_struct
+@itemx gcc_struct
+These attributes can be applied to variables and struct types.
+
+If @code{packed} is used on a structure, or if bit-fields are used,
+it may be that the Microsoft ABI lays out the structure differently
+than the way GCC normally does.  Particularly when moving packed
+data between functions compiled with GCC and the native Microsoft compiler
+(either via function call or as data in a file), it may be necessary to access
+either format.
+
+The @code{ms_struct} and @code{gcc_struct} attributes correspond
+to the @option{-mms-bitfields} and @option{-mno-ms-bitfields}
+command-line options, respectively;
+see @ref{x86 Options}, for details of how structure layout is affected.
+
+@end table
+
+
+@anchor{Xstormy16 Function Attributes}
+@anchor{Xstormy16 Variable Attributes}
+@node Xstormy16 Attributes
+@subsubsection Xstormy16 Attributes
+
+These attributes are supported by the Xstormy16 back end:
+
+@table @code
+@atindex @code{interrupt}, Xstormy16
+@item interrupt
+This attribute applies to functions.
+
+It indicates
+that the specified function is an interrupt handler.  The compiler generates
+function entry and exit sequences suitable for use in an interrupt handler
+when this attribute is present.
+
+@atindex @code{below100}, Xstormy16
+@item below100
+This attribute applies to variables.
+
+If a variable has the @code{below100} attribute (@code{BELOW100} is
+allowed also), GCC places the variable in the first 0x100 bytes of
+memory and use special opcodes to access it.  Such variables are
+placed in either the @code{.bss_below100} section or the
+@code{.data_below100} section.
+@end table
+
+
+@node Attribute Syntax
+@subsection GNU Attribute Syntax
+@cindex attribute syntax
+@cindex C standard attributes
+@cindex C++ standard attributes
+@cindex standard attribute syntax
+@cindex GNU attribute syntax
+
+GCC provides two different ways to specify attributes: the standard C
+and C++ syntax using double square brackets, and the older GNU
+extension syntax using the @code{@w{__attribute__}} keyword, which predates
+the adoption of the standard syntax and is still widely used in older
+code.  This section describes the details of the GNU extension
+@code{__attribute__} syntax,
+and the constructs to which attribute specifiers bind, for the C
+language.  Some details may vary for C++ and Objective-C@.  Because of
+limitations in the grammar for attributes, some forms described here
+may not be successfully parsed in all cases.
+
+There are some problems with the semantics of attributes in C++.  For
+example, there are no manglings for attributes, although they may affect
+code generation, so problems may arise when attributed types are used in
+conjunction with templates or overloading.  Similarly, @code{typeid}
+does not distinguish between types with different attributes.  Support
+for attributes in C++ may be restricted in future to attributes on
+declarations only, but not on nested declarators.
+
+@xref{Attributes}, for details of the semantics of attributes.
+applying to functions.
+
+An @dfn{attribute specifier} is of the form
+@code{__attribute__ ((@var{attribute-list}))}.  An @dfn{attribute list}
+is a possibly empty comma-separated sequence of @dfn{attributes}, where
+each attribute is one of the following:
+
+@itemize @bullet
+@item
+Empty.  Empty attributes are ignored.
+
+@item
+An attribute name
+(which may be an identifier such as @code{unused}, or a reserved
+word such as @code{const}).
+
+@item
+An attribute name followed by a parenthesized list of
+parameters for the attribute.
+These parameters take one of the following forms:
+
+@itemize @bullet
+@item
+An identifier.  For example, @code{mode} attributes use this form.
+
+@item
+An identifier followed by a comma and a non-empty comma-separated list
+of expressions.  For example, @code{format} attributes use this form.
+
+@item
+A possibly empty comma-separated list of expressions.  For example,
+@code{format_arg} attributes use this form with the list being a single
+integer constant expression, and @code{alias} attributes use this form
+with the list being a single string constant.
+@end itemize
+@end itemize
+
+An @dfn{attribute specifier list} is a sequence of one or more attribute
+specifiers, not separated by any other tokens.
+
+You may optionally specify attribute names with @samp{__}
+preceding and following the name.
+This allows you to use them in header files without
+being concerned about a possible macro of the same name.  For example,
+you may use the attribute name @code{__noreturn__} instead of @code{noreturn}.
+
+GCC also accepts the keyword @code{__attribute} as a synonym for
+@code{__attribute__}.
+
+@subsubheading Label Attributes
+

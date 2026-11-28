@@ -1,0 +1,244 @@
+@c GCC 16.1.0 | BLOQUE 0024 | 03-09
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 7292-7531 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -Wformat-overflow
+@itemx -Wformat-overflow=1
+Level @var{1} of @option{-Wformat-overflow} enabled by @option{-Wformat}
+employs a conservative approach that warns only about calls that most
+likely overflow the buffer.  At this level, numeric arguments to format
+directives with unknown values are assumed to have the value of one, and
+strings of unknown length to be empty.  Numeric arguments that are known
+to be bounded to a subrange of their type, or string arguments whose output
+is bounded either by their directive's precision or by a finite set of
+string literals, are assumed to take on the value within the range that
+results in the most bytes on output.  For example, the call to @code{sprintf}
+below is diagnosed because even with both @var{a} and @var{b} equal to zero,
+the terminating NUL character (@code{'\0'}) appended by the function
+to the destination buffer will be written past its end.  Increasing
+the size of the buffer by a single byte is sufficient to avoid the
+warning, though it may not be sufficient to avoid the overflow.
+
+@smallexample
+void f (int a, int b)
+@{
+  char buf [13];
+  sprintf (buf, "a = %i, b = %i\n", a, b);
+@}
+@end smallexample
+
+@item -Wformat-overflow=2
+Level @var{2} warns also about calls that might overflow the destination
+buffer given an argument of sufficient length or magnitude.  At level
+@var{2}, unknown numeric arguments are assumed to have the minimum
+representable value for signed types with a precision greater than 1, and
+the maximum representable value otherwise.  Unknown string arguments whose
+length cannot be assumed to be bounded either by the directive's precision,
+or by a finite set of string literals they may evaluate to, or the character
+array they may point to, are assumed to be 1 character long.
+
+At level @var{2}, the call in the example above is again diagnosed, but
+this time because with @var{a} equal to a 32-bit @code{INT_MIN} the first
+@code{%i} directive will write some of its digits beyond the end of
+the destination buffer.  To make the call safe regardless of the values
+of the two variables, the size of the destination buffer must be increased
+to at least 34 bytes.  GCC includes the minimum size of the buffer in
+an informational note following the warning.
+
+An alternative to increasing the size of the destination buffer is to
+constrain the range of formatted values.  The maximum length of string
+arguments can be bounded by specifying the precision in the format
+directive.  When numeric arguments of format directives can be assumed
+to be bounded by less than the precision of their type, choosing
+an appropriate length modifier to the format specifier will reduce
+the required buffer size.  For example, if @var{a} and @var{b} in the
+example above can be assumed to be within the precision of
+the @code{short int} type then using either the @code{%hi} format
+directive or casting the argument to @code{short} reduces the maximum
+required size of the buffer to 24 bytes.
+
+@smallexample
+void f (int a, int b)
+@{
+  char buf [23];
+  sprintf (buf, "a = %hi, b = %i\n", a, (short)b);
+@}
+@end smallexample
+@end table
+
+@opindex Wno-format-zero-length
+@opindex Wformat-zero-length
+@item -Wno-format-zero-length
+If @option{-Wformat} is specified, do not warn about zero-length formats.
+The C standard specifies that zero-length formats are allowed.
+
+@opindex Wformat-nonliteral
+@opindex Wno-format-nonliteral
+@item -Wformat-nonliteral
+If @option{-Wformat} is specified, also warn if the format string is not a
+string literal and so cannot be checked, unless the format function
+takes its format arguments as a @code{va_list}.
+
+@opindex Wformat-security
+@opindex Wno-format-security
+@item -Wformat-security
+If @option{-Wformat} is specified, also warn about uses of format
+functions that represent possible security problems.  At present, this
+warns about calls to @code{printf} and @code{scanf} functions where the
+format string is not a string literal and there are no format arguments,
+as in @code{printf (foo);}.  This may be a security hole if the format
+string came from untrusted input and contains @samp{%n}.  (This is
+currently a subset of what @option{-Wformat-nonliteral} warns about, but
+in future warnings may be added to @option{-Wformat-security} that are not
+included in @option{-Wformat-nonliteral}.)
+
+@opindex Wformat-signedness
+@opindex Wno-format-signedness
+@item -Wformat-signedness
+If @option{-Wformat} is specified, also warn if the format string
+requires an unsigned argument and the argument is signed and vice versa.
+
+@opindex Wformat-truncation
+@opindex Wno-format-truncation
+@item -Wformat-truncation
+@itemx -Wformat-truncation=@var{level}
+Warn about calls to formatted input/output functions such as @code{snprintf}
+and @code{vsnprintf} that might result in output truncation.  When the exact
+number of bytes written by a format directive cannot be determined at
+compile-time it is estimated based on heuristics that depend on
+the @var{level} argument and on optimization.  While enabling optimization
+will in most cases improve the accuracy of the warning, it may also result
+in false positives.  Except as noted otherwise, the option uses the same
+logic @option{-Wformat-overflow}.
+
+@table @gcctabopt
+@opindex Wformat-truncation
+@opindex Wno-format-truncation
+@item -Wformat-truncation
+@itemx -Wformat-truncation=1
+Level @var{1} of @option{-Wformat-truncation} enabled by @option{-Wformat}
+employs a conservative approach that warns only about calls to bounded
+functions whose return value is unused and that will most likely result
+in output truncation.
+
+@item -Wformat-truncation=2
+Level @var{2} warns also about calls to bounded functions whose return
+value is used and that might result in truncation given an argument of
+sufficient length or magnitude.
+@end table
+
+@opindex Wformat-y2k
+@opindex Wno-format-y2k
+@item -Wformat-y2k
+If @option{-Wformat} is specified, also warn about @code{strftime}
+formats that may yield only a two-digit year.
+
+@opindex Wnonnull
+@opindex Wno-nonnull
+@item -Wnonnull
+Warn about passing a null pointer for arguments marked as
+requiring a non-null value by the @code{nonnull} function attribute.
+
+@option{-Wnonnull} is included in @option{-Wall} and @option{-Wformat}.  It
+can be disabled with the @option{-Wno-nonnull} option.
+
+@opindex Wnonnull-compare
+@opindex Wno-nonnull-compare
+@item -Wnonnull-compare
+Warn when comparing an argument marked with the @code{nonnull}
+function attribute against null inside the function.
+
+@option{-Wnonnull-compare} is included in @option{-Wall}.  It
+can be disabled with the @option{-Wno-nonnull-compare} option.
+
+@opindex Wnull-dereference
+@opindex Wno-null-dereference
+@item -Wnull-dereference
+Warn if the compiler detects paths that trigger erroneous or
+undefined behavior due to dereferencing a null pointer.  This option
+is only active when @option{-fdelete-null-pointer-checks} is active,
+which is enabled by optimizations in most targets.  The precision of
+the warnings depends on the optimization options used.
+
+@opindex Wno-musttail-local-addr
+@opindex Wmusttail-local-addr
+@item -Wno-musttail-local-addr
+Do not warn about passing a pointer (or in C++, a reference) to a
+local variable or label to argument of a @code{musttail} call.  Those
+variables go out of scope before the tail call instruction.
+
+@opindex Wmaybe-musttail-local-addr
+@opindex Wno-maybe-musttail-local-addr
+@item -Wmaybe-musttail-local-addr
+Warn when address of a local variable can escape to a @code{musttail}
+call, unless it goes out of scope already before the @code{musttail}
+call.
+
+@smallexample
+int foo (int *);
+
+int
+bar (int *x)
+@{
+  if (x[0] == 1)
+    @{
+      int a = 42;
+      foo (&a);
+      /* Without the @code{musttail} attribute this call would not
+         be tail called, because address of the @code{a} variable escapes
+         and the second foo call could dereference it.  With the attribute
+         the local variables are assumed to go out of scope immediately
+         before the tail call instruction and the compiler warns about
+         this.  */
+      [[gnu::musttail]] return foo (nullptr);
+    @}
+  else
+    @{
+      @{
+        int a = 42;
+        foo (&a);
+      @}
+      /* The @code{a} variable isn't already in scope, so even when it
+         escaped, even without @code{musttail} attribute it would be
+         undefined behavior to dereference it and the compiler could
+         turn this into a tail call.  No warning is diagnosed here.  */
+      [[gnu::musttail]] return foo (nullptr);
+    @}
+@}
+@end smallexample
+
+This warning is enabled by @option{-Wextra}.
+
+@opindex Wnrvo
+@opindex Wno-nrvo
+@item -Wnrvo @r{(C++ and Objective-C++ only)}
+Warn if the compiler does not elide the copy from a local variable to
+the return value of a function in a context where it is allowed by
+[class.copy.elision].  This elision is commonly known as the Named
+Return Value Optimization.  For instance, in the example below the
+compiler cannot elide copies from both v1 and v2, so it elides neither.
+
+@smallexample
+std::vector<int> f()
+@{
+  std::vector<int> v1, v2;
+  // ...
+  if (cond) return v1;
+  else return v2; // warning: not eliding copy
+@}
+@end smallexample
+
+@opindex Winfinite-recursion
+@opindex Wno-infinite-recursion
+@item -Winfinite-recursion
+Warn about infinitely recursive calls.  The warning is effective at all
+optimization levels but requires optimization in order to detect infinite
+recursion in calls between two or more functions.
+@option{-Winfinite-recursion} is included in @option{-Wall}.
+
+Compare with @option{-Wanalyzer-infinite-recursion} which provides a
+similar diagnostic, but is implemented in a different way (as part of
+@option{-fanalyzer}).
+
+@opindex Winit-self
+@opindex Wno-init-self

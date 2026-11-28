@@ -1,0 +1,308 @@
+@c GCC 16.1.0 | BLOQUE 0120 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 27280-27583 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -minline-float-divide-max-throughput
+Generate code for inline divides of floating-point values
+using the maximum throughput algorithm.
+
+@opindex mno-inline-float-divide
+@item -mno-inline-float-divide
+Do not generate inline code for divides of floating-point values.
+
+@opindex minline-int-divide-min-latency
+@item -minline-int-divide-min-latency
+Generate code for inline divides of integer values
+using the minimum latency algorithm.
+
+@opindex minline-int-divide-max-throughput
+@item -minline-int-divide-max-throughput
+Generate code for inline divides of integer values
+using the maximum throughput algorithm.
+
+@opindex mno-inline-int-divide
+@opindex minline-int-divide
+@item -mno-inline-int-divide
+Do not generate inline code for divides of integer values.
+
+@opindex minline-sqrt-min-latency
+@item -minline-sqrt-min-latency
+Generate code for inline square roots
+using the minimum latency algorithm.
+
+@opindex minline-sqrt-max-throughput
+@item -minline-sqrt-max-throughput
+Generate code for inline square roots
+using the maximum throughput algorithm.
+
+@opindex mno-inline-sqrt
+@item -mno-inline-sqrt
+Do not generate inline code for @code{sqrt}.
+
+@opindex mno-dwarf2-asm
+@opindex mdwarf2-asm
+@item -mno-dwarf2-asm
+@itemx -mdwarf2-asm
+Don't (or do) generate assembler code for the DWARF line number debugging
+info.  This may be useful when not using the GNU assembler.
+
+@opindex mearly-stop-bits
+@opindex mno-early-stop-bits
+@item -mearly-stop-bits
+@itemx -mno-early-stop-bits
+Allow stop bits to be placed earlier than immediately preceding the
+instruction that triggered the stop bit.  This can improve instruction
+scheduling, but does not always do so.
+
+@opindex mfixed-range
+@item -mfixed-range=@var{register-range}
+Generate code treating the given register range as fixed registers.
+A fixed register is one that the register allocator cannot use.  This is
+useful when compiling kernel code.  A register range is specified as
+two registers separated by a dash.  Multiple register ranges can be
+specified separated by a comma.
+
+@opindex mtls-size
+@item -mtls-size=@var{tls-size}
+Specify bit size of immediate TLS offsets.  Valid values are 14, 22, and
+64.
+
+@opindex mtune
+@item -mtune=@var{cpu-type}
+Tune the instruction scheduling for a particular CPU, Valid values are
+@samp{itanium}, @samp{itanium1}, @samp{merced}, @samp{itanium2},
+and @samp{mckinley}.
+
+@opindex milp32
+@opindex mlp64
+@item -milp32
+@itemx -mlp64
+Generate code for a 32-bit or 64-bit environment.
+The 32-bit environment sets int, long and pointer to 32 bits.
+The 64-bit environment sets int to 32 bits and long and pointer
+to 64 bits.  These are HP-UX specific flags.
+
+@opindex mno-sched-br-data-spec
+@opindex msched-br-data-spec
+@item -mno-sched-br-data-spec
+@itemx -msched-br-data-spec
+(Dis/En)able data speculative scheduling before reload.
+This results in generation of @code{ld.a} instructions and
+the corresponding check instructions (@code{ld.c} / @code{chk.a}).
+The default setting is disabled.
+
+@opindex msched-ar-data-spec
+@opindex mno-sched-ar-data-spec
+@item -msched-ar-data-spec
+@itemx -mno-sched-ar-data-spec
+(En/Dis)able data speculative scheduling after reload.
+This results in generation of @code{ld.a} instructions and
+the corresponding check instructions (@code{ld.c} / @code{chk.a}).
+The default setting is enabled.
+
+@opindex mno-sched-control-spec
+@opindex msched-control-spec
+@item -mno-sched-control-spec
+@itemx -msched-control-spec
+(Dis/En)able control speculative scheduling.  This feature is
+available only during region scheduling (i.e.@: before reload).
+This results in generation of the @code{ld.s} instructions and
+the corresponding check instructions @code{chk.s}.
+The default setting is disabled.
+
+@opindex msched-br-in-data-spec
+@opindex mno-sched-br-in-data-spec
+@item -msched-br-in-data-spec
+@itemx -mno-sched-br-in-data-spec
+(En/Dis)able speculative scheduling of the instructions that
+are dependent on the data speculative loads before reload.
+This is effective only with @option{-msched-br-data-spec} enabled.
+The default setting is enabled.
+
+@opindex msched-ar-in-data-spec
+@opindex mno-sched-ar-in-data-spec
+@item -msched-ar-in-data-spec
+@itemx -mno-sched-ar-in-data-spec
+(En/Dis)able speculative scheduling of the instructions that
+are dependent on the data speculative loads after reload.
+This is effective only with @option{-msched-ar-data-spec} enabled.
+The default setting is enabled.
+
+@opindex msched-in-control-spec
+@opindex mno-sched-in-control-spec
+@item -msched-in-control-spec
+@itemx -mno-sched-in-control-spec
+(En/Dis)able speculative scheduling of the instructions that
+are dependent on the control speculative loads.
+This is effective only with @option{-msched-control-spec} enabled.
+The default setting is enabled.
+
+@opindex mno-sched-count-spec-in-critical-path
+@opindex msched-count-spec-in-critical-path
+@item -mno-sched-count-spec-in-critical-path
+@itemx -msched-count-spec-in-critical-path
+If enabled, speculative dependencies are considered during
+computation of the instructions priorities.  This makes the use of the
+speculation a bit more conservative.
+The default setting is disabled.
+
+@opindex msched-spec-ldc
+@opindex mno-sched-spec-ldc
+@item -msched-spec-ldc
+@itemx -mno-sched-spec-ldc
+Use a simple data speculation check.  This option is on by default.
+
+@opindex msched-spec-control-ldc
+@opindex mno-sched-spec-control-ldc
+@item -msched-control-spec-ldc
+@itemx -mno-sched-control-spec-ldc
+Use a simple check for control speculation.  This option is on by default.
+
+@opindex msched-stop-bits-after-every-cycle
+@opindex mno-sched-stop-bits-after-every-cycle
+@item -msched-stop-bits-after-every-cycle
+@itemx -mno-sched-stop-bits-after-every-cycle
+Place a stop bit after every cycle when scheduling.  This option is on
+by default.
+
+@opindex msched-fp-mem-deps-zero-cost
+@opindex mno-sched-fp-mem-deps-zero-cost
+@item -msched-fp-mem-deps-zero-cost
+@itemx -mno-sched-fp-mem-deps-zero-cost
+Assume that floating-point stores and loads are not likely to cause a conflict
+when placed into the same instruction group.  This option is disabled by
+default.
+
+@opindex msel-sched-dont-check-control-spec
+@opindex mno-sel-sched-dont-check-control-spec
+@item -msel-sched-dont-check-control-spec
+@itemx -mno-sel-sched-dont-check-control-spec
+Generate checks for control speculation in selective scheduling.
+This flag is disabled by default.
+
+@opindex msched-max-memory-insns
+@item -msched-max-memory-insns=@var{max-insns}
+Limit on the number of memory insns per instruction group, giving lower
+priority to subsequent memory insns attempting to schedule in the same
+instruction group. Frequently useful to prevent cache bank conflicts.
+The default value is 1.
+
+@opindex msched-max-memory-insns-hard-limit
+@opindex mno-sched-max-memory-insns-hard-limit
+@item -msched-max-memory-insns-hard-limit
+@itemx -mno-sched-max-memory-insns-hard-limit
+Makes the limit specified by @option{msched-max-memory-insns} a hard limit,
+disallowing more than that number in an instruction group.
+Otherwise, the limit is ``soft'', meaning that non-memory operations
+are preferred when the limit is reached, but memory operations may still
+be scheduled.
+
+@end table
+
+@node LM32 Options
+@subsection LM32 Options
+@cindex LM32 options
+
+These @option{-m} options are defined for the LatticeMico32 architecture:
+
+@table @gcctabopt
+@opindex mbarrel-shift-enabled
+@opindex mno-barrel-shift-enabled
+@item -mbarrel-shift-enabled
+Enable barrel-shift instructions.
+
+@opindex mdivide-enabled
+@opindex mno-divide-enabled
+@item -mdivide-enabled
+Enable divide and modulus instructions.
+
+@opindex mmultiply-enabled
+@opindex mno-multiply-enabled
+@item -mmultiply-enabled
+Enable multiply instructions.
+
+@opindex msign-extend-enabled
+@opindex mno-sign-extend-enabled
+@item -msign-extend-enabled
+Enable sign extend instructions.
+
+@opindex muser-enabled
+@opindex mno-user-enabled
+@item -muser-enabled
+Enable user-defined instructions.
+
+@end table
+
+@node LoongArch Options
+@subsection LoongArch Options
+@cindex LoongArch Options
+
+These command-line options are defined for LoongArch targets:
+
+@table @gcctabopt
+@opindex march
+@item -march=@var{arch-type}
+Generate instructions for the machine type @var{arch-type}.
+@option{-march=@var{arch-type}} allows GCC to generate code that
+may not run at all on processors other than the one indicated.
+
+The choices for @var{arch-type} are:
+
+@table @samp
+@item native
+Local processor type detected by the native compiler.
+@item loongarch64
+Generic LoongArch 64-bit processor.
+@item la464
+LoongArch LA464-based processor with LSX, LASX.
+@item la664
+LoongArch LA664-based processor with LSX, LASX
+and all LoongArch v1.1 instructions.
+@item la64v1.0
+LoongArch64 ISA version 1.0.
+@item la64v1.1
+LoongArch64 ISA version 1.1.
+@item la32v1.0
+LoongArch32 ISA version 1.0.
+@item la32rv1.0
+LoongArch32 Reduced ISA version 1.0.
+@end table
+
+More information about LoongArch ISA versions can be found at
+@uref{https://github.com/loongson/la-toolchain-conventions}.
+
+@opindex mtune
+@item -mtune=@var{tune-type}
+Optimize the generated code for the given processor target.
+
+The choices for @var{tune-type} are:
+
+@table @samp
+@item native
+Local processor type detected by the native compiler.
+@item generic
+Generic LoongArch processor.
+@item loongarch64
+Generic LoongArch 64-bit processor.
+@item la464
+LoongArch LA464 core.
+@item la664
+LoongArch LA664 core.
+@item loongarch32
+Generic LoongArch 32-bit processor.
+@end table
+
+
+@opindex mabi
+@item -mabi=@var{base-abi-type}
+Generate code for the specified calling convention.
+@var{base-abi-type} can be one of:
+@table @samp
+@item lp64d
+Uses 64-bit general purpose registers and 32/64-bit floating-point
+registers for parameter passing.  Data model is LP64, where @samp{int}
+is 32 bits, while @samp{long int} and pointers are 64 bits.
+@item lp64f
+Uses 64-bit general purpose registers and 32-bit floating-point
+registers for parameter passing.  Data model is LP64, where @samp{int}
+is 32 bits, while @samp{long int} and pointers are 64 bits.

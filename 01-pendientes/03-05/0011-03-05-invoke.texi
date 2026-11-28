@@ -1,0 +1,245 @@
+@c GCC 16.1.0 | BLOQUE 0011 | 03-05
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 4674-4914 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -Woverloaded-virtual @r{(C++ and Objective-C++ only)}
+@itemx -Woverloaded-virtual=@var{n}
+Warn when a function declaration hides virtual functions from a
+base class.  For example, in:
+
+@smallexample
+struct A @{
+  virtual void f();
+@};
+
+struct B: public A @{
+  void f(int); // does not override
+@};
+@end smallexample
+
+the @code{A} class version of @code{f} is hidden in @code{B}, and code
+like:
+
+@smallexample
+B* b;
+b->f();
+@end smallexample
+
+@noindent
+fails to compile.
+
+In cases where the different signatures are not an accident, the
+simplest solution is to add a using-declaration to the derived class
+to un-hide the base function, e.g. add @code{using A::f;} to @code{B}.
+
+The optional level suffix controls the behavior when all the
+declarations in the derived class override virtual functions in the
+base class, even if not all of the base functions are overridden:
+
+@smallexample
+struct C @{
+  virtual void f();
+  virtual void f(int);
+@};
+
+struct D: public C @{
+  void f(int); // does override
+@}
+@end smallexample
+
+This pattern is less likely to be a mistake; if D is only used
+virtually, the user might have decided that the base class semantics
+for some of the overloads are fine.
+
+At level 1, this case does not warn; at level 2, it does.
+@option{-Woverloaded-virtual} by itself selects level 2.  Level 1 is
+included in @option{-Wall}.
+
+@opindex Wno-pmf-conversions
+@opindex Wpmf-conversions
+@item -Wno-pmf-conversions @r{(C++ and Objective-C++ only)}
+Disable the diagnostic for converting a bound pointer to member function
+to a plain pointer.
+
+@opindex Wsign-promo
+@opindex Wno-sign-promo
+@item -Wsign-promo @r{(C++ and Objective-C++ only)}
+Warn when overload resolution chooses a promotion from unsigned or
+enumerated type to a signed type, over a conversion to an unsigned type of
+the same size.  Previous versions of G++ tried to preserve
+unsignedness, but the standard mandates the current behavior.
+
+@opindex Wtemplates
+@opindex Wno-templates
+@item -Wtemplates @r{(C++ and Objective-C++ only)}
+Warn when a primary template declaration is encountered.  Some coding
+rules disallow templates, and this may be used to enforce that rule.
+The warning is inactive inside a system header file, such as the STL, so
+one can still use the STL.  One may also instantiate or specialize
+templates.
+
+@opindex Wmismatched-new-delete
+@opindex Wno-mismatched-new-delete
+@item -Wmismatched-new-delete @r{(C++ and Objective-C++ only)}
+Warn for mismatches between calls to @code{operator new} or @code{operator
+delete} and the corresponding call to the allocation or deallocation function.
+This includes invocations of C++ @code{operator delete} with pointers
+returned from either mismatched forms of @code{operator new}, or from other
+functions that allocate objects for which the @code{operator delete} isn't
+a suitable deallocator, as well as calls to other deallocation functions
+with pointers returned from @code{operator new} for which the deallocation
+function isn't suitable.
+
+For example, the @code{delete} expression in the function below is diagnosed
+because it doesn't match the array form of the @code{new} expression
+the pointer argument was returned from.  Similarly, the call to @code{free}
+is also diagnosed.
+
+@smallexample
+void f ()
+@{
+  int *a = new int[n];
+  delete a;   // warning: mismatch in array forms of expressions
+
+  char *p = new char[n];
+  free (p);   // warning: mismatch between new and free
+@}
+@end smallexample
+
+The related option @option{-Wmismatched-dealloc} diagnoses mismatches
+involving allocation and deallocation functions other than @code{operator
+new} and @code{operator delete}.
+
+@option{-Wmismatched-new-delete} is included in @option{-Wall}.
+
+@opindex Wmismatched-tags
+@opindex Wno-mismatched-tags
+@item -Wmismatched-tags @r{(C++ and Objective-C++ only)}
+Warn for declarations of structs, classes, and class templates and their
+specializations with a class-key that does not match either the definition
+or the first declaration if no definition is provided.
+
+For example, the declaration of @code{struct Object} in the argument list
+of @code{draw} triggers the warning.  To avoid it, either remove the redundant
+class-key @code{struct} or replace it with @code{class} to match its definition.
+@smallexample
+class Object @{
+public:
+  virtual ~Object () = 0;
+@};
+void draw (struct Object*);
+@end smallexample
+
+It is not wrong to declare a class with the class-key @code{struct} as
+the example above shows.  The @option{-Wmismatched-tags} option is intended
+to help achieve a consistent style of class declarations.  In code that is
+intended to be portable to Windows-based compilers the warning helps prevent
+unresolved references due to the difference in the mangling of symbols
+declared with different class-keys.  The option can be used either on its
+own or in conjunction with @option{-Wredundant-tags}.
+
+@opindex Wmultiple-inheritance
+@opindex Wno-multiple-inheritance
+@item -Wmultiple-inheritance @r{(C++ and Objective-C++ only)}
+Warn when a class is defined with multiple direct base classes.  Some
+coding rules disallow multiple inheritance, and this may be used to
+enforce that rule.  The warning is inactive inside a system header file,
+such as the STL, so one can still use the STL.  One may also define
+classes that indirectly use multiple inheritance.
+
+@opindex Wvirtual-inheritance
+@opindex Wno-virtual-inheritance
+@item -Wvirtual-inheritance
+Warn when a class is defined with a virtual direct base class.  Some
+coding rules disallow multiple inheritance, and this may be used to
+enforce that rule.  The warning is inactive inside a system header file,
+such as the STL, so one can still use the STL.  One may also define
+classes that indirectly use virtual inheritance.
+
+@opindex Wvirtual-move-assign
+@opindex Wno-virtual-move-assign
+@item -Wno-virtual-move-assign
+Suppress warnings about inheriting from a virtual base with a
+non-trivial C++11 move assignment operator.  This is dangerous because
+if the virtual base is reachable along more than one path, it is
+moved multiple times, which can mean both objects end up in the
+moved-from state.  If the move assignment operator is written to avoid
+moving from a moved-from object, this warning can be disabled.
+
+@opindex Wnamespaces
+@opindex Wno-namespaces
+@item -Wnamespaces
+Warn when a namespace definition is opened.  Some coding rules disallow
+namespaces, and this may be used to enforce that rule.  The warning is
+inactive inside a system header file, such as the STL, so one can still
+use the STL.  One may also use using directives and qualified names.
+
+@opindex Wtemplate-body
+@opindex Wno-template-body
+@item -Wno-template-body @r{(C++ and Objective-C++ only)}
+Disable diagnosing errors when parsing a template, and instead issue an
+error only upon instantiation of the template.  This flag can also be
+used to downgrade such errors into warnings with @option{Wno-error=} or
+@option{-fpermissive}.
+
+@opindex Wtemplate-id-cdtor
+@opindex Wno-template-id-cdtor
+@item -Wno-template-id-cdtor @r{(C++ and Objective-C++ only)}
+Disable the warning about the use of simple-template-id as the declarator-id
+of a constructor or destructor, which became invalid in C++20 via DR 2237.
+For example:
+
+@smallexample
+template<typename T> struct S @{
+  S<T>(); // should be S();
+  ~S<T>();  // should be ~S();
+@};
+@end smallexample
+
+@option{-Wtemplate-id-cdtor} is enabled by default with
+@option{-std=c++20}; it is also enabled by @option{-Wc++20-compat}.
+
+@opindex Wtemplate-names-tu-local
+@opindex Wno-template-names-tu-local
+@item -Wtemplate-names-tu-local
+Warn when a template body hides an exposure of a translation-unit-local
+entity.  In most cases, referring to a translation-unit-local entity
+(such as an internal linkage declaration) within an entity that is
+emitted into a module's CMI is an error.  However, within the
+initializer of a variable, or in the body of a non-inline function,
+this is not an exposure and no error is emitted.
+
+This can cause variable or function templates to accidentally become
+unusable if they reference such an entity, because other translation
+units that import the template will never be able to instantiate it.
+This warning attempts to detect cases where this might occur.
+The presence of an explicit instantiation silences the warning.
+
+This flag is enabled by @option{-Wextra}.
+
+@opindex Wexpose-global-module-tu-local
+@opindex Wno-expose-global-module-tu-local
+@item -Wno-expose-global-module-tu-local
+An exposure of a translation-unit-local entity from a module interface is
+invalid, as this may cause ODR violations and manifest in link errors or other
+unexpected behaviour.  However, many existing libraries declare TU-local
+entities in their interface, and avoiding exposures of these entities may be
+difficult in some cases.
+
+As an extension, GCC allows exposures of internal variables and functions that
+were declared in the global module fragment.  This warning indicates when such
+an invalid exposure has occurred, and can be silenced using diagnostic pragmas
+either at the site of the exposure, or at the point of declaration of the
+internal declaration.  This also applies to @code{export using} declarations
+naming such entities.
+
+When combined with @option{-Wtemplate-names-tu-local}, GCC will also warn about
+non-exposure references to TU-local entities in template bodies. Such templates
+can still be instantiated in other TUs but the above risks regarding exposures
+of translation-unit-local entities apply.
+
+This warning is enabled by default, and is upgraded to an error by
+@option{-pedantic-errors}.
+
+@opindex Wexternal-tu-local
+@opindex Wno-external-tu-local

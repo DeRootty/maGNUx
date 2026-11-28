@@ -1,0 +1,272 @@
+@c GCC 16.1.0 | BLOQUE 0220 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 11429-11696 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+To avoid complications from future changes to the semantics and the
+compatibility issues between compilers, consider replacing basic @code{asm}
+with extended @code{asm}.  See
+@uref{https://gcc.gnu.org/wiki/ConvertBasicAsmToExtended, How to convert
+from basic asm to extended asm} for information about how to perform this
+conversion.
+
+LTO typically requires rewriting top-level basic @code{asm} statements to
+extended @code{asm}.  Otherwise you will likely encounter missing symbol
+errors by linker.  Alternatively you may use
+@option{-flto-toplevel-asm-heuristics}.
+
+The compiler copies the assembler instructions in a basic @code{asm} 
+verbatim to the assembly language output file, without 
+processing dialects or any of the @samp{%} operators that are available with
+extended @code{asm}. This results in minor differences between basic 
+@code{asm} strings and extended @code{asm} templates. For example, to refer to 
+registers you might use @samp{%eax} in basic @code{asm} and
+@samp{%%eax} in extended @code{asm}.
+
+On targets such as x86 that support multiple assembler dialects,
+all basic @code{asm} blocks use the assembler dialect specified by the 
+@option{-masm} command-line option (@pxref{x86 Options}).  
+Basic @code{asm} provides no
+mechanism to provide different assembler strings for different dialects.
+
+For basic @code{asm} with non-empty assembler string GCC assumes
+the assembler block does not change any general purpose registers,
+but it may read or write any globally accessible variable.
+
+Here is an example of basic @code{asm} for i386:
+
+@example
+/* Note that this code will not compile with -masm=intel */
+#define DebugBreak() asm("int $3")
+@end example
+
+@node Extended Asm
+@subsection Extended Asm - Assembler Instructions with C Expression Operands
+@cindex extended @code{asm}
+@cindex assembly language in C, extended
+
+With extended @code{asm} you can read and write C variables from 
+assembler and perform jumps from assembler code to C labels.  
+Extended @code{asm} syntax uses colons (@samp{:}) to delimit
+the operand parameters after the assembler template:
+
+@example
+asm @var{asm-qualifiers} ( @var{AssemblerTemplate} 
+                 : @var{OutputOperands} 
+                 @r{[} : @var{InputOperands}
+                 @r{[} : @var{Clobbers} @r{]} @r{]})
+
+asm @var{asm-qualifiers} ( @var{AssemblerTemplate} 
+                      : @var{OutputOperands}
+                      : @var{InputOperands}
+                      : @var{Clobbers}
+                      : @var{GotoLabels})
+@end example
+where in the last form, @var{asm-qualifiers} contains @code{goto} (and in the
+first form, not).
+
+The @code{asm} keyword is a GNU extension.
+When writing code that can be compiled with @option{-ansi} and the
+various @option{-std} options, use @code{__asm__} instead of 
+@code{asm} (@pxref{Alternate Keywords}).
+
+@subsubheading Qualifiers
+@table @code
+
+@item volatile
+The typical use of extended @code{asm} statements is to manipulate input 
+values to produce output values. However, your @code{asm} statements may 
+also produce side effects. If so, you may need to use the @code{volatile} 
+qualifier to disable certain optimizations. @xref{Volatile}.
+
+@item inline
+If you use the @code{inline} qualifier, then for inlining purposes the size
+of the @code{asm} statement is taken as the smallest size possible
+(@pxref{Size of an asm}).
+
+@item goto
+This qualifier informs the compiler that the @code{asm} statement may 
+perform a jump to one of the labels listed in the @var{GotoLabels}.
+@xref{GotoLabels}.
+@end table
+
+@subsubheading Parameters
+@table @var
+@item AssemblerTemplate
+This is a literal string that is the template for the assembler code. It is a 
+combination of fixed text and tokens that refer to the input, output, 
+and goto parameters. @xref{AssemblerTemplate}.
+
+@item OutputOperands
+A comma-separated list describing the C variables modified by the
+instructions in the @var{AssemblerTemplate}.  An empty list is permitted.
+@xref{OutputOperands}.
+
+@item InputOperands
+A comma-separated list describing the C expressions read by the
+instructions in the @var{AssemblerTemplate}.  An empty list is permitted.
+@xref{InputOperands}.
+
+@item Clobbers
+A comma-separated list of registers or other values changed by the 
+@var{AssemblerTemplate}, beyond those listed as outputs.
+An empty list is permitted.  @xref{Clobbers and Scratch Registers}.
+
+@item GotoLabels
+When you are using the @code{goto} form of @code{asm}, this section contains 
+the list of all C labels to which the code in the 
+@var{AssemblerTemplate} may jump. 
+@xref{GotoLabels}.
+
+@code{asm} statements may not perform jumps into other @code{asm} statements,
+only to the listed @var{GotoLabels}.
+GCC's optimizers do not know about other jumps; therefore they cannot take 
+account of them when deciding how to optimize.
+@end table
+
+The total number of input + output + goto operands is limited to 30.
+
+@subsubheading Remarks
+The @code{asm} statement allows you to include assembly instructions directly 
+within C code. This may help you to maximize performance in time-sensitive 
+code or to access assembly instructions that are not readily available to C 
+programs.
+
+Similarly to basic @code{asm}, extended @code{asm} statements may be used
+both inside a C function or at file scope (``top-level''), where you can
+use this technique to emit assembler directives, define assembly language
+macros that can be invoked elsewhere in the file, or write entire functions
+in assembly language.
+Extended @code{asm} statements outside of functions may not use any
+qualifiers, may not specify clobbers, may not use @code{%}, @code{+} or
+@code{&} modifiers in constraints and can only use constraints which don't
+allow using any register.
+
+Functions declared with the @code{naked} attribute require basic 
+@code{asm} (@pxref{Common Attributes}).
+
+While the uses of @code{asm} are many and varied, it may help to think of an 
+@code{asm} statement as a series of low-level instructions that convert input 
+parameters to output parameters. So a simple (if not particularly useful) 
+example for i386 using @code{asm} might look like this:
+
+@example
+int src = 1;
+int dst;   
+
+asm ("mov %1, %0\n\t"
+    "add $1, %0"
+    : "=r" (dst) 
+    : "r" (src));
+
+printf("%d\n", dst);
+@end example
+
+This code copies @code{src} to @code{dst} and add 1 to @code{dst}.
+
+@anchor{Volatile}
+@subsubsection Volatile
+@cindex volatile @code{asm}
+@cindex @code{asm} volatile
+
+GCC's optimizers sometimes discard @code{asm} statements if they determine 
+there is no need for the output variables. Also, the optimizers may move 
+code out of loops if they believe that the code will always return the same 
+result (i.e.@: none of its input values change between calls). Using the 
+@code{volatile} qualifier disables these optimizations. @code{asm} statements 
+that have no output operands and @code{asm goto} statements, 
+are implicitly volatile.
+
+This i386 code demonstrates a case that does not use (or require) the 
+@code{volatile} qualifier. If it is performing assertion checking, this code 
+uses @code{asm} to perform the validation. Otherwise, @code{dwRes} is 
+unreferenced by any code. As a result, the optimizers can discard the 
+@code{asm} statement, which in turn removes the need for the entire 
+@code{DoCheck} routine. By omitting the @code{volatile} qualifier when it 
+isn't needed you allow the optimizers to produce the most efficient code 
+possible.
+
+@example
+void DoCheck(uint32_t dwSomeValue)
+@{
+   uint32_t dwRes;
+
+   // Assumes dwSomeValue is not zero.
+   asm ("bsfl %1,%0"
+     : "=r" (dwRes)
+     : "r" (dwSomeValue)
+     : "cc");
+
+   assert(dwRes > 3);
+@}
+@end example
+
+The next example shows a case where the optimizers can recognize that the input 
+(@code{dwSomeValue}) never changes during the execution of the function and can 
+therefore move the @code{asm} outside the loop to produce more efficient code. 
+Again, using the @code{volatile} qualifier disables this type of optimization.
+
+@example
+void do_print(uint32_t dwSomeValue)
+@{
+   uint32_t dwRes;
+
+   for (uint32_t x=0; x < 5; x++)
+   @{
+      // Assumes dwSomeValue is not zero.
+      asm ("bsfl %1,%0"
+        : "=r" (dwRes)
+        : "r" (dwSomeValue)
+        : "cc");
+
+      printf("%u: %u %u\n", x, dwSomeValue, dwRes);
+   @}
+@}
+@end example
+
+The following example demonstrates a case where you need to use the 
+@code{volatile} qualifier. 
+It uses the x86 @code{rdtsc} instruction, which reads 
+the computer's time-stamp counter. Without the @code{volatile} qualifier, 
+the optimizers might assume that the @code{asm} block will always return the 
+same value and therefore optimize away the second call.
+
+@example
+uint64_t msr;
+
+asm volatile ( "rdtsc\n\t"    // Returns the time in EDX:EAX.
+        "shl $32, %%rdx\n\t"  // Shift the upper bits left.
+        "or %%rdx, %0"        // 'Or' in the lower bits.
+        : "=a" (msr)
+        : 
+        : "rdx");
+
+printf("msr: %llx\n", msr);
+
+// Do other work...
+
+// Reprint the timestamp
+asm volatile ( "rdtsc\n\t"    // Returns the time in EDX:EAX.
+        "shl $32, %%rdx\n\t"  // Shift the upper bits left.
+        "or %%rdx, %0"        // 'Or' in the lower bits.
+        : "=a" (msr)
+        : 
+        : "rdx");
+
+printf("msr: %llx\n", msr);
+@end example
+
+GCC's optimizers do not treat this code like the non-volatile code in the 
+earlier examples. They do not move it out of loops or omit it on the 
+assumption that the result from a previous call is still valid.
+
+Note that the compiler can move even @code{volatile asm} instructions relative
+to other code, including across jump instructions. For example, on many 
+targets there is a system register that controls the rounding mode of 
+floating-point operations. Setting it with a @code{volatile asm} statement,
+as in the following PowerPC example, does not work reliably.
+
+@example
+asm volatile("mtfsf 255, %0" : : "f" (fpenv));
+sum = x + y;
+@end example
+

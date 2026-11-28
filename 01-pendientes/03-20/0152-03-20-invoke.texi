@@ -1,0 +1,308 @@
+@c GCC 16.1.0 | BLOQUE 0152 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 34179-34482 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -mvis4b
+@itemx -mno-vis4b
+With @option{-mvis4b}, GCC generates code that takes advantage of
+version 4.0 of the UltraSPARC Visual Instruction Set extensions, plus
+the additional VIS instructions introduced in the Oracle SPARC
+Architecture 2017.  The default is @option{-mvis4b} when targeting a
+cpu that supports such instructions, such as m8 and later.  Setting
+@option{-mvis4b} also sets @option{-mvis4}, @option{-mvis3b},
+@option{-mvis3}, @option{-mvis2} and @option{-mvis}.
+
+@opindex mcbcond
+@opindex mno-cbcond
+@item -mcbcond
+@itemx -mno-cbcond
+With @option{-mcbcond}, GCC generates code that takes advantage of the UltraSPARC
+Compare-and-Branch-on-Condition instructions.  The default is @option{-mcbcond}
+when targeting a CPU that supports such instructions, such as Niagara-4 and
+later.
+
+@opindex mfmaf
+@opindex mno-fmaf
+@item -mfmaf
+@itemx -mno-fmaf
+With @option{-mfmaf}, GCC generates code that takes advantage of the UltraSPARC
+Fused Multiply-Add Floating-point instructions.  The default is @option{-mfmaf}
+when targeting a CPU that supports such instructions, such as Niagara-3 and
+later.
+
+@opindex mfsmuld
+@opindex mno-fsmuld
+@item -mfsmuld
+@itemx -mno-fsmuld
+With @option{-mfsmuld}, GCC generates code that takes advantage of the
+Floating-point Multiply Single to Double (FsMULd) instruction.  The default is
+@option{-mfsmuld} when targeting a CPU supporting the architecture versions V8
+or V9 with FPU except @option{-mcpu=leon}.
+
+@opindex mpopc
+@opindex mno-popc
+@item -mpopc
+@itemx -mno-popc
+With @option{-mpopc}, GCC generates code that takes advantage of the UltraSPARC
+Population Count instruction.  The default is @option{-mpopc}
+when targeting a CPU that supports such an instruction, such as Niagara-2 and
+later.
+
+@opindex msubxc
+@opindex mno-subxc
+@item -msubxc
+@itemx -mno-subxc
+With @option{-msubxc}, GCC generates code that takes advantage of the UltraSPARC
+Subtract-Extended-with-Carry instruction.  The default is @option{-msubxc}
+when targeting a CPU that supports such an instruction, such as Niagara-7 and
+later.
+
+@opindex mfix-at697f
+@item -mfix-at697f
+Enable the documented workaround for the single erratum of the Atmel AT697F
+processor (which corresponds to erratum #13 of the AT697E processor).
+
+@opindex mfix-ut699
+@item -mfix-ut699
+Enable the documented workarounds for the floating-point errata and the data
+cache nullify errata of the UT699 processor.
+
+@opindex mfix-ut700
+@item -mfix-ut700
+Enable the documented workaround for the back-to-back store errata of
+the UT699E/UT700 processor.
+
+@opindex mfix-gr712rc
+@item -mfix-gr712rc
+Enable the documented workaround for the back-to-back store errata of
+the GR712RC processor.
+@end table
+
+These @samp{-m} options are supported in addition to the above
+on SPARC-V9 processors in 64-bit environments:
+
+@table @gcctabopt
+@opindex m32
+@opindex m64
+@item -m32
+@itemx -m64
+Generate code for a 32-bit or 64-bit environment.
+The 32-bit environment sets int, long and pointer to 32 bits.
+The 64-bit environment sets int to 32 bits and long and pointer
+to 64 bits.
+
+@opindex mptr32
+@opindex mptr64
+@item -mptr32
+@itemx -mptr64
+Use 32- or 64-bit pointers, respectively.  Unlike the @option{-m32} and
+@option{-m64} options, this affects only the pointer size and not the ABI.
+
+@opindex mcmodel=
+@item -mcmodel=@var{which}
+Set the code model to one of
+
+@table @samp
+@item medlow
+The Medium/Low code model: 64-bit addresses, programs
+must be linked in the low 32 bits of memory.  Programs can be statically
+or dynamically linked.
+
+@item medmid
+The Medium/Middle code model: 64-bit addresses, programs
+must be linked in the low 44 bits of memory, the text and data segments must
+be less than 2GB in size and the data segment must be located within 2GB of
+the text segment.
+
+@item medany
+The Medium/Anywhere code model: 64-bit addresses, programs
+may be linked anywhere in memory, the text and data segments must be less
+than 2GB in size and the data segment must be located within 2GB of the
+text segment.
+
+@item embmedany
+The Medium/Anywhere code model for embedded systems:
+64-bit addresses, the text and data segments must be less than 2GB in
+size, both starting anywhere in memory (determined at link time).  The
+global register %g4 points to the base of the data segment.  Programs
+are statically linked and PIC is not supported.
+@end table
+
+@opindex mmemory-model
+@item -mmemory-model=@var{mem-model}
+Set the memory model in force on the processor to one of
+
+@table @samp
+@item default
+The default memory model for the processor and operating system.
+
+@item rmo
+Relaxed Memory Order
+
+@item pso
+Partial Store Order
+
+@item tso
+Total Store Order
+
+@item sc
+Sequential Consistency
+@end table
+
+These memory models are formally defined in Appendix D of the SPARC-V9
+architecture manual, as set in the processor's @code{PSTATE.MM} field.
+
+@opindex mstack-bias
+@opindex mno-stack-bias
+@item -mstack-bias
+@itemx -mno-stack-bias
+With @option{-mstack-bias}, GCC assumes that the stack pointer, and
+frame pointer if present, are offset by @minus{}2047 which must be added back
+when making stack frame references.  This is the default in 64-bit mode.
+Otherwise, assume no such offset is present.
+@end table
+
+@node System V Options
+@subsection Options for System V
+
+These additional options are available on System V Release 4 for
+compatibility with other compilers on those systems:
+
+@table @gcctabopt
+@opindex G
+@item -G
+Create a shared object.
+It is recommended that @option{-symbolic} or @option{-shared} be used instead.
+
+@opindex YP
+@item -YP,@var{dirs}
+Search the directories @var{dirs}, and no others, for libraries
+specified with @option{-l}.
+
+@opindex Ym
+@item -Ym,@var{dir}
+Look in the directory @var{dir} to find the M4 preprocessor.
+The assembler uses this option.
+@c This is supposed to go with a -Yd for predefined M4 macro files, but
+@c the generic assembler that comes with Solaris takes just -Ym.
+@end table
+
+@node V850 Options
+@subsection V850 Options
+@cindex V850 Options
+
+These @samp{-m} options are defined for V850 implementations:
+
+@table @gcctabopt
+@opindex mlong-calls
+@opindex mno-long-calls
+@item -mlong-calls
+@itemx -mno-long-calls
+Treat all calls as being far away (near).  If calls are assumed to be
+far away, the compiler always loads the function's address into a
+register, and calls indirect through the pointer.
+
+@opindex mno-ep
+@opindex mep
+@item -mno-ep
+@itemx -mep
+Do not optimize (do optimize) basic blocks that use the same index
+pointer 4 or more times to copy pointer into the @code{ep} register, and
+use the shorter @code{sld} and @code{sst} instructions.  The @option{-mep}
+option is on by default if you optimize.
+
+@opindex mno-prolog-function
+@opindex mprolog-function
+@item -mno-prolog-function
+@itemx -mprolog-function
+Do not use (do use) external functions to save and restore registers
+at the prologue and epilogue of a function.  The external functions
+are slower, but use less code space if more than one function saves
+the same number of registers.  The @option{-mprolog-function} option
+is on by default if you optimize.
+
+@opindex mspace
+@item -mspace
+Try to make the code as small as possible.  At present, this just turns
+on the @option{-mep} and @option{-mprolog-function} options.
+
+@opindex mtda
+@item -mtda=@var{n}
+Put static or global variables whose size is @var{n} bytes or less into
+the tiny data area that register @code{ep} points to.  The tiny data
+area can hold up to 256 bytes in total (128 bytes for byte references).
+
+@opindex msda
+@item -msda=@var{n}
+Put static or global variables whose size is @var{n} bytes or less into
+the small data area that register @code{gp} points to.  The small data
+area can hold up to 64 kilobytes.
+
+@opindex mzda
+@item -mzda=@var{n}
+Put static or global variables whose size is @var{n} bytes or less into
+the first 32 kilobytes of memory.
+
+@opindex mv850
+@item -mv850
+Specify that the target processor is the V850.
+
+@opindex mv850e3v5
+@item -mv850e3v5
+Specify that the target processor is the V850E3V5.  The preprocessor
+constant @code{__v850e3v5__} is defined if this option is used.
+
+@opindex mv850e2v4
+@item -mv850e2v4
+Specify that the target processor is the V850E3V5.  This is an alias for
+the @option{-mv850e3v5} option.
+
+@opindex mv850e2v3
+@item -mv850e2v3
+Specify that the target processor is the V850E2V3.  The preprocessor
+constant @code{__v850e2v3__} is defined if this option is used.
+
+@opindex mv850e2
+@item -mv850e2
+Specify that the target processor is the V850E2.  The preprocessor
+constant @code{__v850e2__} is defined if this option is used.
+
+@opindex mv850e1
+@item -mv850e1
+Specify that the target processor is the V850E1.  The preprocessor
+constants @code{__v850e1__} and @code{__v850e__} are defined if
+this option is used.
+
+@opindex mv850es
+@item -mv850es
+Specify that the target processor is the V850ES.  This is an alias for
+the @option{-mv850e1} option.
+
+@opindex mv850e
+@item -mv850e
+Specify that the target processor is the V850E@.  The preprocessor
+constant @code{__v850e__} is defined if this option is used.
+
+If neither @option{-mv850} nor @option{-mv850e} nor @option{-mv850e1}
+nor @option{-mv850e2} nor @option{-mv850e2v3} nor @option{-mv850e3v5}
+are defined then a default target processor is chosen and the
+relevant @samp{__v850*__} preprocessor constant is defined.
+
+The preprocessor constants @code{__v850} and @code{__v851__} are always
+defined, regardless of which processor variant is the target.
+
+@opindex mdisable-callt
+@opindex mno-disable-callt
+@item -mdisable-callt
+@itemx -mno-disable-callt
+This option suppresses generation of the @code{CALLT} instruction for the
+v850e, v850e1, v850e2, v850e2v3 and v850e3v5 flavors of the v850
+architecture.
+
+This option is enabled by default when the RH850 ABI is
+in use (see @option{-mrh850-abi}), and disabled by default when the
+GCC ABI is in use.  If @code{CALLT} instructions are being generated
+then the C preprocessor symbol @code{__V850_CALLT__} is defined.
+
+@opindex mrelax
+@opindex mno-relax

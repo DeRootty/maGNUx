@@ -1,0 +1,483 @@
+@c GCC 16.1.0 | BLOQUE 0270 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 14912-15390 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Built-in Functions
+@chapter Built-in Functions Provided by GCC
+@cindex Built-in Functions
+
+GCC provides a very large number of implicitly-declared built-in
+functions that are typically inlined by the compiler.  Some of these
+builtins directly correspond to standard library routines.  Some are
+for internal use in the processing of exceptions or variable-length
+argument lists and are not documented here because they may change
+from time to time; we do not recommend general use of these functions.
+
+The remaining functions are provided either for optimization purposes, or
+to expose low-level functionality needed to implement
+features provided by library functions or similar ``glue'' between GCC
+and other programming languages or libraries.  Others are
+target-specific, providing direct access to instructions that have no
+direct C equivalents without the need to write assembly language.  There
+are also builtins to support various kinds of runtime error checking.
+
+Most builtins have names prefixed with @samp{__builtin_}, although not
+all of them use this convention.  Except as otherwise documented, all
+built-in functions are available from any of the C family languages
+supported by GCC.
+
+With the exception of built-ins that have library equivalents such as
+the standard C library functions discussed below in @ref{Library Builtins},
+or that expand to
+library calls, GCC built-in functions are always expanded inline and
+thus do not have corresponding entry points and their address cannot
+be obtained.  Attempting to use them in an expression other than
+a function call results in a compile-time error.
+
+@menu
+* Library Builtins::	Built-in equivalents for C library functions.
+* Numeric Builtins::	Additional builtins for numeric and bit operations.
+* Stack Allocation::	Built-in alloca variants.
+* Nonlocal Gotos::      Built-ins for nonlocal gotos.
+* Constructing Calls::  Built-ins for dispatching a call to another function.
+* Return Address::      Getting the return or frame address of a function.
+* Stack Scrubbing::     Stack scrubbing internal interfaces.
+* Vector Extensions::   Using vector instructions through built-in functions.
+* Atomic Memory Access:: __atomic and __sync builtins.
+* Object Size Checking:: Built-in functions for limited buffer overflow
+                        checking.
+* New/Delete Builtins:: Built-in functions for C++ allocations and deallocations.
+* Other Builtins::      Other built-in functions.
+* Target Builtins::     Built-in functions specific to particular targets.
+@end menu
+
+@node Library Builtins
+@section Builtins for C Library Functions
+@cindex built-in library functions
+@cindex library function builtins
+@cindex C library function builtins
+
+@findex __builtin_iseqsig
+@findex __builtin_isfinite
+@findex __builtin_isnormal
+@findex __builtin_isgreater
+@findex __builtin_isgreaterequal
+@findex __builtin_isunordered
+@findex __builtin_speculation_safe_value
+@findex _Exit
+@findex _exit
+@findex abort
+@findex abs
+@findex acos
+@findex acosf
+@findex acosh
+@findex acoshf
+@findex acoshl
+@findex acosl
+@findex acospi
+@findex acospif
+@findex acospil
+@findex alloca
+@findex asin
+@findex asinf
+@findex asinh
+@findex asinhf
+@findex asinhl
+@findex asinl
+@findex asinpi
+@findex asinpif
+@findex asinpil
+@findex atan
+@findex atan2
+@findex atan2f
+@findex atan2l
+@findex atan2pi
+@findex atan2pif
+@findex atan2pil
+@findex atanf
+@findex atanh
+@findex atanhf
+@findex atanhl
+@findex atanl
+@findex atanpi
+@findex atanpif
+@findex atanpil
+@findex bcmp
+@findex bzero
+@findex cabs
+@findex cabsf
+@findex cabsl
+@findex cacos
+@findex cacosf
+@findex cacosh
+@findex cacoshf
+@findex cacoshl
+@findex cacosl
+@findex calloc
+@findex carg
+@findex cargf
+@findex cargl
+@findex casin
+@findex casinf
+@findex casinh
+@findex casinhf
+@findex casinhl
+@findex casinl
+@findex catan
+@findex catanf
+@findex catanh
+@findex catanhf
+@findex catanhl
+@findex catanl
+@findex cbrt
+@findex cbrtf
+@findex cbrtl
+@findex ccos
+@findex ccosf
+@findex ccosh
+@findex ccoshf
+@findex ccoshl
+@findex ccosl
+@findex ceil
+@findex ceilf
+@findex ceill
+@findex cexp
+@findex cexpf
+@findex cexpl
+@findex cimag
+@findex cimagf
+@findex cimagl
+@findex clog
+@findex clogf
+@findex clogl
+@findex clog10
+@findex clog10f
+@findex clog10l
+@findex conj
+@findex conjf
+@findex conjl
+@findex copysign
+@findex copysignf
+@findex copysignl
+@findex cos
+@findex cosf
+@findex cosh
+@findex coshf
+@findex coshl
+@findex cosl
+@findex cospi
+@findex cospif
+@findex cospil
+@findex cpow
+@findex cpowf
+@findex cpowl
+@findex cproj
+@findex cprojf
+@findex cprojl
+@findex creal
+@findex crealf
+@findex creall
+@findex csin
+@findex csinf
+@findex csinh
+@findex csinhf
+@findex csinhl
+@findex csinl
+@findex csqrt
+@findex csqrtf
+@findex csqrtl
+@findex ctan
+@findex ctanf
+@findex ctanh
+@findex ctanhf
+@findex ctanhl
+@findex ctanl
+@findex dcgettext
+@findex dgettext
+@findex drem
+@findex dremf
+@findex dreml
+@findex erf
+@findex erfc
+@findex erfcf
+@findex erfcl
+@findex erff
+@findex erfl
+@findex exit
+@findex exp
+@findex exp10
+@findex exp10f
+@findex exp10l
+@findex exp2
+@findex exp2f
+@findex exp2l
+@findex expf
+@findex expl
+@findex expm1
+@findex expm1f
+@findex expm1l
+@findex fabs
+@findex fabsf
+@findex fabsl
+@findex fdim
+@findex fdimf
+@findex fdiml
+@findex ffs
+@findex floor
+@findex floorf
+@findex floorl
+@findex fma
+@findex fmaf
+@findex fmal
+@findex fmax
+@findex fmaxf
+@findex fmaxl
+@findex fmin
+@findex fminf
+@findex fminl
+@findex fmod
+@findex fmodf
+@findex fmodl
+@findex fprintf
+@findex fprintf_unlocked
+@findex fputs
+@findex fputs_unlocked
+@findex free
+@findex frexp
+@findex frexpf
+@findex frexpl
+@findex fscanf
+@findex gamma
+@findex gammaf
+@findex gammal
+@findex gamma_r
+@findex gammaf_r
+@findex gammal_r
+@findex gettext
+@findex hypot
+@findex hypotf
+@findex hypotl
+@findex ilogb
+@findex ilogbf
+@findex ilogbl
+@findex imaxabs
+@findex index
+@findex isalnum
+@findex isalpha
+@findex isascii
+@findex isblank
+@findex iscntrl
+@findex isdigit
+@findex isgraph
+@findex islower
+@findex isprint
+@findex ispunct
+@findex isspace
+@findex isupper
+@findex iswalnum
+@findex iswalpha
+@findex iswblank
+@findex iswcntrl
+@findex iswdigit
+@findex iswgraph
+@findex iswlower
+@findex iswprint
+@findex iswpunct
+@findex iswspace
+@findex iswupper
+@findex iswxdigit
+@findex isxdigit
+@findex j0
+@findex j0f
+@findex j0l
+@findex j1
+@findex j1f
+@findex j1l
+@findex jn
+@findex jnf
+@findex jnl
+@findex labs
+@findex ldexp
+@findex ldexpf
+@findex ldexpl
+@findex lgamma
+@findex lgammaf
+@findex lgammal
+@findex lgamma_r
+@findex lgammaf_r
+@findex lgammal_r
+@findex llabs
+@findex llrint
+@findex llrintf
+@findex llrintl
+@findex llround
+@findex llroundf
+@findex llroundl
+@findex log
+@findex log10
+@findex log10f
+@findex log10l
+@findex log1p
+@findex log1pf
+@findex log1pl
+@findex log2
+@findex log2f
+@findex log2l
+@findex logb
+@findex logbf
+@findex logbl
+@findex logf
+@findex logl
+@findex lrint
+@findex lrintf
+@findex lrintl
+@findex lround
+@findex lroundf
+@findex lroundl
+@findex malloc
+@findex memchr
+@findex memcmp
+@findex memcpy
+@findex mempcpy
+@findex memset
+@findex modf
+@findex modff
+@findex modfl
+@findex nearbyint
+@findex nearbyintf
+@findex nearbyintl
+@findex nextafter
+@findex nextafterf
+@findex nextafterl
+@findex nexttoward
+@findex nexttowardf
+@findex nexttowardl
+@findex pow
+@findex pow10
+@findex pow10f
+@findex pow10l
+@findex powf
+@findex powl
+@findex printf
+@findex printf_unlocked
+@findex putchar
+@findex puts
+@findex realloc
+@findex remainder
+@findex remainderf
+@findex remainderl
+@findex remquo
+@findex remquof
+@findex remquol
+@findex rindex
+@findex rint
+@findex rintf
+@findex rintl
+@findex round
+@findex roundf
+@findex roundl
+@findex scalb
+@findex scalbf
+@findex scalbl
+@findex scalbln
+@findex scalblnf
+@findex scalblnf
+@findex scalbn
+@findex scalbnf
+@findex scanfnl
+@findex signbit
+@findex signbitf
+@findex signbitl
+@findex signbitd32
+@findex signbitd64
+@findex signbitd128
+@findex significand
+@findex significandf
+@findex significandl
+@findex sin
+@findex sincos
+@findex sincosf
+@findex sincosl
+@findex sinf
+@findex sinh
+@findex sinhf
+@findex sinhl
+@findex sinl
+@findex sinpi
+@findex sinpif
+@findex sinpil
+@findex snprintf
+@findex sprintf
+@findex sqrt
+@findex sqrtf
+@findex sqrtl
+@findex sscanf
+@findex stpcpy
+@findex stpncpy
+@findex strcasecmp
+@findex strcat
+@findex strchr
+@findex strcmp
+@findex strcpy
+@findex strcspn
+@findex strdup
+@findex strfmon
+@findex strftime
+@findex strlen
+@findex strncasecmp
+@findex strncat
+@findex strncmp
+@findex strncpy
+@findex strndup
+@findex strnlen
+@findex strpbrk
+@findex strrchr
+@findex strspn
+@findex strstr
+@findex tan
+@findex tanf
+@findex tanh
+@findex tanhf
+@findex tanhl
+@findex tanl
+@findex tanpi
+@findex tanpif
+@findex tanpil
+@findex tgamma
+@findex tgammaf
+@findex tgammal
+@findex toascii
+@findex tolower
+@findex toupper
+@findex towlower
+@findex towupper
+@findex trunc
+@findex truncf
+@findex truncl
+@findex vfprintf
+@findex vfscanf
+@findex vprintf
+@findex vscanf
+@findex vsnprintf
+@findex vsprintf
+@findex vsscanf
+@findex y0
+@findex y0f
+@findex y0l
+@findex y1
+@findex y1f
+@findex y1l
+@findex yn
+@findex ynf
+@findex ynl
+
+@opindex fno-builtin
+GCC includes built-in versions of many of the functions in the standard
+C library.  These functions come in two forms: one whose names start with
+the @code{__builtin_} prefix, and the other without.  Both forms have the
+same type (including prototype), the same address (when their address is
+taken), and the same meaning as the C library functions even if you specify
+the @option{-fno-builtin} option @pxref{C Dialect Options}).  Many of these
+functions are only optimized in certain cases; if they are not optimized in
+a particular case, a call to the library function is emitted.
+

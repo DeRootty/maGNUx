@@ -1,0 +1,366 @@
+@c GCC 16.1.0 | BLOQUE 0212 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 9261-9622 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item ptwrite
+@itemx no-ptwrite
+Enable/disable the generation of the PTWRITE instructions.
+
+@atindex @code{target("rdpid")}, x86
+@item rdpid
+@itemx no-rdpid
+Enable/disable the generation of the RDPID instructions.
+
+@atindex @code{target("rdrnd")}, x86
+@item rdrnd
+@itemx no-rdrnd
+Enable/disable the generation of the RDRND instructions.
+
+@atindex @code{target("rdseed")}, x86
+@item rdseed
+@itemx no-rdseed
+Enable/disable the generation of the RDSEED instructions.
+
+@atindex @code{target("rtm")}, x86
+@item rtm
+@itemx no-rtm
+Enable/disable the generation of the RTM instructions.
+
+@atindex @code{target("sahf")}, x86
+@item sahf
+@itemx no-sahf
+Enable/disable the generation of the SAHF instructions.
+
+@atindex @code{target("sgx")}, x86
+@item sgx
+@itemx no-sgx
+Enable/disable the generation of the SGX instructions.
+
+@atindex @code{target("sha")}, x86
+@item sha
+@itemx no-sha
+Enable/disable the generation of the SHA instructions.
+
+@atindex @code{target("shstk")}, x86
+@item shstk
+@itemx no-shstk
+Enable/disable the shadow stack built-in functions from CET.
+
+@atindex @code{target("sse")}, x86
+@item sse
+@itemx no-sse
+Enable/disable the generation of the SSE instructions.
+
+@atindex @code{target("sse2")}, x86
+@item sse2
+@itemx no-sse2
+Enable/disable the generation of the SSE2 instructions.
+
+@atindex @code{target("sse3")}, x86
+@item sse3
+@itemx no-sse3
+Enable/disable the generation of the SSE3 instructions.
+
+@atindex @code{target("sse4")}, x86
+@item sse4
+@itemx no-sse4
+Enable/disable the generation of the SSE4 instructions (both SSE4.1
+and SSE4.2).
+
+@atindex @code{target("sse4.1")}, x86
+@item sse4.1
+@itemx no-sse4.1
+Enable/disable the generation of the SSE4.1 instructions.
+
+@atindex @code{target("sse4.2")}, x86
+@item sse4.2
+@itemx no-sse4.2
+Enable/disable the generation of the SSE4.2 instructions.
+
+@atindex @code{target("sse4a")}, x86
+@item sse4a
+@itemx no-sse4a
+Enable/disable the generation of the SSE4A instructions.
+
+@atindex @code{target("ssse3")}, x86
+@item ssse3
+@itemx no-ssse3
+Enable/disable the generation of the SSSE3 instructions.
+
+@atindex @code{target("tbm")}, x86
+@item tbm
+@itemx no-tbm
+Enable/disable the generation of the TBM instructions.
+
+@atindex @code{target("vaes")}, x86
+@item vaes
+@itemx no-vaes
+Enable/disable the generation of the VAES instructions.
+
+@atindex @code{target("vpclmulqdq")}, x86
+@item vpclmulqdq
+@itemx no-vpclmulqdq
+Enable/disable the generation of the VPCLMULQDQ instructions.
+
+@atindex @code{target("waitpkg")}, x86
+@item waitpkg
+@itemx no-waitpkg
+Enable/disable the generation of the WAITPKG instructions.
+
+@atindex @code{target("wbnoinvd")}, x86
+@item wbnoinvd
+@itemx no-wbnoinvd
+Enable/disable the generation of the WBNOINVD instructions.
+
+@atindex @code{target("xop")}, x86
+@item xop
+@itemx no-xop
+Enable/disable the generation of the XOP instructions.
+
+@atindex @code{target("xsave")}, x86
+@item xsave
+@itemx no-xsave
+Enable/disable the generation of the XSAVE instructions.
+
+@atindex @code{target("xsavec")}, x86
+@item xsavec
+@itemx no-xsavec
+Enable/disable the generation of the XSAVEC instructions.
+
+@atindex @code{target("xsaveopt")}, x86
+@item xsaveopt
+@itemx no-xsaveopt
+Enable/disable the generation of the XSAVEOPT instructions.
+
+@atindex @code{target("xsaves")}, x86
+@item xsaves
+@itemx no-xsaves
+Enable/disable the generation of the XSAVES instructions.
+
+@atindex @code{target("amx-tile")}, x86
+@item amx-tile
+@itemx no-amx-tile
+Enable/disable the generation of the AMX-TILE instructions.
+
+@atindex @code{target("amx-int8")}, x86
+@item amx-int8
+@itemx no-amx-int8
+Enable/disable the generation of the AMX-INT8 instructions.
+
+@atindex @code{target("amx-bf16")}, x86
+@item amx-bf16
+@itemx no-amx-bf16
+Enable/disable the generation of the AMX-BF16 instructions.
+
+@atindex @code{target("uintr")}, x86
+@item uintr
+@itemx no-uintr
+Enable/disable the generation of the UINTR instructions.
+
+@atindex @code{target("hreset")}, x86
+@item hreset
+@itemx no-hreset
+Enable/disable the generation of the HRESET instruction.
+
+@atindex @code{target("kl")}, x86
+@item kl
+@itemx no-kl
+Enable/disable the generation of the KEYLOCKER instructions.
+
+@atindex @code{target("widekl")}, x86
+@item widekl
+@itemx no-widekl
+Enable/disable the generation of the WIDEKL instructions.
+
+@atindex @code{target("avxvnni")}, x86
+@item avxvnni
+@itemx no-avxvnni
+Enable/disable the generation of the AVXVNNI instructions.
+
+@atindex @code{target("avxifma")}, x86
+@item avxifma
+@itemx no-avxifma
+Enable/disable the generation of the AVXIFMA instructions.
+
+@atindex @code{target("avxvnniint8")}, x86
+@item avxvnniint8
+@itemx no-avxvnniint8
+Enable/disable the generation of the AVXVNNIINT8 instructions.
+
+@atindex @code{target("avxneconvert")}, x86
+@item avxneconvert
+@itemx no-avxneconvert
+Enable/disable the generation of the AVXNECONVERT instructions.
+
+@atindex @code{target("cmpccxadd")}, x86
+@item cmpccxadd
+@itemx no-cmpccxadd
+Enable/disable the generation of the CMPccXADD instructions.
+
+@atindex @code{target("amx-fp16")}, x86
+@item amx-fp16
+@itemx no-amx-fp16
+Enable/disable the generation of the AMX-FP16 instructions.
+
+@atindex @code{target("prefetchi")}, x86
+@item prefetchi
+@itemx no-prefetchi
+Enable/disable the generation of the PREFETCHI instructions.
+
+@atindex @code{target("raoint")}, x86
+@item raoint
+@itemx no-raoint
+Enable/disable the generation of the RAOINT instructions.
+
+@atindex @code{target("amx-complex")}, x86
+@item amx-complex
+@itemx no-amx-complex
+Enable/disable the generation of the AMX-COMPLEX instructions.
+
+@atindex @code{target("avxvnniint16")}, x86
+@item avxvnniint16
+@itemx no-avxvnniint16
+Enable/disable the generation of the AVXVNNIINT16 instructions.
+
+@atindex @code{target("sm3")}, x86
+@item sm3
+@itemx no-sm3
+Enable/disable the generation of the SM3 instructions.
+
+@atindex @code{target("sha512")}, x86
+@item sha512
+@itemx no-sha512
+Enable/disable the generation of the SHA512 instructions.
+
+@atindex @code{target("sm4")}, x86
+@item sm4
+@itemx no-sm4
+Enable/disable the generation of the SM4 instructions.
+
+@atindex @code{target("usermsr")}, x86
+@item usermsr
+@itemx no-usermsr
+Enable/disable the generation of the USER_MSR instructions.
+
+@atindex @code{target("apxf")}, x86
+@item apxf
+@itemx no-apxf
+Enable/disable the generation of the APX features, including
+EGPR, PUSH2POP2, NDD and PPX.
+
+@atindex @code{target("avx10.1")}, x86
+@item avx10.1
+@itemx no-avx10.1
+Enable/Disable the generation of the AVX10.1 instructions.
+
+@atindex @code{target("avx10.2")}, x86
+@item avx10.2
+@itemx no-avx10.2
+Enable/Disable the generation of the AVX10.2 instructions.
+
+@atindex @code{target("amx-avx512")}, x86
+@item amx-avx512
+@itemx no-amx-avx512
+Enable/disable the generation of the AMX-AVX512 instructions.
+
+@atindex @code{target("amx-tf32")}, x86
+@item amx-tf32
+@itemx no-amx-tf32
+Enable/disable the generation of the AMX-TF32 instructions.
+
+@atindex @code{target("amx-fp8")}, x86
+@item amx-fp8
+@itemx no-amx-fp8
+Enable/disable the generation of the AMX-FP8 instructions.
+
+@atindex @code{target("movrs")}, x86
+@item movrs
+@itemx no-movrs
+Enable/disable the generation of the MOVRS instructions.
+
+@atindex @code{target("amx-movrs")}, x86
+@item amx-movrs
+@itemx no-amx-movrs
+Enable/disable the generation of the AMX-MOVRS instructions.
+
+@atindex @code{target("cld")}, x86
+@item cld
+@itemx no-cld
+Enable/disable the generation of the CLD before string moves.
+
+@atindex @code{target("fancy-math-387")}, x86
+@item fancy-math-387
+@itemx no-fancy-math-387
+Enable/disable the generation of the @code{sin}, @code{cos}, and
+@code{sqrt} instructions on the 387 floating-point unit.
+
+@atindex @code{target("ieee-fp")}, x86
+@item ieee-fp
+@itemx no-ieee-fp
+Enable/disable the generation of floating point that depends on IEEE arithmetic.
+
+@atindex @code{target("inline-all-stringops")}, x86
+@item inline-all-stringops
+@itemx no-inline-all-stringops
+Enable/disable inlining of string operations.
+
+@atindex @code{target("inline-stringops-dynamically")}, x86
+@item inline-stringops-dynamically
+@itemx no-inline-stringops-dynamically
+Enable/disable the generation of the inline code to do small string
+operations and calling the library routines for large operations.
+
+@atindex @code{target("align-stringops")}, x86
+@item align-stringops
+@itemx no-align-stringops
+Do/do not align destination of inlined string operations.
+
+@atindex @code{target("recip")}, x86
+@item recip
+@itemx no-recip
+Enable/disable the generation of RCPSS, RCPPS, RSQRTSS and RSQRTPS
+instructions followed an additional Newton-Raphson step instead of
+doing a floating-point division.
+
+@atindex @code{target("80387")}, x86
+@item 80387
+@itemx no-80387
+Generate code containing 80387 instructions for floating point.
+
+@atindex @code{target("general-regs-only")}, x86
+@item general-regs-only
+Generate code which uses only the general registers.
+
+@atindex @code{target("arch=@var{ARCH}")}, x86
+@item arch=@var{ARCH}
+Specify the architecture to generate code for in compiling the function.
+
+@atindex @code{target("tune=@var{TUNE}")}, x86
+@item tune=@var{TUNE}
+Specify the architecture to tune for in compiling the function.
+
+@atindex @code{target("fpmath=@var{FPMATH}")}, x86
+@item fpmath=@var{FPMATH}
+Specify which floating-point unit to use.  You must specify the
+@code{target("fpmath=sse,387")} option as
+@code{target("fpmath=sse+387")} because the comma would separate
+different options.
+
+@atindex @code{prefer-vector-width}, x86
+@item prefer-vector-width=@var{OPT}
+On x86 targets, the @code{prefer-vector-width} attribute informs the
+compiler to use @var{OPT}-bit vector width in instructions
+instead of the default on the selected platform.
+
+Valid @var{OPT} values are:
+
+@table @samp
+@item none
+No extra limitations applied to GCC other than defined by the selected platform.
+
+@item 128
+Prefer 128-bit vector width for instructions.
+
+@item 256
+Prefer 256-bit vector width for instructions.
+

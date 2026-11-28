@@ -1,0 +1,294 @@
+@c GCC 16.1.0 | BLOQUE 0115 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 25736-26025 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -mconstant-cfstrings
+@itemx -fconstant-cfstrings
+When the NeXT runtime is being used (the default on these systems), override
+any @option{-fconstant-string-class} setting and cause @code{@@"@dots{}"}
+literals to be laid out as constant CoreFoundation strings.
+
+@option{-fconstant-cfstrings} is an alias for @option{-mconstant-cfstrings}.
+
+@opindex mdynamic-no-pic
+@opindex mno-dynamic-no-pic
+@item -mdynamic-no-pic
+Generate code suitable for executables (not shared libraries).  This
+option is incompatible with @option{-fpic}, @option{-fPIC}, @option{-fpie},
+or @option{-fPIE}.
+
+@opindex mfix-and-continue
+@opindex mno-fix-and-continue
+@opindex ffix-and-continue
+@opindex findirect-data
+@item -mfix-and-continue
+@itemx -ffix-and-continue
+@itemx -findirect-data
+Generate code suitable for fast turnaround development, such as to
+allow GDB to dynamically load @file{.o} files into already-running
+programs.  @option{-findirect-data} and @option{-ffix-and-continue}
+are provided for backwards compatibility.
+
+@opindex mkernel
+@opindex mno-kernel
+@item -mkernel
+Enable kernel development mode.  The @option{-mkernel} option sets
+@option{-static}, @option{-fno-common}, @option{-fno-use-cxa-atexit},
+@option{-fno-exceptions}, @option{-fno-non-call-exceptions},
+@option{-fapple-kext}, @option{-fno-weak} and @option{-fno-rtti} where
+applicable.  This mode also sets @option{-mno-altivec},
+@option{-msoft-float}, @option{-fno-builtin} and
+@option{-mlong-branch} for PowerPC targets.
+
+@opindex mmacosx-version-min
+@opindex asm_macosx_version_min
+@item -mmacosx-version-min=@var{version}
+@itemx -asm_macosx_version_min=@var{version}
+The @option{-mmacosx-version-min} option specifies
+the earliest version of MacOS X that this executable will run on is
+@var{version}.  Typical values supported for @var{version} include @code{12},
+@code{10.12}, and @code{10.5.8}.
+
+If the compiler was built to use the system's headers by default,
+then the default for this option is the system version on which the
+compiler is running, otherwise the default is to make choices that
+are compatible with as many systems and code bases as possible.
+
+@option{-asm_macosx_version_min=@var{version}} is similar, but the GCC
+driver passes its @var{version} information only to the assembler.
+
+@opindex mone-byte-bool
+@item -mone-byte-bool
+Override the defaults for @code{bool} so that @code{sizeof(bool)==1}.
+By default @code{sizeof(bool)} is @code{4} when compiling for
+Darwin/PowerPC and @code{1} when compiling for Darwin/x86, so this
+option has no effect on x86.
+
+@strong{Warning:} The @option{-mone-byte-bool} switch causes GCC
+to generate code that is not binary compatible with code generated
+without that switch.  Using this switch may require recompiling all
+other modules in a program, including system libraries.  Use this
+switch to conform to a non-default data model.
+
+@opindex msymbol-stubs
+@opindex mno-symbol-stubs
+@item -msymbol-stubs
+@itemx -mno-symbol-stubs
+Force generation of external symbol indirection stubs for PIC references.
+By default, this option is enabled automatically if the target linker
+version (@option{-mtarget-linker}) is old enough to require them.
+
+@opindex mtarget-linker
+@item -mtarget-linker=@var{version}
+@item -mtarget-linker @var{version}
+Specify the target @command{ld64} version, overriding any version specified
+in the GCC configuration.  Newer linker versions support improved code
+generation in some cases, for example for PIC code.
+
+@opindex ObjC
+@item -ObjC
+Equivalent to @samp{-x objective-c}; specifies that the input is
+is Objective-C source code.
+
+@opindex ObjC++
+@item -ObjC++
+Equivalent to @samp{-x objective-c++}; specifies that the input is
+is Objective-C++ source code.
+
+@opindex Wnonportable-cfstrings
+@opindex Wno-nonportable-cfstrings
+@item -Wnonportable-cfstrings
+@itemx -Wno-nonportable-cfstrings
+Warn if constant CoreFoundation string objects contain non-portable
+characters.  This warning is enabled by default.
+
+@opindex all_load
+@item -all_load
+Loads all members of static archive libraries.
+See man ld(1) for more information.
+
+@opindex arch_errors_fatal
+@item -arch_errors_fatal
+Cause the errors having to do with files that have the wrong architecture
+to be fatal.
+
+@opindex bind_at_load
+@item -bind_at_load
+Causes the output file to be marked such that the dynamic linker will
+bind all undefined references when the file is loaded or launched.
+
+@opindex bundle
+@item -bundle
+Produce a Mach-o bundle format file.
+See man ld(1) for more information.
+
+@opindex bundle_loader
+@item -bundle_loader @var{executable}
+This option specifies the @var{executable} that will load the build
+output file being linked.  See man ld(1) for more information.
+
+@opindex dynamiclib
+@item -dynamiclib
+When passed this option, GCC produces a dynamic library instead of
+an executable when linking, using the Darwin @file{libtool} command.
+
+@opindex force_cpusubtype_ALL
+@item -force_cpusubtype_ALL
+This causes GCC's output file to have the @samp{ALL} subtype, instead of
+one controlled by the @option{-mcpu} or @option{-march} option.
+
+@opindex nodefaultrpaths
+@item -nodefaultrpaths
+Do not add default run paths for the compiler library directories to
+executables, modules or dynamic libraries. On macOS 10.5 and later,
+the embedded runpath is added by default unless the user adds
+@option{-nodefaultrpaths} to the link line. Run paths are needed
+(and therefore enforced) to build on macOS version 10.11 or later.
+
+@opindex nodefaultexport
+@item -nodefaultexport
+Do not add default symbol exports to modules or dynamic libraries.
+
+@opindex allowable_client
+@opindex client_name
+@opindex compatibility_version
+@opindex current_version
+@opindex dead_strip
+@opindex dylib_file
+@opindex dylinker
+@opindex dylinker_install_name
+@opindex dynamic
+@opindex exported_symbols_list
+@opindex filelist
+@opindex flat_namespace
+@opindex force_flat_namespace
+@opindex framework
+@opindex headerpad_max_install_names
+@opindex image_base
+@opindex init
+@opindex install_name
+@opindex keep_private_externs
+@opindex pagezero_size
+@opindex read_only_relocs
+@opindex sectalign
+@opindex sectcreate
+@opindex seg_addr_table
+@opindex seg1addr
+@opindex segaddr
+@opindex segprot
+@opindex segs_read_only_addr
+@opindex segs_read_write_addr
+@opindex sub_library
+@opindex sub_umbrella
+@opindex twolevel_namespace
+@opindex twolevel_namespace_hints
+@opindex umbrella
+@opindex undefined
+@opindex unexported_symbols_list
+@opindex weak_framework
+@opindex weak_reference_mismatches
+@opindex whatsloaded
+@opindex whyload
+@item -allowable_client  @var{client_name}
+@itemx -client_name
+@itemx -compatibility_version
+@itemx -current_version
+@itemx -dead_strip
+@itemx -dylib_file
+@itemx -dylinker
+@itemx -dylinker_install_name
+@itemx -dynamic
+@itemx -exported_symbols_list
+@itemx -filelist
+@need 800
+@itemx -flat_namespace
+@itemx -force_flat_namespace
+@itemx -framework
+@itemx -headerpad_max_install_names
+@itemx -image_base
+@itemx -init @var{symbol-name}
+@itemx -install_name
+@itemx -keep_private_externs
+@need 800
+@itemx -pagezero_size
+@itemx -preload
+@need 800
+@itemx -read_only_relocs
+@itemx -sectalign
+@itemx -sectcreate
+@itemx -seg_addr_table
+@itemx -seg1addr
+@itemx -segaddr
+@need 800
+@itemx -segprot
+@itemx -segs_read_only_addr
+@itemx -segs_read_write_addr
+@itemx -sub_library
+@need 800
+@itemx -sub_umbrella
+@itemx -twolevel_namespace
+@itemx -twolevel_namespace_hints
+@itemx -umbrella
+@itemx -undefined
+@itemx -unexported_symbols_list
+@itemx -weak_framework
+@itemx -weak_reference_mismatches
+@itemx -whatsloaded
+@itemx -whyload
+These options are passed to the Darwin linker.  The Darwin linker man page
+describes them in detail.
+@end table
+
+@node DEC Alpha Options
+@subsection DEC Alpha Options
+
+These @samp{-m} options are defined for the DEC Alpha implementations:
+
+@table @gcctabopt
+@opindex mno-soft-float
+@opindex msoft-float
+@item -mno-soft-float
+@itemx -msoft-float
+Use (do not use) the hardware floating-point instructions for
+floating-point operations.  When @option{-msoft-float} is specified,
+functions in @file{libgcc.a} are used to perform floating-point
+operations.  Unless they are replaced by routines that emulate the
+floating-point operations, or compiled in such a way as to call such
+emulations routines, these routines issue floating-point
+operations.   If you are compiling for an Alpha without floating-point
+operations, you must ensure that the library is built so as not to call
+them.
+
+Note that Alpha implementations without floating-point operations are
+required to have floating-point registers.
+
+@opindex mfp-regs
+@opindex mno-fp-regs
+@item -mfp-regs
+@itemx -mno-fp-regs
+Generate code that uses (does not use) the floating-point register set.
+@option{-mno-fp-regs} implies @option{-msoft-float}.  If the floating-point
+register set is not used, floating-point operands are passed in integer
+registers as if they were integers and floating-point results are passed
+in @code{$0} instead of @code{$f0}.  This is a non-standard calling sequence,
+so any function with a floating-point argument or return value called by code
+compiled with @option{-mno-fp-regs} must also be compiled with that
+option.
+
+A typical use of this option is building a kernel that does not use,
+and hence need not save and restore, any floating-point registers.
+
+@opindex mieee
+@item -mieee
+The Alpha architecture implements floating-point hardware optimized for
+maximum performance.  It is mostly compliant with the IEEE floating-point
+standard.  However, for full compliance, software assistance is
+required.  This option generates code fully IEEE-compliant code
+@emph{except} that the @var{inexact-flag} is not maintained (see below).
+If this option is turned on, the preprocessor macro @code{_IEEE_FP} is
+defined during compilation.  The resulting code is less efficient but is
+able to correctly support denormalized numbers and exceptional IEEE
+values such as not-a-number and plus/minus infinity.  Other Alpha
+compilers call this option @option{-ieee_with_no_inexact}.
+
+@opindex mieee-with-inexact

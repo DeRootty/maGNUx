@@ -1,0 +1,223 @@
+@c GCC 16.1.0 | BLOQUE 0023 | 03-09
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 7073-7291 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -Wpsabi @r{(C, Objective-C, C++ and Objective-C++ only)}
+
+@option{-Wpsabi} enables warnings about processor-specific ABI
+changes, such as changes in alignment requirements or how function
+arguments are passed.  On several targets, including AArch64, ARM,
+x86, MIPS, RS6000/PowerPC, and S/390, these details have changed
+between different versions of GCC and/or different versions of the C
+or C++ language standards in ways that affect binary compatibility of
+compiled code.  With @option{-Wpsabi}, GCC can detect potentially
+incompatible usages and warn you about them.
+
+@option{-Wpsabi} is enabled by default, and is also implied by
+@option{-Wabi}.
+
+@opindex Wchanges-meaning
+@opindex Wno-changes-meaning
+@item -Wno-changes-meaning @r{(C++ and Objective-C++ only)}
+C++ requires that unqualified uses of a name within a class have the
+same meaning in the complete scope of the class, so declaring the name
+after using it is ill-formed:
+@smallexample
+struct A;
+struct B1 @{ A a; typedef A A; @}; // warning, 'A' changes meaning
+struct B2 @{ A a; struct A @{ @}; @}; // error, 'A' changes meaning
+@end smallexample
+By default, the B1 case is only a warning because the two declarations
+have the same type, while the B2 case is an error.  Both diagnostics
+can be disabled with @option{-Wno-changes-meaning}.  Alternately, the
+error case can be reduced to a warning with
+@option{-Wno-error=changes-meaning} or @option{-fpermissive}.
+
+Both diagnostics are also suppressed by @option{-fms-extensions}.
+
+@opindex Wchar-subscripts
+@opindex Wno-char-subscripts
+@item -Wchar-subscripts
+Warn if an array subscript has type @code{char}.  This is a common cause
+of error, as programmers often forget that this type is signed on some
+machines.  @xref{Characters implementation}, and
+@ref{@code{char} type signedness}.
+
+This warning is enabled by @option{-Wall}.  When enabled, the warning
+is given regardless of whether @code{char} is unsigned by default on
+the target, and it is also not affected by the @option{-fsigned-char}
+or @option{-funsigned-char} options.
+
+@opindex Wno-coverage-mismatch
+@opindex Wcoverage-mismatch
+@item -Wno-coverage-mismatch
+Warn if feedback profiles do not match when using the
+@option{-fprofile-use} option.
+If a source file is changed between compiling with @option{-fprofile-generate}
+and with @option{-fprofile-use}, the files with the profile feedback can fail
+to match the source file and GCC cannot use the profile feedback
+information.  By default, this warning is enabled and is treated as an
+error.  @option{-Wno-coverage-mismatch} can be used to disable the
+warning or @option{-Wno-error=coverage-mismatch} can be used to
+disable the error.  Disabling the error for this warning can result in
+poorly optimized code and is useful only in the
+case of very minor changes such as bug fixes to an existing code-base.
+Completely disabling the warning is not recommended.
+
+@opindex Wno-coverage-too-many-conditions
+@opindex Wcoverage-too-many-conditions
+@item -Wno-coverage-too-many-conditions
+Warn if @option{-fcondition-coverage} is used and an expression have too many
+terms and GCC gives up coverage.  Coverage is given up when there are more
+terms in the conditional than there are bits in a @code{gcov_type_unsigned}.
+This warning is enabled by default.
+
+@opindex Wno-coverage-too-many-paths
+@opindex Wcoverage-too-many-paths
+@item -Wno-coverage-too-many-paths
+Warn if @option{-fpath-coverage} is used and a function has too many
+paths and GCC gives up coverage.  Giving up is controlled by
+@option{-fpath-coverage-limit}.  This warning is enabled by default.
+
+@opindex Wno-coverage-invalid-line-number
+@opindex Wcoverage-invalid-line-number
+@item -Wno-coverage-invalid-line-number
+Warn in case a function ends earlier than it begins due
+to an invalid linenum macros.  The warning is emitted only
+with @option{--coverage} enabled.
+
+By default, this warning is enabled and is treated as an
+error.  @option{-Wno-coverage-invalid-line-number} can be used to disable the
+warning or @option{-Wno-error=coverage-invalid-line-number} can be used to
+disable the error.
+
+@opindex Wno-cpp
+@opindex Wcpp
+@item -Wno-cpp @r{(C, Objective-C, C++, Objective-C++ and Fortran only)}
+Suppress warning messages emitted by @code{#warning} directives.
+
+@opindex Wdouble-promotion
+@opindex Wno-double-promotion
+@item -Wdouble-promotion @r{(C, C++, Objective-C and Objective-C++ only)}
+Give a warning when a value of type @code{float} is implicitly
+promoted to @code{double}.  CPUs with a 32-bit ``single-precision''
+floating-point unit implement @code{float} in hardware, but emulate
+@code{double} in software.  On such a machine, doing computations
+using @code{double} values is much more expensive because of the
+overhead required for software emulation.
+
+It is easy to accidentally do computations with @code{double} because
+floating-point literals are implicitly of type @code{double}.  For
+example, in:
+@smallexample
+@group
+float area(float radius)
+@{
+   return 3.14159 * radius * radius;
+@}
+@end group
+@end smallexample
+the compiler performs the entire computation with @code{double}
+because the floating-point literal is a @code{double}.
+
+@opindex Wduplicate-decl-specifier
+@opindex Wno-duplicate-decl-specifier
+@item -Wduplicate-decl-specifier @r{(C and Objective-C only)}
+Warn if a declaration has duplicate @code{const}, @code{volatile},
+@code{restrict} or @code{_Atomic} specifier.  This warning is enabled by
+@option{-Wall}.
+
+@opindex Wformat
+@opindex Wno-format
+@opindex ffreestanding
+@opindex fno-freestanding
+@opindex fno-builtin
+@opindex Wformat=
+@item -Wformat
+@itemx -Wformat=@var{n}
+Check calls to @code{printf} and @code{scanf}, etc., to make sure that
+the arguments supplied have types appropriate to the format string
+specified, and that the conversions specified in the format string make
+sense.  This includes standard functions, and others specified by format
+attributes (@pxref{Common Attributes}), in the @code{printf},
+@code{scanf}, @code{strftime} and @code{strfmon} (an X/Open extension,
+not in the C standard) families (or other target-specific families).
+Which functions are checked without format attributes having been
+specified depends on the standard version selected, and such checks of
+functions without the attribute specified are disabled by
+@option{-ffreestanding} or @option{-fno-builtin}.
+
+The formats are checked against the format features supported by GNU
+libc version 2.2.  These include all ISO C90 and C99 features, as well
+as features from the Single Unix Specification and some BSD and GNU
+extensions.  Other library implementations may not support all these
+features; GCC does not support warning about features that go beyond a
+particular library's limitations.  However, if @option{-Wpedantic} is used
+with @option{-Wformat}, warnings are given about format features not
+in the selected standard version (but not for @code{strfmon} formats,
+since those are not in any version of the C standard).  @xref{C Dialect
+Options,,Options Controlling C Dialect}.
+
+@table @gcctabopt
+@opindex Wformat
+@opindex Wformat=1
+@item -Wformat=1
+@itemx -Wformat
+Option @option{-Wformat} is equivalent to @option{-Wformat=1}, and
+@option{-Wno-format} is equivalent to @option{-Wformat=0}.  Since
+@option{-Wformat} also checks for null format arguments for several
+functions, @option{-Wformat} also implies @option{-Wnonnull}.  Some
+aspects of this level of format checking can be disabled by the
+options: @option{-Wno-format-contains-nul}, @option{-Wno-format-diag},
+@option{-Wno-format-extra-args}, and @option{-Wno-format-zero-length}.
+@option{-Wformat} is enabled by @option{-Wall}.
+
+@opindex Wformat=2
+@item -Wformat=2
+Enable @option{-Wformat} plus additional format checks.  Currently
+equivalent to @option{-Wformat -Wformat-nonliteral -Wformat-security
+-Wformat-y2k}.
+@end table
+
+@opindex Wno-format-contains-nul
+@opindex Wformat-contains-nul
+@item -Wno-format-contains-nul
+If @option{-Wformat} is specified, do not warn about format strings that
+contain NUL bytes.
+
+@opindex Wno-format-diag
+@opindex Wformat-diag
+@item -Wno-format-diag
+If @option{-Wformat} is specified, do not warn about format strings that
+are unsuitable for GCC diagnostics.
+
+@opindex Wno-format-extra-args
+@opindex Wformat-extra-args
+@item -Wno-format-extra-args
+If @option{-Wformat} is specified, do not warn about excess arguments to a
+@code{printf} or @code{scanf} format function.  The C standard specifies
+that such arguments are ignored.
+
+Where the unused arguments lie between used arguments that are
+specified with @samp{$} operand number specifications, normally
+warnings are still given, since the implementation could not know what
+type to pass to @code{va_arg} to skip the unused arguments.  However,
+in the case of @code{scanf} formats, this option suppresses the
+warning if the unused arguments are all pointers, since the Single
+Unix Specification says that such unused arguments are allowed.
+
+@opindex Wformat-overflow
+@opindex Wno-format-overflow
+@item -Wformat-overflow
+@itemx -Wformat-overflow=@var{level}
+Warn about calls to formatted input/output functions such as @code{sprintf}
+and @code{vsprintf} that might overflow the destination buffer.  When the
+exact number of bytes written by a format directive cannot be determined
+at compile-time it is estimated based on heuristics that depend on the
+@var{level} argument and on optimization.  While enabling optimization
+will in most cases improve the accuracy of the warning, it may also
+result in false positives.
+
+@table @gcctabopt
+@opindex Wformat-overflow
+@opindex Wno-format-overflow

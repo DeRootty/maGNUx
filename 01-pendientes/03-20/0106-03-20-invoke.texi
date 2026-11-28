@@ -1,0 +1,80 @@
+@c GCC 16.1.0 | BLOQUE 0106 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 24075-24150 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -mbranch-protection=@var{features}
+
+Enable branch protection features (armv8.1-m.main only).
+
+@var{features} can have one of the following forms:
+
+@samp{none} generates code without branch protection or return address
+signing.
+
+@samp{standard} generates code with all branch protection
+features enabled at their standard level.
+
+@samp{pac-ret} generates code with return address signing
+set to its standard level, which is to sign all functions that save
+the return address to memory.
+
+@samp{pac-ret+leaf} extends the @samp{pac-ret} signing to include leaf
+functions even if they do not write the return address to memory.
+
+@samp{bti} adds landing-pad instructions at the permitted targets of
+indirect branch instructions.
+
+If support for the @samp{+pacbti} architecture extension is not enabled
+(e.g. via @option{-march=}), then all
+branch protection and return address signing operations are
+constrained to use only the instructions defined in the
+architectural-NOP space. The generated code remains
+backwards-compatible with earlier versions of the architecture, but
+the additional security can be enabled at run time on processors that
+support the @samp{PACBTI} extension.
+
+Branch target enforcement using BTI can only be enabled at runtime if
+all code in the application has been compiled with at least
+@samp{-mbranch-protection=bti}.
+
+Any setting other than @samp{none} is supported only on armv8-m.main
+or later.
+
+The default is to generate code without branch protection or return
+address signing.
+
+@opindex mvectorize-with-neon-quad
+@opindex mvectorize-with-neon-double
+@item -mvectorize-with-neon-quad
+@itemx -mvectorize-with-neon-double
+Control whether vectorization uses NEON quad-word or double-word registers.
+The default is @option{-mvectorize-with-neon-quad}.
+
+@end table
+
+@node AVR Options
+@subsection AVR Options
+@cindex AVR Options
+
+These options are defined for AVR implementations:
+
+@table @gcctabopt
+@opindex mmcu
+@item -mmcu=@var{mcu}
+Specify the AVR instruction set architecture (ISA) or device type.
+The default for this option is@tie{}@code{avr2}.
+
+The following AVR devices and ISAs are supported.
+@emph{Note:} A complete device support consists of
+startup code @code{crt@var{mcu}.o}, a device header @code{avr/io*.h},
+a device library @code{lib@var{mcu}.a} and a
+@uref{https://gcc.gnu.org/wiki/avr-gcc#spec-files,device-specs} file
+@code{specs-@var{mcu}}. Only the latter is provided by the compiler
+according the supported @code{@var{mcu}}s below.  The rest is supported
+by @w{@uref{https://github.com/avrdudes/avr-libc/,AVR-LibC}}, or by means of
+@uref{https://gcc.gnu.org/wiki/avr-gcc#atpack,@code{atpack}} files
+from the hardware manufacturer.
+
+@c Auto-generated.  Re-build when new devices are added to avr-mcus.def
+@c by running "make avr-mcus" in $builddir/gcc.
+@include avr-mmcu.texi

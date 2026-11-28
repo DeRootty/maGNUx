@@ -1,0 +1,296 @@
+@c GCC 16.1.0 | BLOQUE 0052 | 03-12
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 13307-13598 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Optimize Options
+@section Options That Control Optimization
+@cindex optimize options
+@cindex options, optimization
+
+These options control various sorts of optimizations.
+
+Without any optimization option, the compiler's goal is to reduce the
+cost of compilation and to make debugging produce the expected
+results.  Statements are independent: if you stop the program with a
+breakpoint between statements, you can then assign a new value to any
+variable or change the program counter to any other statement in the
+function and get exactly the results you expect from the source
+code.
+
+Turning on optimization flags makes the compiler attempt to improve
+the performance and/or code size at the expense of compilation time
+and possibly the ability to debug the program.
+
+The compiler performs optimization based on the knowledge it has of the
+program.  Compiling multiple files at once to a single output file mode allows
+the compiler to use information gained from all of the files when compiling
+each of them.
+
+Not all optimizations are controlled directly by a flag.  Only
+optimizations that have a flag are listed in this section.
+
+Most optimizations are completely disabled at @option{-O0} or if an
+@option{-O} level is not set on the command line, even if individual
+optimization flags are specified.  Similarly, @option{-Og} suppresses
+many optimization passes.
+
+Depending on the target and how GCC was configured, a slightly different
+set of optimizations may be enabled at each @option{-O} level than
+those listed here.  You can invoke GCC with @option{-Q --help=optimizers}
+to find out the exact set of optimizations that are enabled at each level.
+@xref{Overall Options}, for examples.
+
+@table @gcctabopt
+@opindex O
+@opindex O1
+@opindex optimize
+@item -O
+@itemx -O1
+@itemx --optimize
+Optimize.  Optimizing compilation takes somewhat more time, and a lot
+more memory for a large function.
+
+With @option{-O}, the compiler tries to reduce code size and execution
+time, without performing any optimizations that take a great deal of
+compilation time.
+
+@option{-O} is the recommended optimization level for large machine-generated
+code as a sensible balance between time taken to compile and memory use:
+higher optimization levels perform optimizations with greater algorithmic
+complexity than at @option{-O}.
+
+@c Note that in addition to the default_options_table list in opts.cc,
+@c several optimization flags default to true but control optimization
+@c passes that are explicitly disabled at -O0.
+
+@option{-O} turns on the following optimization flags:
+
+@c Please keep the following list alphabetized.
+@gccoptlist{-fauto-inc-dec
+-fbranch-count-reg
+-fcombine-stack-adjustments
+-fcompare-elim
+-fcprop-registers
+-fdce
+-fdefer-pop
+-fdelayed-branch
+-fdse
+-fforward-propagate
+-fguess-branch-probability
+-fif-conversion
+-fif-conversion2
+-finline-functions-called-once
+-fipa-modref
+-fipa-profile
+-fipa-pure-const
+-fipa-reference
+-fipa-reference-addressable
+-fivopts
+-fmerge-constants
+-fmove-loop-invariants
+-fmove-loop-stores
+-fomit-frame-pointer
+-freorder-blocks
+-fshrink-wrap
+-fshrink-wrap-separate
+-fsplit-wide-types
+-fssa-backprop
+-fssa-phiopt
+-ftree-bit-ccp
+-ftree-ccp
+-ftree-ch
+-ftree-coalesce-vars
+-ftree-copy-prop
+-ftree-dce
+-ftree-dominator-opts
+-ftree-dse
+-ftree-forwprop
+-ftree-fre
+-ftree-phiprop
+-ftree-pta
+-ftree-scev-cprop
+-ftree-sink
+-ftree-slsr
+-ftree-sra
+-ftree-ter
+-funit-at-a-time}
+
+@opindex O2
+@item -O2
+Optimize even more.  GCC performs nearly all supported optimizations
+that do not involve a space-speed tradeoff.
+As compared to @option{-O}, this option increases both compilation time
+and the performance of the generated code.
+
+@option{-O2} turns on all optimization flags specified by @option{-O1}.  It
+also turns on the following optimization flags:
+
+@c Please keep the following list alphabetized!
+@gccoptlist{-falign-functions  -falign-jumps
+-falign-labels  -falign-loops
+-fcaller-saves
+-fcode-hoisting
+-fcrossjumping
+-fcse-follow-jumps  -fcse-skip-blocks
+-fdelete-null-pointer-checks -fdep-fusion
+-fdevirtualize  -fdevirtualize-speculatively
+-fexpensive-optimizations
+-ffinite-loops
+-fgcse  -fgcse-lm
+-fhoist-adjacent-loads
+-finline-functions
+-finline-small-functions
+-findirect-inlining
+-fipa-bit-cp  -fipa-cp  -fipa-icf
+-fipa-ra  -fipa-sra  -fipa-vrp
+-fisolate-erroneous-paths-dereference
+-flra-remat
+-foptimize-crc
+-foptimize-sibling-calls
+-foptimize-strlen
+-fpartial-inlining
+-fpeephole2
+-freorder-blocks-algorithm=stc
+-freorder-blocks-and-partition  -freorder-functions
+-frerun-cse-after-loop
+-fschedule-insns  -fschedule-insns2
+-fsched-interblock  -fsched-spec
+-fspeculatively-call-stored-functions
+-fstore-merging
+-fstrict-aliasing
+-fthread-jumps
+-ftree-builtin-call-dce
+-ftree-loop-vectorize
+-ftree-pre
+-ftree-slp-vectorize
+-ftree-switch-conversion  -ftree-tail-merge
+-ftree-vrp
+-fvect-cost-model=very-cheap}
+
+Please note the warning under @option{-fgcse} about
+invoking @option{-O2} on programs that use computed gotos.
+
+@opindex O3
+@item -O3
+Optimize yet more.  @option{-O3} turns on all optimizations specified
+by @option{-O2} and also turns on the following optimization flags:
+
+@c Please keep the following list alphabetized!
+@gccoptlist{-fgcse-after-reload
+-fipa-cp-clone
+-floop-interchange
+-floop-unroll-and-jam
+-fpeel-loops
+-fpredictive-commoning
+-fsplit-loops
+-fsplit-paths
+-ftree-loop-distribution
+-ftree-partial-pre
+-funswitch-loops
+-fvect-cost-model=dynamic
+-fversion-loops-for-strides}
+
+@opindex O0
+@item -O0
+Reduce compilation time and make debugging produce the expected
+results.  This is the default.
+
+At @option{-O0}, GCC completely disables most optimization passes;
+they are not run even if you explicitly enable them on the command
+line, or are listed by @option{-Q --help=optimizers} as being enabled by
+default.  Many optimizations performed by GCC depend on code analysis
+or canonicalization passes that are enabled by @option{-O}, and it would
+not be useful to run individual optimization passes in isolation.
+
+@opindex Os
+@item -Os
+Optimize for size.  @option{-Os} enables all @option{-O2} optimizations
+except those that often increase code size:
+
+@gccoptlist{-falign-functions  -falign-jumps
+-falign-labels  -falign-loops
+-fprefetch-loop-arrays  -freorder-blocks-algorithm=stc}
+
+It also enables @option{-finline-functions}, causes the compiler to tune for
+code size rather than execution speed, and performs further optimizations
+designed to reduce code size.
+
+@opindex Ofast
+@item -Ofast
+Disregard strict standards compliance.  @option{-Ofast} enables all
+@option{-O3} optimizations.  It also enables optimizations that are not
+valid for all standard-compliant programs.
+It turns on @option{-ffast-math}, @option{-fallow-store-data-races}
+and the Fortran-specific @option{-fstack-arrays}, unless
+@option{-fmax-stack-var-size} is specified, and @option{-fno-protect-parens}.
+It turns off @option{-fsemantic-interposition}.
+
+@opindex Og
+@item -Og
+Optimize while keeping in mind debugging experience.
+@option{-Og} should be the optimization
+level of choice for the standard edit-compile-debug cycle, offering
+a reasonable blend of optimization, fast compilation and debugging experience
+especially for code with a high abstraction penalty.  In contrast to
+@option{-O0}, this enables @option{-fvar-tracking-assignments} and
+@option{-fvar-tracking} which handle debug information in the prologue
+and epilogue of functions better than @option{-O0}.
+
+Like @option{-O0}, @option{-Og} completely skips a number of
+optimization passes so that individual options controlling them have
+no effect.  Otherwise @option{-Og} enables all @option{-O1}
+optimization flags except for those known to greatly interfere with debugging:
+
+@gccoptlist{-fbranch-count-reg  -fdelayed-branch
+-fdse  -fif-conversion  -fif-conversion2
+-finline-functions-called-once
+-fmove-loop-invariants  -fmove-loop-stores  -fssa-phiopt
+-ftree-bit-ccp  -ftree-dse  -ftree-pta  -ftree-sra}
+
+@opindex Oz
+@item -Oz
+Optimize aggressively for size rather than speed.  This may increase
+the number of instructions executed if those instructions require
+fewer bytes to encode.  @option{-Oz} behaves similarly to @option{-Os}
+including enabling most @option{-O2} optimizations.
+
+@end table
+
+If you use multiple @option{-O} options, with or without level numbers,
+the last such option is the one that is effective.
+
+Options of the form @option{-f@var{flag}} specify machine-independent
+flags.  Most flags have both positive and negative forms; the negative
+form of @option{-ffoo} is @option{-fno-foo}.  In the table
+below, only one of the forms is listed---the one you typically
+use.  You can figure out the other form by either removing @samp{no-}
+or adding it.
+
+The following options control specific optimizations.  They are either
+activated by @option{-O} options or are related to ones that are.  You
+can use the following flags in the rare cases when ``fine-tuning'' of
+optimizations to be performed is desired.
+
+@table @gcctabopt
+@opindex fno-defer-pop
+@opindex fdefer-pop
+@item -fno-defer-pop
+For machines that must pop arguments after a function call, always pop
+the arguments as soon as each function returns.
+At levels @option{-O1} and higher, @option{-fdefer-pop} is the default;
+this allows the compiler to let arguments accumulate on the stack for several
+function calls and pop them all at once.
+
+@opindex fforward-propagate
+@opindex fno-forward-propagate
+@item -fforward-propagate
+Perform a forward propagation pass on RTL@.  The pass tries to combine two
+instructions and checks if the result can be simplified.  If loop unrolling
+is active, two passes are performed and the second is scheduled after
+loop unrolling.
+
+This option is enabled by default at optimization levels @option{-O1},
+@option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex favoid-store-forwarding
+@opindex fno-avoid-store-forwarding

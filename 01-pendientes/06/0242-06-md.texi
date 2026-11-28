@@ -1,0 +1,303 @@
+@c GCC 16.1.0 | BLOQUE 0242 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 2976-3274 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item l
+The @code{lo} register.  Use this register to store values that are
+no bigger than a word.
+
+@item x
+The concatenated @code{hi} and @code{lo} registers.  Use this register
+to store doubleword values.
+
+@item c
+A register suitable for use in an indirect jump.  This will always be
+@code{$25} for @option{-mabicalls}.
+
+@item v
+Register @code{$3}.  Do not use this constraint in new code;
+it is retained only for compatibility with glibc.
+
+@item y
+Equivalent to @code{r}; retained for backwards compatibility.
+
+@item z
+A floating-point condition code register.
+
+@item I
+A signed 16-bit constant (for arithmetic instructions).
+
+@item J
+Integer zero.
+
+@item K
+An unsigned 16-bit constant (for logic instructions).
+
+@item L
+A signed 32-bit constant in which the lower 16 bits are zero.
+Such constants can be loaded using @code{lui}.
+
+@item M
+A constant that cannot be loaded using @code{lui}, @code{addiu}
+or @code{ori}.
+
+@item N
+A constant in the range @minus{}65535 to @minus{}1 (inclusive).
+
+@item O
+A signed 15-bit constant.
+
+@item P
+A constant in the range 1 to 65535 (inclusive).
+
+@item G
+Floating-point zero.
+
+@item R
+An address that can be used in a non-macro load or store.
+
+@item ZC
+A memory operand whose address is formed by a base register and offset
+that is suitable for use in instructions with the same addressing mode
+as @code{ll} and @code{sc}.
+
+@item ZD
+An address suitable for a @code{prefetch} instruction, or for any other
+instruction with the same addressing mode as @code{prefetch}.
+@end table
+
+@item Motorola 680x0---@file{config/m68k/constraints.md}
+@table @code
+@item a
+Address register
+
+@item d
+Data register
+
+@item f
+68881 floating-point register, if available
+
+@item I
+Integer in the range 1 to 8
+
+@item J
+16-bit signed number
+
+@item K
+Signed number whose magnitude is greater than 0x80
+
+@item L
+Integer in the range @minus{}8 to @minus{}1
+
+@item M
+Signed number whose magnitude is greater than 0x100
+
+@item N
+Range 24 to 31, rotatert:SI 8 to 1 expressed as rotate
+
+@item O
+16 (for rotate using swap)
+
+@item P
+Range 8 to 15, rotatert:HI 8 to 1 expressed as rotate
+
+@item R
+Numbers that mov3q can handle
+
+@item G
+Floating point constant that is not a 68881 constant
+
+@item S
+Operands that satisfy 'm' when -mpcrel is in effect
+
+@item T
+Operands that satisfy 's' when -mpcrel is not in effect
+
+@item Q
+Address register indirect addressing mode
+
+@item U
+Register offset addressing
+
+@item W
+const_call_operand
+
+@item Cs
+symbol_ref or const
+
+@item Ci
+const_int
+
+@item C0
+const_int 0
+
+@item Cj
+Range of signed numbers that don't fit in 16 bits
+
+@item Cmvq
+Integers valid for mvq
+
+@item Capsw
+Integers valid for a moveq followed by a swap
+
+@item Cmvz
+Integers valid for mvz
+
+@item Cmvs
+Integers valid for mvs
+
+@item Ap
+push_operand
+
+@item Ac
+Non-register operands allowed in clr
+
+@end table
+
+@item Moxie---@file{config/moxie/constraints.md}
+@table @code
+@item A
+An absolute address
+
+@item B
+An offset address
+
+@item W
+A register indirect memory operand
+
+@item I
+A constant in the range of 0 to 255.
+
+@item N
+A constant in the range of 0 to @minus{}255.
+
+@end table
+
+@item MSP430--@file{config/msp430/constraints.md}
+@table @code
+
+@item R12
+Register R12.
+
+@item R13
+Register R13.
+
+@item K
+Integer constant 1.
+
+@item L
+Integer constant -1^20..1^19.
+
+@item M
+Integer constant 1-4.
+
+@item Ya
+Memory references which do not require an extended MOVX instruction.
+
+@item Yl
+Memory reference, labels only.
+
+@item Ys
+Memory reference, stack only.
+
+@end table
+
+@item NDS32---@file{config/nds32/constraints.md}
+@table @code
+@item w
+LOW register class $r0 to $r7 constraint for V3/V3M ISA.
+@item l
+LOW register class $r0 to $r7.
+@item d
+MIDDLE register class $r0 to $r11, $r16 to $r19.
+@item h
+HIGH register class $r12 to $r14, $r20 to $r31.
+@item t
+Temporary assist register $ta (i.e.@: $r15).
+@item k
+Stack register $sp.
+@item Iu03
+Unsigned immediate 3-bit value.
+@item In03
+Negative immediate 3-bit value in the range of @minus{}7--0.
+@item Iu04
+Unsigned immediate 4-bit value.
+@item Is05
+Signed immediate 5-bit value.
+@item Iu05
+Unsigned immediate 5-bit value.
+@item In05
+Negative immediate 5-bit value in the range of @minus{}31--0.
+@item Ip05
+Unsigned immediate 5-bit value for movpi45 instruction with range 16--47.
+@item Iu06
+Unsigned immediate 6-bit value constraint for addri36.sp instruction.
+@item Iu08
+Unsigned immediate 8-bit value.
+@item Iu09
+Unsigned immediate 9-bit value.
+@item Is10
+Signed immediate 10-bit value.
+@item Is11
+Signed immediate 11-bit value.
+@item Is15
+Signed immediate 15-bit value.
+@item Iu15
+Unsigned immediate 15-bit value.
+@item Ic15
+A constant which is not in the range of imm15u but ok for bclr instruction.
+@item Ie15
+A constant which is not in the range of imm15u but ok for bset instruction.
+@item It15
+A constant which is not in the range of imm15u but ok for btgl instruction.
+@item Ii15
+A constant whose compliment value is in the range of imm15u
+and ok for bitci instruction.
+@item Is16
+Signed immediate 16-bit value.
+@item Is17
+Signed immediate 17-bit value.
+@item Is19
+Signed immediate 19-bit value.
+@item Is20
+Signed immediate 20-bit value.
+@item Ihig
+The immediate value that can be simply set high 20-bit.
+@item Izeb
+The immediate value 0xff.
+@item Izeh
+The immediate value 0xffff.
+@item Ixls
+The immediate value 0x01.
+@item Ix11
+The immediate value 0x7ff.
+@item Ibms
+The immediate value with power of 2.
+@item Ifex
+The immediate value with power of 2 minus 1.
+@item U33
+Memory constraint for 333 format.
+@item U45
+Memory constraint for 45 format.
+@item U37
+Memory constraint for 37 format.
+@end table
+
+@item OpenRISC---@file{config/or1k/constraints.md}
+@table @code
+@item I
+Integer that is valid as an immediate operand in an
+instruction taking a signed 16-bit number. Range
+@minus{}32768 to 32767.
+
+@item K
+Integer that is valid as an immediate operand in an
+instruction taking an unsigned 16-bit number. Range
+0 to 65535.
+
+@item M
+Signed 16-bit constant shifted left 16 bits. (Used with @code{l.movhi})
+
+@item O
+Zero
+

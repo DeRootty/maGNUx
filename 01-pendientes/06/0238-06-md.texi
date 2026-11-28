@@ -1,0 +1,416 @@
+@c GCC 16.1.0 | BLOQUE 0238 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 1898-2309 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+@cindex @samp{-} in constraint
+@item -
+Says that the selected following constraints within the same alternative
+should be matched differently.  Normally in PIC code symbolic operands
+in constraints like @samp{i}, @samp{s} or @samp{n} are not allowed at all
+or severely restricted.  The @samp{-} modifier, which is only allowed
+outside of functions, allows symbolic operands even in PIC code.  This
+modifier is usually used together with the @code{cc} operand modifier.
+
+@smallexample
+extern void foo (void), bar (void);
+int v;
+extern int w;
+asm (".globl %cc0, %cc2; .text; %cc0: call %cc1; ret; .data; %cc2: .word %cc3"
+     :: ":" (foo), "-s" (&bar), ":" (&w), "-i" (&v));
+@end smallexample
+
+This asm declaration tells the compiler it defines function @code{foo} and
+variable @code{w} and uses function @code{bar} and variable @code{v}.  This
+will compile even with PIC, but it is up to the user to ensure it will
+assemble correctly and have the expected behavior.
+@end table
+
+@node Machine Constraints
+@subsection Constraints for Particular Machines
+@cindex machine specific constraints
+@cindex constraints, machine specific
+
+Whenever possible, you should use the general-purpose constraint letters
+in @code{asm} arguments, since they will convey meaning more readily to
+people reading your code.  Failing that, use the constraint letters
+that usually have very similar meanings across architectures.  The most
+commonly used constraints are @samp{m} and @samp{r} (for memory and
+general-purpose registers respectively; @pxref{Simple Constraints}), and
+@samp{I}, usually the letter indicating the most common
+immediate-constant format.
+
+Each architecture defines additional constraints.  These constraints
+are used by the compiler itself for instruction generation, as well as
+for @code{asm} statements; therefore, some of the constraints are not
+particularly useful for @code{asm}.  Here is a summary of some of the
+machine-dependent constraints available on some particular machines;
+it includes both constraints that are useful for @code{asm} and
+constraints that aren't.  The compiler source file mentioned in the
+table heading for each architecture is the definitive reference for
+the meanings of that architecture's constraints.
+
+@c Please keep this table alphabetized by target!
+@table @emph
+@item AArch64 family---@file{config/aarch64/constraints.md}
+@table @code
+@item k
+The stack pointer register (@code{SP})
+
+@item w
+Floating point register, Advanced SIMD vector register or SVE vector register
+
+@item x
+Like @code{w}, but restricted to registers 0 to 15 inclusive.
+
+@item y
+Like @code{w}, but restricted to registers 0 to 7 inclusive.
+
+@item Upl
+One of the low eight SVE predicate registers (@code{P0} to @code{P7})
+
+@item Upa
+Any of the SVE predicate registers (@code{P0} to @code{P15})
+
+@item I
+Integer constant that is valid as an immediate operand in an @code{ADD}
+instruction
+
+@item J
+Integer constant that is valid as an immediate operand in a @code{SUB}
+instruction (once negated)
+
+@item K
+Integer constant that can be used with a 32-bit logical instruction
+
+@item L
+Integer constant that can be used with a 64-bit logical instruction
+
+@item M
+Integer constant that is valid as an immediate operand in a 32-bit @code{MOV}
+pseudo instruction. The @code{MOV} may be assembled to one of several different
+machine instructions depending on the value
+
+@item N
+Integer constant that is valid as an immediate operand in a 64-bit @code{MOV}
+pseudo instruction
+
+@item S
+An absolute symbolic address or a label reference
+
+@item Y
+Floating point constant zero
+
+@item Z
+Integer constant zero
+
+@item Ush
+The high part (bits 12 and upwards) of the pc-relative address of a symbol
+within 4GB of the instruction
+
+@item Q
+A memory address which uses a single base register with no offset
+
+@item Ump
+A memory address suitable for a load/store pair instruction in SI, DI, SF and
+DF modes
+
+@end table
+
+
+@item AMD GCN ---@file{config/gcn/constraints.md}
+@table @code
+@item I
+Immediate integer in the range @minus{}16 to 64
+
+@item J
+Immediate 16-bit signed integer
+
+@item Kf
+Immediate constant @minus{}1
+
+@item L
+Immediate 15-bit unsigned integer
+
+@item A
+Immediate constant that can be inlined in an instruction encoding: integer
+@minus{}16..64, or float 0.0, +/@minus{}0.5, +/@minus{}1.0, +/@minus{}2.0,
++/@minus{}4.0, 1.0/(2.0*PI)
+
+@item B
+Immediate 32-bit signed integer that can be attached to an instruction encoding
+
+@item C
+Immediate 32-bit integer in range @minus{}16..4294967295 (i.e. 32-bit unsigned
+integer or @samp{A} constraint)
+
+@item DA
+Immediate 64-bit constant that can be split into two @samp{A} constants
+
+@item DB
+Immediate 64-bit constant that can be split into two @samp{B} constants
+
+@item U
+Any @code{unspec}
+
+@item Y
+Any @code{symbol_ref} or @code{label_ref}
+
+@item v
+VGPR register
+
+@item a
+Accelerator VGPR register (CDNA1 onwards)
+
+@item Sg
+SGPR register
+
+@item SD
+SGPR registers valid for instruction destinations, including VCC, M0 and EXEC
+
+@item SS
+SGPR registers valid for instruction sources, including VCC, M0, EXEC and SCC
+
+@item Sm
+SGPR registers valid as a source for scalar memory instructions (excludes M0
+and EXEC)
+
+@item Sv
+SGPR registers valid as a source or destination for vector instructions
+(excludes EXEC)
+
+@item ca
+All condition registers: SCC, VCCZ, EXECZ
+
+@item cs
+Scalar condition register: SCC
+
+@item cV
+Vector condition register: VCC, VCC_LO, VCC_HI
+
+@item e
+EXEC register (EXEC_LO and EXEC_HI)
+
+@item RB
+Memory operand with address space suitable for @code{buffer_*} instructions
+
+@item RF
+Memory operand with address space suitable for @code{flat_*} instructions
+
+@item RS
+Memory operand with address space suitable for @code{s_*} instructions
+
+@item RL
+Memory operand with address space suitable for @code{ds_*} LDS instructions
+
+@item RG
+Memory operand with address space suitable for @code{ds_*} GDS instructions
+
+@item RD
+Memory operand with address space suitable for any @code{ds_*} instructions
+
+@item RM
+Memory operand with address space suitable for @code{global_*} instructions
+
+@end table
+
+
+@item ARC ---@file{config/arc/constraints.md}
+@table @code
+@item q
+Registers usable in ARCompact 16-bit instructions: @code{r0}-@code{r3},
+@code{r12}-@code{r15}.  This constraint can only match when the @option{-mq}
+option is in effect.
+
+@item e
+Registers usable as base-regs of memory addresses in ARCompact 16-bit memory
+instructions: @code{r0}-@code{r3}, @code{r12}-@code{r15}, @code{sp}.
+This constraint can only match when the @option{-mq}
+option is in effect.
+@item D
+ARC FPX (dpfp) 64-bit registers. @code{D0}, @code{D1}.
+
+@item I
+A signed 12-bit integer constant.
+
+@item Cal
+constant for arithmetic/logical operations.  This might be any constant
+that can be put into a long immediate by the assmbler or linker without
+involving a PIC relocation.
+
+@item K
+A 3-bit unsigned integer constant.
+
+@item L
+A 6-bit unsigned integer constant.
+
+@item CnL
+One's complement of a 6-bit unsigned integer constant.
+
+@item CmL
+Two's complement of a 6-bit unsigned integer constant.
+
+@item M
+A 5-bit unsigned integer constant.
+
+@item O
+A 7-bit unsigned integer constant.
+
+@item P
+A 8-bit unsigned integer constant.
+
+@item H
+Any const_double value.
+@end table
+
+@item ARM family---@file{config/arm/constraints.md}
+@table @code
+
+@item h
+In Thumb state, the core registers @code{r8}-@code{r15}.
+
+@item k
+The stack pointer register.
+
+@item l
+In Thumb State the core registers @code{r0}-@code{r7}.  In ARM state this
+is an alias for the @code{r} constraint.
+
+@item t
+VFP floating-point registers @code{s0}-@code{s31}.  Used for 32 bit values.
+
+@item w
+VFP floating-point registers @code{d0}-@code{d31} and the appropriate
+subset @code{d0}-@code{d15} based on command line options.
+Used for 64 bit values only.  Not valid for Thumb1.
+
+@item G
+The floating-point constant 0.0
+
+@item I
+Integer that is valid as an immediate operand in a data processing
+instruction.  That is, an integer in the range 0 to 255 rotated by a
+multiple of 2
+
+@item J
+Integer in the range @minus{}4095 to 4095
+
+@item K
+Integer that satisfies constraint @samp{I} when inverted (ones complement)
+
+@item L
+Integer that satisfies constraint @samp{I} when negated (twos complement)
+
+@item M
+Integer in the range 0 to 32
+
+@item Q
+A memory reference where the exact address is in a single register
+(`@samp{m}' is preferable for @code{asm} statements)
+
+@item R
+An item in the constant pool
+
+@item S
+A symbol in the text segment of the current file
+
+@item Uv
+A memory reference suitable for VFP load/store insns (reg+constant offset)
+
+@item Uq
+A memory reference suitable for the ARMv4 ldrsb instruction.
+@end table
+
+@item AVR family---@file{config/avr/constraints.md}
+@table @code
+@item l
+Registers from r0 to r15
+
+@item a
+Registers from r16 to r23
+
+@item d
+Registers from r16 to r31
+
+@item w
+Registers from r24 to r31.  These registers can be used in @samp{adiw} command
+
+@item e
+Pointer register (r26--r31)
+
+@item b
+Base pointer register (r28--r31)
+
+@item q
+Stack pointer register (SPH:SPL)
+
+@item t
+Temporary register r0
+
+@item x
+Register pair X (r27:r26)
+
+@item y
+Register pair Y (r29:r28)
+
+@item z
+Register pair Z (r31:r30)
+
+@item I
+Constant greater than @minus{}1, less than 64
+
+@item J
+Constant greater than @minus{}64, less than 1
+
+@item K
+Constant integer 2
+
+@item L
+Constant integer 0
+
+@item M
+Constant that fits in 8 bits
+
+@item N
+Constant integer @minus{}1
+
+@item O
+Constant integer 8, 16, or 24
+
+@item P
+Constant integer 1
+
+@item G
+A floating point constant 0.0
+
+@item Q
+A memory address based on Y or Z pointer with displacement.
+@end table
+
+@item Blackfin family---@file{config/bfin/constraints.md}
+@table @code
+@item a
+P register
+
+@item d
+D register
+
+@item z
+A call clobbered P register.
+
+@item q@var{n}
+A single register.  If @var{n} is in the range 0 to 7, the corresponding D
+register.  If it is @code{A}, then the register P0.
+
+@item D
+Even-numbered D register
+
+@item W
+Odd-numbered D register
+
+@item e
+Accumulator register.
+
+@item A
+Even-numbered accumulator register.
+

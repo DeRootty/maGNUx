@@ -1,0 +1,223 @@
+@c GCC 16.1.0 | BLOQUE 0080 | 03-16
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 18601-18819 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -static-pie
+@itemx --static-pie
+Produce a static position independent executable on targets that support
+it.  A static position independent executable is similar to a static
+executable, but can be loaded at any address without a dynamic linker.
+For predictable results, you must also specify the same set of options
+used for compilation (@option{-fpie}, @option{-fPIE}, or model
+suboptions) when you specify this linker option.
+
+@opindex pthread
+@item -pthread
+Link with the POSIX threads library.  This option is supported on
+GNU/Linux targets, most other Unix derivatives, and also on
+x86 Cygwin and MinGW targets.  On some targets this option also sets
+flags for the preprocessor, so it should be used consistently for both
+compilation and linking.
+
+@opindex r
+@item -r
+Produce a relocatable object as output.  This is also known as partial
+linking.
+
+@opindex rdynamic
+@item -rdynamic
+Pass the flag @option{-export-dynamic} to the ELF linker, on targets
+that support it. This instructs the linker to add all symbols, not
+only used ones, to the dynamic symbol table. This option is needed
+for some uses of @code{dlopen} or to allow obtaining backtraces
+from within a program.
+
+@opindex s
+@item -s
+Remove all symbol table and relocation information from the executable.
+
+@opindex static
+@item -static
+@itemx --static
+On systems that support dynamic linking, this overrides @option{-pie}
+and prevents linking with the shared libraries.  On other systems, this
+option has no effect.
+
+@opindex shared
+@item -shared
+@itemx --shared
+Produce a shared object which can then be linked with other objects to
+form an executable.  Not all systems support this option.  For predictable
+results, you must also specify the same set of options used for compilation
+(@option{-fpic}, @option{-fPIC}, or model suboptions) when
+you specify this linker option.@footnote{On some systems, @samp{gcc -shared}
+needs to build supplementary stub code for constructors to work.  On
+multi-libbed systems, @samp{gcc -shared} must select the correct support
+libraries to link against.  Failing to supply the correct flags may lead
+to subtle defects.  Supplying them in cases where they are not necessary
+is innocuous.  @option{-shared} suppresses the addition of startup code
+to alter the floating-point environment as done with @option{-ffast-math},
+@option{-Ofast} or @option{-funsafe-math-optimizations} on some targets.}
+
+@opindex shared-libgcc
+@opindex static-libgcc
+@item -shared-libgcc
+@itemx -static-libgcc
+On systems that provide @file{libgcc} as a shared library, these options
+force the use of either the shared or static version, respectively.
+If no shared version of @file{libgcc} was built when the compiler was
+configured, these options have no effect.
+
+There are several situations in which an application should use the
+shared @file{libgcc} instead of the static version.  The most common
+of these is when the application wishes to throw and catch exceptions
+across different shared libraries.  In that case, each of the libraries
+as well as the application itself should use the shared @file{libgcc}.
+
+Therefore, the G++ driver automatically adds @option{-shared-libgcc}
+whenever you build a shared library or a main executable, because C++
+programs typically use exceptions, so this is the right thing to do.
+
+If, instead, you use the GCC driver to create shared libraries, you may
+find that they are not always linked with the shared @file{libgcc}.
+If GCC finds, at its configuration time, that you have a non-GNU linker
+or a GNU linker that does not support option @option{--eh-frame-hdr},
+it links the shared version of @file{libgcc} into shared libraries
+by default.  Otherwise, it takes advantage of the linker and optimizes
+away the linking with the shared version of @file{libgcc}, linking with
+the static version of libgcc by default.  This allows exceptions to
+propagate through such shared libraries, without incurring relocation
+costs at library load time.
+
+However, if a library or main executable is supposed to throw or catch
+exceptions, you must link it using the G++ driver, or using the option
+@option{-shared-libgcc}, such that it is linked with the shared
+@file{libgcc}.
+
+@opindex static-libasan
+@item -static-libasan
+When the @option{-fsanitize=address} option is used to link a program,
+the GCC driver automatically links against @option{libasan}.  If
+@file{libasan} is available as a shared library, and the @option{-static}
+option is not used, then this links against the shared version of
+@file{libasan}.  The @option{-static-libasan} option directs the GCC
+driver to link @file{libasan} statically, without necessarily linking
+other libraries statically.
+
+@opindex static-libhwasan
+@item -static-libhwasan
+When the @option{-fsanitize=hwaddress} option is used to link a program,
+the GCC driver automatically links against @option{libhwasan}.  If
+@file{libhwasan} is available as a shared library, and the @option{-static}
+option is not used, then this links against the shared version of
+@file{libhwasan}.  The @option{-static-libhwasan} option directs the GCC
+driver to link @file{libhwasan} statically, without necessarily linking
+other libraries statically.
+
+@opindex static-liblsan
+@item -static-liblsan
+When the @option{-fsanitize=leak} option is used to link a program,
+the GCC driver automatically links against @option{liblsan}.  If
+@file{liblsan} is available as a shared library, and the @option{-static}
+option is not used, then this links against the shared version of
+@file{liblsan}.  The @option{-static-liblsan} option directs the GCC
+driver to link @file{liblsan} statically, without necessarily linking
+other libraries statically.
+
+@opindex static-libtsan
+@item -static-libtsan
+When the @option{-fsanitize=thread} option is used to link a program,
+the GCC driver automatically links against @option{libtsan}.  If
+@file{libtsan} is available as a shared library, and the @option{-static}
+option is not used, then this links against the shared version of
+@file{libtsan}.  The @option{-static-libtsan} option directs the GCC
+driver to link @file{libtsan} statically, without necessarily linking
+other libraries statically.
+
+@opindex static-libubsan
+@item -static-libubsan
+When the @option{-fsanitize=undefined} option is used to link a program,
+the GCC driver automatically links against @option{libubsan}.  If
+@file{libubsan} is available as a shared library, and the @option{-static}
+option is not used, then this links against the shared version of
+@file{libubsan}.  The @option{-static-libubsan} option directs the GCC
+driver to link @file{libubsan} statically, without necessarily linking
+other libraries statically.
+
+@opindex static-libstdc++
+@item -static-libstdc++
+When the @command{g++} program is used to link a C++ program, it
+normally automatically links against @option{libstdc++}.  If
+@file{libstdc++} is available as a shared library, and the
+@option{-static} option is not used, then this links against the
+shared version of @file{libstdc++}.  That is normally fine.  However, it
+is sometimes useful to freeze the version of @file{libstdc++} used by
+the program without going all the way to a fully static link.  The
+@option{-static-libstdc++} option directs the @command{g++} driver to
+link @file{libstdc++} statically, without necessarily linking other
+libraries statically.
+
+@opindex symbolic
+@item -symbolic
+@itemx --symbolic
+Bind references to global symbols when building a shared object.  Warn
+about any unresolved references (unless overridden by the link editor
+option @option{-Xlinker -z -Xlinker defs}).  Only a few systems support
+this option.
+
+@opindex T
+@cindex linker script
+@item -T @var{script}
+Use @var{script} as the linker script.  This option is supported by most
+systems using the GNU linker.  On some targets, such as bare-board
+targets without an operating system, the @option{-T} option may be required
+when linking to avoid references to undefined symbols.
+
+@opindex Xlinker
+@item -Xlinker @var{option}
+Pass @var{option} as an option to the linker.  You can use this to
+supply system-specific linker options that GCC does not recognize.
+
+If you want to pass an option that takes a separate argument, you must use
+@option{-Xlinker} twice, once for the option and once for the argument.
+For example, to pass @option{-assert definitions}, you must write
+@option{-Xlinker -assert -Xlinker definitions}.  It does not work to write
+@option{-Xlinker "-assert definitions"}, because this passes the entire
+string as a single argument, which is not what the linker expects.
+
+When using the GNU linker, it is usually more convenient to pass
+arguments to linker options using the @option{@var{option}=@var{value}}
+syntax than as separate arguments.  For example, you can specify
+@option{-Xlinker -Map=output.map} rather than
+@option{-Xlinker -Map -Xlinker output.map}.  Other linkers may not support
+this syntax for command-line options.
+
+@opindex Wl
+@opindex for-linker
+@item -Wl,@var{option}
+@itemx --for-linker=@var{option}
+@itemx --for-linker @var{option}
+Pass @var{option} as an option to the linker.  If @var{option} contains
+commas, it is split into multiple options at the commas.  You can use this
+syntax to pass an argument to the option.
+For example, @option{-Wl,-Map,output.map} passes @option{-Map output.map} to the
+linker.  When using the GNU linker, you can also get the same effect with
+@option{-Wl,-Map=output.map}.
+
+@opindex u
+@opindex force-link
+@item -u @var{symbol}
+@itemx --force-link=@var{symbol}
+@itemx --force-link @var{symbol}
+Pretend the symbol @var{symbol} is undefined, to force linking of
+library modules to define it.  You can use @option{-u} multiple times with
+different symbols to force loading of additional library modules.
+
+@opindex Tbss
+@opindex Tdata
+@opindex Ttext
+@opindex N
+@opindex n
+@opindex t
+@opindex Z
+@opindex z

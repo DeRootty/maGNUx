@@ -1,0 +1,217 @@
+@c GCC 16.1.0 | BLOQUE 0319 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 26065-26277 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@smallexample
+@exdent vector unsigned char
+@exdent vec_inserth (unsigned char, vector unsigned char, unsigned int);
+@exdent vector unsigned short
+@exdent vec_inserth (unsigned short, vector unsigned short, unsigned int);
+@exdent vector unsigned int
+@exdent vec_inserth (unsigned int, vector unsigned int, unsigned int);
+@exdent vector unsigned long long
+@exdent vec_inserth (unsigned long long, vector unsigned long long,
+unsigned int);
+@exdent vector unsigned char
+@exdent vec_inserth (vector unsigned char, vector unsigned char, unsigned int);
+@exdent vector unsigned short
+@exdent vec_inserth (vector unsigned short, vector unsigned short,
+unsigned int);
+@exdent vector unsigned int
+@exdent vec_inserth (vector unsigned int, vector unsigned int, unsigned int);
+@end smallexample
+
+Let src be the first argument, when the first argument is a scalar, or the
+rightmost element of the first argument, when the first argument is a vector.
+Insert src into the second argument at the position identified by the third
+argument, using opposite element order in the second argument, and leaving the
+rest of the second argument unchanged.  If the byte index is greater than 14
+for halfwords, 12 for words, or 8 for doublewords, the intrinsic will be
+rejected. Note that the underlying hardware instruction uses the same register
+for the second argument and the result.
+For little-endian, the code generation will be semantically equivalent to
+@code{vins[bhwd]lx}, while for big-endian it will be semantically equivalent to
+@code{vins[bhwd]rx}.
+Note that some fairly anomalous results can be generated if the byte index is
+not aligned on an element boundary for the sort of element being inserted.
+@findex vec_inserth
+
+Vector Replace Element
+@smallexample
+@exdent vector signed int vec_replace_elt (vector signed int, signed int,
+const int);
+@exdent vector unsigned int vec_replace_elt (vector unsigned int,
+unsigned int, const int);
+@exdent vector float vec_replace_elt (vector float, float, const int);
+@exdent vector signed long long vec_replace_elt (vector signed long long,
+signed long long, const int);
+@exdent vector unsigned long long vec_replace_elt (vector unsigned long long,
+unsigned long long, const int);
+@exdent vector double rec_replace_elt (vector double, double, const int);
+@end smallexample
+The third argument (constrained to [0,3]) identifies the natural-endian
+element number of the first argument that will be replaced by the second
+argument to produce the result.  The other elements of the first argument will
+remain unchanged in the result.
+
+If it's desirable to insert a word at an unaligned position, use
+vec_replace_unaligned instead.
+
+@findex vec_replace_element
+
+Vector Replace Unaligned
+@smallexample
+@exdent vector unsigned char vec_replace_unaligned (vector unsigned char,
+signed int, const int);
+@exdent vector unsigned char vec_replace_unaligned (vector unsigned char,
+unsigned int, const int);
+@exdent vector unsigned char vec_replace_unaligned (vector unsigned char,
+float, const int);
+@exdent vector unsigned char vec_replace_unaligned (vector unsigned char,
+signed long long, const int);
+@exdent vector unsigned char vec_replace_unaligned (vector unsigned char,
+unsigned long long, const int);
+@exdent vector unsigned char vec_replace_unaligned (vector unsigned char,
+double, const int);
+@end smallexample
+
+The second argument replaces a portion of the first argument to produce the
+result, with the rest of the first argument unchanged in the result.  The
+third argument identifies the byte index (using left-to-right, or big-endian
+order) where the high-order byte of the second argument will be placed, with
+the remaining bytes of the second argument placed naturally "to the right"
+of the high-order byte.
+
+The programmer is responsible for understanding the endianness issues involved
+with the first argument and the result.
+@findex vec_replace_unaligned
+
+Vector Shift Left Double Bit Immediate
+@smallexample
+@exdent vector signed char vec_sldb (vector signed char, vector signed char,
+const unsigned int);
+@exdent vector unsigned char vec_sldb (vector unsigned char,
+vector unsigned char, const unsigned int);
+@exdent vector signed short vec_sldb (vector signed short, vector signed short,
+const unsigned int);
+@exdent vector unsigned short vec_sldb (vector unsigned short,
+vector unsigned short, const unsigned int);
+@exdent vector signed int vec_sldb (vector signed int, vector signed int,
+const unsigned int);
+@exdent vector unsigned int vec_sldb (vector unsigned int, vector unsigned int,
+const unsigned int);
+@exdent vector signed long long vec_sldb (vector signed long long,
+vector signed long long, const unsigned int);
+@exdent vector unsigned long long vec_sldb (vector unsigned long long,
+vector unsigned long long, const unsigned int);
+@exdent vector signed __int128 vec_sldb (vector signed __int128,
+vector signed __int128, const unsigned int);
+@exdent vector unsigned __int128 vec_sldb (vector unsigned __int128,
+vector unsigned __int128, const unsigned int);
+@end smallexample
+
+Shift the combined input vectors left by the amount specified by the low-order
+three bits of the third argument, and return the leftmost remaining 128 bits.
+Code using this instruction must be endian-aware.
+
+@findex vec_sldb
+
+Vector Shift Right Double Bit Immediate
+
+@smallexample
+@exdent vector signed char vec_srdb (vector signed char, vector signed char,
+const unsigned int);
+@exdent vector unsigned char vec_srdb (vector unsigned char, vector unsigned char,
+const unsigned int);
+@exdent vector signed short vec_srdb (vector signed short, vector signed short,
+const unsigned int);
+@exdent vector unsigned short vec_srdb (vector unsigned short, vector unsigned short,
+const unsigned int);
+@exdent vector signed int vec_srdb (vector signed int, vector signed int,
+const unsigned int);
+@exdent vector unsigned int vec_srdb (vector unsigned int, vector unsigned int,
+const unsigned int);
+@exdent vector signed long long vec_srdb (vector signed long long,
+vector signed long long, const unsigned int);
+@exdent vector unsigned long long vec_srdb (vector unsigned long long,
+vector unsigned long long, const unsigned int);
+@exdent vector signed __int128 vec_srdb (vector signed __int128,
+vector signed __int128, const unsigned int);
+@exdent vector unsigned __int128 vec_srdb (vector unsigned __int128,
+vector unsigned __int128, const unsigned int);
+@end smallexample
+
+Shift the combined input vectors right by the amount specified by the low-order
+three bits of the third argument, and return the remaining 128 bits.  Code
+using this built-in must be endian-aware.
+
+@findex vec_srdb
+
+Vector Splat
+
+@smallexample
+@exdent vector signed int vec_splati (const signed int);
+@exdent vector float vec_splati (const float);
+@end smallexample
+
+Splat a 32-bit immediate into a vector of words.
+
+@findex vec_splati
+
+@smallexample
+@exdent vector double vec_splatid (const float);
+@end smallexample
+
+Convert a single precision floating-point value to double-precision and splat
+the result to a vector of double-precision floats.
+
+@findex vec_splatid
+
+@smallexample
+@exdent vector signed int vec_splati_ins (vector signed int,
+const unsigned int, const signed int);
+@exdent vector unsigned int vec_splati_ins (vector unsigned int,
+const unsigned int, const unsigned int);
+@exdent vector float vec_splati_ins (vector float, const unsigned int,
+const float);
+@end smallexample
+
+Argument 2 must be either 0 or 1.  Splat the value of argument 3 into the word
+identified by argument 2 of each doubleword of argument 1 and return the
+result.  The other words of argument 1 are unchanged.
+
+@findex vec_splati_ins
+
+Vector Blend Variable
+
+@smallexample
+@exdent vector signed char vec_blendv (vector signed char, vector signed char,
+vector unsigned char);
+@exdent vector unsigned char vec_blendv (vector unsigned char,
+vector unsigned char, vector unsigned char);
+@exdent vector signed short vec_blendv (vector signed short,
+vector signed short, vector unsigned short);
+@exdent vector unsigned short vec_blendv (vector unsigned short,
+vector unsigned short, vector unsigned short);
+@exdent vector signed int vec_blendv (vector signed int, vector signed int,
+vector unsigned int);
+@exdent vector unsigned int vec_blendv (vector unsigned int,
+vector unsigned int, vector unsigned int);
+@exdent vector signed long long vec_blendv (vector signed long long,
+vector signed long long, vector unsigned long long);
+@exdent vector unsigned long long vec_blendv (vector unsigned long long,
+vector unsigned long long, vector unsigned long long);
+@exdent vector float vec_blendv (vector float, vector float,
+vector unsigned int);
+@exdent vector double vec_blendv (vector double, vector double,
+vector unsigned long long);
+@end smallexample
+
+Blend the first and second argument vectors according to the sign bits of the
+corresponding elements of the third argument vector.  This is similar to the
+@code{vsel} and @code{xxsel} instructions but for bigger elements.
+
+@findex vec_blendv
+
+Vector Permute Extended
+

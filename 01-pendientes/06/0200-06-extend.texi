@@ -1,0 +1,264 @@
+@c GCC 16.1.0 | BLOQUE 0200 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 5876-6135 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item branch-protection
+Select the function scope on which branch protection will be applied.  The
+behavior and permissible arguments are the same as for the command-line option
+@option{-mbranch-protection=}.  The default value is @code{none}.
+
+@atindex @code{target("outline-atomics")}, AArch64
+@item outline-atomics
+@itemx no-outline-atomics
+Enable or disable calls to out-of-line helpers to implement atomic operations.
+This corresponds to the behavior of the command-line options
+@option{-moutline-atomics} and @option{-mno-outline-atomics}.
+
+@atindex @code{target("max-vectorization")}, AArch64
+@item max-vectorization
+@itemx no-max-vectorization
+@code{max-vectorization} tells GCC's vectorizer to treat all vector
+loops as being more profitable than the original scalar loops when
+optimizing the current function.  @code{no-max-vectorization} disables
+this behavior.
+This corresponds to the behavior of the command-line options
+@option{-mmax-vectorization} and @option{-mno-max-vectorization}.
+
+@atindex @code{target("indirect_return")}, AArch64
+@item indirect_return
+The @code{indirect_return} attribute can be applied to a function type
+to indicate that the function may return via an indirect branch instead
+of via a normal return instruction.  For example, this can be true of
+functions that implement manual context switching between user space
+threads, such as the POSIX @code{swapcontext} function.  This attribute
+adds a @code{BTI J} instruction when BTI is enabled e.g. via
+@option{-mbranch-protection}.
+
+@atindex @code{target("preserve_none")}, AArch64
+@item preserve_none
+Use this attribute to change the procedure call standard of the specified
+function to the preserve-none variant.
+
+The preserve-none ABI variant modifies the AAPCS such that it has no
+callee-saved registers (including SIMD and floating-point registers). That is,
+with the exception of the stack register, link register (r30), and frame pointer
+(r29), all registers are changed to caller saved, and can be used as scratch
+registers by the callee.
+
+Additionally, registers r20--r28, r0--r7, r10--r14, r9 and r15 are used for
+argument passing, in that order.  For Microsoft Windows targets
+r15 is not used for argument passing.
+
+The return value registers remain r0 and r1 in both cases.
+
+All other details are the same as for the AAPCS ABI.
+
+This ABI has not been stabilized, and may be subject to change in future
+versions.
+@end table
+
+Specifying @code{target} attributes on individual functions or performing
+link-time optimization across translation units compiled with different
+target options can affect function inlining rules.
+
+In particular, a caller function can inline a callee function only if the
+architectural features available to the callee are a subset of the features
+available to the caller.
+For example: A function @code{foo} compiled with @option{-march=armv8-a+crc},
+or tagged with the equivalent @code{arch=armv8-a+crc} attribute,
+can inline a function @code{bar} compiled with @option{-march=armv8-a+nocrc}
+because the all the architectural features that function @code{bar} requires
+are available to function @code{foo}.  Conversely, function @code{bar} cannot
+inline function @code{foo}.
+
+Additionally inlining a function compiled with @option{-mstrict-align} into a
+function compiled without @code{-mstrict-align} is not allowed.
+However, inlining a function compiled without @option{-mstrict-align} into a
+function compiled with @option{-mstrict-align} is allowed.
+
+Note that CPU tuning options and attributes such as the @option{-mcpu=},
+@option{-mtune=} do not inhibit inlining unless the CPU specified by the
+@option{-mcpu=} option or the @code{cpu=} attribute conflicts with the
+architectural feature rules specified above.
+
+@end table
+
+@anchor{AMD GCN Function Attributes}
+@node AMD GCN Attributes
+@subsubsection AMD GCN Attributes
+
+These attributes are supported by the AMD GCN back end:
+
+@table @code
+@atindex @code{amdgpu_hsa_kernel}, AMD GCN
+@item amdgpu_hsa_kernel
+This attribute applies to functions.
+
+It indicates that the corresponding function should be compiled as
+a kernel function, that is, an entry point that can be invoked from the host
+via the HSA runtime library.  By default functions are only callable only from
+other GCN functions.
+
+This attribute is implicitly applied to any function named @code{main}, using
+default parameters.
+
+Kernel functions may return an integer value, which will be written to a
+conventional place within the HSA "kernargs" region.
+
+The attribute parameters configure what values are passed into the kernel
+function by the GPU drivers, via the initial register state.  Some values are
+used by the compiler, and therefore forced on.  Enabling other options may
+break assumptions in the compiler and/or run-time libraries.
+
+@table @code
+@item private_segment_buffer
+Set @code{enable_sgpr_private_segment_buffer} flag.  Always on (required to
+locate the stack).
+
+@item dispatch_ptr
+Set @code{enable_sgpr_dispatch_ptr} flag.  Always on (required to locate the
+launch dimensions).
+
+@item queue_ptr
+Set @code{enable_sgpr_queue_ptr} flag.  Always on (required to convert address
+spaces).
+
+@item kernarg_segment_ptr
+Set @code{enable_sgpr_kernarg_segment_ptr} flag.  Always on (required to
+locate the kernel arguments, "kernargs").
+
+@item dispatch_id
+Set @code{enable_sgpr_dispatch_id} flag.
+
+@item flat_scratch_init
+Set @code{enable_sgpr_flat_scratch_init} flag.
+
+@item private_segment_size
+Set @code{enable_sgpr_private_segment_size} flag.
+
+@item grid_workgroup_count_X
+Set @code{enable_sgpr_grid_workgroup_count_x} flag.  Always on (required to
+use OpenACC/OpenMP).
+
+@item grid_workgroup_count_Y
+Set @code{enable_sgpr_grid_workgroup_count_y} flag.
+
+@item grid_workgroup_count_Z
+Set @code{enable_sgpr_grid_workgroup_count_z} flag.
+
+@item workgroup_id_X
+Set @code{enable_sgpr_workgroup_id_x} flag.
+
+@item workgroup_id_Y
+Set @code{enable_sgpr_workgroup_id_y} flag.
+
+@item workgroup_id_Z
+Set @code{enable_sgpr_workgroup_id_z} flag.
+
+@item workgroup_info
+Set @code{enable_sgpr_workgroup_info} flag.
+
+@item private_segment_wave_offset
+Set @code{enable_sgpr_private_segment_wave_byte_offset} flag.  Always on
+(required to locate the stack).
+
+@item work_item_id_X
+Set @code{enable_vgpr_workitem_id} parameter.  Always on (can't be disabled).
+
+@item work_item_id_Y
+Set @code{enable_vgpr_workitem_id} parameter.  Always on (required to enable
+vectorization.)
+
+@item work_item_id_Z
+Set @code{enable_vgpr_workitem_id} parameter.  Always on (required to use
+OpenACC/OpenMP).
+
+@end table
+@end table
+
+@anchor{ARC Function Attributes}
+@anchor{ARC Type Attributes}
+@anchor{ARC Variable Attributes}
+@node ARC Attributes
+@subsubsection ARC Attributes
+
+These attributes are supported by the ARC back end:
+
+@table @code
+@atindex @code{interrupt}, ARC
+@item interrupt
+This attribute applies to functions.
+
+It indicates
+that the specified function is an interrupt handler.  The compiler generates
+function entry and exit sequences suitable for use in an interrupt handler
+when this attribute is present.
+
+On the ARC, you must specify the kind of interrupt to be handled
+in a parameter to the interrupt attribute like this:
+
+@smallexample
+void f () __attribute__ ((interrupt ("ilink1")));
+@end smallexample
+
+Permissible values for this parameter are: @w{@code{ilink1}} and
+@w{@code{ilink2}} for ARCv1 architecture, and @w{@code{ilink}} and
+@w{@code{firq}} for ARCv2 architecture.
+
+@atindex @code{long_call}, ARC
+@atindex @code{medium_call}, ARC
+@atindex @code{short_call}, ARC
+@cindex indirect calls, ARC
+@item long_call
+@itemx medium_call
+@itemx short_call
+These attributes apply to functions.
+
+These attributes specify how a particular function is called.
+They override the
+@option{-mlong-calls} and @option{-mmedium-calls} (@pxref{ARC Options})
+command-line switches and @code{#pragma long_calls} settings.
+
+For ARC, a function marked with the @code{long_call} attribute is
+always called using register-indirect jump-and-link instructions,
+thereby enabling the called function to be placed anywhere within the
+32-bit address space.  A function marked with the @code{medium_call}
+attribute will always be close enough to be called with an unconditional
+branch-and-link instruction, which has a 25-bit offset from
+the call site.  A function marked with the @code{short_call}
+attribute will always be close enough to be called with a conditional
+branch-and-link instruction, which has a 21-bit offset from
+the call site.
+
+@atindex @code{jli_always}, ARC
+@item jli_always
+This attribute applies to functions.
+
+It forces the associated function to be called using a @code{jli}
+instruction.  The @code{jli} instruction makes use of a table stored
+into @code{.jlitab} section, which holds the location of the functions
+which are addressed using this instruction.
+
+@atindex @code{jli_fixed}, ARC
+@item jli_fixed
+This attribute applies to functions.
+
+Identical to @code{jli_always} above, but the location of the function in the
+@code{jli} table is known and given as an attribute parameter.
+
+@atindex @code{secure_call}, ARC
+@item secure_call
+This attribute applies to functions.
+
+It allows you to mark secure-code functions that are
+callable from normal mode.  The location of the secure call function
+into the @code{sjli} table needs to be passed as argument.
+
+@atindex @code{aux}, ARC
+@item aux
+This attribute applies to variables.
+
+The @code{aux} attribute is used to directly access the ARC's
+auxiliary register space from C.  The auxiliary register number is
+given via attribute argument.
+

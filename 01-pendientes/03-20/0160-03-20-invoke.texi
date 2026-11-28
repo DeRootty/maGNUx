@@ -1,0 +1,190 @@
+@c GCC 16.1.0 | BLOQUE 0160 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 36415-36600 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -mvzeroupper
+This option instructs GCC to emit a @code{vzeroupper} instruction
+before a transfer of control flow out of the function to minimize
+the AVX to SSE transition penalty as well as remove unnecessary @code{zeroupper}
+intrinsics.
+
+@opindex mstv
+@opindex mno-stv
+@item -mstv
+@itemx -mno-stv
+Enable/disable Scalar to Vectorization pass transforming 64-bit
+integer computation into vector ones.  This optimization is restricted
+to @option{-O2} and higher.
+
+@opindex mprefer-avx128
+@opindex mno-prefer-avx128
+@item -mprefer-avx128
+This option instructs GCC to use 128-bit AVX instructions instead of
+256-bit AVX instructions in the auto-vectorizer.
+
+@opindex mprefer-vector-width
+@item -mprefer-vector-width=@var{opt}
+This option instructs GCC to use @var{opt}-bit vector width in instructions
+instead of default on the selected platform.
+
+@opindex mpartial-vector-fp-math
+@opindex mno-partial-vector-fp-math
+@item -mpartial-vector-fp-math
+@itemx -mno-partial-vector-fp-math
+This option enables GCC to generate floating-point operations that might
+affect the set of floating-point status flags on partial vectors, where
+vector elements reside in the low part of the 128-bit SSE register.  Unless
+@option{-fno-trapping-math} is specified, the compiler guarantees correct
+behavior by sanitizing all input operands to have zeroes in the unused
+upper part of the vector register.  Note that by using built-in functions
+or inline assembly with partial vector arguments, NaNs, denormal or invalid
+values can leak into the upper part of the vector, causing possible
+performance issues when @option{-fno-trapping-math} is in effect.  These
+issues can be mitigated by manually sanitizing the upper part of the partial
+vector argument register or by using @option{-mdaz-ftz} to set
+denormals-are-zero (DAZ) flag in the MXCSR register.
+
+This option is enabled by default.
+
+@opindex mmove-max
+@item -mmove-max=@var{bits}
+This option instructs GCC to set the maximum number of bits can be
+moved from memory to memory efficiently to @var{bits}.  The valid
+@var{bits} are 128, 256 and 512.
+
+@opindex mstore-max
+@item -mstore-max=@var{bits}
+This option instructs GCC to set the maximum number of bits can be
+stored to memory efficiently to @var{bits}.  The valid @var{bits} are
+128, 256 and 512.
+
+@table @samp
+@item none
+No extra limitations applied to GCC other than defined by the selected platform.
+
+@item 128
+Prefer 128-bit vector width for instructions.
+
+@item 256
+Prefer 256-bit vector width for instructions.
+
+@item 512
+Prefer 512-bit vector width for instructions.
+@end table
+
+@opindex mnoreturn-no-callee-saved-registers
+@opindex mno-noreturn-no-callee-saved-registers
+@item -mnoreturn-no-callee-saved-registers
+This option optimizes functions with @code{noreturn} attribute or
+@code{_Noreturn} specifier by not saving in the function prologue callee-saved
+registers which are used in the function (except for the @code{BP}
+register).  This option can interfere with debugging of the caller of the
+@code{noreturn} function or any function further up in the call stack, so it
+is not enabled by default.
+
+@opindex mcx16
+@opindex mno-cx16
+@item -mcx16
+This option enables GCC to generate @code{CMPXCHG16B} instructions in 64-bit
+code to implement compare-and-exchange operations on 16-byte aligned 128-bit
+objects.  This is useful for atomic updates of data structures exceeding one
+machine word in size.  The compiler uses this instruction to implement
+@ref{__sync Builtins}.  However, for @ref{__atomic Builtins} operating on
+128-bit integers, a library call is always used.
+
+@opindex msahf
+@opindex mno-sahf
+@item -msahf
+This option enables generation of @code{SAHF} instructions in 64-bit code.
+Early Intel Pentium 4 CPUs with Intel 64 support,
+prior to the introduction of Pentium 4 G1 step in December 2005,
+lacked the @code{LAHF} and @code{SAHF} instructions
+which are supported by AMD64.
+These are load and store instructions, respectively, for certain status flags.
+In 64-bit mode, the @code{SAHF} instruction is used to optimize @code{fmod},
+@code{drem}, and @code{remainder} built-in functions;
+see @ref{Other Builtins} for details.
+
+@opindex mmovbe
+@opindex mno-movbe
+@item -mmovbe
+This option enables use of the @code{movbe} instruction to optimize
+byte swapping of four and eight byte entities.
+
+@opindex mshstk
+@opindex mno-shstk
+@item -mshstk
+The @option{-mshstk} option enables shadow stack built-in functions
+from x86 Control-flow Enforcement Technology (CET).
+
+@opindex mcrc32
+@opindex mno-crc32
+@item -mcrc32
+This option enables built-in functions @code{__builtin_ia32_crc32qi},
+@code{__builtin_ia32_crc32hi}, @code{__builtin_ia32_crc32si} and
+@code{__builtin_ia32_crc32di} to generate the @code{crc32} machine instruction.
+
+@opindex mmwait
+@opindex mno-mwait
+@item -mmwait
+This option enables built-in functions @code{__builtin_ia32_monitor},
+and @code{__builtin_ia32_mwait} to generate the @code{monitor} and
+@code{mwait} machine instructions.
+
+@opindex mrecip
+@opindex mno-recip
+@item -mrecip
+This option enables use of @code{RCPSS} and @code{RSQRTSS} instructions
+(and their vectorized variants @code{RCPPS} and @code{RSQRTPS})
+with an additional Newton-Raphson step
+to increase precision instead of @code{DIVSS} and @code{SQRTSS}
+(and their vectorized
+variants) for single-precision floating-point arguments.  These instructions
+are generated only when @option{-funsafe-math-optimizations} is enabled
+together with @option{-ffinite-math-only} and @option{-fno-trapping-math}.
+Note that while the throughput of the sequence is higher than the throughput
+of the non-reciprocal instruction, the precision of the sequence can be
+decreased by up to 2 ulp (i.e.@: the inverse of 1.0 equals 0.99999994).
+
+Note that GCC implements @code{1.0f/sqrtf(@var{x})} in terms of @code{RSQRTSS}
+(or @code{RSQRTPS}) already with @option{-ffast-math} (or the above option
+combination), and doesn't need @option{-mrecip}.
+
+Also note that GCC emits the above sequence with additional Newton-Raphson step
+for vectorized single-float division and vectorized @code{sqrtf(@var{x})}
+already with @option{-ffast-math} (or the above option combination), and
+doesn't need @option{-mrecip}.
+
+@opindex mrecip=
+@item -mrecip=@var{opt}
+This option controls which reciprocal estimate instructions
+may be used.  @var{opt} is a comma-separated list of options, which may
+be preceded by a @samp{!} to invert the option:
+
+@table @samp
+@item all
+Enable all estimate instructions.
+
+@item default
+Enable the default instructions, equivalent to @option{-mrecip}.
+
+@item none
+Disable all estimate instructions, equivalent to @option{-mno-recip}.
+
+@item div
+Enable the approximation for scalar division.
+
+@item vec-div
+Enable the approximation for vectorized division.
+
+@item sqrt
+Enable the approximation for scalar square root.
+
+@item vec-sqrt
+Enable the approximation for vectorized square root.
+@end table
+
+So, for example, @option{-mrecip=all,!sqrt} enables
+all of the reciprocal approximations, except for square root.
+
+@opindex mveclibabi

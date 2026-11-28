@@ -1,0 +1,260 @@
+@c GCC 16.1.0 | BLOQUE 0263 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 13226-13481 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Local Register Variables
+@subsubsection Specifying Registers for Local Variables
+@anchor{Local Reg Vars}
+@cindex local variables, specifying registers
+@cindex specifying registers for local variables
+@cindex registers for local variables
+
+You can define a local register variable and associate it with a specified 
+register like this:
+
+@smallexample
+register int *foo asm ("r12");
+@end smallexample
+
+@noindent
+Here @code{r12} is the name of the register that should be used.  Note
+that this is the same syntax used for defining global register variables, 
+but for a local variable the declaration appears within a function.  The 
+@code{register} keyword is required, and cannot be combined with 
+@code{static}.  The register name must be a valid register name for the
+target platform.
+
+Do not use type qualifiers such as @code{const} and @code{volatile}, as
+the outcome may be contrary to expectations. In particular, when the
+@code{const} qualifier is used, the compiler may substitute the
+variable with its initializer in @code{asm} statements, which may cause
+the corresponding operand to appear in a different register.
+
+As with global register variables, it is recommended that you choose 
+a register that is normally saved and restored by function calls on your 
+machine, so that calls to library routines will not clobber it.
+
+The only supported use for this feature is to specify registers
+for input and output operands when calling Extended @code{asm} 
+(@pxref{Extended Asm}).  This may be necessary if the constraints for a 
+particular machine don't provide sufficient control to select the desired 
+register.  To force an operand into a register, create a local variable 
+and specify the register name after the variable's declaration.  Then use 
+the local variable for the @code{asm} operand and specify any constraint 
+letter that matches the register:
+
+@smallexample
+register int *p1 asm ("r0") = @dots{};
+register int *p2 asm ("r1") = @dots{};
+register int *result asm ("r0");
+asm ("sysint" : "=r" (result) : "0" (p1), "r" (p2));
+@end smallexample
+
+@emph{Warning:} In the above example, be aware that a register (for example 
+@code{r0}) can be call-clobbered by subsequent code, including function 
+calls and library calls for arithmetic operators on other variables (for 
+example the initialization of @code{p2}).  In this case, use temporary 
+variables for expressions between the register assignments:
+
+@smallexample
+int t1 = @dots{};
+register int *p1 asm ("r0") = @dots{};
+register int *p2 asm ("r1") = t1;
+register int *result asm ("r0");
+asm ("sysint" : "=r" (result) : "0" (p1), "r" (p2));
+@end smallexample
+
+Defining a register variable does not reserve the register.  Other than
+when invoking the Extended @code{asm}, the contents of the specified 
+register are not guaranteed.  For this reason, the following uses 
+are explicitly @emph{not} supported.  If they appear to work, it is only 
+happenstance, and may stop working as intended due to (seemingly) 
+unrelated changes in surrounding code, or even minor changes in the 
+optimization of a future version of gcc:
+
+@itemize @bullet
+@item Passing parameters to or from Basic @code{asm}
+@item Passing parameters to or from Extended @code{asm} without using input 
+or output operands.
+@item Passing parameters to or from routines written in assembler (or
+other languages) using non-standard calling conventions.
+@end itemize
+
+Some developers use Local Register Variables in an attempt to improve 
+gcc's allocation of registers, especially in large functions.  In this 
+case the register name is essentially a hint to the register allocator.
+While in some instances this can generate better code, improvements are
+subject to the whims of the allocator/optimizers.  Since there are no
+guarantees that your improvements won't be lost, this usage of Local
+Register Variables is discouraged.
+
+On the MIPS platform, there is related use for local register variables 
+with slightly different characteristics (@pxref{MIPS Coprocessors,, 
+Defining coprocessor specifics for MIPS targets, gccint, 
+GNU Compiler Collection (GCC) Internals}).
+
+@node Hard Register Constraints
+@subsubsection Hard Register Constraints
+
+Similar to register @code{asm} but still distinct, hard register constraints
+are another way to force operands of inline @code{asm} into specific machine
+registers.  In contrast to register @code{asm} where a variable is bound to a
+machine register, a hard register constraint binds an @code{asm} operand to a
+machine register.  Assume in the following that @code{r4} is a general-purpose
+register, @code{f5} a floating-point register, and @code{v6} a vector register
+for some target.
+
+@smallexample
+int x;
+int y __attribute__ ((vector_size (16)));
+@dots{}
+asm ("some instructions"
+     : "=@{r4@}" (x)
+     : "@{f5@}" (42.0), "@{v6@}" (y));
+@end smallexample
+
+For the inline @code{asm}, variable @code{x} is bound to register @code{r4},
+and @code{y} is loaded to @code{v6}.  Furthermore, constant @code{42.0} is
+loaded into floating-point register @code{f5}.
+
+A key difference between register @code{asm} and hard register constraints is
+that the latter are specified at the point where they are supposed to
+materialize, namely at inline @code{asm}, which may lead to more readable code.
+
+@subsubheading Usage
+
+Each input operand is loaded into the register specified by its corresponding
+hard register constraint.  Furthermore, each hard register must be used at most
+once among an alternative for inputs.  This renders hard register constraints
+more strict compared to register @code{asm} where multiple inputs may share a
+register as for example in
+
+@smallexample
+int x;
+register int y asm ("0") = @dots{};
+asm ("" : "=r" (x) : "r" (y), "r" (y));
+@end smallexample
+
+or even
+
+@smallexample
+register int x asm ("0") = 42;
+register int y asm ("0") = 24;
+asm ("" : "=r" (x) : "r" (x), "r" (y));
+@end smallexample
+
+The analogue for hard register constraints is invalid in order to prevent
+subtle bugs.
+
+Likewise, two outputs must not share a register among an alternative.  That
+means, the following example is invalid
+
+@smallexample
+int x, y;
+asm ("" : "=@{r4@}" (x), "=@{r4@}" (y));  // invalid
+@end smallexample
+
+which also aligns with register @code{asm}.  Despite that, each output must
+refer to a distinct object if a hard register constraint is involved.  For
+example, in the following, object @code{x} is assigned two registers.
+
+@smallexample
+int x;
+asm ("" : "=r" (x), "=r" (x));
+@end smallexample
+
+This is not allowed for hard register constraints in order to prevent subtle
+bugs.  Even if only one output operand has a hard register constraint, the code
+is rejected since the allocation for the object is still ambiguous.
+
+@smallexample
+int x;
+asm ("" : "=r" (x), "=@{1@}" (x));  // invalid
+@end smallexample
+
+The type of an operand must be supported by the corresponding machine register.
+
+A hard register constraint may refer to any general, floating-point, or vector
+register except a fixed register as e.g.@: the stack-pointer register.  The set
+of allowed registers is target dependent analogue to register @code{asm}.
+Furthermore, the referenced register must be a valid register name of the
+target.  Note, on some targets, a single register may be referred to by
+different names where each name specifies the length of the register.  For
+example, on x86_64 the register names @code{rcx}, @code{ecx}, and @code{cx} all
+refer to the same register but in different sizes.  If any of those names is
+used for a hard register constraint, the actual size of a register is
+determined by its corresponding operand.  For example
+
+@smallexample
+long x;
+asm ("mov\t$42, %0" : "=@{ecx@}" (x));
+@end smallexample
+
+Although the hard register constraint refers to register @code{ecx}, the actual
+register will be @code{rcx} since on x86_64 a @code{long} is 8 byte in total.
+This aligns with register @code{asm} where you could have
+
+@smallexample
+register long x asm ("ecx");
+@end smallexample
+
+@subsubheading Interaction with Register @code{asm}
+
+A mixture of both constructs as for example
+
+@smallexample
+register int x asm ("r4") = 42;
+int y;
+asm ("" : "=@{r5@}" (y) : "r" (x));
+@end smallexample
+
+is valid.
+
+If an operand is a register @code{asm} and the corresponding constraint a hard
+register, then both must refer to the same register.  That means
+
+@smallexample
+register int x asm ("r4");
+asm ("" : "=@{r4@}" (x));
+@end smallexample
+
+is valid and
+
+@smallexample
+register int x asm ("r4");
+asm ("" : "=@{r5@}" (x));  // invalid
+@end smallexample
+
+is invalid.
+
+Note, register @code{asm} may not only be clobbered by function calls but also
+by inline @code{asm} in conjunction with hard register constraints.  For
+example, in the following
+
+@smallexample
+register int x asm ("r5") = 42;
+int y;
+asm ("" : "=@{r5@}" (y));
+asm ("" : "+r" (x));
+@end smallexample
+
+variable @code{x} materializes before the very first inline @code{asm} which
+writes to register @code{r5} and therefore clobbers @code{x} which in turn is
+read by the subsequent inline @code{asm}.
+
+@subsubheading Limitations
+
+At the moment fixed registers are not supported for hard register constraints.
+Thus, idioms like
+
+@smallexample
+register void *x asm ("rsp");
+asm ("" : "=r" (x));
+@end smallexample
+
+are not supported for hard register constraints.  This might be lifted.
+
+Multiple hard register constraints in one alternative are also not supported.
+Furthermore, combinations of hard register constraints and regular register
+constraints in one alternative are not supported, too.
+

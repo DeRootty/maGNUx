@@ -1,0 +1,229 @@
+@c GCC 16.1.0 | BLOQUE 0065 | 03-12
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 16359-16583 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -funsafe-math-optimizations
+
+Allow optimizations for floating-point arithmetic that (a) assume
+that arguments and results are valid and (b) may violate IEEE or
+ANSI standards.  When used at link time, it may include libraries
+or startup files that change the default FPU control word or other
+similar optimizations.
+
+This option is not turned on by any @option{-O} option besides
+@option{-Ofast} since it can result in incorrect output
+for programs that depend on an exact implementation of IEEE
+or ISO rules/specifications for math functions. It may, however,
+yield faster code for programs that do not require the guarantees
+of these specifications.
+Enables @option{-fno-signed-zeros}, @option{-fno-trapping-math},
+@option{-fassociative-math} and @option{-freciprocal-math}.
+
+The default is @option{-fno-unsafe-math-optimizations}.
+
+@opindex fassociative-math
+@opindex fno-associative-math
+@item -fassociative-math
+
+Allow re-association of operands in series of floating-point operations.
+This violates the ISO C and C++ language standard by possibly changing
+computation result.  NOTE: re-ordering may change the sign of zero as
+well as ignore NaNs and inhibit or create underflow or overflow (and
+thus cannot be used on code that relies on rounding behavior like
+@code{(x + 2**52) - 2**52}.  May also reorder floating-point comparisons
+and thus may not be used when ordered comparisons are required.
+This option requires that both @option{-fno-signed-zeros} and
+@option{-fno-trapping-math} be in effect.  Moreover, it doesn't make
+much sense with @option{-frounding-math}. For Fortran the option
+is automatically enabled when both @option{-fno-signed-zeros} and
+@option{-fno-trapping-math} are in effect.
+
+The default is @option{-fno-associative-math}.
+
+@opindex freciprocal-math
+@opindex fno-reciprocal-math
+@item -freciprocal-math
+
+Allow the reciprocal of a value to be used instead of dividing by
+the value if this enables optimizations.  For example @code{x / y}
+can be replaced with @code{x * (1/y)}, which is useful if @code{(1/y)}
+is subject to common subexpression elimination.  Note that this loses
+precision and increases the number of flops operating on the value.
+
+The default is @option{-fno-reciprocal-math}.
+
+@opindex ffinite-math-only
+@opindex fno-finite-math-only
+@item -ffinite-math-only
+Allow optimizations for floating-point arithmetic that assume
+that arguments and results are not NaNs or +-Infs.
+
+This option is not turned on by any @option{-O} option besides
+@option{-Ofast} since it can result in incorrect output
+for programs that depend on an exact implementation of IEEE or
+ISO rules/specifications for math functions. It may, however,
+yield faster code for programs that do not require the guarantees
+of these specifications.
+
+The default is @option{-fno-finite-math-only}.
+
+@opindex fno-signed-zeros
+@opindex fsigned-zeros
+@item -fno-signed-zeros
+Allow optimizations for floating-point arithmetic that ignore the
+signedness of zero.  IEEE arithmetic specifies the behavior of
+distinct +0.0 and @minus{}0.0 values, which then prohibits simplification
+of expressions such as x+0.0 or 0.0*x (even with @option{-ffinite-math-only}).
+This option implies that the sign of a zero result isn't significant.
+
+The default is @option{-fsigned-zeros}.
+
+@opindex fno-trapping-math
+@opindex ftrapping-math
+@item -fno-trapping-math
+Compile code assuming that floating-point operations cannot generate
+user-visible traps.  These traps include division by zero, overflow,
+underflow, inexact result and invalid operation.  This option requires
+that @option{-fno-signaling-nans} be in effect.  Setting this option may
+allow faster code if one relies on ``non-stop'' IEEE arithmetic, for example.
+
+This option is not turned on by any @option{-O} option besides
+@option{-Ofast} since it can result in incorrect output for programs
+that depend on an exact implementation of IEEE or ISO rules/specifications
+for math functions.
+
+The default is @option{-ftrapping-math}.
+
+Future versions of GCC may provide finer control of this setting
+using C99's @code{FENV_ACCESS} pragma.  This command-line option
+will be used along with @option{-frounding-math} to specify the
+default state for @code{FENV_ACCESS}.
+
+@opindex frounding-math
+@opindex fno-rounding-math
+@item -frounding-math
+Disable transformations and optimizations that assume default floating-point
+rounding behavior (round-to-nearest).
+This option should be specified for programs that change
+the FP rounding mode dynamically, or that may be executed with a
+non-default rounding mode.  This option disables constant folding of
+floating-point expressions at compile time (which may be affected by
+rounding mode) and arithmetic transformations that are unsafe in the
+presence of sign-dependent rounding modes.
+
+The default is @option{-fno-rounding-math}.
+
+This option is experimental and does not currently guarantee to
+disable all GCC optimizations that are affected by rounding mode.
+Future versions of GCC may provide finer control of this setting
+using C99's @code{FENV_ACCESS} pragma.  This command-line option
+will be used along with @option{-ftrapping-math} to specify the
+default state for @code{FENV_ACCESS}.
+
+@opindex fsignaling-nans
+@opindex fno-signaling-nans
+@item -fsignaling-nans
+Compile code assuming that IEEE signaling NaNs may generate user-visible
+traps during floating-point operations.  Setting this option disables
+optimizations that may change the number of exceptions visible with
+signaling NaNs.  This option implies @option{-ftrapping-math}.
+
+This option causes the preprocessor macro @code{__SUPPORT_SNAN__} to
+be defined.
+
+The default is @option{-fno-signaling-nans}.
+
+This option is experimental and does not currently guarantee to
+disable all GCC optimizations that affect signaling NaN behavior.
+
+@opindex fsingle-precision-constant
+@opindex fno-single-precision-constant
+@item -fsingle-precision-constant
+Treat floating-point constants as single precision instead of
+implicitly converting them to double-precision constants.
+
+@opindex fcx-limited-range
+@opindex fno-cx-limited-range
+@item -fcx-limited-range
+When enabled, this option states that a range reduction step is not
+needed when performing complex division.  Also, there is no checking
+whether the result of a complex multiplication or division is @code{NaN
++ I*NaN}, with an attempt to rescue the situation in that case.  The
+option is enabled by @option{-ffast-math}.
+
+This option controls the default setting of the ISO C99
+@code{CX_LIMITED_RANGE} pragma.  Nevertheless, the option applies to
+all languages.
+
+@opindex fcx-fortran-rules
+@opindex fno-cx-fortran-rules
+@item -fcx-fortran-rules
+Complex multiplication and division follow Fortran rules.  Range
+reduction is done as part of complex division, but there is no checking
+whether the result of a complex multiplication or division is @code{NaN
++ I*NaN}, with an attempt to rescue the situation in that case.
+
+@opindex fcx-method
+@item -fcx-method=@var{method}
+Complex multiplication and division follow the stated @var{method}.  The
+@var{method} argument should be one of @samp{limited-range}, @samp{fortran}
+or @samp{stdc}.
+
+The default is to honor language specific constraints which means
+@samp{fortran} for Fortran and @samp{stdc} otherwise.
+
+@end table
+
+The following options control optimizations that may improve
+performance, but are not enabled by any @option{-O} options.  This
+section includes experimental options that may produce broken code.
+
+@table @gcctabopt
+@opindex fbranch-probabilities
+@opindex fno-branch-probabilities
+@item -fbranch-probabilities
+After running a program compiled with @option{-fprofile-arcs}
+(@pxref{Instrumentation Options}),
+you can compile it a second time using
+@option{-fbranch-probabilities}, to improve optimizations based on
+the number of times each branch was taken.  When a program
+compiled with @option{-fprofile-arcs} exits, it saves arc execution
+counts to a file called @file{@var{sourcename}.gcda} for each source
+file.  The information in this data file is very dependent on the
+structure of the generated code, so you must use the same source code
+and the same optimization options for both compilations.
+See details about the file naming in @option{-fprofile-arcs}.
+
+With @option{-fbranch-probabilities}, GCC puts a
+@samp{REG_BR_PROB} note on each @samp{JUMP_INSN} and @samp{CALL_INSN}.
+These can be used to improve optimization.  Currently, they are only
+used in one place: in @file{reorg.cc}, instead of guessing which path a
+branch is most likely to take, the @samp{REG_BR_PROB} values are used to
+exactly determine which path is taken more often.
+
+Enabled by @option{-fprofile-use} and @option{-fauto-profile}.
+
+@opindex fprofile-values
+@opindex fno-profile-values
+@item -fprofile-values
+If combined with @option{-fprofile-arcs}, it adds code so that some
+data about values of expressions in the program is gathered.
+
+With @option{-fbranch-probabilities}, it reads back the data gathered
+from profiling values of expressions for usage in optimizations.
+
+Enabled by @option{-fprofile-generate}, @option{-fprofile-use}, and
+@option{-fauto-profile}.
+
+@opindex fprofile-reorder-functions
+@opindex fno-profile-reorder-functions
+@item -fprofile-reorder-functions
+Function reordering based on profile instrumentation collects
+first time of execution of a function and orders these functions
+in ascending order, aiming to optimize program startup through more
+efficient loading of text segments.
+
+Enabled with @option{-fprofile-use}.
+
+@opindex fvpt
+@opindex fno-vpt

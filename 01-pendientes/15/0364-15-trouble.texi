@@ -1,0 +1,58 @@
+@c GCC 16.1.0 | BLOQUE 0364 | 15
+@c Fuente: gcc/doc/trouble.texi | blob: ad13357c30a7540755cbde108c6aa2c121ea111a
+@c Lineas originales: 1145-1198 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@opindex pedantic-errors
+ISO C requires a ``diagnostic'' message for certain kinds of invalid
+programs, but a warning is defined by GCC to count as a diagnostic.  If
+GCC produces a warning but not an error, that is correct ISO C support.
+If testsuites call this ``failure'', they should be run with the GCC
+option @option{-pedantic-errors}, which will turn these warnings into
+errors.
+
+@end itemize
+
+@node Warnings and Errors
+@section Warning Messages and Error Messages
+
+@cindex error messages
+@cindex warnings vs errors
+@cindex messages, warning and error
+The GNU compiler can produce two kinds of diagnostics: errors and
+warnings.  Each kind has a different purpose:
+
+@itemize @w{}
+@item
+@dfn{Errors} report problems that make it impossible to compile your
+program.  GCC reports errors with the source file name and line
+number where the problem is apparent.
+
+@item
+@dfn{Warnings} report other unusual conditions in your code that
+@emph{may} indicate a problem, although compilation can (and does)
+proceed.  Warning messages also report the source file name and line
+number, but include the text @samp{warning:} to distinguish them
+from error messages.
+@end itemize
+
+Warnings may indicate danger points where you should check to make sure
+that your program really does what you intend; or the use of obsolete
+features; or the use of nonstandard features of GNU C or C++.  Many
+warnings are issued only if you ask for them, with one of the @option{-W}
+options (for instance, @option{-Wall} requests a variety of useful
+warnings).
+
+@opindex pedantic
+@opindex pedantic-errors
+GCC always tries to compile your program if possible; it never
+gratuitously rejects a program whose meaning is clear merely because
+(for instance) it fails to conform to a standard.  In some cases,
+however, the C and C++ standards specify that certain extensions are
+forbidden, and a diagnostic @emph{must} be issued by a conforming
+compiler.  The @option{-pedantic} option tells GCC to issue warnings in
+such cases; @option{-pedantic-errors} says to make them errors instead.
+This does not mean that @emph{all} non-ISO constructs get warnings
+or errors.
+
+@xref{Warning Options,,Options to Request or Suppress Warnings}, for
+more detail on these and related command-line options.

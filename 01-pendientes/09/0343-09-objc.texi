@@ -1,0 +1,284 @@
+@c GCC 16.1.0 | BLOQUE 0343 | 09
+@c Fuente: gcc/doc/objc.texi | blob: b87f9db480a6d8249f896ed06885d9b908aec710
+@c Lineas originales: 1-280 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@c Copyright (C) 1988-2026 Free Software Foundation, Inc.
+@c This is part of the GCC manual.
+@c For copying conditions, see the file gcc.texi.
+
+@node Objective-C
+@comment  node-name,  next,  previous,  up
+
+@chapter GNU Objective-C Features
+
+This document is meant to describe some of the GNU Objective-C
+features.  It is not intended to teach you Objective-C.  There are
+several resources on the Internet that present the language.
+
+@menu
+* GNU Objective-C runtime API::
+* Executing code before main::
+* Type encoding::
+* Garbage Collection::
+* Constant string objects::
+* compatibility_alias::
+* Exceptions::
+* Synchronization::
+* Fast enumeration::
+* Messaging with the GNU Objective-C runtime::
+@end menu
+
+@c =========================================================================
+@node GNU Objective-C runtime API
+@section GNU Objective-C Runtime API
+
+This section is specific for the GNU Objective-C runtime.  If you are
+using a different runtime, you can skip it.
+
+The GNU Objective-C runtime provides an API that allows you to
+interact with the Objective-C runtime system, querying the live
+runtime structures and even manipulating them.  This allows you for
+example to inspect and navigate classes, methods and protocols; to
+define new classes or new methods, and even to modify existing classes
+or protocols.
+
+If you are using a ``Foundation'' library such as GNUstep-Base, this
+library will provide you with a rich set of functionality to do most
+of the inspection tasks, and you probably will only need direct access
+to the GNU Objective-C runtime API to define new classes or methods.
+
+@menu
+* Modern GNU Objective-C runtime API::
+* Traditional GNU Objective-C runtime API::
+@end menu
+
+@c =========================================================================
+@node Modern GNU Objective-C runtime API
+@subsection Modern GNU Objective-C Runtime API
+
+The GNU Objective-C runtime provides an API which is similar to the
+one provided by the ``Objective-C 2.0'' Apple/NeXT Objective-C
+runtime.  The API is documented in the public header files of the GNU
+Objective-C runtime:
+
+@itemize @bullet
+
+@item
+@file{objc/objc.h}: this is the basic Objective-C header file,
+defining the basic Objective-C types such as @code{id}, @code{Class}
+and @code{BOOL}.  You have to include this header to do almost
+anything with Objective-C.
+
+@item
+@file{objc/runtime.h}: this header declares most of the public runtime
+API functions allowing you to inspect and manipulate the Objective-C
+runtime data structures.  These functions are fairly standardized
+across Objective-C runtimes and are almost identical to the Apple/NeXT
+Objective-C runtime ones.  It does not declare functions in some
+specialized areas (constructing and forwarding message invocations,
+threading) which are in the other headers below.  You have to include
+@file{objc/objc.h} and @file{objc/runtime.h} to use any of the
+functions, such as @code{class_getName()}, declared in
+@file{objc/runtime.h}.
+
+@item
+@file{objc/message.h}: this header declares public functions used to
+construct, deconstruct and forward message invocations.  Because
+messaging is done in quite a different way on different runtimes,
+functions in this header are specific to the GNU Objective-C runtime
+implementation.
+
+@item
+@file{objc/objc-exception.h}: this header declares some public
+functions related to Objective-C exceptions.  For example functions in
+this header allow you to throw an Objective-C exception from plain
+C/C++ code.
+
+@item
+@file{objc/objc-sync.h}: this header declares some public functions
+related to the Objective-C @code{@@synchronized()} syntax, allowing
+you to emulate an Objective-C @code{@@synchronized()} block in plain
+C/C++ code.
+
+@item
+@file{objc/thr.h}: this header declares a public runtime API threading
+layer that is only provided by the GNU Objective-C runtime.  It
+declares functions such as @code{objc_mutex_lock()}, which provide a
+platform-independent set of threading functions.
+
+@end itemize
+
+The header files contain detailed documentation for each function in
+the GNU Objective-C runtime API.
+
+@c =========================================================================
+@node Traditional GNU Objective-C runtime API
+@subsection Traditional GNU Objective-C Runtime API
+
+The GNU Objective-C runtime used to provide a different API, which we
+call the ``traditional'' GNU Objective-C runtime API.  Functions
+belonging to this API are easy to recognize because they use a
+different naming convention, such as @code{class_get_super_class()}
+(traditional API) instead of @code{class_getSuperclass()} (modern
+API).  Software using this API includes the file
+@file{objc/objc-api.h} where it is declared.
+
+Starting with GCC 4.7.0, the traditional GNU runtime API is no longer
+available.
+
+@c =========================================================================
+@node Executing code before main
+@section @code{+load}: Executing Code before @code{main}
+
+This section is specific for the GNU Objective-C runtime.  If you are
+using a different runtime, you can skip it.
+
+The GNU Objective-C runtime provides a way that allows you to execute
+code before the execution of the program enters the @code{main}
+function.  The code is executed on a per-class and a per-category basis,
+through a special class method @code{+load}.
+
+This facility is very useful if you want to initialize global variables
+which can be accessed by the program directly, without sending a message
+to the class first.  The usual way to initialize global variables, in the
+@code{+initialize} method, might not be useful because
+@code{+initialize} is only called when the first message is sent to a
+class object, which in some cases could be too late.
+
+Suppose for example you have a @code{FileStream} class that declares
+@code{Stdin}, @code{Stdout} and @code{Stderr} as global variables, like
+below:
+
+@smallexample
+
+FileStream *Stdin = nil;
+FileStream *Stdout = nil;
+FileStream *Stderr = nil;
+
+@@implementation FileStream
+
++ (void)initialize
+@{
+    Stdin = [[FileStream new] initWithFd:0];
+    Stdout = [[FileStream new] initWithFd:1];
+    Stderr = [[FileStream new] initWithFd:2];
+@}
+
+/* @r{Other methods here} */
+@@end
+
+@end smallexample
+
+In this example, the initialization of @code{Stdin}, @code{Stdout} and
+@code{Stderr} in @code{+initialize} occurs too late.  The programmer can
+send a message to one of these objects before the variables are actually
+initialized, thus sending messages to the @code{nil} object.  The
+@code{+initialize} method which actually initializes the global
+variables is not invoked until the first message is sent to the class
+object.  The solution would require these variables to be initialized
+just before entering @code{main}.
+
+The correct solution of the above problem is to use the @code{+load}
+method instead of @code{+initialize}:
+
+@smallexample
+
+@@implementation FileStream
+
++ (void)load
+@{
+    Stdin = [[FileStream new] initWithFd:0];
+    Stdout = [[FileStream new] initWithFd:1];
+    Stderr = [[FileStream new] initWithFd:2];
+@}
+
+/* @r{Other methods here} */
+@@end
+
+@end smallexample
+
+The @code{+load} is a method that is not overridden by categories.  If a
+class and a category of it both implement @code{+load}, both methods are
+invoked.  This allows some additional initializations to be performed in
+a category.
+
+This mechanism is not intended to be a replacement for @code{+initialize}.
+You should be aware of its limitations when you decide to use it
+instead of @code{+initialize}.
+
+@menu
+* What you can and what you cannot do in +load::
+@end menu
+
+
+@node What you can and what you cannot do in +load
+@subsection What You Can and Cannot Do in @code{+load}
+
+@code{+load} is to be used only as a last resort.  Because it is
+executed very early, most of the Objective-C runtime machinery will
+not be ready when @code{+load} is executed; hence @code{+load} works
+best for executing C code that is independent on the Objective-C
+runtime.
+
+The @code{+load} implementation in the GNU runtime guarantees you the
+following things:
+
+@itemize @bullet
+
+@item
+you can write whatever C code you like;
+
+@item
+you can allocate and send messages to objects whose class is implemented
+in the same file;
+
+@item
+the @code{+load} implementation of all super classes of a class are
+executed before the @code{+load} of that class is executed;
+
+@item
+the @code{+load} implementation of a class is executed before the
+@code{+load} implementation of any category.
+
+@end itemize
+
+In particular, the following things, even if they can work in a
+particular case, are not guaranteed:
+
+@itemize @bullet
+
+@item
+allocation of or sending messages to arbitrary objects;
+
+@item
+allocation of or sending messages to objects whose classes have a
+category implemented in the same file;
+
+@item
+sending messages to Objective-C constant strings (@code{@@"this is a
+constant string"});
+
+@end itemize
+
+You should make no assumptions about receiving @code{+load} in sibling
+classes when you write @code{+load} of a class.  The order in which
+sibling classes receive @code{+load} is not guaranteed.
+
+The order in which @code{+load} and @code{+initialize} are called could
+be problematic if this matters.  If you don't allocate objects inside
+@code{+load}, it is guaranteed that @code{+load} is called before
+@code{+initialize}.  If you create an object inside @code{+load} the
+@code{+initialize} method of object's class is invoked even if
+@code{+load} was not invoked.  Note if you explicitly call @code{+load}
+on a class, @code{+initialize} will be called first.  To avoid possible
+problems try to implement only one of these methods.
+
+The @code{+load} method is also invoked when a bundle is dynamically
+loaded into your running program.  This happens automatically without any
+intervening operation from you.  When you write bundles and you need to
+write @code{+load} you can safely create and send messages to objects whose
+classes already exist in the running program.  The same restrictions as
+above apply to classes defined in bundle.
+
+
+

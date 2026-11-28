@@ -1,0 +1,16 @@
+@c GCC 16.1.0 | BLOQUE 0246 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 3475-3486 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+@item eI
+A signed 34-bit integer constant if prefixed instructions are supported.
+
+@item eP
+A scalar floating point constant or a vector constant that can be
+loaded to a VSX register with one prefixed instruction.
+
+@item eQ
+An IEEE 128-bit constant that can be loaded into a VSX register with
+the @code{lxvkq} instruction.
+

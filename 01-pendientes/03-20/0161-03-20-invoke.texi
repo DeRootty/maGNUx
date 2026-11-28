@@ -1,0 +1,206 @@
+@c GCC 16.1.0 | BLOQUE 0161 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 36601-36802 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -mveclibabi=@var{type}
+Specifies the ABI type to use for vectorizing intrinsics using an external
+library.  Supported values for @var{type} are @samp{svml} for the Intel short
+vector math library, @samp{aocl} for the math library (LibM) from AMD
+Optimizing CPU Libraries (AOCL) and @samp{acml} for the end-of-life AMD core
+math library (to which AOCL-LibM is the successor).
+To use this option, both @option{-ftree-vectorize} and
+@option{-funsafe-math-optimizations} have to be enabled, and an SVML or ACML
+ABI-compatible library must be specified at link time.
+
+GCC currently emits calls to @code{vmldExp2}, @code{vmldLn2},
+@code{vmldLog102}, @code{vmldPow2}, @code{vmldTanh2}, @code{vmldTan2},
+@code{vmldAtan2}, @code{vmldAtanh2}, @code{vmldCbrt2}, @code{vmldSinh2},
+@code{vmldSin2}, @code{vmldAsinh2}, @code{vmldAsin2}, @code{vmldCosh2},
+@code{vmldCos2}, @code{vmldAcosh2}, @code{vmldAcos2}, @code{vmlsExp4},
+@code{vmlsLn4}, @code{vmlsLog104}, @code{vmlsPow4}, @code{vmlsTanh4},
+@code{vmlsTan4}, @code{vmlsAtan4}, @code{vmlsAtanh4}, @code{vmlsCbrt4},
+@code{vmlsSinh4}, @code{vmlsSin4}, @code{vmlsAsinh4}, @code{vmlsAsin4},
+@code{vmlsCosh4}, @code{vmlsCos4}, @code{vmlsAcosh4} and @code{vmlsAcos4} for
+corresponding function type when @option{-mveclibabi=svml} is used,
+@code{amd_vrs4_acosf}, @code{amd_vrs16_acosf}, @code{amd_vrd8_asin},
+@code{amd_vrs4_asinf}, @code{amd_vrs8_asinf}, @code{amd_vrs16_asinf},
+@code{amd_vrd2_atan}, @code{amd_vrd8_atan}, @code{amd_vrs4_atanf},
+@code{amd_vrs8_atanf}, @code{amd_vrs16_atanf}, @code{amd_vrd2_cos},
+@code{amd_vrd4_cos}, @code{amd_vrd8_cos}, @code{amd_vrs4_cosf},
+@code{amd_vrs8_cosf}, @code{amd_vrs16_cosf}, @code{amd_vrs4_coshf},
+@code{amd_vrs8_coshf}, @code{amd_vrd2_erf}, @code{amd_vrd4_erf},
+@code{amd_vrd8_erf}, @code{amd_vrs4_erff}, @code{amd_vrs8_erff},
+@code{amd_vrs16_erff}, @code{amd_vrd2_exp}, @code{amd_vrd4_exp},
+@code{amd_vrd8_exp}, @code{amd_vrs4_expf}, @code{amd_vrs8_expf},
+@code{amd_vrs16_expf}, @code{amd_vrd2_exp10}, @code{amd_vrs4_exp10f},
+@code{amd_vrd2_exp2}, @code{amd_vrd4_exp2}, @code{amd_vrd8_exp2},
+@code{amd_vrs4_exp2f}, @code{amd_vrs8_exp2f}, @code{amd_vrs16_exp2f},
+@code{amd_vrs4_expm1f}, @code{amd_vrd2_log}, @code{amd_vrd4_log},
+@code{amd_vrd8_log}, @code{amd_vrs4_logf}, @code{amd_vrs8_logf},
+@code{amd_vrs16_logf}, @code{amd_vrd2_log10}, @code{amd_vrs4_log10f},
+@code{amd_vrs8_log10f}, @code{amd_vrs16_log10f}, @code{amd_vrd2_log1p},
+@code{amd_vrs4_log1pf}, @code{amd_vrd2_log2}, @code{amd_vrd4_log2},
+@code{amd_vrd8_log2}, @code{amd_vrs4_log2f}, @code{amd_vrs8_log2f},
+@code{amd_vrs16_log2f}, @code{amd_vrd2_pow}, @code{amd_vrd4_pow},
+@code{amd_vrd8_pow}, @code{amd_vrs4_powf}, @code{amd_vrs8_powf},
+@code{amd_vrs16_powf}, @code{amd_vrd2_sin}, @code{amd_vrd4_sin},
+@code{amd_vrd8_sin}, @code{amd_vrs4_sinf}, @code{amd_vrs8_sinf},
+@code{amd_vrs16_sinf}, @code{amd_vrd2_tan}, @code{amd_vrd4_tan},
+@code{amd_vrd8_tan}, @code{amd_vrs16_tanf}, @code{amd_vrs4_tanhf},
+@code{amd_vrs8_tanhf}, @code{amd_vrs16_tanhf} for the corresponding function
+type when @option{-mveclibabi=aocl} is used, and @code{__vrd2_sin},
+@code{__vrd2_cos}, @code{__vrd2_exp}, @code{__vrd2_log}, @code{__vrd2_log2},
+@code{__vrd2_log10}, @code{__vrs4_sinf}, @code{__vrs4_cosf},
+@code{__vrs4_expf}, @code{__vrs4_logf}, @code{__vrs4_log2f},
+@code{__vrs4_log10f} and @code{__vrs4_powf} for the corresponding function type
+when @option{-mveclibabi=acml} is used.
+
+@opindex mabi
+@item -mabi=@var{name}
+Generate code for the specified calling convention.  Permissible values
+are @samp{sysv} for the ABI used on GNU/Linux and other systems, and
+@samp{ms} for the Microsoft ABI.  The default is to use the Microsoft
+ABI when targeting Microsoft Windows and the SysV ABI on all other systems.
+You can control this behavior for specific functions by
+using the function attributes @code{ms_abi} and @code{sysv_abi}.
+@xref{x86 Attributes}.
+
+@opindex masm=@var{dialect}
+@item -masm=@var{dialect}
+Output assembly instructions using selected @var{dialect}.  Also affects
+which dialect is used for basic @code{asm} (@pxref{Basic Asm}) and
+extended @code{asm} (@pxref{Extended Asm}). Supported choices (in dialect
+order) are @samp{att} or @samp{intel}. The default is @samp{att}. Darwin does
+not support @samp{intel}.
+
+@opindex mforce-indirect-call
+@opindex mno-force-indirect-call
+@item -mforce-indirect-call
+Force all calls to functions to be indirect. This is useful
+when using Intel Processor Trace where it generates more precise timing
+information for function calls.
+
+@opindex mmanual-endbr
+@opindex mno-manual-endbr
+@item -mmanual-endbr
+Insert ENDBR instruction at function entry only via the @code{cf_check}
+function attribute. This is useful when used with the option
+@option{-fcf-protection=branch} to control ENDBR insertion at the
+function entry.
+
+@opindex mcet-switch
+@opindex mno-cet-switch
+@item -mcet-switch
+By default, CET instrumentation is turned off on switch statements that
+use a jump table and indirect branch track is disabled.  Since jump
+tables are stored in read-only memory, this does not result in a direct
+loss of hardening.  But if the jump table index is attacker-controlled,
+the indirect jump may not be constrained by CET.  This option turns on
+CET instrumentation to enable indirect branch track for switch statements
+with jump tables which leads to the jump targets reachable via any indirect
+jumps.
+
+@opindex mcall-ms2sysv-xlogues
+@opindex mno-call-ms2sysv-xlogues
+@item -mcall-ms2sysv-xlogues
+Due to differences in 64-bit ABIs, any Microsoft ABI function that calls a
+System V ABI function must consider RSI, RDI and XMM6-15 as clobbered.  By
+default, the code for saving and restoring these registers is emitted inline,
+resulting in fairly lengthy prologues and epilogues.  Using
+@option{-mcall-ms2sysv-xlogues} emits prologues and epilogues that
+use stubs in the static portion of libgcc to perform these saves and restores,
+thus reducing function size at the cost of a few extra instructions.
+
+@opindex mtls-dialect
+@item -mtls-dialect=@var{type}
+Generate code to access thread-local storage using the @samp{gnu} or
+@samp{gnu2} conventions.  @samp{gnu} is the conservative default;
+@samp{gnu2} is more efficient, but it may add compile- and run-time
+requirements that cannot be satisfied on all systems.
+
+@opindex mpush-args
+@opindex mno-push-args
+@item -mpush-args
+@itemx -mno-push-args
+Use PUSH operations to store outgoing parameters.  This method is shorter
+and usually equally fast as method using SUB/MOV operations and is enabled
+by default.  In some cases disabling it may improve performance because of
+improved scheduling and reduced dependencies.
+
+@opindex maccumulate-outgoing-args
+@opindex mno-accumulate-outgoing-args
+@item -maccumulate-outgoing-args
+If enabled, the maximum amount of space required for outgoing arguments is
+computed in the function prologue.  This is faster on most modern CPUs
+because of reduced dependencies, improved scheduling and reduced stack usage
+when the preferred stack boundary is not equal to 2.  The drawback is a notable
+increase in code size.  This switch implies @option{-mno-push-args}.
+
+@opindex mms-bitfields
+@opindex mno-ms-bitfields
+@item -mms-bitfields
+@itemx -mno-ms-bitfields
+
+Enable/disable bit-field layout compatible with the native Microsoft
+Windows compiler.
+
+If @code{packed} is used on a structure, or if bit-fields are used,
+it may be that the Microsoft ABI lays out the structure differently
+than the way GCC normally does.  Particularly when moving packed
+data between functions compiled with GCC and the native Microsoft compiler
+(either via function call or as data in a file), it may be necessary to access
+either format.
+
+This option is enabled by default for Microsoft Windows
+targets.  This behavior can also be controlled locally by use of variable
+or type attributes.  For more information, see @ref{x86 Attributes}.
+
+The Microsoft structure layout algorithm is fairly simple with the exception
+of the bit-field packing.
+The padding and alignment of members of structures and whether a bit-field
+can straddle a storage-unit boundary are determine by these rules:
+
+@enumerate
+@item Structure members are stored sequentially in the order in which they are
+declared: the first member has the lowest memory address and the last member
+the highest.
+
+@item Every data object has an alignment requirement.  The alignment requirement
+for all data except structures, unions, and arrays is either the size of the
+object or the current packing size (specified with either the
+@code{aligned} attribute or the @code{pack} pragma),
+whichever is less.  For structures, unions, and arrays,
+the alignment requirement is the largest alignment requirement of its members.
+Every object is allocated an offset so that:
+
+@smallexample
+offset % alignment_requirement == 0
+@end smallexample
+
+@item Adjacent bit-fields are packed into the same 1-, 2-, or 4-byte allocation
+unit if the integral types are the same size and if the next bit-field fits
+into the current allocation unit without crossing the boundary imposed by the
+common alignment requirements of the bit-fields.
+@end enumerate
+
+MSVC interprets zero-length bit-fields in the following ways:
+
+@enumerate
+@item If a zero-length bit-field is inserted between two bit-fields that
+are normally coalesced, the bit-fields are not coalesced.
+
+For example:
+
+@smallexample
+struct
+ @{
+   unsigned long bf_1 : 12;
+   unsigned long : 0;
+   unsigned long bf_2 : 12;
+ @} t1;
+@end smallexample
+
+@noindent
+The size of @code{t1} is 8 bytes with the zero-length bit-field.  If the
+zero-length bit-field were removed, @code{t1}'s size would be 4 bytes.
+

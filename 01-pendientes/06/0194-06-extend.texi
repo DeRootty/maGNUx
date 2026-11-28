@@ -1,0 +1,212 @@
+@c GCC 16.1.0 | BLOQUE 0194 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 4377-4584 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item scalar_storage_order ("@var{endianness}")
+This attribute applies to a @code{union} or @code{struct}.
+
+It sets the storage order, aka endianness, of the scalar fields of the type, as
+well as the array fields whose component is scalar.  The supported
+endiannesses are @code{big-endian} and @code{little-endian}.  The attribute
+has no effects on fields which are themselves a @code{union}, a @code{struct}
+or an array whose component is a @code{union} or a @code{struct}, and it is
+possible for these fields to have a different scalar storage order than the
+enclosing type.
+
+Note that neither pointer nor vector fields are considered scalar fields in
+this context, so the attribute has no effects on these fields.
+
+This attribute is supported only for targets that use a uniform default
+scalar storage order (fortunately, most of them), i.e.@: targets that store
+the scalars either all in big-endian or all in little-endian.
+
+Additional restrictions are enforced for types with the reverse scalar
+storage order with regard to the scalar storage order of the target:
+
+@itemize
+@item Taking the address of a scalar field of a @code{union} or a
+@code{struct} with reverse scalar storage order is not permitted and yields
+an error.
+@item Taking the address of an array field, whose component is scalar, of
+a @code{union} or a @code{struct} with reverse scalar storage order is
+permitted but yields a warning, unless @option{-Wno-scalar-storage-order}
+is specified.
+@item Taking the address of a @code{union} or a @code{struct} with reverse
+scalar storage order is permitted.
+@end itemize
+
+These restrictions exist because the storage order attribute is lost when
+the address of a scalar or the address of an array with scalar component is
+taken, so storing indirectly through this address generally does not work.
+The second case is nevertheless allowed to be able to perform a block copy
+from or to the array.
+
+Moreover, the use of type punning or aliasing to toggle the storage order
+is not supported; that is to say, if a given scalar object can be accessed
+through distinct types that assign a different storage order to it, then the
+behavior is undefined.
+
+@atindex @code{section}
+@cindex functions in arbitrary sections
+@cindex variables in arbitrary sections
+@cindex program sections
+@item section ("@var{section-name}")
+This attribute applies to functions and variables.
+
+Normally, the compiler places the code it generates in the @code{text} section,
+and variables in @code{data} or @code{bss}.
+Sometimes, however, you need additional sections, or you need certain
+particular functions or variables to appear in special sections.
+The @code{section} attribute specifies that the function or variable
+it applies to lives in a particular section.
+For example, the declaration:
+
+@smallexample
+extern void foobar (void) __attribute__ ((section ("bar")));
+@end smallexample
+
+@noindent
+puts the function @code{foobar} in the @code{bar} section.
+
+Here's a more complicated example:
+@smallexample
+struct duart a __attribute__ ((section ("DUART_A"))) = @{ 0 @};
+struct duart b __attribute__ ((section ("DUART_B"))) = @{ 0 @};
+char stack[10000] __attribute__ ((section ("STACK"))) = @{ 0 @};
+int init_data __attribute__ ((section ("INITDATA")));
+
+main()
+@{
+  /* @r{Initialize stack pointer} */
+  init_sp (stack + sizeof (stack));
+
+  /* @r{Initialize initialized data} */
+  memcpy (&init_data, &data, &edata - &data);
+
+  /* @r{Turn on the serial ports} */
+  init_duart (&a);
+  init_duart (&b);
+@}
+@end smallexample
+
+@noindent
+Use the @code{section} attribute with
+@emph{global} variables and not @emph{local} variables,
+as shown in the example.
+
+You may use the @code{section} attribute with initialized or
+uninitialized global variables but the linker requires
+each object be defined once, with the exception that uninitialized
+variables tentatively go in the @code{common} (or @code{bss}) section
+and can be multiply ``defined''.  Using the @code{section} attribute
+changes what section the variable goes into and may cause the
+linker to issue an error if an uninitialized variable has multiple
+definitions.  You can force a variable to be initialized with the
+@option{-fno-common} flag or the @code{nocommon} attribute.
+
+Some file formats do not support arbitrary sections so the @code{section}
+attribute is not available on all platforms.
+If you need to map the entire contents of a module to a particular
+section, consider using the facilities of the linker instead.
+
+@atindex @code{sentinel}
+@cindex variadic function sentinel
+@cindex functions that have a null-terminated argument list
+@item sentinel
+@itemx sentinel (@var{position})
+This attribute applies to functions.
+
+It indicates that an argument in a call to the function
+is expected to be an explicit @code{NULL}.  The attribute is only valid on
+variadic functions.  By default, the sentinel is expected to be the last
+argument of the function call.  If the optional @var{position} argument
+is specified to the attribute, the sentinel must be located at
+@var{position} counting backwards from the end of the argument list.
+
+@samp{[[gnu::sentinel]]} is equivalent to @samp{[[gnu::sentinel(0)]]}.
+
+The attribute is automatically set with a position of 0 for the built-in
+functions @code{execl} and @code{execlp}.  The built-in function
+@code{execle} has the attribute set with a position of 1.
+
+A valid @code{NULL} in this context is defined as zero with any object
+pointer type.  If your system defines the @code{NULL} macro with
+an integer type then you need to add an explicit cast.  During
+installation GCC replaces the system @code{<stddef.h>} header with
+a copy that redefines NULL appropriately.
+
+The warnings for missing or incorrect sentinels are enabled with
+@option{-Wformat}.
+
+@atindex @code{simd}
+@cindex SIMD function cloning
+@cindex functions that have SIMD clones
+@item simd
+@itemx simd("@var{mask}")
+This attribute applies to functions.
+
+It enables creation of one or more function versions that
+can process multiple arguments using SIMD instructions from a
+single invocation.  Specifying this attribute allows compiler to
+assume that such versions are available at link time (provided
+in the same or another translation unit).  Generated versions are
+target-dependent and described in the corresponding Vector ABI document.  For
+x86_64 target this document can be found
+@uref{https://sourceware.org/glibc/wiki/libmvec?action=AttachFile&do=view&target=VectorABI.txt,here}.
+
+The optional argument @var{mask} may have the value
+@code{notinbranch} or @code{inbranch},
+and instructs the compiler to generate non-masked or masked
+clones correspondingly. By default, all clones are generated.
+
+If the attribute is specified and @code{#pragma omp declare simd} is
+present on a declaration and the @option{-fopenmp} or @option{-fopenmp-simd}
+switch is specified, then the attribute is ignored.
+
+@atindex @code{stack_protect}
+@cindex stack protection
+@cindex functions that should have stack protection
+@item stack_protect
+This attribute applies to functions.
+
+It adds stack protection code to the function it applies to if
+flags @option{-fstack-protector}, @option{-fstack-protector-strong}
+or @option{-fstack-protector-explicit} are set.
+
+@atindex @code{strict_flex_array}
+@cindex flexible array members
+@item strict_flex_array (@var{level})
+The @code{strict_flex_array} attribute can be attached to the trailing
+array field of a structure.
+
+It controls when to treat the trailing array
+field of a structure as a flexible array member for the purposes of accessing
+the elements of such an array.
+@var{level} must be an integer between 0 to 3.
+
+@var{level}=0 is the least strict level, all trailing arrays of structures
+are treated as flexible array members. @var{level}=3 is the strictest level,
+only when the trailing array is declared as a flexible array member per C99
+standard onwards (@samp{[]}), it is treated as a flexible array member.
+
+There are two more levels in between 0 and 3, which are provided to
+support older code that uses the GCC zero-length array extension
+(@samp{[0]}) or one-element array as flexible array members
+(@samp{[1]}).  When @var{level} is 1, the trailing array is treated as
+a flexible array member when it is declared as either @samp{[]},
+@samp{[0]}, or @samp{[1]}.  When @var{level} is 2, the trailing array
+is treated as a flexible array member when it is declared as either
+@samp{[]}, or @samp{[0]}.
+
+This attribute can be used with or without the
+@option{-fstrict-flex-arrays} command-line option.  When both the
+attribute and the option are present at the same time, the level of
+the strictness for the specific trailing array field is determined by
+the attribute.
+
+The @code{strict_flex_array} attribute interacts with the
+@option{-Wstrict-flex-arrays} option.  @xref{Warning Options}, for more
+information.
+
+@atindex @code{strub}
+@cindex stack scrubbing

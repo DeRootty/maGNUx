@@ -1,0 +1,21 @@
+@c GCC 16.1.0 | BLOQUE 0232 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 1473-1489 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@ifclear INTERNALS
+which @code{asm} distinguishes.  For example, an add instruction uses
+two input operands and an output operand, but on most CISC
+@end ifclear
+machines an add instruction really has only two operands, one of them an
+input-output operand:
+
+@smallexample
+addl #35,r12
+@end smallexample
+
+Matching constraints are used in these circumstances.
+More precisely, the two operands that match must include one input-only
+operand and one output-only operand.  Moreover, the digit must be a
+smaller number than the number of the operand that uses it in the
+constraint.
+

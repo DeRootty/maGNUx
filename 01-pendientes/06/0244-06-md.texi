@@ -1,0 +1,17 @@
+@c GCC 16.1.0 | BLOQUE 0244 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 3385-3397 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+@item c
+The count register, @code{ctr}.
+
+@item l
+The link register, @code{lr}.
+
+@item x
+Condition register field 0, @code{cr0}.
+
+@item y
+Any condition register field, @code{cr0}@dots{}@code{cr7}.
+

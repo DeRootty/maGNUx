@@ -1,0 +1,238 @@
+@c GCC 16.1.0 | BLOQUE 0221 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 11697-11930 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+The compiler may move the addition back before the @code{volatile asm}
+statement. To make it work as expected, add an artificial dependency to
+the @code{asm} by referencing a variable in the subsequent code, for
+example:
+
+@example
+asm volatile ("mtfsf 255,%1" : "=X" (sum) : "f" (fpenv));
+sum = x + y;
+@end example
+
+Under certain circumstances, GCC may duplicate (or remove duplicates of) your 
+assembly code when optimizing. This can lead to unexpected duplicate symbol 
+errors during compilation if your @code{asm} code defines symbols or labels. 
+Using @samp{%=} 
+(@pxref{AssemblerTemplate}) may help resolve this problem.
+
+@anchor{AssemblerTemplate}
+@subsubsection Assembler Template
+@cindex @code{asm} assembler template
+
+An assembler template is a literal string containing assembler instructions.
+In C++ with @option{-std=gnu++11} or later, the assembler template can
+also be a constant expression inside parentheses (see @ref{Asm constexprs}).
+
+The compiler replaces tokens in the template that refer 
+to inputs, outputs, and goto labels,
+and then outputs the resulting string to the assembler. The 
+string can contain any instructions recognized by the assembler, including 
+directives. GCC does not parse the assembler instructions 
+themselves and does not know what they mean or even whether they are valid 
+assembler input. However, it does count the statements 
+(@pxref{Size of an asm}).
+
+You may place multiple assembler instructions together in a single @code{asm} 
+string, separated by the characters normally used in assembly code for the 
+system. A combination that works in most places is a newline to break the 
+line, plus a tab character to move to the instruction field (written as 
+@samp{\n\t}). 
+Some assemblers allow semicolons as a line separator. However, note 
+that some assembler dialects use semicolons to start a comment. 
+
+Do not expect a sequence of @code{asm} statements to remain perfectly 
+consecutive after compilation, even when you are using the @code{volatile} 
+qualifier. If certain instructions need to remain consecutive in the output, 
+put them in a single multi-instruction @code{asm} statement.
+
+Accessing data from C programs without using input/output operands (such as 
+by using global symbols directly from the assembler template) may not work as 
+expected. Similarly, calling functions directly from an assembler template 
+requires a detailed understanding of the target assembler and ABI.
+
+Since GCC does not parse the assembler template,
+it has no visibility of any 
+symbols it references. This may result in GCC discarding those symbols as 
+unreferenced unless they are also listed as input, output, or goto operands.
+
+@subsubheading Special format strings
+
+In addition to the tokens described by the input, output, and goto operands, 
+these tokens have special meanings in the assembler template:
+
+@table @samp
+@item %% 
+Outputs a single @samp{%} into the assembler code.
+
+@item %= 
+Outputs a number that is unique to each instance of the @code{asm} 
+statement in the entire compilation. This option is useful when creating local 
+labels and referring to them multiple times in a single template that 
+generates multiple assembler instructions. 
+
+@item %@{
+@itemx %|
+@itemx %@}
+Outputs @samp{@{}, @samp{|}, and @samp{@}} characters (respectively)
+into the assembler code.  When unescaped, these characters have special
+meaning to indicate multiple assembler dialects, as described below.
+@end table
+
+@subsubheading Multiple assembler dialects in @code{asm} templates
+
+On targets such as x86, GCC supports multiple assembler dialects.
+The @option{-masm} option controls which dialect GCC uses as its 
+default for inline assembler. The target-specific documentation for the 
+@option{-masm} option contains the list of supported dialects, as well as the 
+default dialect if the option is not specified. This information may be 
+important to understand, since assembler code that works correctly when 
+compiled using one dialect will likely fail if compiled using another.
+@xref{x86 Options}.
+
+If your code needs to support multiple assembler dialects (for example, if 
+you are writing public headers that need to support a variety of compilation 
+options), use constructs of this form:
+
+@example
+@{ dialect0 | dialect1 | dialect2... @}
+@end example
+
+This construct outputs @code{dialect0} 
+when using dialect #0 to compile the code, 
+@code{dialect1} for dialect #1, etc. If there are fewer alternatives within the 
+braces than the number of dialects the compiler supports, the construct 
+outputs nothing.
+
+For example, if an x86 compiler supports two dialects
+(@samp{att}, @samp{intel}), an 
+assembler template such as this:
+
+@example
+"bt@{l %[Offset],%[Base] | %[Base],%[Offset]@}; jc %l2"
+@end example
+
+@noindent
+is equivalent to one of
+
+@example
+"btl %[Offset],%[Base] ; jc %l2"   @r{/* att dialect */}
+"bt %[Base],%[Offset]; jc %l2"     @r{/* intel dialect */}
+@end example
+
+Using that same compiler, this code:
+
+@example
+"xchg@{l@}\t@{%%@}ebx, %1"
+@end example
+
+@noindent
+corresponds to either
+
+@example
+"xchgl\t%%ebx, %1"                 @r{/* att dialect */}
+"xchg\tebx, %1"                    @r{/* intel dialect */}
+@end example
+
+There is no support for nesting dialect alternatives.
+
+@anchor{OutputOperands}
+@subsubsection Output Operands
+@cindex @code{asm} output operands
+
+An @code{asm} statement has zero or more output operands indicating the names
+of C variables modified by the assembler code.
+
+In this i386 example, @code{old} (referred to in the template string as 
+@code{%0}) and @code{*Base} (as @code{%1}) are outputs and @code{Offset} 
+(@code{%2}) is an input:
+
+@example
+bool old;
+
+__asm__ ("btsl %2,%1\n\t" // Turn on zero-based bit #Offset in Base.
+         "sbb %0,%0"      // Use the CF to calculate old.
+   : "=r" (old), "+rm" (*Base)
+   : "Ir" (Offset)
+   : "cc");
+
+return old;
+@end example
+
+Operands are separated by commas.  Each operand has this format:
+
+@example
+@r{[} [@var{asmSymbolicName}] @r{]} @var{constraint} (@var{cvariablename})
+@end example
+
+@table @var
+@item asmSymbolicName
+Specifies an optional symbolic name for the operand.  The literal square
+brackets @samp{[]} around the @var{asmSymbolicName} are required both
+in the operand specification and references to the operand in the assembler
+template, i.e.@: @samp{%[Value]}.
+The scope of the name is the @code{asm} statement
+that contains the definition. Any valid C identifier is acceptable,
+including names already defined in the surrounding code. No two operands 
+within the same @code{asm} statement can use the same symbolic name.
+
+When not using an @var{asmSymbolicName}, use the (zero-based) position
+of the operand 
+in the list of operands in the assembler template. For example if there are 
+three output operands, use @samp{%0} in the template to refer to the first, 
+@samp{%1} for the second, and @samp{%2} for the third. 
+
+@item constraint
+A string constant specifying constraints on the placement of the operand; 
+@xref{Constraints}, for details.
+In C++ with @option{-std=gnu++11} or later, the constraint can
+also be a constant expression inside parentheses (see @ref{Asm constexprs}).
+
+Output constraints must begin with either @samp{=} (a variable overwriting an 
+existing value) or @samp{+} (when reading and writing). When using 
+@samp{=}, do not assume the location contains the existing value
+on entry to the @code{asm}, except 
+when the operand is tied to an input; @pxref{InputOperands,,Input Operands}.
+
+After the prefix, there must be one or more additional constraints 
+(@pxref{Constraints}) that describe where the value resides. Common 
+constraints include @samp{r} for register and @samp{m} for memory. 
+When you list more than one possible location (for example, @code{"=rm"}),
+the compiler chooses the most efficient one based on the current context. 
+If you list as many alternates as the @code{asm} statement allows, you permit 
+the optimizers to produce the best possible code. 
+If you must use a specific register, but your Machine Constraints do not
+provide sufficient control to select the specific register you want, 
+local register variables may provide a solution (@pxref{Local Register 
+Variables}).
+
+@item cvariablename
+Specifies a C lvalue expression to hold the output, typically a variable name.
+The enclosing parentheses are a required part of the syntax.
+
+@end table
+
+When the compiler selects the registers to use to 
+represent the output operands, it does not use any of the clobbered registers 
+(@pxref{Clobbers and Scratch Registers}).
+
+Output operand expressions must be lvalues. The compiler cannot check whether 
+the operands have data types that are reasonable for the instruction being 
+executed. For output expressions that are not directly addressable (for 
+example a bit-field), the constraint must allow a register. In that case, GCC 
+uses the register as the output of the @code{asm}, and then stores that 
+register into the output. 
+
+Operands using the @samp{+} constraint modifier count as two operands 
+(that is, both as input and output) towards the total maximum of 30 operands
+per @code{asm} statement.
+
+Use the @samp{&} constraint modifier (@pxref{Modifiers}) on all output
+operands that must not overlap an input.  Otherwise, 
+GCC may allocate the output operand in the same register as an unrelated 
+input operand, on the assumption that the assembler code consumes its 
+inputs before producing outputs. This assumption may be false if the assembler 
+code actually consists of more than one instruction.
+

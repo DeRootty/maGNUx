@@ -1,0 +1,261 @@
+@c GCC 16.1.0 | BLOQUE 0038 | 03-09
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 10507-10763 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -Wsizeof-array-div
+Warn about divisions of two sizeof operators when the first one is applied
+to an array and the divisor does not equal the size of the array element.
+In such a case, the computation will not yield the number of elements in the
+array, which is likely what the user intended.  This warning warns e.g. about
+@smallexample
+int fn ()
+@{
+  int arr[10];
+  return sizeof (arr) / sizeof (short);
+@}
+@end smallexample
+
+This warning is enabled by @option{-Wall}.
+
+@opindex Wsizeof-pointer-div
+@opindex Wno-sizeof-pointer-div
+@item -Wsizeof-pointer-div
+Warn for suspicious divisions of two sizeof expressions that divide
+the pointer size by the element size, which is the usual way to compute
+the array size but won't work out correctly with pointers.  This warning
+warns e.g.@: about @code{sizeof (ptr) / sizeof (ptr[0])} if @code{ptr} is
+not an array, but a pointer.  This warning is enabled by @option{-Wall}.
+
+@opindex Wsizeof-pointer-memaccess
+@opindex Wno-sizeof-pointer-memaccess
+@item -Wsizeof-pointer-memaccess
+Warn for suspicious length parameters to certain string and memory built-in
+functions if the argument uses @code{sizeof}.  This warning triggers for
+example for @code{memset (ptr, 0, sizeof (ptr));} if @code{ptr} is not
+an array, but a pointer, and suggests a possible fix, or about
+@code{memcpy (&foo, ptr, sizeof (&foo));}.  @option{-Wsizeof-pointer-memaccess}
+also warns about calls to bounded string copy functions like @code{strncat}
+or @code{strncpy} that specify as the bound a @code{sizeof} expression of
+the source array.  For example, in the following function the call to
+@code{strncat} specifies the size of the source string as the bound.  That
+is almost certainly a mistake and so the call is diagnosed.
+@smallexample
+void make_file (const char *name)
+@{
+  char path[PATH_MAX];
+  strncpy (path, name, sizeof path - 1);
+  strncat (path, ".text", sizeof ".text");
+  @dots{}
+@}
+@end smallexample
+
+The @option{-Wsizeof-pointer-memaccess} option is enabled by @option{-Wall}.
+
+@opindex Wsizeof-array-argument
+@opindex Wno-sizeof-array-argument
+@item -Wno-sizeof-array-argument
+Do not warn when the @code{sizeof} operator is applied to a parameter that is
+declared as an array in a function definition.  This warning is enabled by
+default for C and C++ programs.
+
+@opindex Wmemset-elt-size
+@opindex Wno-memset-elt-size
+@item -Wmemset-elt-size
+Warn for suspicious calls to the @code{memset} built-in function, if the
+first argument references an array, and the third argument is a number
+equal to the number of elements, but not equal to the size of the array
+in memory.  This indicates that the user has omitted a multiplication by
+the element size.  This warning is enabled by @option{-Wall}.
+
+@opindex Wmemset-transposed-args
+@opindex Wno-memset-transposed-args
+@item -Wmemset-transposed-args
+Warn for suspicious calls to the @code{memset} built-in function where
+the second argument is not zero and the third argument is zero.  For
+example, the call @code{memset (buf, sizeof buf, 0)} is diagnosed because
+@code{memset (buf, 0, sizeof buf)} was meant instead.  The diagnostic
+is only emitted if the third argument is a literal zero.  Otherwise, if
+it is an expression that is folded to zero, or a cast of zero to some
+type, it is far less likely that the arguments have been mistakenly
+transposed and no warning is emitted.  This warning is enabled
+by @option{-Wall}.
+
+@opindex Waddress
+@opindex Wno-address
+@item -Waddress
+Warn about suspicious uses of address expressions. These include comparing
+the address of a function or a declared object to the null pointer constant
+such as in
+@smallexample
+void f (void);
+void g (void)
+@{
+  if (!f)   // warning: expression evaluates to false
+    abort ();
+@}
+@end smallexample
+comparisons of a pointer to a string literal, such as in
+@smallexample
+void f (const char *x)
+@{
+  if (x == "abc")   // warning: expression evaluates to false
+    puts ("equal");
+@}
+@end smallexample
+and tests of the results of pointer addition or subtraction for equality
+to null, such as in
+@smallexample
+void f (const int *p, int i)
+@{
+  return p + i == NULL;
+@}
+@end smallexample
+Such uses typically indicate a programmer error: the address of most
+functions and objects necessarily evaluates to true (the exception are
+weak symbols), so their use in a conditional might indicate missing
+parentheses in a function call or a missing dereference in an array
+expression.  The subset of the warning for object pointers can be
+suppressed by casting the pointer operand to an integer type such
+as @code{intptr_t} or @code{uintptr_t}.
+Comparisons against string literals result in unspecified behavior
+and are not portable, and suggest the intent was to call @code{strcmp}.
+The warning is suppressed if the suspicious expression is the result
+of macro expansion.
+@option{-Waddress} warning is enabled by @option{-Wall}.
+
+@opindex Waddress-of-packed-member
+@opindex Wno-address-of-packed-member
+@item -Wno-address-of-packed-member
+Do not warn when the address of packed member of struct or union is taken,
+which usually results in an unaligned pointer value.  This is
+enabled by default.
+
+@opindex Wlogical-op
+@opindex Wno-logical-op
+@item -Wlogical-op
+Warn about suspicious uses of logical operators in expressions.
+This includes using logical operators in contexts where a
+bitwise operator is likely to be expected.  Also warns when
+the operands of a logical operator are the same:
+@smallexample
+extern int a;
+if (a < 0 && a < 0) @{ @dots{} @}
+@end smallexample
+
+@opindex Wlogical-not-parentheses
+@opindex Wno-logical-not-parentheses
+@item -Wlogical-not-parentheses
+Warn about logical not used on the left hand side operand of a comparison.
+This option does not warn if the right operand is considered to be a boolean
+expression.  Its purpose is to detect suspicious code like the following:
+@smallexample
+int a;
+@dots{}
+if (!a > 1) @{ @dots{} @}
+@end smallexample
+
+It is possible to suppress the warning by wrapping the LHS into
+parentheses:
+@smallexample
+if ((!a) > 1) @{ @dots{} @}
+@end smallexample
+
+This warning is enabled by @option{-Wall}.
+
+@opindex Waggregate-return
+@opindex Wno-aggregate-return
+@item -Waggregate-return
+Warn if any functions that return structures or unions are defined or
+called.  (In languages where you can return an array, this also elicits
+a warning.)
+
+@opindex Wno-aggressive-loop-optimizations
+@opindex Waggressive-loop-optimizations
+@item -Wno-aggressive-loop-optimizations
+Do not warn if the compiler detects undefined behavior in a loop with
+a constant number of iterations.  @option{-Waggressive-loop-optimizations}
+is enabled by default.
+
+@opindex Wno-attributes
+@opindex Wattributes
+@item -Wno-attributes
+Do not warn if an unexpected @code{__attribute__} is used, such as
+unrecognized attributes, function attributes applied to variables,
+etc.  This does not stop errors for incorrect use of supported
+attributes.
+
+Warnings about ill-formed uses of standard attributes are upgraded to
+errors by @option{-pedantic-errors}.
+
+Additionally, using @option{-Wno-attributes=}, it is possible to suppress
+warnings about unknown scoped attributes (in C++11 and C23).  For example,
+@option{-Wno-attributes=vendor::attr} disables warning about the following
+declaration:
+
+@smallexample
+[[vendor::attr]] void f();
+@end smallexample
+
+It is also possible to disable warning about all attributes in a namespace
+using @option{-Wno-attributes=vendor::} which prevents warning about both
+of these declarations:
+
+@smallexample
+[[vendor::safe]] void f();
+[[vendor::unsafe]] void f2();
+@end smallexample
+
+Note that @option{-Wno-attributes=} does not imply @option{-Wno-attributes}.
+
+@opindex Wno-builtin-declaration-mismatch
+@opindex Wbuiltin-declaration-mismatch
+@item -Wno-builtin-declaration-mismatch
+Warn if a built-in function is declared with an incompatible signature
+or as a non-function, or when a built-in function declared with a type
+that does not include a prototype is called with arguments whose promoted
+types do not match those expected by the function.  When @option{-Wextra}
+is specified, also warn when a built-in function that takes arguments is
+declared without a prototype.  The @option{-Wbuiltin-declaration-mismatch}
+warning is enabled by default.  To avoid the warning include the appropriate
+header to bring the prototypes of built-in functions into scope.
+
+For example, the call to @code{memset} below is diagnosed by the warning
+because the function expects a value of type @code{size_t} as its argument
+but the type of @code{32} is @code{int}.  With @option{-Wextra},
+the declaration of the function is diagnosed as well.
+@smallexample
+extern void* memset ();
+void f (void *d)
+@{
+  memset (d, '\0', 32);
+@}
+@end smallexample
+
+@opindex Wno-builtin-macro-redefined
+@opindex Wbuiltin-macro-redefined
+@item -Wno-builtin-macro-redefined
+Do not warn if certain built-in macros are redefined.  This suppresses
+warnings for redefinition of @code{__TIMESTAMP__}, @code{__TIME__},
+@code{__DATE__}, @code{__FILE__}, and @code{__BASE_FILE__}.
+
+@opindex Wkeyword-macro
+@opindex Wno-keyword-macro
+@item -Wkeyword-macro
+Warn if a keyword is defined as a macro or undefined.
+For C++ identifiers with special meaning or standard attribute identifiers
+are diagnosed as well.  This warning is enabled by default for C++26
+if @code{-Wpedantic} and emits a pedwarn in that case.
+
+@opindex Wfree-labels
+@opindex Wno-free-labels
+@item -Wfree-labels @r{(C and Objective-C only)}
+Warn if a label is applied to a non-statement, or occurs at the end of a
+compound statement.  Such labels are allowed by C23 and later dialects
+of C, and are available as a GCC extension in all other dialects.
+
+This warning is also enabled by @option{-Wc11-c23-compat}.  It is turned
+into an error if building for a C version before C23 by
+@option{-pedantic-errors}.
+
+@opindex Wheader-guard
+@opindex Wno-header-guard

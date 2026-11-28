@@ -1,0 +1,255 @@
+@c GCC 16.1.0 | BLOQUE 0034 | 03-09
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 9752-10002 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -Wdeclaration-after-statement @r{(C and Objective-C only)}
+Warn when a declaration is found after a statement in a block.  This
+construct, known from C++, was introduced with ISO C99 and is by default
+allowed in GCC@.  It is not supported by ISO C90.  @xref{Mixed Labels and Declarations}.
+
+This warning is upgraded to an error by @option{-pedantic-errors}.
+
+@opindex Wshadow
+@opindex Wno-shadow
+@item -Wshadow
+Warn whenever a local variable or type declaration shadows another
+variable, parameter, type, class member (in C++), or instance variable
+(in Objective-C) or whenever a built-in function is shadowed.  Note
+that in C++, the compiler warns if a local variable shadows an
+explicit typedef, but not if it shadows a struct/class/enum.
+If this warning is enabled, it includes also all instances of
+local shadowing.  This means that @option{-Wno-shadow=local}
+and @option{-Wno-shadow=compatible-local} are ignored when
+@option{-Wshadow} is used.
+Same as @option{-Wshadow=global}.
+
+@opindex Wno-shadow-ivar
+@opindex Wshadow-ivar
+@item -Wno-shadow-ivar @r{(Objective-C only)}
+Do not warn whenever a local variable shadows an instance variable in an
+Objective-C method.
+
+@opindex Wshadow=global
+@opindex Wno-shadow=global
+@item -Wshadow=global
+Warn for any shadowing.
+Same as @option{-Wshadow}.
+
+@opindex Wshadow=local
+@opindex Wno-shadow=local
+@item -Wshadow=local
+Warn when a local variable shadows another local variable or parameter.
+
+@opindex Wshadow=compatible-local
+@opindex Wno-shadow=compatible-local
+@item -Wshadow=compatible-local
+Warn when a local variable shadows another local variable or parameter
+whose type is compatible with that of the shadowing variable.  In C++,
+type compatibility here means the type of the shadowing variable can be
+converted to that of the shadowed variable.  The creation of this flag
+(in addition to @option{-Wshadow=local}) is based on the idea that when
+a local variable shadows another one of incompatible type, it is most
+likely intentional, not a bug or typo, as shown in the following example:
+
+@smallexample
+@group
+for (SomeIterator i = SomeObj.begin(); i != SomeObj.end(); ++i)
+@{
+  for (int i = 0; i < N; ++i)
+  @{
+    ...
+  @}
+  ...
+@}
+@end group
+@end smallexample
+
+Since the two variable @code{i} in the example above have incompatible types,
+enabling only @option{-Wshadow=compatible-local} does not emit a warning.
+Because their types are incompatible, if a programmer accidentally uses one
+in place of the other, type checking is expected to catch that and emit an
+error or warning.  Use of this flag instead of @option{-Wshadow=local} can
+possibly reduce the number of warnings triggered by intentional shadowing.
+Note that this also means that shadowing @code{const char *i} by
+@code{char *i} does not emit a warning.
+
+This warning is also enabled by @option{-Wshadow=local}.
+
+@opindex Wlarger-than=
+@opindex Wlarger-than-@var{byte-size}
+@item -Wlarger-than=@var{byte-size}
+Warn whenever an object is defined whose size exceeds @var{byte-size}.
+@option{-Wlarger-than=}@samp{PTRDIFF_MAX} is enabled by default.
+Warnings controlled by the option can be disabled either by specifying
+@var{byte-size} of @samp{SIZE_MAX} or more or by @option{-Wno-larger-than}.
+
+Also warn for calls to bounded functions such as @code{memchr} or
+@code{strnlen} that specify a bound greater than the largest possible
+object, which is @samp{PTRDIFF_MAX} bytes by default.  These warnings
+can only be disabled by @option{-Wno-larger-than}.
+
+@opindex Wno-larger-than
+@item -Wno-larger-than
+Disable @option{-Wlarger-than=} warnings.  The option is equivalent
+to @option{-Wlarger-than=}@samp{SIZE_MAX} or larger.
+
+@opindex Wframe-larger-than=
+@opindex Wno-frame-larger-than
+@item -Wframe-larger-than=@var{byte-size}
+Warn if the size of a function frame exceeds @var{byte-size}.
+The computation done to determine the stack frame size is approximate
+and not conservative.
+The actual requirements may be somewhat greater than @var{byte-size}
+even if you do not get a warning.  In addition, any space allocated
+via @code{alloca}, variable-length arrays, or related constructs
+is not included by the compiler when determining
+whether or not to issue a warning.
+@option{-Wframe-larger-than=}@samp{PTRDIFF_MAX} is enabled by default.
+Warnings controlled by the option can be disabled either by specifying
+@var{byte-size} of @samp{SIZE_MAX} or more or by
+@option{-Wno-frame-larger-than}.
+
+@opindex Wno-frame-larger-than
+@item -Wno-frame-larger-than
+Disable @option{-Wframe-larger-than=} warnings.  The option is equivalent
+to @option{-Wframe-larger-than=}@samp{SIZE_MAX} or larger.
+
+@opindex Wfree-nonheap-object
+@opindex Wno-free-nonheap-object
+@item -Wfree-nonheap-object
+Warn when attempting to deallocate an object that was either not allocated
+on the heap, or by using a pointer that was not returned from a prior call
+to the corresponding allocation function.  For example, because the call
+to @code{stpcpy} returns a pointer to the terminating nul character and
+not to the beginning of the object, the call to @code{free} below is
+diagnosed.
+
+@smallexample
+void f (char *p)
+@{
+  p = stpcpy (p, "abc");
+  // ...
+  free (p);   // warning
+@}
+@end smallexample
+
+@option{-Wfree-nonheap-object} is included in @option{-Wall}.
+
+@opindex Wstack-usage
+@opindex Wno-stack-usage
+@item -Wstack-usage=@var{byte-size}
+Warn if the stack usage of a function might exceed @var{byte-size}.
+The computation done to determine the stack usage is conservative.
+Any space allocated via @code{alloca}, variable-length arrays, or related
+constructs is included by the compiler when determining whether or not to
+issue a warning.
+
+The message is in keeping with the output of @option{-fstack-usage}.
+
+@itemize
+@item
+If the stack usage is fully static but exceeds the specified amount, it's:
+
+@smallexample
+  warning: stack usage is 1120 bytes
+@end smallexample
+@item
+If the stack usage is (partly) dynamic but bounded, it's:
+
+@smallexample
+  warning: stack usage might be 1648 bytes
+@end smallexample
+@item
+If the stack usage is (partly) dynamic and not bounded, it's:
+
+@smallexample
+  warning: stack usage might be unbounded
+@end smallexample
+@end itemize
+
+@option{-Wstack-usage=}@samp{PTRDIFF_MAX} is enabled by default.
+Warnings controlled by the option can be disabled either by specifying
+@var{byte-size} of @samp{SIZE_MAX} or more or by
+@option{-Wno-stack-usage}.
+
+@opindex Wno-stack-usage
+@item -Wno-stack-usage
+Disable @option{-Wstack-usage=} warnings.  The option is equivalent
+to @option{-Wstack-usage=}@samp{SIZE_MAX} or larger.
+
+@opindex Wunsafe-loop-optimizations
+@opindex Wno-unsafe-loop-optimizations
+@item -Wunsafe-loop-optimizations
+Warn if the loop cannot be optimized because the compiler cannot
+assume anything on the bounds of the loop indices.  With
+@option{-funsafe-loop-optimizations} warn if the compiler makes
+such assumptions.
+
+@opindex Wno-pedantic-ms-format
+@opindex Wpedantic-ms-format
+@item -Wno-pedantic-ms-format @r{(MinGW targets only)}
+When used in combination with @option{-Wformat}
+and @option{-pedantic} without GNU extensions, this option
+disables the warnings about non-ISO @code{printf} / @code{scanf} format
+width specifiers @code{I32}, @code{I64}, and @code{I} used on Windows targets,
+which depend on the MS runtime.
+
+@opindex Wpointer-arith
+@opindex Wno-pointer-arith
+@item -Wpointer-arith
+Warn about anything that depends on the ``size of'' a function type or
+of @code{void}.  GNU C assigns these types a size of 1, for
+convenience in calculations with @code{void *} pointers and pointers
+to functions.  In C++, warn also when an arithmetic operation involves
+@code{NULL}.  This warning is also enabled by @option{-Wpedantic}.
+
+This warning is upgraded to an error by @option{-pedantic-errors}.
+
+@opindex Wpointer-compare
+@opindex Wno-pointer-compare
+@item -Wno-pointer-compare
+Do not warn if a pointer is compared with a zero character constant.
+This usually
+means that the pointer was meant to be dereferenced.  For example:
+
+@smallexample
+const char *p = foo ();
+if (p == '\0')
+  return 42;
+@end smallexample
+
+Note that the code above is invalid in C++11.
+
+This warning is enabled by default.
+
+@opindex Wtsan
+@opindex Wno-tsan
+@item -Wno-tsan
+
+Disable warnings about unsupported features in ThreadSanitizer.
+
+ThreadSanitizer does not support @code{std::atomic_thread_fence} and
+can report false positives.
+
+@opindex Wtype-limits
+@opindex Wno-type-limits
+@item -Wtype-limits
+Warn if a comparison is always true or always false due to the limited
+range of the data type, but do not warn for constant expressions.  For
+example, warn if an unsigned variable is compared against zero with
+@code{<} or @code{>=}.  This warning is also enabled by
+@option{-Wextra}.
+
+@opindex Wabsolute-value
+@opindex Wno-absolute-value
+@item -Wabsolute-value @r{(C and Objective-C only)}
+Warn for calls to standard functions that compute the absolute value
+of an argument when a more appropriate standard function is available.
+For example, calling @code{abs(3.14)} triggers the warning because the
+appropriate function to call to compute the absolute value of a double
+argument is @code{fabs}.  The option also triggers warnings when the
+argument in a call to such a function has an unsigned type.  This
+warning can be suppressed with an explicit type cast and it is also
+enabled by @option{-Wextra}.
+
+@include cppwarnopts.texi

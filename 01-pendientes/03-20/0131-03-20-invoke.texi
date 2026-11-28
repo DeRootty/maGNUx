@@ -1,0 +1,339 @@
+@c GCC 16.1.0 | BLOQUE 0131 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 30336-30670 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node NDS32 Options
+@subsection NDS32 Options
+@cindex NDS32 Options
+
+These options are defined for NDS32 implementations:
+
+@table @gcctabopt
+
+@opindex mbig-endian
+@opindex EB
+@item -mbig-endian
+@itemx -EB
+Generate code in big-endian mode.
+
+@opindex mlittle-endian
+@opindex EL
+@item -mlittle-endian
+@itemx -EL
+Generate code in little-endian mode.
+
+@opindex mabi
+@opindex mfloat-abi
+@item -mabi=2
+@itemx -mfloat-abi=soft
+Use the soft floating-point ABI.
+
+@item -mabi=2fp+
+@itemx -mfloat-abi=hard
+Use the hard floating-point ABI.
+
+@opindex mreduced-regs
+@item -mreduced-regs
+Use reduced-set registers for register allocation.
+
+@opindex mfull-regs
+@item -mfull-regs
+Use full-set registers for register allocation.
+
+@opindex malways-align
+@opindex mno-always-align
+@item -malways-align
+Always align function entry, jump targets, and return address.
+
+@opindex malign-functions
+@opindex mno-align-functions
+@item -malign-functions
+Align function entry to 4 bytes.
+
+@opindex mfp-as-gp
+@opindex mno-fp-as-gp
+@item -mfp-as-gp
+@itemx -mno-fp-as-gp
+Enable/disable fp-as-gp optimization.
+
+@opindex mcmov
+@opindex mno-cmov
+@item -mcmov
+@itemx -mno-cmov
+Enable/disable generation of conditional move instructions.
+
+@opindex mhw-abs
+@opindex mno-hw-abs
+@item -mhw-abs
+@itemx -mno-hw-abs
+Enable/disable generation of hardware abs instructions.
+
+@opindex mext-perf
+@opindex mno-ext-perf
+@item -mext-perf
+@itemx -mno-ext-perf
+Enable/disable generation of performance extension instructions.
+
+@opindex mext-perf2
+@opindex mno-ext-perf2
+@item -mext-perf2
+@itemx -mno-ext-perf2
+Enable/disable generation of performance extension 2 instructions.
+
+@opindex mext-string
+@opindex mno-ext-string
+@item -mext-string
+@itemx -mno-ext-string
+Enable/disable generation of string extension instructions.
+
+@opindex mext-dsp
+@opindex mno-ext-dsp
+@item -mext-dsp
+@itemx -mno-ext-dsp
+Enable/disable generation of DSP extension instructions.
+
+@opindex mext-fpu-fma
+@opindex mno-ext-fpu-fma
+@item -mext-fpu-fma
+@itemx -mno-ext-fpu-fma
+Enable/disable generation of floating-point multiply-accumulation instructions.
+
+@opindex mext-fpu-sp
+@opindex mno-ext-fpu-sp
+@item -mext-fpu-sp
+@itemx -mno-ext-fpu-sp
+Enable/disable generation of single-precision floating-point instructions.
+
+@opindex mext-fpu-dp
+@opindex mno-ext-fpu-dp
+@item -mext-fpu-dp
+@itemx -mno-ext-fpu-dp
+Enable/disable generation of double-precision floating-point instructions.
+
+@opindex mv3push
+@opindex mno-v3push
+@item -mv3push
+@itemx -mno-v3push
+Enable/disable generation of v3 push25/pop25 instructions.
+
+@opindex m16-bit
+@opindex mno-16-bit
+@item -m16-bit
+@itemx -mno-16-bit
+Enable/disable generation of 16-bit instructions.
+
+@opindex mvh
+@opindex mno-vh
+@item -mvh
+@itemx -mno-vh
+Enable/disable Virtual Hosting support.
+
+@opindex misr-vector-size
+@item -misr-vector-size=@var{num}
+Specify the size of each interrupt vector, which must be 4 or 16.
+
+@opindex misr-secure
+@item -misr-secure=@var{num}
+Specify the security level of c-isr for the whole file.
+
+@opindex mcache-block-size
+@item -mcache-block-size=@var{num}
+Specify the size of each cache block,
+which must be a power of 2 between 4 and 512.
+
+@opindex march=
+@item -march=@var{arch}
+Specify the target architecture.  @var{arch} may be one of
+@samp{v2}, @samp{v3}, @samp{v3j}, @samp{v3m}, @samp{v3f}, or @samp{v3s}.
+
+@opindex mcpu=
+@item -mcpu=@var{cpu}
+Specify the CPU to compile for.  @var{cpu} may be one of
+@samp{n6}, @samp{n650}, @samp{n7}, @samp{n705}, @samp{n8}, @samp{n801},
+@samp{sn8}, @samp{sn801}, @samp{s8}, @samp{s801}, @samp{e8}, @samp{e801},
+@samp{n820}, @samp{s830}, @samp{e830}, @samp{n9}, @samp{n903}, @samp{n903a},
+@samp{n968}, @samp{n968a}, @samp{n10}, @samp{n1033}, @samp{n1033a},
+@samp{n1033-fpu}, @samp{n1033-spu}, @samp{n1068}, @samp{n1068a},
+@samp{n1068-fpu}, @samp{n1068a-fpu}, @samp{d10}, @samp{d1088},
+@samp{d1088-fpu}, @samp{d1088-spu}, @samp{n15}, @samp{d15}, @samp{n15s},
+@samp{d15s}, @samp{n15f}, @samp{d15f}, @samp{n12}, @samp{n1213},
+@samp{n1233}, @samp{n1233-fpu}, @samp{n1233-spu}, @samp{n13}, @samp{n1337},
+@samp{n1337-fpu}, @samp{n1337-spu}, or @samp{simple}.
+
+@opindex mconfig-fpu=
+@item -mconfig-fpu=@var{num}
+Specify a FPU configuration value from 0 to 7; 0--3 is as FPU spec says,
+and 4--7 correspond to 0--3.
+
+@opindex mconfig-mul=
+@item -mconfig-mul=@var{type}
+Specify configuration for multiply instruction.  @var{type} can be one of
+@samp{fast}, @samp{fast1} (equivalent to @samp{fast}), @samp{fast2}, or
+@samp{slow}.  The default is @samp{fast1}.
+
+@opindex mconfig-register-ports=
+@item -mconfig-register-ports=@var{kind}
+Specify the numbers of read/write ports for n9/n10 cores.  The value should
+be @samp{3r2w} or @samp{2r1w}.
+
+@opindex mcmodel=
+@item -mcmodel=@var{code-model}
+Set the code model to one of:
+@table @asis
+@item @samp{small}
+All the data and read-only data segments must be within 512KB addressing space.
+The text segment must be within 16MB addressing space.
+@item @samp{medium}
+The data segment must be within 512KB while the read-only data segment can be
+within 4GB addressing space.  The text segment should be still within 16MB
+addressing space.
+@item @samp{large}
+All the text and data segments can be within 4GB addressing space.
+@end table
+The default is @samp{large} on GNU/Linux targets and @samp{medium} on other
+ELF targets.
+
+@opindex mctor-dtor
+@opindex mno-ctor-dtor
+@item -mctor-dtor
+@itemx -mno-ctor-dtor
+Enable/disable constructor/destructor feature.
+
+@opindex mrelax
+@opindex mno-relax
+@item -mrelax
+@itemx -mno-relax
+Enable/disable linker option to relax instructions.
+
+@opindex mrelax-hint
+@opindex mno-relax-hint
+@item -mrelax-hint
+@itemx -mno-relax-hint
+Enable/disable insertion of hints for linker to do relaxation.
+
+@opindex msched-prolog-epilog
+@opindex mno-sched-prolog-epilog
+@item -msched-prolog-epilog
+@itemx -mno-sched-prolog-epilog
+Enable/disable scheduling of a function's prologue and epilogue sequence.
+
+@opindex mret-in-naked-func
+@opindex mno-ret-in-naked-func
+@item -mret-in-naked-func
+@itemx -mno-ret-in-naked-func
+Enable/disable generation of return instructions in naked functions.  This
+option is enabled by default.
+
+@opindex malways-save-lp
+@opindex mno-always-save-lp
+@item -malways-save-lp
+@itemx -mno-always-save-lp
+Enable/disable always saving @code{$lp} on the stack.
+
+@opindex munaligned-access
+@opindex mno-unaligned-access
+@item -munaligned-access
+@itemx -mno-unaligned-access
+Enable/disable unaligned word and halfword accesses to packed data.
+
+@opindex minline-asm-r15
+@opindex mno-inline-asm-r15
+@item -minline-asm-r15
+@itemx -mno-inline-asm-r15
+Allow/disallow use of r15 for inline asm.
+@end table
+
+@node Nvidia PTX Options
+@subsection Nvidia PTX Options
+@cindex Nvidia PTX options
+@cindex nvptx options
+
+These options are defined for Nvidia PTX:
+
+@table @gcctabopt
+
+@opindex m64
+@item -m64
+Ignored, but preserved for backward compatibility.  Only 64-bit ABI is
+supported.
+
+@opindex march
+@item -march=@var{architecture-string}
+Generate code for the specified PTX ISA target architecture.
+Valid architecture strings are
+@samp{sm_30}, @samp{sm_35}, @samp{sm_37},
+@samp{sm_50}, @samp{sm_52}, @samp{sm_53},
+@samp{sm_61},
+@samp{sm_70}, @samp{sm_75},
+@samp{sm_80}, and @samp{sm_89}.
+The default depends on how the compiler has been configured, see
+@option{--with-arch}.
+
+This option sets the value of the preprocessor macro
+@code{__PTX_SM__}; for instance, for @samp{sm_35}, it has the value
+@samp{350}.
+
+@opindex misa
+@item -misa=@var{architecture-string}
+Alias of @option{-march=}.
+
+@opindex march-map
+@item -march-map=@var{architecture-string}
+Select the closest available @option{-march=} value that is not more
+capable.  For instance, for @option{-march-map=sm_50} select
+@option{-march=sm_37}, and for @option{-march-map=sm_53} select
+@option{-march=sm_53}.
+
+@opindex mptx
+@item -mptx=@var{version-string}
+Generate code for the specified PTX ISA version.
+Valid version strings are
+@samp{3.1},
+@samp{4.0}, @samp{4.1}, @samp{4.2},
+@samp{5.0},
+@samp{6.0}, @samp{6.3},
+@samp{7.0}, @samp{7.3}, and @samp{7.8}.
+The default PTX ISA version is the one that added support for the
+selected PTX ISA target architecture, see @option{-march=}, but at
+least @samp{6.3}, or @samp{7.3} for @option{-march=sm_52} and higher.
+
+This option sets the values of the preprocessor macros
+@code{__PTX_ISA_VERSION_MAJOR__} and @code{__PTX_ISA_VERSION_MINOR__};
+for instance, for @samp{3.1} the macros have the values @samp{3} and
+@samp{1}, respectively.
+
+@opindex mmainkernel
+@item -mmainkernel
+Link in code for a __main kernel.  This is for stand-alone instead of
+offloading execution.
+
+@opindex moptimize
+@opindex mno-optimize
+@item -moptimize
+@itemx -mno-optimize
+Enable/disable partitioned execution optimizations.  This option is enabled by
+default when any level of optimization is selected.
+
+@opindex msoft-stack
+@opindex mno-soft-stack
+@item -msoft-stack
+@itemx -mno-soft-stack
+For @option{-mno-soft-stack} (the default, unless @option{-mgomp} has
+been specified), use PTX ``native'' stacks, that is,
+generate code that uses @code{.local} memory or PTX @code{alloca}
+directly for stack storage.
+Unless @option{-mptx=7.3} or higher and @option{-march=sm_52} or
+higher are active, variable-length arrays and dynamically allocating
+memory on the stack with @code{alloca} are not supported.
+
+For @option{-msoft-stack} (implied by @option{-mgomp}),
+generate code that does not use @code{.local} memory or PTX @code{alloca}
+directly for stack storage. Instead, a per-warp stack pointer is
+maintained explicitly. This enables variable-length stack allocation (with
+variable-length arrays or @code{alloca}), and when global memory is used for
+underlying storage, makes it possible to access automatic variables from other
+threads, or with atomic instructions. This code generation variant is used
+for OpenMP offloading, but the option is exposed on its own for the purpose
+of testing the compiler; to generate code suitable for linking into programs
+using OpenMP offloading, use option @option{-mgomp}.
+

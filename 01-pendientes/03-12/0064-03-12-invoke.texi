@@ -1,0 +1,212 @@
+@c GCC 16.1.0 | BLOQUE 0064 | 03-12
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 16151-16358 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -ffold-mem-offsets
+@itemx -fno-fold-mem-offsets
+Try to eliminate add instructions by folding them in memory loads/stores.
+
+Enabled at levels @option{-O2}, @option{-O3}.
+
+@opindex fcprop-registers
+@opindex fno-cprop-registers
+@item -fcprop-registers
+After register allocation and post-register allocation instruction splitting,
+perform a copy-propagation pass to try to reduce scheduling dependencies
+and occasionally eliminate the copy.
+
+Enabled at levels @option{-O1}, @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex fprofile-correction
+@opindex fno-profile-correction
+@item -fprofile-correction
+Profiles collected using an instrumented binary for multi-threaded programs may
+be inconsistent due to missed counter updates. When this option is specified,
+GCC uses heuristics to correct or smooth out such inconsistencies. By
+default, GCC emits an error message when an inconsistent profile is detected.
+
+This option is enabled by @option{-fauto-profile}.
+
+@opindex fprofile-partial-training
+@opindex fno-profile-partial-training
+@item -fprofile-partial-training
+With @code{-fprofile-use} all portions of programs not executed during
+training runs are optimized aggressively for size rather than speed.
+In some cases it is not practical to train all possible hot paths in
+the program. (For example, it may contain functions specific to a
+given hardware and training may not cover all hardware configurations
+the program later runs on.)  With @code{-fprofile-partial-training}
+profile feedback is ignored for all functions not executed during the
+training runs, causing them to be optimized as if they were compiled
+without profile feedback. This leads to better performance when the
+training is not representative at the cost of significantly bigger code.
+
+@opindex fprofile-use
+@opindex fno-profile-use
+@item -fprofile-use
+@itemx -fprofile-use=@var{path}
+Enable profile feedback-directed optimizations,
+and the following optimizations, many of which
+are generally profitable only with profile feedback available:
+
+@gccoptlist{-fbranch-probabilities  -fprofile-values
+-funroll-loops  -fpeel-loops  -ftracer  -fvpt
+-finline-functions  -fipa-cp  -fipa-cp-clone  -fipa-bit-cp
+-fpredictive-commoning  -fsplit-loops  -funswitch-loops
+-fgcse-after-reload  -ftree-loop-vectorize  -ftree-slp-vectorize
+-fvect-cost-model=dynamic  -ftree-loop-distribute-patterns
+-fprofile-reorder-functions}
+
+Before you can use this option, you must first generate profiling information.
+@xref{Instrumentation Options}, for information about the
+@option{-fprofile-generate} option.
+
+By default, GCC emits an error message if the feedback profiles do not
+match the source code.  This error can be turned into a warning by using
+@option{-Wno-error=coverage-mismatch}.  Note this may result in poorly
+optimized code.  Additionally, by default, GCC also emits a warning message if
+the feedback profiles do not exist (see @option{-Wmissing-profile}).
+
+If @var{path} is specified, GCC looks at the @var{path} to find
+the profile feedback data files. See @option{-fprofile-dir}.
+
+@opindex fauto-profile
+@opindex fno-auto-profile
+@item -fauto-profile
+@itemx -fauto-profile=@var{path}
+Enable sampling-based feedback-directed optimizations,
+and the following optimizations,
+many of which are generally profitable only with profile feedback available:
+
+@gccoptlist{-fbranch-probabilities  -fprofile-values
+-funroll-loops  -fpeel-loops  -ftracer  -fvpt
+-finline-functions  -fipa-cp  -fipa-cp-clone  -fipa-bit-cp
+-fpredictive-commoning  -fsplit-loops  -funswitch-loops
+-fgcse-after-reload  -ftree-loop-vectorize  -ftree-slp-vectorize
+-fvect-cost-model=dynamic  -ftree-loop-distribute-patterns
+-fprofile-correction}
+
+@var{path} is the name of a file containing AutoFDO profile information.
+If omitted, it defaults to @file{fbdata.afdo} in the current directory.
+
+Producing an AutoFDO profile data file requires running your program
+with the @command{perf} utility on a supported GNU/Linux target system.
+For more information, see @uref{https://perfwiki.github.io/main/}.
+
+E.g.
+@smallexample
+perf record -e br_inst_retired:near_taken -b -o perf.data \
+    -- your_program
+@end smallexample
+
+Then use the @command{create_gcov} tool to convert the raw profile data
+to a format that can be used by GCC.@  You must also supply the
+unstripped binary for your program to this tool.
+See @uref{https://github.com/google/autofdo}.
+
+E.g.
+@smallexample
+create_gcov --binary=your_program.unstripped --profile=perf.data \
+    --gcov=profile.afdo
+@end smallexample
+
+@opindex fauto-profile-inlining
+@opindex fno-auto-profile-inlining
+@item -fauto-profile-inlining
+When auto-profile is available inline all relevant functions which was
+inlined in the tran run before reading the profile feedback.  This improves
+context sensitivity of the profile.  Enabled by default.
+@end table
+
+The following options control compiler behavior regarding floating-point
+arithmetic.  These options trade off between speed and
+correctness.  All must be specifically enabled.
+
+@table @gcctabopt
+@opindex fexcess-precision
+@item -fexcess-precision=@var{style}
+This option allows control over excess precision on machines
+where floating-point operations occur in a format with more precision or
+range than the IEEE standard and interchange floating-point types.
+An example of such a target is x87 floating point on x86 processors,
+which uses an 80-bit representation internally instead of the 64-bit
+IEEE format.  For most programs, the excess precision is harmless,
+but some programs may rely on the
+requirements of the C or C++ language standards for handling IEEE values.
+
+By default, @option{-fexcess-precision=fast} is in effect; this means that
+operations may be carried out in a wider precision than the types specified
+in the source if that would result in faster code, and it is unpredictable
+when rounding to the types specified in the source code takes place.
+When compiling C or C++, if @option{-fexcess-precision=standard} is specified
+then excess precision follows the rules specified in ISO C99 or C++;
+in particular,
+both casts and assignments cause values to be rounded to their
+semantic types (whereas @option{-ffloat-store} only affects
+assignments).  This option is enabled by default for C or C++ if a strict
+conformance option such as @option{-std=c99} or @option{-std=c++17} is used.
+@option{-ffast-math} enables @option{-fexcess-precision=fast} by default
+regardless of whether a strict conformance option is used.
+If @option{-fexcess-precision=16} is specified, constants and the
+results of expressions with types @code{_Float16} and @code{__bf16}
+are computed without excess precision.
+
+@opindex mfpmath
+@option{-fexcess-precision=standard} is not implemented for languages
+other than C or C++.  On the x86, it has no effect if @option{-mfpmath=sse}
+or @option{-mfpmath=sse+387} is specified; in the former case, IEEE
+semantics apply without excess precision, and in the latter, rounding
+is unpredictable.
+
+@opindex ffloat-store
+@opindex fno-float-store
+@item -ffloat-store
+Do not store floating-point variables in registers, and inhibit other
+options that might change whether a floating-point value is taken from a
+register or memory.  This option has generally been subsumed by
+@option{-fexcess-precision=standard}, which is more general.  If you do use
+@option{-ffloat-store}, you may need to modify your program to explicitly
+store intermediate computations in temporary variables since
+@option{-ffloat-store} handles rounding to IEEE format
+only on assignments and not casts as @option{-fexcess-precision=standard}
+does.
+
+@opindex ffast-math
+@opindex fno-fast-math
+@item -ffast-math
+Sets the options @option{-fno-math-errno}, @option{-funsafe-math-optimizations},
+@option{-ffinite-math-only}, @option{-fno-rounding-math},
+@option{-fno-signaling-nans}, @option{-fcx-limited-range} and
+@option{-fexcess-precision=fast}.
+
+This option causes the preprocessor macro @code{__FAST_MATH__} to be defined.
+
+This option is not turned on by any @option{-O} option besides
+@option{-Ofast} since it can result in incorrect output for programs
+that depend on an exact implementation of IEEE or ISO rules/specifications
+for math functions. It may, however, yield faster code for programs
+that do not require the guarantees of these specifications.
+
+@opindex fno-math-errno
+@opindex fmath-errno
+@item -fno-math-errno
+Do not set @code{errno} after calling math functions that are executed
+with a single instruction, e.g., @code{sqrt}.  A program that relies on
+IEEE exceptions for math error handling may want to use this flag
+for speed while maintaining IEEE arithmetic compatibility.
+
+This option is not turned on by any @option{-O} option  besides
+@option{-Ofast} since it can result in incorrect output for
+programs that depend on an exact implementation of IEEE or
+ISO rules/specifications for math functions. It may, however,
+yield faster code for programs that do not require the guarantees
+of these specifications.
+
+The default is @option{-fmath-errno}.
+
+On Darwin systems, the math library never sets @code{errno}.  There is
+therefore no reason for the compiler to consider the possibility that
+it might, and @option{-fno-math-errno} is the default.
+
+@opindex funsafe-math-optimizations
+@opindex fno-unsafe-math-optimizations

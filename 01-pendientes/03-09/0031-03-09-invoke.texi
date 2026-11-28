@@ -1,0 +1,255 @@
+@c GCC 16.1.0 | BLOQUE 0031 | 03-09
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 9035-9285 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -Wsuggest-attribute=format
+@itemx -Wmissing-format-attribute
+
+Warn about function pointers that might be candidates for @code{format}
+attributes.  Note these are only possible candidates, not absolute ones.
+GCC guesses that function pointers with @code{format} attributes that
+are used in assignment, initialization, parameter passing or return
+statements should have a corresponding @code{format} attribute in the
+resulting type.  I.e.@: the left-hand side of the assignment or
+initialization, the type of the parameter variable, or the return type
+of the containing function respectively should also have a @code{format}
+attribute to avoid the warning.
+
+GCC also warns about function definitions that might be
+candidates for @code{format} attributes.  Again, these are only
+possible candidates.  GCC guesses that @code{format} attributes
+might be appropriate for any function that calls a function like
+@code{vprintf} or @code{vscanf}, but this might not always be the
+case, and some functions for which @code{format} attributes are
+appropriate may not be detected.
+
+@opindex Wsuggest-attribute=cold
+@opindex Wno-suggest-attribute=cold
+@item -Wsuggest-attribute=cold
+
+Warn about functions that might be candidates for @code{cold} attribute.  This
+is based on static detection and generally only warns about functions which
+always leads to a call to another @code{cold} function such as wrappers of
+C++ @code{throw} or fatal error reporting functions leading to @code{abort}.
+@end table
+
+@opindex Wno-alloc-size
+@opindex Walloc-size
+@item -Walloc-size
+Warn about calls to allocation functions decorated with attribute
+@code{alloc_size} that specify insufficient size for the target type of
+the pointer the result is assigned to, including those to the built-in
+forms of the functions @code{aligned_alloc}, @code{alloca},
+@code{calloc}, @code{malloc}, and @code{realloc}.
+
+@opindex Wno-alloc-zero
+@opindex Walloc-zero
+@item -Walloc-zero
+Warn about calls to allocation functions decorated with attribute
+@code{alloc_size} that specify zero bytes, including those to the built-in
+forms of the functions @code{aligned_alloc}, @code{alloca}, @code{calloc},
+@code{malloc}, and @code{realloc}.  Because the behavior of these functions
+when called with a zero size differs among implementations (and in the case
+of @code{realloc} has been deprecated) relying on it may result in subtle
+portability bugs and should be avoided.
+
+@opindex Wcalloc-transposed-args
+@opindex Wno-calloc-transposed-args
+@item -Wcalloc-transposed-args
+Warn about calls to allocation functions decorated with attribute
+@code{alloc_size} with two arguments, which use @code{sizeof} operator
+as the earlier size argument and don't use it as the later size argument.
+This is a coding style warning.  The first argument to @code{calloc} is
+documented to be number of elements in array, while the second argument
+is size of each element, so @code{calloc (@var{n}, sizeof (int))} is preferred
+over @code{calloc (sizeof (int), @var{n})}.  If @code{sizeof} in the earlier
+argument and not the latter is intentional, the warning can be suppressed
+by using @code{calloc (sizeof (struct @var{S}) + 0, n)} or
+@code{calloc (1 * sizeof (struct @var{S}), 4)} or using @code{sizeof} in the
+later argument as well.
+
+@opindex Walloc-size-larger-than=
+@opindex Wno-alloc-size-larger-than
+@item -Walloc-size-larger-than=@var{byte-size}
+Warn about calls to functions decorated with attribute @code{alloc_size}
+that attempt to allocate objects larger than the specified number of bytes,
+or where the result of the size computation in an integer type with infinite
+precision would exceed the value of @samp{PTRDIFF_MAX} on the target.
+@option{-Walloc-size-larger-than=}@samp{PTRDIFF_MAX} is enabled by default.
+Warnings controlled by the option can be disabled either by specifying
+@var{byte-size} of @samp{SIZE_MAX} or more or by
+@option{-Wno-alloc-size-larger-than}.
+@xref{Common Attributes}.
+
+@opindex Wno-alloc-size-larger-than
+@item -Wno-alloc-size-larger-than
+Disable @option{-Walloc-size-larger-than=} warnings.  The option is
+equivalent to @option{-Walloc-size-larger-than=}@samp{SIZE_MAX} or
+larger.
+
+@opindex Wno-alloca
+@opindex Walloca
+@item -Walloca
+This option warns on all uses of @code{alloca} in the source.
+
+@opindex Wno-auto-profile
+@opindex Wauto-profile
+@item -Wauto-profile
+Output warnings about auto-profile inconsistencies.
+
+@opindex Wcannot-profile
+@opindex Wno-cannot-profile
+@item -Wcannot-profile
+Warn when profiling instrumentation was requested, but could not be applied to
+a certain function.
+
+@opindex Walloca-larger-than=
+@opindex Wno-alloca-larger-than
+@item -Walloca-larger-than=@var{byte-size}
+This option warns on calls to @code{alloca} with an integer argument whose
+value is either zero, or that is not bounded by a controlling predicate
+that limits its value to at most @var{byte-size}.  It also warns for calls
+to @code{alloca} where the bound value is unknown.  Arguments of non-integer
+types are considered unbounded even if they appear to be constrained to
+the expected range.
+
+For example, a bounded case of @code{alloca} could be:
+
+@smallexample
+void func (size_t n)
+@{
+  void *p;
+  if (n <= 1000)
+    p = alloca (n);
+  else
+    p = malloc (n);
+  f (p);
+@}
+@end smallexample
+
+In the above example, passing @code{-Walloca-larger-than=1000} would not
+issue a warning because the call to @code{alloca} is known to be at most
+1000 bytes.  However, if @code{-Walloca-larger-than=500} were passed,
+the compiler would emit a warning.
+
+Unbounded uses, on the other hand, are uses of @code{alloca} with no
+controlling predicate constraining its integer argument.  For example:
+
+@smallexample
+void func ()
+@{
+  void *p = alloca (n);
+  f (p);
+@}
+@end smallexample
+
+If @code{-Walloca-larger-than=500} were passed, the above would trigger
+a warning, but this time because of the lack of bounds checking.
+
+Note, that even seemingly correct code involving signed integers could
+cause a warning:
+
+@smallexample
+void func (signed int n)
+@{
+  if (n < 500)
+    @{
+      p = alloca (n);
+      f (p);
+    @}
+@}
+@end smallexample
+
+In the above example, @var{n} could be negative, causing a larger than
+expected argument to be implicitly cast into the @code{alloca} call.
+
+This option also warns when @code{alloca} is used in a loop.
+
+@option{-Walloca-larger-than=}@samp{PTRDIFF_MAX} is enabled by default
+but is usually only effective  when @option{-ftree-vrp} is active (default
+for @option{-O2} and above).
+
+See also @option{-Wvla-larger-than=}@samp{byte-size}.
+
+@opindex Wno-alloca-larger-than
+@item -Wno-alloca-larger-than
+Disable @option{-Walloca-larger-than=} warnings.  The option is
+equivalent to @option{-Walloca-larger-than=}@samp{SIZE_MAX} or larger.
+
+@opindex Warith-conversion
+@opindex Wno-arith-conversion
+@item -Warith-conversion
+Do warn about implicit conversions from arithmetic operations even
+when conversion of the operands to the same type cannot change their
+values.  This affects warnings from @option{-Wconversion},
+@option{-Wfloat-conversion}, and @option{-Wsign-conversion}.
+
+@smallexample
+@group
+void f (char c, int i)
+@{
+  c = c + i; // warns with @option{-Wconversion}
+  c = c + 1; // only warns with @option{-Warith-conversion}
+@}
+@end group
+@end smallexample
+
+@opindex Wno-array-bounds
+@opindex Warray-bounds
+@item -Warray-bounds
+@itemx -Warray-bounds=@var{n}
+Warn about out of bounds subscripts or offsets into arrays.  This warning
+is enabled by @option{-Wall}.  It is more effective when @option{-ftree-vrp}
+is active (the default for @option{-O2} and above) but a subset of instances
+are issued even without optimization.
+
+By default, the trailing array of a structure will be treated as a flexible
+array member by @option{-Warray-bounds} or @option{-Warray-bounds=@var{n}}
+if it is declared as either a flexible array member per C99 standard onwards
+(@samp{[]}), a GCC zero-length array extension (@samp{[0]}), or an one-element
+array (@samp{[1]}). As a result, out of bounds subscripts or offsets into
+zero-length arrays or one-element arrays are not warned by default.
+
+You can add the option @option{-fstrict-flex-arrays} or
+@option{-fstrict-flex-arrays=@var{level}} to control how this
+option treat trailing array of a structure as a flexible array member:
+
+when @var{level}<=1, no change to the default behavior.
+
+when @var{level}=2, additional warnings will be issued for out of bounds
+subscripts or offsets into one-element arrays;
+
+when @var{level}=3, in addition to @var{level}=2, additional warnings will be
+issued for out of bounds subscripts or offsets into zero-length arrays.
+
+@table @gcctabopt
+@item -Warray-bounds=1
+This is the default warning level of @option{-Warray-bounds} and is enabled
+by @option{-Wall}; higher levels are not, and must be explicitly requested.
+
+@item -Warray-bounds=2
+This warning level also warns about the intermediate results of pointer
+arithmetic that may yield out of bounds values. This warning level may
+give a larger number of false positives and is deactivated by default.
+@end table
+
+@opindex Wunterminated-string-initialization
+@opindex Wno-unterminated-string-initialization
+@item -Wunterminated-string-initialization @r{(C and Objective-C only)}
+Warn about character arrays initialized as unterminated character sequences
+with a string literal, unless the declaration being initialized has
+the @code{nonstring} attribute.
+For example:
+
+@smallexample
+char arr[3] = "foo"; /* Warning.  */
+char arr2[3] __attribute__((nonstring)) = "bar"; /* No warning.  */
+@end smallexample
+
+This warning is enabled by @option{-Wextra}.  If @option{-Wc++-compat}
+is enabled, the warning has slightly different wording and warns even
+if the declaration being initialized has the @code{nonstring} warning,
+as in C++ such initializations are an error.
+
+@opindex Warray-compare
+@opindex Wno-array-compare

@@ -1,0 +1,273 @@
+@c GCC 16.1.0 | BLOQUE 0355 | 11
+@c Fuente: gcc/doc/gcov.texi | blob: 7080f7c4a2a425fd68d595c0634da86252a3b364
+@c Lineas originales: 1548-1816 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@smallexample
+#include "app.h"
+
+#include <stdio.h>
+
+/* The application reads a character stream encoded by encode() from stdin,
+   decodes it, and writes the decoded characters to stdout.  Characters other
+   than the 16 characters 'a' to 'p' are ignored.  */
+
+static int can_decode (unsigned char c)
+@{
+  return (unsigned char)(c - a) < 16;
+@}
+
+void
+application (void)
+@{
+  int first = 1;
+  int i;
+  unsigned char c;
+
+  while ((i = fgetc (stdin)) != EOF)
+    @{
+      unsigned char x = (unsigned char)i;
+
+      if (can_decode (x))
+        @{
+          if (first)
+            c = x - a;
+          else
+            fputc (c + 16 * (x - a), stdout);
+          first = !first;
+        @}
+      else
+        first = 1;
+    @}
+@}
+@end smallexample
+
+Thirdly, create the source file @file{main.c} with the following content:
+
+@smallexample
+#include "app.h"
+
+#include <gcov.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+/* The start and end symbols are provided by the linker script.  We use the
+   array notation to avoid issues with a potential small-data area.  */
+
+extern const struct gcov_info *const __gcov_info_start[];
+extern const struct gcov_info *const __gcov_info_end[];
+
+/* This function shall produce a reliable in order byte stream to transfer the
+   gcov information from the target to the host system.  */
+
+static void
+dump (const void *d, unsigned n, void *arg)
+@{
+  (void)arg;
+  const unsigned char *c = d;
+  unsigned char buf[2];
+
+  for (unsigned i = 0; i < n; ++i)
+    fwrite (encode (c[i], buf), sizeof (buf), 1, stderr);
+@}
+
+/* The filename is serialized to a gcfn data stream by the
+   __gcov_filename_to_gcfn() function.  The gcfn data is used by the
+   "merge-stream" subcommand of the "gcov-tool" to figure out the filename
+   associated with the gcov information. */
+
+static void
+filename (const char *f, void *arg)
+@{
+  __gcov_filename_to_gcfn (f, dump, arg);
+@}
+
+/* The __gcov_info_to_gcda() function may have to allocate memory under
+   certain conditions.  Simply try it out if it is needed for your application
+   or not.  */
+
+static void *
+allocate (unsigned length, void *arg)
+@{
+  (void)arg;
+  return malloc (length);
+@}
+
+/* Dump the gcov information of all translation units.  */
+
+static void
+dump_gcov_info (void)
+@{
+  const struct gcov_info *const *info = __gcov_info_start;
+  const struct gcov_info *const *end = __gcov_info_end;
+
+  /* Obfuscate variable to prevent compiler optimizations.  */
+  __asm__ ("" : "+r" (info));
+
+  while (info != end)
+  @{
+    void *arg = NULL;
+    __gcov_info_to_gcda (*info, filename, dump, allocate, arg);
+    fputc ('\n', stderr);
+    ++info;
+  @}
+@}
+
+/* The main() function just runs the application and then dumps the gcov
+   information to stderr.  */
+
+int
+main (void)
+@{
+  application ();
+  dump_gcov_info ();
+  return 0;
+@}
+@end smallexample
+
+If we compile @file{app.c} with test coverage and no extra profiling options,
+then a global constructor (@code{_sub_I_00100_0} here, it may have a different
+name in your environment) and destructor (@code{_sub_D_00100_1}) is used to
+register and dump the gcov information, respectively.  We also see undefined
+references to @code{__gcov_init} and @code{__gcov_exit}:
+
+@smallexample
+$ gcc --coverage -c app.c
+$ nm app.o
+0000000000000000 r a
+0000000000000030 T application
+0000000000000000 t can_decode
+                 U fgetc
+                 U fputc
+0000000000000000 b __gcov0.application
+0000000000000038 b __gcov0.can_decode
+0000000000000000 d __gcov_.application
+00000000000000c0 d __gcov_.can_decode
+                 U __gcov_exit
+                 U __gcov_init
+                 U __gcov_merge_add
+                 U stdin
+                 U stdout
+0000000000000161 t _sub_D_00100_1
+0000000000000151 t _sub_I_00100_0
+@end smallexample
+
+Compile @file{app.c} and @file{main.c} with test coverage and
+@option{-fprofile-info-section}.  Now, a read-only pointer size object is
+present in the @code{.gcov_info} section and there are no undefined references
+to @code{__gcov_init} and @code{__gcov_exit}:
+
+@smallexample
+$ gcc --coverage -fprofile-info-section -c main.c
+$ gcc --coverage -fprofile-info-section -c app.c
+$ objdump -h app.o
+
+app.o:     file format elf64-x86-64
+
+Sections:
+Idx Name          Size      VMA               LMA               File off  Algn
+  0 .text         00000151  0000000000000000  0000000000000000  00000040  2**0
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .data         00000100  0000000000000000  0000000000000000  000001a0  2**5
+                  CONTENTS, ALLOC, LOAD, RELOC, DATA
+  2 .bss          00000040  0000000000000000  0000000000000000  000002a0  2**5
+                  ALLOC
+  3 .rodata       0000003c  0000000000000000  0000000000000000  000002a0  2**3
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  4 .gcov_info    00000008  0000000000000000  0000000000000000  000002e0  2**3
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+  5 .comment      0000004e  0000000000000000  0000000000000000  000002e8  2**0
+                  CONTENTS, READONLY
+  6 .note.GNU-stack 00000000  0000000000000000  0000000000000000  00000336  2**0
+                  CONTENTS, READONLY
+  7 .eh_frame     00000058  0000000000000000  0000000000000000  00000338  2**3
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+@end smallexample
+
+We have to customize the program link procedure so that all the
+@code{.gcov_info} linker input sections are placed in a contiguous memory block
+with a begin and end symbol.  Firstly, get the default linker script using the
+following commands (we assume a GNU linker):
+
+@smallexample
+$ ld --verbose | sed '1,/^===/d' | sed '/^===/d' > linkcmds
+@end smallexample
+
+Secondly, open the file @file{linkcmds} with a text editor and place the linker
+output section definition from the overview after the @code{.rodata} section
+definition.  Link the program executable using the customized linker script:
+
+@smallexample
+$ gcc --coverage main.o app.o -T linkcmds -Wl,-Map,app.map
+@end smallexample
+
+In the linker map file @file{app.map}, we see that the linker placed the
+read-only pointer size objects of our objects files @file{main.o} and
+@file{app.o} into a contiguous memory block and provided the symbols
+@code{__gcov_info_start} and @code{__gcov_info_end}:
+
+@smallexample
+$ grep -C 1 "\.gcov_info" app.map
+
+.gcov_info      0x0000000000403ac0       0x10
+                0x0000000000403ac0                PROVIDE (__gcov_info_start = .)
+ *(.gcov_info)
+ .gcov_info     0x0000000000403ac0        0x8 main.o
+ .gcov_info     0x0000000000403ac8        0x8 app.o
+                0x0000000000403ad0                PROVIDE (__gcov_info_end = .)
+@end smallexample
+
+Make sure no @file{.gcda} files are present.  Run the program with nothing to
+decode and dump @file{stderr} to the file @file{gcda-0.txt} (first run).  Run
+the program to decode @file{gcda-0.txt} and send it to the @command{gcov-tool}
+using the @command{merge-stream} subcommand to create the @file{.gcda} files
+(second run).  Run @command{gcov} to produce a report for @file{app.c}.  We see
+that the first run with nothing to decode results in a partially covered
+application:
+
+@smallexample
+$ rm -f app.gcda main.gcda
+$ echo "" | ./a.out 2>gcda-0.txt
+$ ./a.out <gcda-0.txt 2>gcda-1.txt | gcov-tool merge-stream
+$ gcov -bc app.c
+File 'app.c'
+Lines executed:69.23% of 13
+Branches executed:66.67% of 6
+Taken at least once:50.00% of 6
+Calls executed:66.67% of 3
+Creating 'app.c.gcov'
+
+Lines executed:69.23% of 13
+@end smallexample
+
+Run the program to decode @file{gcda-1.txt} and send it to the
+@command{gcov-tool} using the @command{merge-stream} subcommand to update the
+@file{.gcda} files.  Run @command{gcov} to produce a report for @file{app.c}.
+Since the second run decoded the gcov information of the first run, we have now
+a fully covered application:
+
+@smallexample
+$ ./a.out <gcda-1.txt 2>gcda-2.txt | gcov-tool merge-stream
+$ gcov -bc app.c
+File 'app.c'
+Lines executed:100.00% of 13
+Branches executed:100.00% of 6
+Taken at least once:100.00% of 6
+Calls executed:100.00% of 3
+Creating 'app.c.gcov'
+
+Lines executed:100.00% of 13
+@end smallexample
+
+@subsection System Initialization Caveats
+
+The gcov information of a translation unit consists of several global data
+structures.  For example, the instrumented code may update program flow graph
+edge counters in a zero-initialized data structure.  It is safe to run
+instrumented code before the zero-initialized data is cleared to zero.  The
+coverage information obtained before the zero-initialized data is cleared to
+zero is unusable.  Dumping the gcov information using
+@code{__gcov_info_to_gcda()} before the zero-initialized data is cleared to
+zero or the initialized data is loaded, is undefined behaviour.  Clearing the
+zero-initialized data to zero through a function instrumented for profiling or
+test coverage is undefined behaviour, since it may produce inconsistent program
+flow graph edge counters for example.

@@ -1,0 +1,229 @@
+@c GCC 16.1.0 | BLOQUE 0049 | 03-11
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 12779-13003 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Debugging Options
+@section Options for Debugging Your Program
+@cindex options, debugging
+@cindex debugging information options
+
+To tell GCC to emit extra information for use by a debugger, in almost
+all cases you need only to add @option{-g} to your other options.  Some debug
+formats can co-exist (like DWARF with CTF) when each of them is enabled
+explicitly by adding the respective command line option to your other options.
+
+GCC allows you to use @option{-g} with
+@option{-O}.  The shortcuts taken by optimized code may occasionally
+be surprising: some variables you declared may not exist
+at all; flow of control may briefly move where you did not expect it;
+some statements may not be executed because they compute constant
+results or their values are already at hand; some statements may
+execute in different places because they have been moved out of loops.
+Nevertheless it is possible to debug optimized output.  This makes
+it reasonable to use the optimizer for programs that might have bugs.
+
+If you are not using some other optimization option, consider
+using @option{-Og} (@pxref{Optimize Options}) with @option{-g}.
+With no @option{-O} option at all, some compiler passes that collect
+information useful for debugging do not run at all, so that
+@option{-Og} may result in a better debugging experience.
+
+@table @gcctabopt
+@opindex g
+@opindex debug
+@item -g
+@itemx --debug
+Produce debugging information in the operating system's native format
+(stabs, COFF, XCOFF, or DWARF)@.  GDB can work with this debugging
+information.
+
+On most systems that use stabs format, @option{-g} enables use of extra
+debugging information that only GDB can use; this extra information
+makes debugging work better in GDB but probably makes other debuggers
+crash or refuse to read the program.  If you want to control for certain whether
+to generate the extra information, use @option{-gvms} (see below).
+
+@opindex ggdb
+@item -ggdb
+Produce debugging information for use by GDB@.  This means to use the
+most expressive format available (DWARF, stabs, or the native format
+if neither of those are supported), including GDB extensions if at all
+possible.
+
+@opindex gdwarf
+@item -gdwarf
+@itemx -gdwarf-@var{version}
+Produce debugging information in DWARF format (if that is supported).
+The value of @var{version} may be either 2, 3, 4 or 5; the default
+version for most targets is 5 (with the exception of VxWorks, TPF and
+Darwin / macOS, which default to version 2, and AIX, which defaults
+to version 4).
+
+Note that with DWARF Version 2, some ports require and always
+use some non-conflicting DWARF 3 extensions in the unwind tables.
+
+Version 4 may require GDB 7.0 and @option{-fvar-tracking-assignments}
+for maximum benefit. Version 5 requires GDB 8.0 or higher.
+
+GCC no longer supports DWARF Version 1, which is substantially
+different than Version 2 and later.  For historical reasons, some
+other DWARF-related options such as
+@option{-fno-dwarf2-cfi-asm}) retain a reference to DWARF Version 2
+in their names, but apply to all currently-supported versions of DWARF.
+
+@opindex gbtf
+@item -gbtf
+Request BTF debug information.  BTF is the default debugging format for the
+eBPF target.  On other targets, like x86, BTF debug information can be
+generated along with DWARF debug information when both of the debug formats are
+enabled explicitly via their respective command line options.
+
+@opindex gprune-btf
+@opindex gno-prune-btf
+@item -gprune-btf
+@itemx -gno-prune-btf
+Prune BTF information before emission.  When pruning, only type
+information for types used by global variables and file-scope functions
+will be emitted.  If compiling for the BPF target with BPF CO-RE
+enabled, type information will also be emitted for types used in BPF
+CO-RE relocations.  In addition, struct and union types which are only
+referred to via pointers from members of other struct or union types
+shall be pruned and replaced with BTF_KIND_FWD, as though those types
+were only present in the input as forward declarations.
+
+This option substantially reduces the size of produced BTF information,
+but at significant loss in the amount of detailed type information.
+It is primarily useful when compiling for the BPF target, to minimize
+the size of the resulting object, and to eliminate BTF information
+which is not immediately relevant to the BPF program loading process.
+
+This option is enabled by default for the BPF target when generating
+BTF information.
+
+@opindex gctf
+@item -gctf
+@itemx -gctf@var{level}
+Request CTF debug information and use level to specify how much CTF debug
+information should be produced.  If @option{-gctf} is specified
+without a value for level, the default level of CTF debug information is 2.
+
+CTF debug information can be generated along with DWARF debug information when
+both of the debug formats are enabled explicitly via their respective command
+line options.
+
+Level 0 produces no CTF debug information at all.  Thus, @option{-gctf0}
+negates @option{-gctf}.
+
+Level 1 produces CTF information for tracebacks only.  This includes callsite
+information, but does not include type information.
+
+Level 2 produces type information for entities (functions, data objects etc.)
+at file-scope or global-scope only.
+
+@opindex gvms
+@item -gvms
+Produce debugging information in Alpha/VMS debug format (if that is
+supported).  This is the format used by DEBUG on Alpha/VMS systems.
+
+@opindex gcodeview
+@opindex gno-codeview
+@item -gcodeview
+Produce debugging information in CodeView debug format (if that is
+supported).  This is the format used by Microsoft Visual C++ on
+Windows.
+
+@item -g@var{level}
+@itemx -ggdb@var{level}
+@itemx -gvms@var{level}
+Request debugging information and also use @var{level} to specify how
+much information.  The default level is 2.
+
+Level 0 produces no debug information at all.  Thus, @option{-g0} negates
+@option{-g}.
+
+Level 1 produces minimal information, enough for making backtraces in
+parts of the program that you don't plan to debug.  This includes
+descriptions of functions and external variables, and line number
+tables, but no information about local variables.
+
+Level 2 is the normal setting to produce debuggable code.  The debug output
+includes all the information from level 1, plus information about
+local variables and typedefs to allow stepping through code and examining
+its state.  For C++ code, additional information is also emitted to assist
+in debugging namespace, class, and template functions.
+
+Level 3 includes extra information, such as all the macro definitions
+present in the program.  Some debuggers support macro expansion when
+you use @option{-g3}.
+
+If you use multiple @option{-g} options, with or without level numbers,
+the last such option is the one that is effective.
+
+@option{-gdwarf} does not accept a concatenated debug level, to avoid
+confusion with @option{-gdwarf-@var{level}}.
+Instead use an additional @option{-g@var{level}} option to change the
+debug level for DWARF.
+
+@opindex feliminate-unused-debug-symbols
+@opindex fno-eliminate-unused-debug-symbols
+@item -fno-eliminate-unused-debug-symbols
+By default, no debug information is produced for symbols that are not actually
+used. Use this option if you want debug information for all symbols.
+
+@opindex femit-class-debug-always
+@opindex fno-emit-class-debug-always
+@item -femit-class-debug-always
+Instead of emitting debugging information for a C++ class in only one
+object file, emit it in all object files using the class.  This option
+should be used only with debuggers that are unable to handle the way GCC
+normally emits debugging information for classes because using this
+option increases the size of debugging information by as much as a
+factor of two.
+
+@opindex fmerge-debug-strings
+@opindex fno-merge-debug-strings
+@item -fno-merge-debug-strings
+Direct the linker to not merge together strings in the debugging
+information that are identical in different object files.  Merging is
+not supported by all assemblers or linkers.  Merging decreases the size
+of the debug information in the output file at the cost of increasing
+link processing time.  Merging is enabled by default.
+
+@opindex fdebug-prefix-map
+@item -fdebug-prefix-map=@var{old}=@var{new}
+When compiling files residing in directory @file{@var{old}}, record
+debugging information describing them as if the files resided in
+directory @file{@var{new}} instead.  This can be used to replace a
+build-time path with an install-time path in the debug info.  It can
+also be used to change an absolute path to a relative path by using
+@file{.} for @var{new}.  This can give more reproducible builds, which
+are location independent, but may require an extra command to tell GDB
+where to find the source files. See also @option{-ffile-prefix-map}
+and @option{-fcanon-prefix-map}.
+
+@opindex fvar-tracking
+@opindex fno-var-tracking
+@item -fvar-tracking
+Run variable tracking pass.  It computes where variables are stored at each
+position in code.  Better debugging information is then generated
+(if the debugging information format supports this information).
+
+It is enabled by default when compiling with optimization (@option{-Os},
+@option{-O}, @option{-O2}, @dots{}), debugging information (@option{-g}) and
+the debug info format supports it.
+
+@opindex fvar-tracking-assignments
+@opindex fno-var-tracking-assignments
+@item -fvar-tracking-assignments
+Annotate assignments to user variables early in the compilation and
+attempt to carry the annotations over throughout the compilation all the
+way to the end, in an attempt to improve debug information while
+optimizing.  Use of @option{-gdwarf-4} is recommended along with it.
+
+It can be enabled even if var-tracking is disabled, in which case
+annotations are created and maintained, but discarded at the end.
+By default, this flag is enabled together with @option{-fvar-tracking},
+except when selective scheduling is enabled.
+
+@opindex fvar-tracking-uninit
+@opindex fno-var-tracking-uninit

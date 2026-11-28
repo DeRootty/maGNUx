@@ -1,0 +1,9 @@
+@c GCC 16.1.0 | BLOQUE 0108 | 03-20
+@c Fuente: gcc/doc/avr-mmcu.texi | blob: 37c4a41d53fd55f7ea4e561dc4ded7ecbe2cf435
+@c Lineas originales: 79-83 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item @anchor{avr1}avr1
+This ISA is implemented by the minimal AVR core and supported for assembler only.
+@*@var{mcu}@tie{}= @code{attiny11}, @code{attiny12}, @code{attiny15}, @code{attiny28}, @code{at90s1200}.
+
+@end table

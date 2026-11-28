@@ -1,0 +1,246 @@
+@c GCC 16.1.0 | BLOQUE 0225 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 12762-13003 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item @code{w}
+@tab Print the HImode name of the register.
+@tab @code{%w0}
+@tab @code{%ax}
+@tab @code{ax}
+@item @code{z}
+@tab Print the opcode suffix for the size of the current integer operand (one of @code{b}/@code{w}/@code{l}/@code{q}).
+@tab @code{%z0}
+@tab @code{l}
+@tab 
+@end multitable
+
+@code{V} is a special modifier which prints the name of the full integer
+register without @code{%}.
+
+@anchor{x86floatingpointasmoperands}
+@subsubsection x86 Floating-Point @code{asm} Operands
+
+On x86 targets, there are several rules on the usage of stack-like registers
+in the operands of an @code{asm}.  These rules apply only to the operands
+that are stack-like registers:
+
+@enumerate
+@item
+Given a set of input registers that die in an @code{asm}, it is
+necessary to know which are implicitly popped by the @code{asm}, and
+which must be explicitly popped by GCC@.
+
+An input register that is implicitly popped by the @code{asm} must be
+explicitly clobbered, unless it is constrained to match an
+output operand.
+
+@item
+For any input register that is implicitly popped by an @code{asm}, it is
+necessary to know how to adjust the stack to compensate for the pop.
+If any non-popped input is closer to the top of the reg-stack than
+the implicitly popped register, it would not be possible to know what the
+stack looked like---it's not clear how the rest of the stack ``slides
+up''.
+
+All implicitly popped input registers must be closer to the top of
+the reg-stack than any input that is not implicitly popped.
+
+It is possible that if an input dies in an @code{asm}, the compiler might
+use the input register for an output reload.  Consider this example:
+
+@smallexample
+asm ("foo" : "=t" (a) : "f" (b));
+@end smallexample
+
+@noindent
+This code says that input @code{b} is not popped by the @code{asm}, and that
+the @code{asm} pushes a result onto the reg-stack, i.e., the stack is one
+deeper after the @code{asm} than it was before.  But, it is possible that
+reload may think that it can use the same register for both the input and
+the output.
+
+To prevent this from happening,
+if any input operand uses the @samp{f} constraint, all output register
+constraints must use the @samp{&} early-clobber modifier.
+
+The example above is correctly written as:
+
+@smallexample
+asm ("foo" : "=&t" (a) : "f" (b));
+@end smallexample
+
+@item
+Some operands need to be in particular places on the stack.  All
+output operands fall in this category---GCC has no other way to
+know which registers the outputs appear in unless you indicate
+this in the constraints.
+
+Output operands must specifically indicate which register an output
+appears in after an @code{asm}.  @samp{=f} is not allowed: the operand
+constraints must select a class with a single register.
+
+@item
+Output operands may not be ``inserted'' between existing stack registers.
+Since no 387 opcode uses a read/write operand, all output operands
+are dead before the @code{asm}, and are pushed by the @code{asm}.
+It makes no sense to push anywhere but the top of the reg-stack.
+
+Output operands must start at the top of the reg-stack: output
+operands may not ``skip'' a register.
+
+@item
+Some @code{asm} statements may need extra stack space for internal
+calculations.  This can be guaranteed by clobbering stack registers
+unrelated to the inputs and outputs.
+
+@end enumerate
+
+This @code{asm}
+takes one input, which is internally popped, and produces two outputs.
+
+@smallexample
+asm ("fsincos" : "=t" (cos), "=u" (sin) : "0" (inp));
+@end smallexample
+
+@noindent
+This @code{asm} takes two inputs, which are popped by the @code{fyl2xp1} opcode,
+and replaces them with one output.  The @code{st(1)} clobber is necessary 
+for the compiler to know that @code{fyl2xp1} pops both inputs.
+
+@smallexample
+asm ("fyl2xp1" : "=t" (result) : "0" (x), "u" (y) : "st(1)");
+@end smallexample
+
+@anchor{msp430Operandmodifiers}
+@subsubsection MSP430 Operand Modifiers
+
+The list below describes the supported modifiers and their effects for MSP430.
+
+@multitable @columnfractions .10 .90
+@headitem Modifier @tab Description
+@item @code{A} @tab Select low 16-bits of the constant/register/memory operand.
+@item @code{B} @tab Select high 16-bits of the constant/register/memory
+operand.
+@item @code{C} @tab Select bits 32-47 of the constant/register/memory operand.
+@item @code{D} @tab Select bits 48-63 of the constant/register/memory operand.
+@item @code{H} @tab Equivalent to @code{B} (for backwards compatibility).
+@item @code{I} @tab Print the inverse (logical @code{NOT}) of the constant
+value.
+@item @code{J} @tab Print an integer without a @code{#} prefix.
+@item @code{L} @tab Equivalent to @code{A} (for backwards compatibility).
+@item @code{O} @tab Offset of the current frame from the top of the stack.
+@item @code{Q} @tab Use the @code{A} instruction postfix.
+@item @code{R} @tab Inverse of condition code, for unsigned comparisons.
+@item @code{W} @tab Subtract 16 from the constant value.
+@item @code{X} @tab Use the @code{X} instruction postfix.
+@item @code{Y} @tab Subtract 4 from the constant value.
+@item @code{Z} @tab Subtract 1 from the constant value.
+@item @code{b} @tab Append @code{.B}, @code{.W} or @code{.A} to the
+instruction, depending on the mode.
+@item @code{d} @tab Offset 1 byte of a memory reference or constant value.
+@item @code{e} @tab Offset 3 bytes of a memory reference or constant value.
+@item @code{f} @tab Offset 5 bytes of a memory reference or constant value.
+@item @code{g} @tab Offset 7 bytes of a memory reference or constant value.
+@item @code{p} @tab Print the value of 2, raised to the power of the given
+constant.  Used to select the specified bit position.
+@item @code{r} @tab Inverse of condition code, for signed comparisons.
+@item @code{x} @tab Equivalent to @code{X}, but only for pointers.
+@end multitable
+
+@anchor{loongarchOperandmodifiers}
+@subsubsection LoongArch Operand Modifiers
+
+The list below describes the supported modifiers and their effects for LoongArch.
+
+@multitable @columnfractions .10 .90
+@headitem Modifier @tab Description
+@item @code{d} @tab Same as @code{c}.
+@item @code{i} @tab Print the character ''@code{i}'' if the operand is not a register.
+@item @code{m} @tab Same as @code{c}, but the printed value is @code{operand - 1}.
+@item @code{u} @tab Print a LASX register.
+@item @code{w} @tab Print a LSX register.
+@item @code{X} @tab Print a constant integer operand in hexadecimal.
+@item @code{z} @tab Print the operand in its unmodified form, followed by a comma.
+@end multitable
+
+References to input and output operands in the assembler template of extended
+asm statements can use modifiers to affect the way the operands are formatted
+in the code output to the assembler.  For example, the following code uses the
+'w' modifier for LoongArch:
+
+@example
+test-asm.c:
+
+#include <lsxintrin.h>
+
+__m128i foo (void)
+@{
+__m128i  a,b,c;
+__asm__ ("vadd.d %w0,%w1,%w2\n\t"
+   :"=f" (c)
+   :"f" (a),"f" (b));
+
+return c;
+@}
+
+@end example
+
+@noindent
+The compile command for the test case is as follows:
+
+@example
+gcc test-asm.c -mlsx -S -o test-asm.s
+@end example
+
+@noindent
+The assembly statement produces the following assembly code:
+
+@example
+vadd.d $vr0,$vr0,$vr1
+@end example
+
+This is a 128-bit vector addition instruction, @code{c} (referred to in the
+template string as %0) is the output, and @code{a} (%1) and @code{b} (%2) are
+the inputs.  @code{__m128i} is a vector data type defined in the  file
+@code{lsxintrin.h} (@xref{LoongArch SX Vector Intrinsics}).  The symbol '=f'
+represents a constraint using a floating-point register as an output type, and
+the 'f' in the input operand represents a constraint using a floating-point
+register operand, which can refer to the definition of a constraint
+(@xref{Constraints}) in gcc.
+
+@anchor{riscvOperandmodifiers}
+@subsubsection RISC-V Operand Modifiers
+
+The list below describes the supported modifiers and their effects for RISC-V.
+
+@multitable @columnfractions .10 .90
+@headitem Modifier @tab Description
+@item @code{z} @tab Print ''@code{zero}'' instead of 0 if the operand is an immediate with a value of zero.
+@item @code{i} @tab Print the character ''@code{i}'' if the operand is an immediate.
+@item @code{N} @tab Print the register encoding as integer (0 - 31).
+@item @code{H} @tab Print the name of the next register for integer.
+@end multitable
+
+@anchor{shOperandmodifiers}
+@subsubsection SH Operand Modifiers
+
+The list below describes the supported modifiers and their effects for the SH family of processors.
+
+@multitable @columnfractions .10 .90
+@headitem Modifier @tab Description
+@item @code{.} @tab Print ''@code{.s}'' if the instruction needs a delay slot.
+@item @code{,} @tab Print ''@code{LOCAL_LABEL_PREFIX}''.
+@item @code{@@} @tab Print ''@code{trap}'', ''@code{rte}'' or ''@code{rts}'' depending on the interrupt pragma used.
+@item @code{#} @tab Print ''@code{nop}'' if there is nothing to put in the delay slot.
+@item @code{'} @tab Print likelihood suffix (''@code{/u}'' for unlikely).
+@item @code{>} @tab Print branch target if ''@code{-fverbose-asm}''.
+@item @code{O} @tab Require a constant operand and print the constant expression with no punctuation.
+@item @code{R} @tab Print the ''@code{LSW}'' of a dp value - changes if in little endian.
+@item @code{S} @tab Print the ''@code{MSW}'' of a dp value - changes if in little endian.
+@item @code{T} @tab Print the next word of a dp value - same as ''@code{R}'' in big endian mode.
+@item @code{M} @tab Print ''@code{.b }'', ''@code{.w}'', ''@code{.l}'', ''@code{.s}'', ''@code{.d}'', suffix if operand is a MEM.
+@item @code{N} @tab Print ''@code{r63}'' if the operand is ''@code{const_int 0}''.
+@item @code{d} @tab Print a ''@code{V2SF}'' as ''@code{dN}'' instead of ''@code{fpN}''.
+@item @code{m} @tab Print the pair ''@code{base,offset}'' or ''@code{base,index}'' for LD and ST.
+@item @code{U} @tab Like ''@code{%m}'' for ''@code{LD}'' and ''@code{ST}'', ''@code{HI}'' and ''@code{LO}''.
+@item @code{V} @tab Print the position of a single bit set.

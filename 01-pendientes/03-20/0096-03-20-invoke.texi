@@ -1,0 +1,190 @@
+@c GCC 16.1.0 | BLOQUE 0096 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 21415-21600 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -moutline-atomics
+@itemx -mno-outline-atomics
+Enable or disable calls to out-of-line helpers to implement atomic operations.
+These helpers will, at runtime, determine if the LSE instructions from
+ARMv8.1-A can be used; if not, they will use the load/store-exclusive
+instructions that are present in the base ARMv8.0 ISA.
+
+This option is only applicable when compiling for the base ARMv8.0
+instruction set.  If using a later revision, e.g. @option{-march=armv8.1-a}
+or @option{-march=armv8-a+lse}, the ARMv8.1-Atomics instructions will be
+used directly.  The same applies when using @option{-mcpu=} when the
+selected cpu supports the @samp{lse} feature.
+This option is on by default.
+
+@opindex mmax-vectorization
+@opindex mno-max-vectorization
+@item -mmax-vectorization
+@itemx -mno-max-vectorization
+Enable or disable an override to vectorizer cost model making vectorization
+always appear profitable.  This option can be combined with
+@option{-mautovec-preference} allowing precise control over which ISA will be
+used for auto-vectorization.  Unlike @option{-fno-vect-cost-model} or
+@option{-fvect-cost-model=unlimited} this option does not turn off cost
+comparison between different vector modes.
+
+@opindex mautovec-preference
+@item -mautovec-preference=@var{name}
+Force an ISA selection strategy for auto-vectorization.  The possible
+values of @var{name} are:
+@table @samp
+@item default
+Use the default heuristics.
+@item asimd-only
+Use only Advanced SIMD for auto-vectorization.
+@item sve-only
+Use only SVE for auto-vectorization.
+@item prefer-asimd
+Use both Advanced SIMD and SVE.  Prefer Advanced SIMD when the costs are
+deemed equal.
+@item prefer-sve
+Use both Advanced SIMD and SVE.  Prefer SVE when the costs are deemed equal.
+@end table
+
+For best performance it is highly recommended to use @option{-mcpu} or
+@option{-mtune} instead.  This parameter should only be used for code
+exploration.
+
+@opindex march
+@item -march=@var{name}
+Specify the name of the target architecture and, optionally, one or
+more feature modifiers.  This option has the form
+@option{-march=@var{arch}@r{@{}+@r{[}no@r{]}@var{feature}@r{@}*}}.
+
+The table below summarizes the permissible values for @var{arch}
+and the features that they enable by default:
+
+@multitable @columnfractions 0.20 0.20 0.60
+@headitem @var{arch} value @tab Architecture @tab Includes by default
+@item @samp{armv8-a} @tab Armv8-A @tab @samp{+fp}, @samp{+simd}
+@item @samp{armv8.1-a} @tab Armv8.1-A @tab @samp{armv8-a}, @samp{+crc}, @samp{+lse}, @samp{+rdma}
+@item @samp{armv8.2-a} @tab Armv8.2-A @tab @samp{armv8.1-a}
+@item @samp{armv8.3-a} @tab Armv8.3-A @tab @samp{armv8.2-a}, @samp{+pauth}, @samp{+fcma}, @samp{+jscvt}
+@item @samp{armv8.4-a} @tab Armv8.4-A @tab @samp{armv8.3-a}, @samp{+flagm}, @samp{+fp16fml}, @samp{+dotprod}, @samp{+rcpc2}
+@item @samp{armv8.5-a} @tab Armv8.5-A @tab @samp{armv8.4-a}, @samp{+sb}, @samp{+ssbs}, @samp{+predres}, @samp{+frintts}, @samp{+flagm2}
+@item @samp{armv8.6-a} @tab Armv8.6-A @tab @samp{armv8.5-a}, @samp{+bf16}, @samp{+i8mm}
+@item @samp{armv8.7-a} @tab Armv8.7-A @tab @samp{armv8.6-a}, @samp{+wfxt}, @samp{+xs}
+@item @samp{armv8.8-a} @tab Armv8.8-a @tab @samp{armv8.7-a}, @samp{+mops}
+@item @samp{armv8.9-a} @tab Armv8.9-a @tab @samp{armv8.8-a}
+@item @samp{armv9-a} @tab Armv9-A @tab @samp{armv8.5-a}, @samp{+sve}, @samp{+sve2}
+@item @samp{armv9.1-a} @tab Armv9.1-A @tab @samp{armv9-a}, @samp{+bf16}, @samp{+i8mm}
+@item @samp{armv9.2-a} @tab Armv9.2-A @tab @samp{armv9.1-a}, @samp{+wfxt}, @samp{+xs}
+@item @samp{armv9.3-a} @tab Armv9.3-A @tab @samp{armv9.2-a}, @samp{+mops}
+@item @samp{armv9.4-a} @tab Armv9.4-A @tab @samp{armv9.3-a}, @samp{+sve2p1}
+@item @samp{armv9.5-a} @tab Armv9.5-A @tab @samp{armv9.4-a}, @samp{cpa}, @samp{+faminmax}, @samp{+lut}
+@item @samp{armv8-r} @tab Armv8-R @tab @samp{armv8-r}
+@end multitable
+
+The value @samp{native} is available on native AArch64 GNU/Linux and
+causes the compiler to pick the architecture of the host system.  This
+option has no effect if the compiler is unable to recognize the
+architecture of the host system.  When @option{-march=native} is given and
+no other @option{-mcpu} or @option{-mtune} is given then GCC will pick
+the host CPU as the CPU to tune for as well as select the architecture features
+from.  That is, @option{-march=native} is treated as @option{-mcpu=native}.
+
+The permissible values for @var{feature} are listed in the sub-section
+on @ref{aarch64-feature-modifiers,,@option{-march} and @option{-mcpu}
+Feature Modifiers}.  Where conflicting feature modifiers are
+specified, the right-most feature is used.
+
+GCC uses @var{name} to determine what kind of instructions it can emit
+when generating assembly code.  If @option{-march} is specified
+without either of @option{-mtune} or @option{-mcpu} also being
+specified, the code is tuned to perform well across a range of target
+processors implementing the target architecture.
+
+@opindex mtune
+@item -mtune=@var{name}
+Specify the name of the target processor for which GCC should tune the
+performance of the code.  Permissible values for this option are:
+@samp{generic}, @samp{cortex-a35}, @samp{cortex-a53}, @samp{cortex-a55},
+@samp{cortex-a57}, @samp{cortex-a72}, @samp{cortex-a73}, @samp{cortex-a75},
+@samp{cortex-a76}, @samp{cortex-a76ae}, @samp{cortex-a77},
+@samp{cortex-a65}, @samp{cortex-a65ae}, @samp{cortex-a34},
+@samp{cortex-a78}, @samp{cortex-a78ae}, @samp{cortex-a78c},
+@samp{ares}, @samp{exynos-m1}, @samp{emag}, @samp{falkor},
+@samp{oryon-1},
+@samp{neoverse-512tvb}, @samp{neoverse-e1}, @samp{neoverse-n1},
+@samp{neoverse-n2}, @samp{neoverse-v1}, @samp{neoverse-v2}, @samp{grace},
+@samp{neoverse-v3}, @samp{neoverse-v3ae}, @samp{armagicpu}, @samp{neoverse-n3},
+@samp{olympus}, @samp{cortex-a725}, @samp{cortex-x925},
+@samp{qdf24xx}, @samp{saphira}, @samp{phecda}, @samp{xgene1}, @samp{vulcan},
+@samp{octeontx}, @samp{octeontx81},  @samp{octeontx83},
+@samp{octeontx2}, @samp{octeontx2t98}, @samp{octeontx2t96}
+@samp{octeontx2t93}, @samp{octeontx2f95}, @samp{octeontx2f95n},
+@samp{octeontx2f95mm},
+@samp{a64fx}, @samp{fujitsu-monaka},
+@samp{thunderx}, @samp{thunderxt88},
+@samp{thunderxt88p1}, @samp{thunderxt81}, @samp{tsv110}, @samp{hip12},
+@samp{thunderxt83}, @samp{thunderx2t99}, @samp{thunderx3t110}, @samp{zeus},
+@samp{cortex-a57.cortex-a53}, @samp{cortex-a72.cortex-a53},
+@samp{cortex-a73.cortex-a35}, @samp{cortex-a73.cortex-a53},
+@samp{cortex-a75.cortex-a55}, @samp{cortex-a76.cortex-a55},
+@samp{cortex-r82}, @samp{cortex-r82ae}, @samp{cortex-x1}, @samp{cortex-x1c},
+@samp{cortex-x2}, @samp{cortex-x3}, @samp{cortex-x4}, @samp{cortex-a510},
+@samp{cortex-a520}, @samp{cortex-a520ae}, @samp{cortex-a710}, @samp{cortex-a715},
+@samp{cortex-a720}, @samp{cortex-a720ae}, @samp{ampere1}, @samp{ampere1a},
+@samp{ampere1b}, @samp{ampere1c}, @samp{cobalt-100}, @samp{apple-m1},
+@samp{apple-m2}, @samp{apple-m3}, @samp{apple-m4}, @samp{apple-m5}, @samp{c1-nano},
+@samp{c1-pro}, @samp{c1-premium} @samp{c1-ultra} and @samp{native}.
+
+The values @samp{cortex-a57.cortex-a53}, @samp{cortex-a72.cortex-a53},
+@samp{cortex-a73.cortex-a35}, @samp{cortex-a73.cortex-a53},
+@samp{cortex-a75.cortex-a55}, @samp{cortex-a76.cortex-a55},
+@samp{apple-m1}, @samp{apple-m2}, @samp{apple-m3}, @samp{gb10} specify that GCC
+should tune for a big.LITTLE system.
+
+The value @samp{neoverse-512tvb} specifies that GCC should tune
+for Neoverse cores that (a) implement SVE and (b) have a total vector
+bandwidth of 512 bits per cycle.  In other words, the option tells GCC to
+tune for Neoverse cores that can execute 4 128-bit Advanced SIMD arithmetic
+instructions a cycle and that can execute an equivalent number of SVE
+arithmetic instructions per cycle (2 for 256-bit SVE, 4 for 128-bit SVE).
+This is more general than tuning for a specific core like Neoverse V1
+but is more specific than the default tuning described below.
+
+Additionally on native AArch64 GNU/Linux systems the value
+@samp{native} tunes performance to the host system.  This option has no effect
+if the compiler is unable to recognize the processor of the host system.
+
+Where none of @option{-mtune=}, @option{-mcpu=} or @option{-march=}
+are specified, the code is tuned to perform well across a range
+of target processors.
+
+This option cannot be suffixed by feature modifiers.
+
+@opindex mcpu
+@item -mcpu=@var{name}
+Specify the name of the target processor, optionally suffixed by one
+or more feature modifiers.  This option has the form
+@option{-mcpu=@var{cpu}@r{@{}+@r{[}no@r{]}@var{feature}@r{@}*}}, where
+the permissible values for @var{cpu} are the same as those available
+for @option{-mtune}.  The permissible values for @var{feature} are
+documented in the sub-section on
+@ref{aarch64-feature-modifiers,,@option{-march} and @option{-mcpu}
+Feature Modifiers}.  Where conflicting feature modifiers are
+specified, the right-most feature is used.
+
+GCC uses @var{name} to determine what kind of instructions it can emit when
+generating assembly code (as if by @option{-march}) and to determine
+the target processor for which to tune for performance (as if
+by @option{-mtune}).  Where this option is used in conjunction
+with @option{-march} or @option{-mtune}, those options take precedence
+over the appropriate part of this option.
+
+@option{-mcpu=neoverse-512tvb} is special in that it does not refer
+to a specific core, but instead refers to all Neoverse cores that
+(a) implement SVE and (b) have a total vector bandwidth of 512 bits
+a cycle.  Unless overridden by @option{-march},
+@option{-mcpu=neoverse-512tvb} generates code that can run on a
+Neoverse V1 core, since Neoverse V1 is the first Neoverse core with
+these properties.  Unless overridden by @option{-mtune},
+@option{-mcpu=neoverse-512tvb} tunes code in the same way as for
+@option{-mtune=neoverse-512tvb}.
+
+@opindex moverride

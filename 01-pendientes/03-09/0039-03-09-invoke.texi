@@ -1,0 +1,237 @@
+@c GCC 16.1.0 | BLOQUE 0039 | 03-09
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 10764-10996 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -Wheader-guard
+Warn if a valid preprocessor header multiple inclusion guard has
+a @code{#define} directive right after @code{#ifndef} or @code{#if !defined}
+directive for the multiple inclusion guard, which defines a different macro
+from the guard macro with a similar name, the actual multiple inclusion guard
+macro isn't defined at the corresponding @code{#ifndef} directive at the end
+of the header, and the @code{#define} directive defines an object-like macro
+with empty definition.  In such case, it often is just a misspelled guard
+name, either in the @code{#ifndef} or @code{#if !defined} directive or in the
+subsequent @code{#define} directive.  This warning is enabled
+by @option{-Wall}.
+
+@opindex Wstrict-prototypes
+@opindex Wno-strict-prototypes
+@item -Wstrict-prototypes @r{(C and Objective-C only)}
+Warn if a function is declared or defined without specifying the
+argument types.  (An old-style function definition is permitted without
+a warning if preceded by a declaration that specifies the argument
+types.)
+
+@opindex Wold-style-declaration
+@opindex Wno-old-style-declaration
+@item -Wold-style-declaration @r{(C and Objective-C only)}
+Warn for obsolescent usages, according to the C Standard, in a
+declaration. For example, warn if storage-class specifiers like
+@code{static} are not the first things in a declaration.  This warning
+is also enabled by @option{-Wextra}.
+
+@opindex Wold-style-definition
+@opindex Wno-old-style-definition
+@item -Wold-style-definition @r{(C and Objective-C only)}
+Warn if an old-style function definition is used.  A warning is given
+even if there is a previous prototype.  A definition using @samp{()}
+is not considered an old-style definition in C23 mode, because it is
+equivalent to @samp{(void)} in that case, but is considered an
+old-style definition for older standards.
+
+@opindex Wmultiple-parameter-fwd-decl-lists
+@opindex Wno-multiple-parameter-fwd-decl-lists
+@item -Wmultiple-parameter-fwd-decl-lists @r{(C and Objective-C only)}
+Warn if more than one list of forward declarations of parameters
+appears in a function prototype.
+This warning is also enabled by @option{-Wextra}.
+
+@opindex Wdeprecated-non-prototype
+@opindex Wno-deprecated-non-prototype
+@item -Wdeprecated-non-prototype @r{(C and Objective-C only)}
+Warn if a function declared with an empty parameter list @samp{()} is
+called with one or more arguments, or if a function definition with one
+or more parameters is encountered after such a declaration.  Both cases
+are errors in C23 and later dialects  of C.
+
+This warning is also enabled by @option{-Wc11-c23-compat}.
+
+@opindex Wmissing-parameter-name
+@opindex Wno-missing-parameter-name
+@item -Wmissing-parameter-name @r{(C and Objective-C only)}
+Warn if a function definition omits a parameter name, specifying only
+its type.  This can be used to document that a parameter is unused
+in the definition.  It is part of C23 and later dialects of C,
+and available as a GCC extension in all other dialects.
+
+This warning is also enabled by @option{-Wc11-c23-compat}.  It is turned
+into an error if building for a C version before C23 by
+@option{-pedantic-errors}.
+
+@opindex Wmissing-parameter-type
+@opindex Wno-missing-parameter-type
+@item -Wmissing-parameter-type @r{(C and Objective-C only)}
+A function parameter is declared without a type specifier in K&R-style
+functions:
+
+@smallexample
+void foo(bar) @{ @}
+@end smallexample
+
+This warning is also enabled by @option{-Wextra}.
+
+@opindex Wno-declaration-missing-parameter-type
+@opindex Wdeclaration-missing-parameter-type
+@item -Wno-declaration-missing-parameter-type @r{(C and Objective-C only)}
+Do not warn if a function declaration contains a parameter name without
+a type.  Such function declarations do not provide a function prototype
+and prevent most type checking in function calls.
+
+This warning is enabled by default.  In C99 and later dialects of C, it
+is treated as an error.  The error can be downgraded to a warning using
+@option{-fpermissive} (along with certain other errors), or for this
+error alone, with @option{-Wno-error=declaration-missing-parameter-type}.
+
+This warning is upgraded to an error by @option{-pedantic-errors}.
+
+@opindex Wmissing-prototypes
+@opindex Wno-missing-prototypes
+@item -Wmissing-prototypes @r{(C and Objective-C only)}
+Warn if a global function is defined without a previous prototype
+declaration.  This warning is issued even if the definition itself
+provides a prototype.  Use this option to detect global functions
+that do not have a matching prototype declaration in a header file.
+This option is not valid for C++ because all function declarations
+provide prototypes and a non-matching declaration declares an
+overload rather than conflict with an earlier declaration.
+Use @option{-Wmissing-declarations} to detect missing declarations in C++.
+
+@opindex Wmissing-variable-declarations
+@opindex Wno-missing-variable-declarations
+@item -Wmissing-variable-declarations @r{(C and Objective-C only)}
+Warn if a global variable is defined without a previous declaration.
+Use this option to detect global variables that do not have a matching
+extern declaration in a header file.
+
+@opindex Wmissing-declarations
+@opindex Wno-missing-declarations
+@item -Wmissing-declarations
+Warn if a global function is defined without a previous declaration.
+Do so even if the definition itself provides a prototype.
+Use this option to detect global functions that are not declared in
+header files.  In C, no warnings are issued for functions with previous
+non-prototype declarations; use @option{-Wmissing-prototypes} to detect
+missing prototypes.  In C++, no warnings are issued for function templates,
+or for inline functions, or for functions in anonymous namespaces.
+
+@opindex Wmissing-field-initializers
+@opindex Wno-missing-field-initializers
+@opindex W
+@opindex Wextra
+@opindex Wno-extra
+@item -Wmissing-field-initializers
+Warn if a structure's initializer has some fields missing.  For
+example, the following code causes such a warning, because
+@code{x.h} is implicitly zero:
+
+@smallexample
+struct s @{ int f, g, h; @};
+struct s x = @{ 3, 4 @};
+@end smallexample
+
+@c It's unclear if this behavior is desirable.  See PR39589 and PR96868.
+In C this option does not warn about designated initializers, so the
+following modification does not trigger a warning:
+
+@smallexample
+struct s @{ int f, g, h; @};
+struct s x = @{ .f = 3, .g = 4 @};
+@end smallexample
+
+In C this option does not warn about the universal zero initializer
+@samp{@{ 0 @}}:
+
+@smallexample
+struct s @{ int f, g, h; @};
+struct s x = @{ 0 @};
+@end smallexample
+
+Likewise, in C++ this option does not warn about the empty @{ @}
+initializer, for example:
+
+@smallexample
+struct s @{ int f, g, h; @};
+s x = @{ @};
+@end smallexample
+
+This warning is included in @option{-Wextra}.  To get other @option{-Wextra}
+warnings without this one, use @option{-Wextra -Wno-missing-field-initializers}.
+
+@opindex Wmissing-requires
+@opindex Wno-missing-requires
+@item -Wno-missing-requires
+
+By default, the compiler warns about a concept-id appearing as a C++20 simple-requirement:
+
+@smallexample
+bool satisfied = requires @{ C<T> @};
+@end smallexample
+
+Here @samp{satisfied} will be true if @samp{C<T>} is a valid
+expression, which it is for all T.  Presumably the user meant to write
+
+@smallexample
+bool satisfied = requires @{ requires C<T> @};
+@end smallexample
+
+so @samp{satisfied} is only true if concept @samp{C} is satisfied for
+type @samp{T}.
+
+This warning can be disabled with @option{-Wno-missing-requires}.
+
+@opindex Wmissing-template-keyword
+@opindex Wno-missing-template-keyword
+@item -Wno-missing-template-keyword
+
+The member access tokens ., -> and :: must be followed by the @code{template}
+keyword if the parent object is dependent and the member being named is a
+template.
+
+@smallexample
+template <class X>
+void DoStuff (X x)
+@{
+  x.template DoSomeOtherStuff<X>(); // Good.
+  x.DoMoreStuff<X>(); // Warning, x is dependent.
+@}
+@end smallexample
+
+In rare cases it is possible to get false positives. To silence this, wrap
+the expression in parentheses. For example, the following is treated as a
+template, even where m and N are integers:
+
+@smallexample
+void NotATemplate (my_class t)
+@{
+  int N = 5;
+
+  bool test = t.m < N > (0); // Treated as a template.
+  test = (t.m < N) > (0); // Same meaning, but not treated as a template.
+@}
+@end smallexample
+
+This warning can be disabled with @option{-Wno-missing-template-keyword}.
+
+@opindex Wno-multichar
+@opindex Wmultichar
+@item -Wno-multichar
+Do not warn if a multicharacter constant (@samp{'FOOF'}) is used.
+Usually they indicate a typo in the user's code, as they have
+implementation-defined values, and should not be used in portable code.
+
+@opindex Wnormalized=
+@opindex Wnormalized
+@opindex Wno-normalized
+@cindex NFC
+@cindex NFKC
+@cindex character set, input normalization

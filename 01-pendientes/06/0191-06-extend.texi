@@ -1,0 +1,243 @@
+@c GCC 16.1.0 | BLOQUE 0191 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 3649-3887 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item no_sanitize_address
+@itemx no_address_safety_analysis
+This attribute applies to functions.
+
+The @code{no_sanitize_address} attribute
+informs the compiler that it should not instrument memory accesses
+in the function when compiling with the @option{-fsanitize=address} option.
+
+@code{no_address_safety_analysis} is a deprecated alias of the
+@code{no_sanitize_address} attribute; new code should use
+@code{no_sanitize_address}.
+
+@cindex @code{no_sanitize_coverage} function attribute
+@cindex functions that should not be sanitized
+@item no_sanitize_coverage
+This attribute applies to functions.
+
+The @code{no_sanitize_coverage} attribute
+informs the compiler that it should not do coverage-guided
+fuzzing code instrumentation (@option{-fsanitize-coverage}).
+
+@atindex @code{no_sanitize_thread}
+@cindex functions that should not be sanitized
+@item no_sanitize_thread
+This attribute applies to functions.
+
+The @code{no_sanitize_thread} attribute
+informs the compiler that it should not instrument memory accesses
+in the function when compiling with the @option{-fsanitize=thread} option.
+
+@atindex @code{no_sanitize_undefined}
+@cindex functions that should not be sanitized
+@item no_sanitize_undefined
+This attribute applies to functions.
+
+The @code{no_sanitize_undefined} attribute
+informs the compiler that it should not check for undefined behavior
+in the function when compiling with the @option{-fsanitize=undefined} option.
+
+@atindex @code{no_split_stack}
+@opindex fsplit-stack
+@item no_split_stack
+This attribute applies to functions.
+
+If @option{-fsplit-stack} is given, functions have a small
+prologue which decides whether to split the stack.  Functions with the
+@code{no_split_stack} attribute do not have that prologue, and thus
+may run with only a small amount of stack space available.
+
+@atindex @code{no_stack_limit}
+@cindex stack protection
+@cindex functions that should not have stack limit checking
+@item no_stack_limit
+This attribute applies to functions.
+
+This attribute locally overrides the @option{-fstack-limit-register}
+and @option{-fstack-limit-symbol} command-line options; it has the effect
+of disabling stack limit checking in the function it applies to.
+
+@atindex @code{no_stack_protector}
+@cindex stack protection
+@cindex functions that should not have stack protection
+@item no_stack_protector
+This attribute applies to functions.
+
+It prevents GCC from generating stack protection code for the function.
+
+@atindex @code{noclone}
+@item noclone
+This attribute applies to functions.
+
+This attribute prevents a function from being considered for
+cloning---a mechanism that produces specialized copies of functions
+and which is (currently) performed by interprocedural constant
+propagation.
+
+@atindex @code{noinit}
+@cindex variables that should not be initialized
+@item noinit
+This attribute applies to variables.
+
+Variables with the @code{noinit} attribute are not initialized by
+the C runtime startup code, or the program loader.  Not initializing
+data in this way can reduce program startup times.
+
+This attribute is specific to ELF targets and relies on the linker
+script to place sections with the @code{.noinit} prefix in the right
+location.
+
+@atindex @code{noinline}
+@cindex inlining, suppressing
+@cindex function inlining, suppressing
+@cindex suppressing inlining
+@item noinline
+This attribute applies to functions.
+
+It prevents the function from being considered for
+inlining.  It also disables some other interprocedural optimizations; it's
+preferable to use the more comprehensive @code{noipa} attribute instead
+if that is your goal.
+
+@c Don't enumerate the optimizations by name here; we try to be
+@c future-compatible with this mechanism.
+Even if a function is declared with the @code{noinline} attribute,
+there are optimizations other than inlining that can cause calls to be
+optimized away if it does not have side effects, although the function
+call is live.  To keep such calls from being optimized away, put
+
+@smallexample
+asm ("");
+@end smallexample
+
+@noindent
+(@pxref{Extended Asm}) in the called function, to serve as a special
+side effect.
+
+@atindex @code{noipa}
+@item noipa
+This attribute applies to functions.
+
+It disables interprocedural optimizations between the function with this
+attribute and its callers, as if the body of the function is not available
+when optimizing callers and the callers are unavailable when optimizing
+the body.  This attribute implies @code{noinline}, @code{noclone} and
+@code{no_icf} attributes.    However, this attribute is not equivalent
+to a combination of other attributes, because its purpose is to suppress
+existing and future optimizations employing interprocedural analysis,
+including those that do not have an attribute suitable for disabling
+them individually.
+
+@atindex @code{nonnull}
+@cindex functions that have non-null pointer arguments
+@item nonnull
+@itemx nonnull (@var{arg-index}, @dots{})
+The @code{nonnull} attribute may be applied to a function that takes at
+least one argument of a pointer type.
+
+It indicates that the referenced
+arguments must be non-null pointers.  For instance, the declaration:
+
+@smallexample
+extern void *
+my_memcpy (void *dest, const void *src, size_t len)
+        __attribute__((nonnull (1, 2)));
+@end smallexample
+
+@noindent
+informs the compiler that, in calls to @code{my_memcpy}, arguments
+@var{dest} and @var{src} must be non-null.
+
+The attribute has an effect both on functions calls and function definitions.
+
+For function calls:
+@itemize @bullet
+@item If the compiler determines that a null pointer is
+passed in an argument slot marked as non-null, and the
+@option{-Wnonnull} option is enabled, a warning is issued.
+@xref{Warning Options}.
+@item The @option{-fisolate-erroneous-paths-attribute} option can be
+specified to have GCC transform calls with null arguments to non-null
+functions into traps.  @xref{Optimize Options}.
+@item The compiler may also perform optimizations based on the
+knowledge that certain function arguments cannot be null.  These
+optimizations can be disabled by the
+@option{-fno-delete-null-pointer-checks} option. @xref{Optimize Options}.
+@end itemize
+
+For function definitions:
+@itemize @bullet
+@item If the compiler determines that a function parameter that is
+marked with nonnull is compared with null, and
+@option{-Wnonnull-compare} option is enabled, a warning is issued.
+@xref{Warning Options}.
+@item The compiler may also perform optimizations based on the
+knowledge that @code{nonnull} parameters cannot be null.  This can
+currently not be disabled other than by removing the nonnull
+attribute.
+@end itemize
+
+If no @var{arg-index} is given to the @code{nonnull} attribute,
+all pointer arguments are marked as non-null.  To illustrate, the
+following declaration is equivalent to the previous example:
+
+@smallexample
+extern void *
+my_memcpy (void *dest, const void *src, size_t len)
+        __attribute__((nonnull));
+@end smallexample
+
+@atindex @code{nonnull_if_nonzero}
+@cindex functions that have non-null pointer arguments
+@item nonnull_if_nonzero (@var{arg-index}, @var{arg2-index})
+@itemx nonnull_if_nonzero (@var{arg-index}, @var{arg2-index}, @var{arg3-index})
+This attribute may be applied to a function that takes at
+least one argument of a pointer type.
+
+The @code{nonnull_if_nonzero} attribute is a conditional version of the
+@code{nonnull} attribute.  It has two or three arguments; the first argument
+shall be argument index of a pointer argument which must be in some
+cases non-null and the second argument shall be argument index of an
+integral argument (other than boolean).  If the integral argument is
+zero, the pointer argument can be null, if it is non-zero, the pointer
+argument must not be null.  If three arguments are provided, the third
+argument shall be argument index of another integral argument (other than
+boolean) and the pointer argument can be null if either of the integral
+arguments are zero and if both are non-zero, the pointer argument must not
+be null.
+
+@smallexample
+[[gnu::nonnull (1, 2)]]
+extern void *
+my_memcpy (void *dest, const void *src, size_t len);
+
+[[gnu::nonnull_if_nonzero (1, 3),
+  gnu::nonnull_if_nonzero (2, 3)]]
+extern void *
+my_memcpy2 (void *dest, const void *src, size_t len);
+
+[[gnu::nonnull (4),
+  gnu::nonnull_if_nonzero (1, 2, 3)]]
+extern size_t
+my_fread (void *buf, size_t size, size_t count, FILE *stream);
+@end smallexample
+
+With these declarations, it is invalid to call
+@code{my_memcpy (NULL, NULL, 0);} or to
+call @code{my_memcpy2 (NULL, NULL, 4);} or to call
+@code{my_fread(@var{buf}, 0, 0, NULL);} or to call
+@code{my_fread(NULL, 1, 1, @var{stream});} but it is valid
+to call @code{my_memcpy2 (NULL, NULL, 0);} or
+@code{my_fread(NULL, 0, 0, @var{stream});} or
+@code{my_fread(NULL, 0, 1, @var{stream});} or
+@code{my_fread(NULL, 1, 0, @var{stream});}.  This attribute should be
+used on declarations which have e.g.@: an exception for zero sizes,
+in which case null may be passed.
+
+@atindex @code{nonstring}
+@cindex nonstring character arrays
+@cindex character arrays, non-null-terminated

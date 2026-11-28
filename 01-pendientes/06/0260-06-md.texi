@@ -1,0 +1,8 @@
+@c GCC 16.1.0 | BLOQUE 0260 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 8787-8790 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@c Each of the following nodes are wrapped in separate
+@c "@ifset INTERNALS" to work around memory limits for the default
+@c configuration in older tetex distributions.  Known to not work:
+@c tetex-1.0.7, known to work: tetex-2.0.2.

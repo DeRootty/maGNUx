@@ -1,0 +1,223 @@
+@c GCC 16.1.0 | BLOQUE 0279 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 16954-17172 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+You can declare variables and use them in function calls and returns, as
+well as in assignments and some casts.  You can specify a vector type as
+a return type for a function.  Vector types can also be used as function
+arguments.  It is possible to cast from one vector type to another,
+provided they are of the same size (in fact, you can also cast vectors
+to and from other data types of the same size).
+
+You cannot operate between vectors of different lengths or different
+signedness without a cast.
+
+@findex __builtin_shufflevector
+Vector shuffling is available using the
+@code{__builtin_shufflevector (vec1, vec2, index...)}
+function.  @var{vec1} and @var{vec2} must be expressions with
+vector type with a compatible element type.  The result of
+@code{__builtin_shufflevector} is a vector with the same element type
+as @var{vec1} and @var{vec2} but that has an element count equal to
+the number of indices specified.
+
+The @var{index} arguments are a list of integers that specify the
+elements indices of the first two vectors that should be extracted and
+returned in a new vector. These element indices are numbered sequentially
+starting with the first vector, continuing into the second vector.
+An index of -1 can be used to indicate that the corresponding element in
+the returned vector is a don't care and can be freely chosen to optimized
+the generated code sequence performing the shuffle operation.
+
+Consider the following example,
+@smallexample
+typedef int v4si __attribute__ ((vector_size (16)));
+typedef int v8si __attribute__ ((vector_size (32)));
+
+v8si a = @{1,-2,3,-4,5,-6,7,-8@};
+v4si b = __builtin_shufflevector (a, a, 0, 2, 4, 6); /* b is @{1,3,5,7@} */
+v4si c = @{-2,-4,-6,-8@};
+v8si d = __builtin_shufflevector (c, b, 4, 0, 5, 1, 6, 2, 7, 3); /* d is a */
+@end smallexample
+
+@findex __builtin_convertvector
+Vector conversion is available using the
+@code{__builtin_convertvector (vec, vectype)}
+function.  @var{vec} must be an expression with integral or floating
+vector type and @var{vectype} an integral or floating vector type with the
+same number of elements.  The result has @var{vectype} type and value of
+a C cast of every element of @var{vec} to the element type of @var{vectype}.
+
+Consider the following example,
+@smallexample
+typedef int v4si __attribute__ ((vector_size (16)));
+typedef float v4sf __attribute__ ((vector_size (16)));
+typedef double v4df __attribute__ ((vector_size (32)));
+typedef unsigned long long v4di __attribute__ ((vector_size (32)));
+
+v4si a = @{1,-2,3,-4@};
+v4sf b = @{1.5f,-2.5f,3.f,7.f@};
+v4di c = @{1ULL,5ULL,0ULL,10ULL@};
+v4sf d = __builtin_convertvector (a, v4sf); /* d is @{1.f,-2.f,3.f,-4.f@} */
+/* Equivalent of:
+   v4sf d = @{ (float)a[0], (float)a[1], (float)a[2], (float)a[3] @}; */
+v4df e = __builtin_convertvector (a, v4df); /* e is @{1.,-2.,3.,-4.@} */
+v4df f = __builtin_convertvector (b, v4df); /* f is @{1.5,-2.5,3.,7.@} */
+v4si g = __builtin_convertvector (f, v4si); /* g is @{1,-2,3,7@} */
+v4si h = __builtin_convertvector (c, v4si); /* h is @{1,5,0,10@} */
+@end smallexample
+
+@cindex vector types, using with x86 intrinsics
+Sometimes it is desirable to write code using a mix of generic vector
+operations (for clarity) and machine-specific vector intrinsics (to
+access vector instructions that are not exposed via generic built-ins).
+On x86, intrinsic functions for integer vectors typically use the same
+vector type @code{__m128i} irrespective of how they interpret the vector,
+making it necessary to cast their arguments and return values from/to
+other vector types.  In C, you can make use of a @code{union} type:
+@c In C++ such type punning via a union is not allowed by the language
+@smallexample
+#include <immintrin.h>
+
+typedef unsigned char u8x16 __attribute__ ((vector_size (16)));
+typedef unsigned int  u32x4 __attribute__ ((vector_size (16)));
+
+typedef union @{
+        __m128i mm;
+        u8x16   u8;
+        u32x4   u32;
+@} v128;
+@end smallexample
+
+@noindent
+for variables that can be used with both built-in operators and x86
+intrinsics:
+
+@smallexample
+v128 x, y = @{ 0 @};
+memcpy (&x, ptr, sizeof x);
+y.u8  += 0x80;
+x.mm  = _mm_adds_epu8 (x.mm, y.mm);
+x.u32 &= 0xffffff;
+
+/* Instead of a variable, a compound literal may be used to pass the
+   return value of an intrinsic call to a function expecting the union: */
+v128 foo (v128);
+x = foo ((v128) @{_mm_adds_epu8 (x.mm, y.mm)@});
+@c This could be done implicitly with __attribute__((transparent_union)),
+@c but GCC does not accept it for unions of vector types (PR 88955).
+@end smallexample
+
+@node Atomic Memory Access
+@section Builtins for Atomic Memory Access
+@cindex atomic memory access builtins
+@cindex builtins for atomic memory access
+
+GCC supports two sets of builtins for atomic memory access primitives.  The
+@code{__atomic} builtins provide the underlying support for the C++11
+atomic operations library, and are the currently-recommended interface when
+the C++11 library functions cannot be used directly.
+The @code{__sync} builtins implement the specification from the Intel IA64
+pSABI and are supported primarily for use in legacy code.
+
+@menu
+* __atomic Builtins::   Atomic built-in functions with memory model.
+* __sync Builtins::     Legacy built-in functions for atomic memory access.
+@end menu
+
+@node __atomic Builtins
+@subsection Built-in Functions for Memory Model Aware Atomic Operations
+@cindex C++11 memory model
+@cindex __atomic builtins
+
+The following built-in functions approximately match the requirements
+for the C++11 memory model.  They are all
+identified by being prefixed with @samp{__atomic} and most are
+overloaded so that they work with multiple types.
+
+These functions are intended to replace the legacy @samp{__sync}
+builtins.  The main difference is that the memory order that is requested
+is a parameter to the functions.  New code should always use the
+@samp{__atomic} builtins rather than the @samp{__sync} builtins.
+
+Note that the @samp{__atomic} builtins assume that programs will
+conform to the C++11 memory model.  In particular, they assume
+that programs are free of data races.  See the C++11 standard for
+detailed requirements.
+
+The @samp{__atomic} builtins can be used with any integral scalar or
+pointer type that is 1, 2, 4, or 8 bytes in length.  16-byte integral
+types are also allowed if @samp{__int128} (@pxref{__int128}) is
+supported by the architecture.
+
+The four non-arithmetic functions (load, store, exchange, and 
+compare_exchange) all have a generic version as well.  This generic
+version works on any data type.  It uses the lock-free built-in function
+if the specific data type size makes that possible; otherwise, an
+external call is left to be resolved at run time.  This external call is
+the same format with the addition of a @samp{size_t} parameter inserted
+as the first parameter indicating the size of the object being pointed to.
+All objects must be the same size.
+
+There are 6 different memory orders that can be specified.  These map
+to the C++11 memory orders with the same names, see the C++11 standard
+or the @uref{https://gcc.gnu.org/wiki/Atomic/GCCMM/AtomicSync,GCC wiki
+on atomic synchronization} for detailed definitions.  Individual
+targets may also support additional memory orders for use on specific
+architectures.  Refer to the target documentation for details of
+these.
+
+An atomic operation can both constrain code motion and
+be mapped to hardware instructions for synchronization between threads
+(e.g., a fence).  To which extent this happens is controlled by the
+memory orders, which are listed here in approximately ascending order of
+strength.  The description of each memory order is only meant to roughly
+illustrate the effects and is not a specification; see the C++11
+memory model for precise semantics.
+
+@table  @code
+@item __ATOMIC_RELAXED
+Implies no inter-thread ordering constraints.
+@item __ATOMIC_CONSUME
+This is currently implemented using the stronger @code{__ATOMIC_ACQUIRE}
+memory order because of a deficiency in C++11's semantics for
+@code{memory_order_consume}.
+@item __ATOMIC_ACQUIRE
+Creates an inter-thread happens-before constraint from the release (or
+stronger) semantic store to this acquire load.  Can prevent hoisting
+of code to before the operation.
+@item __ATOMIC_RELEASE
+Creates an inter-thread happens-before constraint to acquire (or stronger)
+semantic loads that read from this release store.  Can prevent sinking
+of code to after the operation.
+@item __ATOMIC_ACQ_REL
+Combines the effects of both @code{__ATOMIC_ACQUIRE} and
+@code{__ATOMIC_RELEASE}.
+@item __ATOMIC_SEQ_CST
+Enforces total ordering with all other @code{__ATOMIC_SEQ_CST} operations.
+@end table
+
+Note that in the C++11 memory model, @emph{fences} (e.g.,
+@samp{__atomic_thread_fence}) take effect in combination with other
+atomic operations on specific memory locations (e.g., atomic loads);
+operations on specific memory locations do not necessarily affect other
+operations in the same way.
+
+Target architectures are encouraged to provide their own patterns for
+each of the atomic built-in functions.  If no target is provided, the original
+non-memory model set of @samp{__sync} atomic built-in functions are
+used, along with any required synchronization fences surrounding it in
+order to achieve the proper behavior.  Execution in this case is subject
+to the same restrictions as those built-in functions.
+
+If there is no pattern or mechanism to provide a lock-free instruction
+sequence, a call is made to an external routine with the same parameters
+to be resolved at run time.
+
+When implementing patterns for these built-in functions, the memory order
+parameter can be ignored as long as the pattern implements the most
+restrictive @code{__ATOMIC_SEQ_CST} memory order.  Any of the other memory
+orders execute correctly with this memory order but they may not execute as
+efficiently as they could with a more appropriate implementation of the
+relaxed requirements.
+

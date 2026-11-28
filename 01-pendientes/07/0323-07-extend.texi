@@ -1,0 +1,237 @@
+@c GCC 16.1.0 | BLOQUE 0323 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 26864-27096 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@smallexample
+#include <htmintrin.h>
+
+unsigned char tx_state = _HTM_STATE (__builtin_ttest ());
+
+if (tx_state == _HTM_TRANSACTIONAL)
+  @{
+    /* Code to use in transactional state.  */
+  @}
+else if (tx_state == _HTM_NONTRANSACTIONAL)
+  @{
+    /* Code to use in non-transactional state.  */
+  @}
+else if (tx_state == _HTM_SUSPENDED)
+  @{
+    /* Code to use in transaction suspended state.  */
+  @}
+@end smallexample
+
+@subsubsection PowerPC HTM High Level Inline Functions
+
+The following high level HTM interface is made available by including
+@code{<htmxlintrin.h>} and using @option{-mhtm} or @option{-mcpu=CPU}
+where CPU is `power8' or later.  This interface is common between PowerPC
+and S/390, allowing users to write one HTM source implementation that
+can be compiled and executed on either system.
+
+@smallexample
+long __TM_simple_begin (void);
+long __TM_begin (void* const TM_buff);
+long __TM_end (void);
+void __TM_abort (void);
+void __TM_named_abort (unsigned char const code);
+void __TM_resume (void);
+void __TM_suspend (void);
+
+long __TM_is_user_abort (void* const TM_buff);
+long __TM_is_named_user_abort (void* const TM_buff, unsigned char *code);
+long __TM_is_illegal (void* const TM_buff);
+long __TM_is_footprint_exceeded (void* const TM_buff);
+long __TM_nesting_depth (void* const TM_buff);
+long __TM_is_nested_too_deep(void* const TM_buff);
+long __TM_is_conflict(void* const TM_buff);
+long __TM_is_failure_persistent(void* const TM_buff);
+long __TM_failure_address(void* const TM_buff);
+long long __TM_failure_code(void* const TM_buff);
+@end smallexample
+
+Using these common set of HTM inline functions, we can create
+a more portable version of the HTM example in the previous
+section that will work on either PowerPC or S/390:
+
+@smallexample
+#include <htmxlintrin.h>
+
+int num_retries = 10;
+TM_buff_type TM_buff;
+
+while (1)
+  @{
+    if (__TM_begin (TM_buff) == _HTM_TBEGIN_STARTED)
+      @{
+        /* Transaction State Initiated.  */
+        if (is_locked (lock))
+          __TM_abort ();
+        ... transaction code...
+        __TM_end ();
+        break;
+      @}
+    else
+      @{
+        /* Transaction State Failed.  Use locks if the transaction
+           failure is "persistent" or we've tried too many times.  */
+        if (num_retries-- <= 0
+            || __TM_is_failure_persistent (TM_buff))
+          @{
+            acquire_lock (lock);
+            ... non transactional fallback path...
+            release_lock (lock);
+            break;
+          @}
+      @}
+  @}
+@end smallexample
+
+@node PowerPC Atomic Memory Operation Functions
+@subsection PowerPC Atomic Memory Operation Functions
+ISA 3.0 of the PowerPC added new atomic memory operation (amo)
+instructions.  GCC provides support for these instructions in 64-bit
+environments.  All of the functions are declared in the include file
+@code{amo.h}.
+
+The functions supported are:
+
+@smallexample
+#include <amo.h>
+
+uint32_t amo_lwat_add (uint32_t *, uint32_t);
+uint32_t amo_lwat_xor (uint32_t *, uint32_t);
+uint32_t amo_lwat_ior (uint32_t *, uint32_t);
+uint32_t amo_lwat_and (uint32_t *, uint32_t);
+uint32_t amo_lwat_umax (uint32_t *, uint32_t);
+uint32_t amo_lwat_umin (uint32_t *, uint32_t);
+uint32_t amo_lwat_swap (uint32_t *, uint32_t);
+
+int32_t amo_lwat_sadd (int32_t *, int32_t);
+int32_t amo_lwat_smax (int32_t *, int32_t);
+int32_t amo_lwat_smin (int32_t *, int32_t);
+int32_t amo_lwat_sswap (int32_t *, int32_t);
+
+uint64_t amo_ldat_add (uint64_t *, uint64_t);
+uint64_t amo_ldat_xor (uint64_t *, uint64_t);
+uint64_t amo_ldat_ior (uint64_t *, uint64_t);
+uint64_t amo_ldat_and (uint64_t *, uint64_t);
+uint64_t amo_ldat_umax (uint64_t *, uint64_t);
+uint64_t amo_ldat_umin (uint64_t *, uint64_t);
+uint64_t amo_ldat_swap (uint64_t *, uint64_t);
+
+int64_t amo_ldat_sadd (int64_t *, int64_t);
+int64_t amo_ldat_smax (int64_t *, int64_t);
+int64_t amo_ldat_smin (int64_t *, int64_t);
+int64_t amo_ldat_sswap (int64_t *, int64_t);
+
+void amo_stwat_add (uint32_t *, uint32_t);
+void amo_stwat_xor (uint32_t *, uint32_t);
+void amo_stwat_ior (uint32_t *, uint32_t);
+void amo_stwat_and (uint32_t *, uint32_t);
+void amo_stwat_umax (uint32_t *, uint32_t);
+void amo_stwat_umin (uint32_t *, uint32_t);
+
+void amo_stwat_sadd (int32_t *, int32_t);
+void amo_stwat_smax (int32_t *, int32_t);
+void amo_stwat_smin (int32_t *, int32_t);
+
+void amo_stdat_add (uint64_t *, uint64_t);
+void amo_stdat_xor (uint64_t *, uint64_t);
+void amo_stdat_ior (uint64_t *, uint64_t);
+void amo_stdat_and (uint64_t *, uint64_t);
+void amo_stdat_umax (uint64_t *, uint64_t);
+void amo_stdat_umin (uint64_t *, uint64_t);
+
+void amo_stdat_sadd (int64_t *, int64_t);
+void amo_stdat_smax (int64_t *, int64_t);
+void amo_stdat_smin (int64_t *, int64_t);
+@end smallexample
+
+@node PowerPC Matrix-Multiply Assist Built-in Functions
+@subsection PowerPC Matrix-Multiply Assist Built-in Functions
+ISA 3.1 of the PowerPC added new Matrix-Multiply Assist (MMA) instructions.
+GCC provides support for these instructions through the following built-in
+functions which are enabled with the @code{-mmma} option.  The vec_t type
+below is defined to be a normal vector unsigned char type.  The uint2, uint4
+and uint8 parameters are 2-bit, 4-bit and 8-bit unsigned integer constants
+respectively.  The compiler will verify that they are constants and that
+their values are within range.
+
+The built-in functions supported are:
+
+@smallexample
+void __builtin_mma_xvi4ger8 (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvi8ger4 (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvi16ger2 (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvi16ger2s (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvf16ger2 (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvbf16ger2 (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvf32ger (__vector_quad *, vec_t, vec_t);
+
+void __builtin_mma_xvi4ger8pp (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvi8ger4pp (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvi8ger4spp(__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvi16ger2pp (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvi16ger2spp (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvf16ger2pp (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvf16ger2pn (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvf16ger2np (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvf16ger2nn (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvbf16ger2pp (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvbf16ger2pn (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvbf16ger2np (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvbf16ger2nn (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvf32gerpp (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvf32gerpn (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvf32gernp (__vector_quad *, vec_t, vec_t);
+void __builtin_mma_xvf32gernn (__vector_quad *, vec_t, vec_t);
+
+void __builtin_mma_pmxvi4ger8 (__vector_quad *, vec_t, vec_t, uint4, uint4, uint8);
+void __builtin_mma_pmxvi4ger8pp (__vector_quad *, vec_t, vec_t, uint4, uint4, uint8);
+
+void __builtin_mma_pmxvi8ger4 (__vector_quad *, vec_t, vec_t, uint4, uint4, uint4);
+void __builtin_mma_pmxvi8ger4pp (__vector_quad *, vec_t, vec_t, uint4, uint4, uint4);
+void __builtin_mma_pmxvi8ger4spp(__vector_quad *, vec_t, vec_t, uint4, uint4, uint4);
+
+void __builtin_mma_pmxvi16ger2 (__vector_quad *, vec_t, vec_t, uint4, uint4, uint2);
+void __builtin_mma_pmxvi16ger2s (__vector_quad *, vec_t, vec_t, uint4, uint4, uint2);
+void __builtin_mma_pmxvf16ger2 (__vector_quad *, vec_t, vec_t, uint4, uint4, uint2);
+void __builtin_mma_pmxvbf16ger2 (__vector_quad *, vec_t, vec_t, uint4, uint4, uint2);
+
+void __builtin_mma_pmxvi16ger2pp (__vector_quad *, vec_t, vec_t, uint4, uint4, uint2);
+void __builtin_mma_pmxvi16ger2spp (__vector_quad *, vec_t, vec_t, uint4, uint4, uint2);
+void __builtin_mma_pmxvf16ger2pp (__vector_quad *, vec_t, vec_t, uint4, uint4, uint2);
+void __builtin_mma_pmxvf16ger2pn (__vector_quad *, vec_t, vec_t, uint4, uint4, uint2);
+void __builtin_mma_pmxvf16ger2np (__vector_quad *, vec_t, vec_t, uint4, uint4, uint2);
+void __builtin_mma_pmxvf16ger2nn (__vector_quad *, vec_t, vec_t, uint4, uint4, uint2);
+void __builtin_mma_pmxvbf16ger2pp (__vector_quad *, vec_t, vec_t, uint4, uint4, uint2);
+void __builtin_mma_pmxvbf16ger2pn (__vector_quad *, vec_t, vec_t, uint4, uint4, uint2);
+void __builtin_mma_pmxvbf16ger2np (__vector_quad *, vec_t, vec_t, uint4, uint4, uint2);
+void __builtin_mma_pmxvbf16ger2nn (__vector_quad *, vec_t, vec_t, uint4, uint4, uint2);
+
+void __builtin_mma_pmxvf32ger (__vector_quad *, vec_t, vec_t, uint4, uint4);
+void __builtin_mma_pmxvf32gerpp (__vector_quad *, vec_t, vec_t, uint4, uint4);
+void __builtin_mma_pmxvf32gerpn (__vector_quad *, vec_t, vec_t, uint4, uint4);
+void __builtin_mma_pmxvf32gernp (__vector_quad *, vec_t, vec_t, uint4, uint4);
+void __builtin_mma_pmxvf32gernn (__vector_quad *, vec_t, vec_t, uint4, uint4);
+
+void __builtin_mma_xvf64ger (__vector_quad *, __vector_pair, vec_t);
+void __builtin_mma_xvf64gerpp (__vector_quad *, __vector_pair, vec_t);
+void __builtin_mma_xvf64gerpn (__vector_quad *, __vector_pair, vec_t);
+void __builtin_mma_xvf64gernp (__vector_quad *, __vector_pair, vec_t);
+void __builtin_mma_xvf64gernn (__vector_quad *, __vector_pair, vec_t);
+
+void __builtin_mma_pmxvf64ger (__vector_quad *, __vector_pair, vec_t, uint4, uint2);
+void __builtin_mma_pmxvf64gerpp (__vector_quad *, __vector_pair, vec_t, uint4, uint2);
+void __builtin_mma_pmxvf64gerpn (__vector_quad *, __vector_pair, vec_t, uint4, uint2);
+void __builtin_mma_pmxvf64gernp (__vector_quad *, __vector_pair, vec_t, uint4, uint2);
+void __builtin_mma_pmxvf64gernn (__vector_quad *, __vector_pair, vec_t, uint4, uint2);
+
+void __builtin_mma_xxmtacc (__vector_quad *);
+void __builtin_mma_xxmfacc (__vector_quad *);
+void __builtin_mma_xxsetaccz (__vector_quad *);
+
+void __builtin_mma_build_acc (__vector_quad *, vec_t, vec_t, vec_t, vec_t);
+void __builtin_mma_disassemble_acc (void *, __vector_quad *);
+

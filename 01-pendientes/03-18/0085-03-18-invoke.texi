@@ -1,0 +1,244 @@
+@c GCC 16.1.0 | BLOQUE 0085 | 03-18
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 18941-19180 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Code Gen Options
+@section Options for Code Generation Conventions
+@cindex code generation conventions
+@cindex options, code generation
+@cindex run-time options
+
+These machine-independent options control the interface conventions
+used in code generation.
+
+Most of them have both positive and negative forms; the negative form
+of @option{-ffoo} is @option{-fno-foo}.  In the table below, only
+one of the forms is listed---the one that is not the default.  You
+can figure out the other form by either removing @samp{no-} or adding
+it.
+
+@table @gcctabopt
+@opindex fstack-reuse
+@item -fstack-reuse=@var{reuse-level}
+This option controls stack space reuse for user declared local/auto variables
+and compiler generated temporaries.  @var{reuse_level} can be @samp{all},
+@samp{named_vars}, or @samp{none}. @samp{all} enables stack reuse for all
+local variables and temporaries, @samp{named_vars} enables the reuse only for
+user defined local variables with names, and @samp{none} disables stack reuse
+completely. The default value is @samp{all}. The option is needed when the
+program extends the lifetime of a scoped local variable or a compiler generated
+temporary beyond the end point defined by the language.  When a lifetime of
+a variable ends, and if the variable lives in memory, the optimizing compiler
+has the freedom to reuse its stack space with other temporaries or scoped
+local variables whose live range does not overlap with it. Legacy code extending
+local lifetime is likely to break with the stack reuse optimization.
+
+For example,
+
+@smallexample
+   int *p;
+   @{
+     int local1;
+
+     p = &local1;
+     local1 = 10;
+     ....
+   @}
+   @{
+      int local2;
+      local2 = 20;
+      ...
+   @}
+
+   if (*p == 10)  // out of scope use of local1
+     @{
+
+     @}
+@end smallexample
+
+Another example:
+@smallexample
+
+   struct A
+   @{
+       A(int k) : i(k), j(k) @{ @}
+       int i;
+       int j;
+   @};
+
+   A *ap;
+
+   void foo(const A& ar)
+   @{
+      ap = &ar;
+   @}
+
+   void bar()
+   @{
+      foo(A(10)); // temp object's lifetime ends when foo returns
+
+      @{
+        A a(20);
+        ....
+      @}
+      ap->i+= 10;  // ap references out of scope temp whose space
+                   // is reused with a. What is the value of ap->i?
+   @}
+
+@end smallexample
+
+The lifetime of a compiler generated temporary is well defined by the C++
+standard. When a lifetime of a temporary ends, and if the temporary lives
+in memory, the optimizing compiler has the freedom to reuse its stack
+space with other temporaries or scoped local variables whose live range
+does not overlap with it. However some of the legacy code relies on
+the behavior of older compilers in which temporaries' stack space is
+not reused, the aggressive stack reuse can lead to runtime errors. This
+option is used to control the temporary stack reuse optimization.
+
+@opindex ftrapv
+@opindex fno-trapv
+@item -ftrapv
+This option generates traps for signed overflow on addition, subtraction,
+multiplication operations.
+The options @option{-ftrapv} and @option{-fwrapv} override each other, so using
+@option{-ftrapv} @option{-fwrapv} on the command-line results in
+@option{-fwrapv} being effective.  Note that only active options override, so
+using @option{-ftrapv} @option{-fwrapv} @option{-fno-wrapv} on the command-line
+results in @option{-ftrapv} being effective.
+
+@opindex fwrapv
+@opindex fno-wrapv
+@item -fwrapv
+This option instructs the compiler to assume that signed arithmetic
+overflow of addition, subtraction and multiplication wraps around
+using twos-complement representation.  This flag enables some optimizations
+and disables others.
+The options @option{-ftrapv} and @option{-fwrapv} override each other, so using
+@option{-ftrapv} @option{-fwrapv} on the command-line results in
+@option{-fwrapv} being effective.  Note that only active options override, so
+using @option{-ftrapv} @option{-fwrapv} @option{-fno-wrapv} on the command-line
+results in @option{-ftrapv} being effective.
+
+@opindex fwrapv-pointer
+@opindex fno-wrapv-pointer
+@item -fwrapv-pointer
+This option instructs the compiler to assume that pointer arithmetic
+overflow on addition and subtraction wraps around using twos-complement
+representation.  This flag disables some optimizations which assume
+pointer overflow is invalid.
+
+@opindex fstrict-overflow
+@opindex fno-strict-overflow
+@item -fstrict-overflow
+This option implies @option{-fno-wrapv} @option{-fno-wrapv-pointer} and when
+negated implies @option{-fwrapv} @option{-fwrapv-pointer}.
+
+@opindex fexceptions
+@opindex fno-exceptions
+@item -fexceptions
+Enable exception handling.  Generates extra code needed to propagate
+exceptions.  For some targets, this implies GCC generates frame
+unwind information for all functions, which can produce significant data
+size overhead, although it does not affect execution.  If you do not
+specify this option, GCC enables it by default for languages like
+C++ that normally require exception handling, and disables it for
+languages like C that do not normally require it.  However, you may need
+to enable this option when compiling C code that needs to interoperate
+properly with exception handlers written in C++.  You may also wish to
+disable this option if you are compiling older C++ programs that don't
+use exception handling.
+
+@opindex fnon-call-exceptions
+@opindex fno-non-call-exceptions
+@item -fnon-call-exceptions
+Generate code that allows trapping instructions to throw exceptions.
+Note that this requires platform-specific runtime support that does
+not exist everywhere.  Moreover, it only allows @emph{trapping}
+instructions to throw exceptions, i.e.@: memory references or floating-point
+instructions.  It does not allow exceptions to be thrown from
+arbitrary signal handlers such as @code{SIGALRM}.  This enables
+@option{-fexceptions}.
+
+@opindex fdelete-dead-exceptions
+@opindex fno-delete-dead-exceptions
+@item -fdelete-dead-exceptions
+Consider that instructions that may throw exceptions but don't otherwise
+contribute to the execution of the program can be optimized away.
+This does not affect calls to functions except those with the
+@code{pure} or @code{const} attributes.
+This option is enabled by default for the Ada and C++ compilers, as permitted by
+the language specifications.
+Optimization passes that cause dead exceptions to be removed are enabled independently at different optimization levels.
+
+@opindex funwind-tables
+@opindex fno-unwind-tables
+@item -funwind-tables
+Similar to @option{-fexceptions}, except that it just generates any needed
+static data, but does not affect the generated code in any other way.
+You normally do not need to enable this option; instead, a language processor
+that needs this handling enables it on your behalf.
+
+@opindex fasynchronous-unwind-tables
+@opindex fno-asynchronous-unwind-tables
+@item -fasynchronous-unwind-tables
+Generate unwind table in DWARF format, if supported by target machine.  The
+table is exact at each instruction boundary, so it can be used for stack
+unwinding from asynchronous events (such as debugger or garbage collector).
+
+@opindex fno-gnu-unique
+@opindex fgnu-unique
+@item -fno-gnu-unique
+On systems with recent GNU assembler and C library, the C++ compiler
+uses the @code{STB_GNU_UNIQUE} binding to make sure that definitions
+of template static data members and static local variables in inline
+functions are unique even in the presence of @code{RTLD_LOCAL}; this
+is necessary to avoid problems with a library used by two different
+@code{RTLD_LOCAL} plugins depending on a definition in one of them and
+therefore disagreeing with the other one about the binding of the
+symbol.  But this causes @code{dlclose} to be ignored for affected
+DSOs; if your program relies on reinitialization of a DSO via
+@code{dlclose} and @code{dlopen}, you can use
+@option{-fno-gnu-unique}.
+
+@opindex fpcc-struct-return
+@opindex fno-pcc-struct-return
+@item -fpcc-struct-return
+Return ``short'' @code{struct} and @code{union} values in memory like
+longer ones, rather than in registers.  This convention is less
+efficient, but it has the advantage of allowing intercallability between
+GCC-compiled files and files compiled with other compilers, particularly
+the Portable C Compiler (pcc).
+
+The precise convention for returning structures in memory depends
+on the target configuration macros.
+
+Short structures and unions are those whose size and alignment match
+that of some integer type.
+
+@strong{Warning:} code compiled with the @option{-fpcc-struct-return}
+switch is not binary compatible with code compiled with the
+@option{-freg-struct-return} switch.
+Use it to conform to a non-default application binary interface.
+
+@opindex freg-struct-return
+@opindex fno-reg-struct-return
+@item -freg-struct-return
+Return @code{struct} and @code{union} values in registers when possible.
+This is more efficient for small structures than
+@option{-fpcc-struct-return}.
+
+If you specify neither @option{-fpcc-struct-return} nor
+@option{-freg-struct-return}, GCC defaults to whichever convention is
+standard for the target.  If there is no standard convention, GCC
+defaults to @option{-fpcc-struct-return}, except on targets where GCC is
+the principal compiler.  In those cases, we can choose the standard, and
+we chose the more efficient register return alternative.
+
+@strong{Warning:} code compiled with the @option{-freg-struct-return}
+switch is not binary compatible with code compiled with the
+@option{-fpcc-struct-return} switch.
+Use it to conform to a non-default application binary interface.
+
+@opindex fshort-enums
+@opindex fno-short-enums

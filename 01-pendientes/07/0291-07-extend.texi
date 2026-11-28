@@ -1,0 +1,238 @@
+@c GCC 16.1.0 | BLOQUE 0291 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 19812-20045 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item @code{void __MQCPXIU (acc, uw2, uw2)}
+@tab @code{__MQCPXIU (@var{c}, @var{a}, @var{b})}
+@tab @code{MQCPXIU @var{a},@var{b},@var{c}}
+@item @code{void __MQCPXRS (acc, sw2, sw2)}
+@tab @code{__MQCPXRS (@var{c}, @var{a}, @var{b})}
+@tab @code{MQCPXRS @var{a},@var{b},@var{c}}
+@item @code{void __MQCPXRU (acc, uw2, uw2)}
+@tab @code{__MQCPXRU (@var{c}, @var{a}, @var{b})}
+@tab @code{MQCPXRU @var{a},@var{b},@var{c}}
+@item @code{sw2 __MQLCLRHS (sw2, sw2)}
+@tab @code{@var{c} = __MQLCLRHS (@var{a}, @var{b})}
+@tab @code{MQLCLRHS @var{a},@var{b},@var{c}}
+@item @code{sw2 __MQLMTHS (sw2, sw2)}
+@tab @code{@var{c} = __MQLMTHS (@var{a}, @var{b})}
+@tab @code{MQLMTHS @var{a},@var{b},@var{c}}
+@item @code{void __MQMACHS (acc, sw2, sw2)}
+@tab @code{__MQMACHS (@var{c}, @var{a}, @var{b})}
+@tab @code{MQMACHS @var{a},@var{b},@var{c}}
+@item @code{void __MQMACHU (acc, uw2, uw2)}
+@tab @code{__MQMACHU (@var{c}, @var{a}, @var{b})}
+@tab @code{MQMACHU @var{a},@var{b},@var{c}}
+@item @code{void __MQMACXHS (acc, sw2, sw2)}
+@tab @code{__MQMACXHS (@var{c}, @var{a}, @var{b})}
+@tab @code{MQMACXHS @var{a},@var{b},@var{c}}
+@item @code{void __MQMULHS (acc, sw2, sw2)}
+@tab @code{__MQMULHS (@var{c}, @var{a}, @var{b})}
+@tab @code{MQMULHS @var{a},@var{b},@var{c}}
+@item @code{void __MQMULHU (acc, uw2, uw2)}
+@tab @code{__MQMULHU (@var{c}, @var{a}, @var{b})}
+@tab @code{MQMULHU @var{a},@var{b},@var{c}}
+@item @code{void __MQMULXHS (acc, sw2, sw2)}
+@tab @code{__MQMULXHS (@var{c}, @var{a}, @var{b})}
+@tab @code{MQMULXHS @var{a},@var{b},@var{c}}
+@item @code{void __MQMULXHU (acc, uw2, uw2)}
+@tab @code{__MQMULXHU (@var{c}, @var{a}, @var{b})}
+@tab @code{MQMULXHU @var{a},@var{b},@var{c}}
+@item @code{sw2 __MQSATHS (sw2, sw2)}
+@tab @code{@var{c} = __MQSATHS (@var{a}, @var{b})}
+@tab @code{MQSATHS @var{a},@var{b},@var{c}}
+@item @code{uw2 __MQSLLHI (uw2, int)}
+@tab @code{@var{c} = __MQSLLHI (@var{a}, @var{b})}
+@tab @code{MQSLLHI @var{a},@var{b},@var{c}}
+@item @code{sw2 __MQSRAHI (sw2, int)}
+@tab @code{@var{c} = __MQSRAHI (@var{a}, @var{b})}
+@tab @code{MQSRAHI @var{a},@var{b},@var{c}}
+@item @code{sw2 __MQSUBHSS (sw2, sw2)}
+@tab @code{@var{c} = __MQSUBHSS (@var{a}, @var{b})}
+@tab @code{MQSUBHSS @var{a},@var{b},@var{c}}
+@item @code{uw2 __MQSUBHUS (uw2, uw2)}
+@tab @code{@var{c} = __MQSUBHUS (@var{a}, @var{b})}
+@tab @code{MQSUBHUS @var{a},@var{b},@var{c}}
+@item @code{void __MQXMACHS (acc, sw2, sw2)}
+@tab @code{__MQXMACHS (@var{c}, @var{a}, @var{b})}
+@tab @code{MQXMACHS @var{a},@var{b},@var{c}}
+@item @code{void __MQXMACXHS (acc, sw2, sw2)}
+@tab @code{__MQXMACXHS (@var{c}, @var{a}, @var{b})}
+@tab @code{MQXMACXHS @var{a},@var{b},@var{c}}
+@item @code{uw1 __MRDACC (acc)}
+@tab @code{@var{b} = __MRDACC (@var{a})}
+@tab @code{MRDACC @var{a},@var{b}}
+@item @code{uw1 __MRDACCG (acc)}
+@tab @code{@var{b} = __MRDACCG (@var{a})}
+@tab @code{MRDACCG @var{a},@var{b}}
+@item @code{uw1 __MROTLI (uw1, const)}
+@tab @code{@var{c} = __MROTLI (@var{a}, @var{b})}
+@tab @code{MROTLI @var{a},#@var{b},@var{c}}
+@item @code{uw1 __MROTRI (uw1, const)}
+@tab @code{@var{c} = __MROTRI (@var{a}, @var{b})}
+@tab @code{MROTRI @var{a},#@var{b},@var{c}}
+@item @code{sw1 __MSATHS (sw1, sw1)}
+@tab @code{@var{c} = __MSATHS (@var{a}, @var{b})}
+@tab @code{MSATHS @var{a},@var{b},@var{c}}
+@item @code{uw1 __MSATHU (uw1, uw1)}
+@tab @code{@var{c} = __MSATHU (@var{a}, @var{b})}
+@tab @code{MSATHU @var{a},@var{b},@var{c}}
+@item @code{uw1 __MSLLHI (uw1, const)}
+@tab @code{@var{c} = __MSLLHI (@var{a}, @var{b})}
+@tab @code{MSLLHI @var{a},#@var{b},@var{c}}
+@item @code{sw1 __MSRAHI (sw1, const)}
+@tab @code{@var{c} = __MSRAHI (@var{a}, @var{b})}
+@tab @code{MSRAHI @var{a},#@var{b},@var{c}}
+@item @code{uw1 __MSRLHI (uw1, const)}
+@tab @code{@var{c} = __MSRLHI (@var{a}, @var{b})}
+@tab @code{MSRLHI @var{a},#@var{b},@var{c}}
+@item @code{void __MSUBACCS (acc, acc)}
+@tab @code{__MSUBACCS (@var{b}, @var{a})}
+@tab @code{MSUBACCS @var{a},@var{b}}
+@item @code{sw1 __MSUBHSS (sw1, sw1)}
+@tab @code{@var{c} = __MSUBHSS (@var{a}, @var{b})}
+@tab @code{MSUBHSS @var{a},@var{b},@var{c}}
+@item @code{uw1 __MSUBHUS (uw1, uw1)}
+@tab @code{@var{c} = __MSUBHUS (@var{a}, @var{b})}
+@tab @code{MSUBHUS @var{a},@var{b},@var{c}}
+@item @code{void __MTRAP (void)}
+@tab @code{__MTRAP ()}
+@tab @code{MTRAP}
+@item @code{uw2 __MUNPACKH (uw1)}
+@tab @code{@var{b} = __MUNPACKH (@var{a})}
+@tab @code{MUNPACKH @var{a},@var{b}}
+@item @code{uw1 __MWCUT (uw2, uw1)}
+@tab @code{@var{c} = __MWCUT (@var{a}, @var{b})}
+@tab @code{MWCUT @var{a},@var{b},@var{c}}
+@item @code{void __MWTACC (acc, uw1)}
+@tab @code{__MWTACC (@var{b}, @var{a})}
+@tab @code{MWTACC @var{a},@var{b}}
+@item @code{void __MWTACCG (acc, uw1)}
+@tab @code{__MWTACCG (@var{b}, @var{a})}
+@tab @code{MWTACCG @var{a},@var{b}}
+@item @code{uw1 __MXOR (uw1, uw1)}
+@tab @code{@var{c} = __MXOR (@var{a}, @var{b})}
+@tab @code{MXOR @var{a},@var{b},@var{c}}
+@end multitable
+
+@node Raw read/write Functions
+@subsubsection Raw Read/Write Functions
+
+This sections describes built-in functions related to read and write
+instructions to access memory.  These functions generate
+@code{membar} instructions to flush the I/O load and stores where
+appropriate, as described in Fujitsu's manual described above.
+
+@table @code
+
+@item unsigned char __builtin_read8 (void *@var{data})
+@item unsigned short __builtin_read16 (void *@var{data})
+@item unsigned long __builtin_read32 (void *@var{data})
+@item unsigned long long __builtin_read64 (void *@var{data})
+
+@item void __builtin_write8 (void *@var{data}, unsigned char @var{datum})
+@item void __builtin_write16 (void *@var{data}, unsigned short @var{datum})
+@item void __builtin_write32 (void *@var{data}, unsigned long @var{datum})
+@item void __builtin_write64 (void *@var{data}, unsigned long long @var{datum})
+@end table
+
+@node Other Built-in Functions
+@subsubsection Other Built-in Functions
+
+This section describes built-in functions that are not named after
+a specific FR-V instruction.
+
+@table @code
+@item sw2 __IACCreadll (iacc @var{reg})
+Return the full 64-bit value of IACC0@.  The @var{reg} argument is reserved
+for future expansion and must be 0.
+
+@item sw1 __IACCreadl (iacc @var{reg})
+Return the value of IACC0H if @var{reg} is 0 and IACC0L if @var{reg} is 1.
+Other values of @var{reg} are rejected as invalid.
+
+@item void __IACCsetll (iacc @var{reg}, sw2 @var{x})
+Set the full 64-bit value of IACC0 to @var{x}.  The @var{reg} argument
+is reserved for future expansion and must be 0.
+
+@item void __IACCsetl (iacc @var{reg}, sw1 @var{x})
+Set IACC0H to @var{x} if @var{reg} is 0 and IACC0L to @var{x} if @var{reg}
+is 1.  Other values of @var{reg} are rejected as invalid.
+
+@item void __data_prefetch0 (const void *@var{x})
+Use the @code{dcpl} instruction to load the contents of address @var{x}
+into the data cache.
+
+@item void __data_prefetch (const void *@var{x})
+Use the @code{nldub} instruction to load the contents of address @var{x}
+into the data cache.  The instruction is issued in slot I1@.
+@end table
+
+@node LoongArch Base Built-in Functions
+@subsection LoongArch Base Built-in Functions
+
+These built-in functions are available for LoongArch.
+
+@menu
+* Data Types::
+* Directly-mapped Builtin Functions::
+* Directly-mapped Division Builtin Functions::
+* Other Builtin Functions::
+@end menu
+
+@node Data Types
+@subsubsection Data Types
+
+@itemize
+@item @code{imm0_31}, a compile-time constant in range 0 to 31;
+@item @code{imm0_16383}, a compile-time constant in range 0 to 16383;
+@item @code{imm0_32767}, a compile-time constant in range 0 to 32767;
+@item @code{imm_n2048_2047}, a compile-time constant in range -2048 to 2047;
+@end itemize
+
+@node Directly-mapped Builtin Functions
+@subsubsection Directly-mapped Builtin Functions
+
+The intrinsics provided are listed below:
+@smallexample
+    unsigned int __builtin_loongarch_movfcsr2gr (imm0_31)
+    void __builtin_loongarch_movgr2fcsr (imm0_31, unsigned int)
+    void __builtin_loongarch_cacop_d (imm0_31, unsigned long int, imm_n2048_2047)
+    unsigned int __builtin_loongarch_cpucfg (unsigned int)
+    void __builtin_loongarch_asrtle_d (long int, long int)
+    void __builtin_loongarch_asrtgt_d (long int, long int)
+    long int __builtin_loongarch_lddir_d (long int, imm0_31)
+    void __builtin_loongarch_ldpte_d (long int, imm0_31)
+
+    int __builtin_loongarch_crc_w_b_w (char, int)
+    int __builtin_loongarch_crc_w_h_w (short, int)
+    int __builtin_loongarch_crc_w_w_w (int, int)
+    int __builtin_loongarch_crc_w_d_w (long int, int)
+    int __builtin_loongarch_crcc_w_b_w (char, int)
+    int __builtin_loongarch_crcc_w_h_w (short, int)
+    int __builtin_loongarch_crcc_w_w_w (int, int)
+    int __builtin_loongarch_crcc_w_d_w (long int, int)
+
+    unsigned int __builtin_loongarch_csrrd_w (imm0_16383)
+    unsigned int __builtin_loongarch_csrwr_w (unsigned int, imm0_16383)
+    unsigned int __builtin_loongarch_csrxchg_w (unsigned int, unsigned int, imm0_16383)
+    unsigned long int __builtin_loongarch_csrrd_d (imm0_16383)
+    unsigned long int __builtin_loongarch_csrwr_d (unsigned long int, imm0_16383)
+    unsigned long int __builtin_loongarch_csrxchg_d (unsigned long int, unsigned long int, imm0_16383)
+
+    unsigned char __builtin_loongarch_iocsrrd_b (unsigned int)
+    unsigned short __builtin_loongarch_iocsrrd_h (unsigned int)
+    unsigned int __builtin_loongarch_iocsrrd_w (unsigned int)
+    unsigned long int __builtin_loongarch_iocsrrd_d (unsigned int)
+    void __builtin_loongarch_iocsrwr_b (unsigned char, unsigned int)
+    void __builtin_loongarch_iocsrwr_h (unsigned short, unsigned int)
+    void __builtin_loongarch_iocsrwr_w (unsigned int, unsigned int)
+    void __builtin_loongarch_iocsrwr_d (unsigned long int, unsigned int)
+
+    void __builtin_loongarch_dbar (imm0_32767)
+    void __builtin_loongarch_ibar (imm0_32767)
+
+    void __builtin_loongarch_syscall (imm0_32767)
+    void __builtin_loongarch_break (imm0_32767)
+@end smallexample
+

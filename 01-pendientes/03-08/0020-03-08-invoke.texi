@@ -1,0 +1,234 @@
+@c GCC 16.1.0 | BLOQUE 0020 | 03-08
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 6336-6565 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -fdiagnostics-format=@var{FORMAT}
+Select a different format for printing diagnostics.
+@var{FORMAT} is @samp{text}, @samp{sarif-stderr} or @samp{sarif-file}.
+
+Using this option replaces any additional ``output sinks'' added by
+@option{-fdiagnostics-add-output=}, or that set by
+@option{-fdiagnostics-set-output=}.
+
+The default is @samp{text}.
+
+@cindex diagnostic output formats, sarif-stderr
+@cindex diagnostic output formats, sarif-file
+The @samp{sarif-stderr} and @samp{sarif-file} formats both emit
+diagnostics in SARIF Version 2.1.0 format, either to stderr, or to a file
+named @file{@var{source}.sarif}, respectively.
+
+@opindex fdiagnostics-add-output
+@item -fdiagnostics-add-output=@var{DIAGNOSTICS-OUTPUT-SPEC}
+Add an additional ``output sink'' for emitting diagnostics.
+
+@var{DIAGNOSTICS-OUTPUT-SPEC} should specify a scheme, optionally followed
+by @code{:} and one or more @var{KEY}=@var{VALUE} pairs, in this form:
+
+@smallexample
+@var{SCHEME}
+@var{SCHEME}:@var{KEY}=@var{VALUE}
+@var{SCHEME}:@var{KEY}=@var{VALUE},@var{KEY2}=@var{VALUE2}
+@end smallexample
+
+etc.
+
+Schemes, keys, or values with a name prefixed ``experimental'' may change
+or be removed without notice.  Keys can be per-scheme, or related to GCC
+as a whole.
+
+@var{SCHEME} can be
+
+@table @gcctabopt
+
+@opindex fdiagnostics-add-output=text
+@item text
+Emit diagnostics to stderr using GCC's classic text output format.
+
+Supported keys for the @code{text} scheme are:
+
+@table @gcctabopt
+
+@item color=@r{[}yes@r{|}no@r{]}
+Override colorization settings from @option{-fdiagnostics-color} for this
+text output.
+
+@item show-nesting=@r{[}yes@r{|}no@r{]}
+Enable a mode that emphasizes hierarchical relationships
+within diagnostics messages, as per @option{-fdiagnostics-show-nesting}.
+Defaults to @code{yes}.
+
+@item show-nesting-locations=@r{[}yes@r{|}no@r{]}
+If @code{show-nesting=yes}, then by default locations are
+shown; set this key to @code{no} to disable printing such locations.
+This exists for use by GCC developers, for writing DejaGnu test cases.
+
+@item show-nesting-levels=@r{[}yes@r{|}no@r{]}
+This is a debugging option for use with @code{show-nesting=yes}.
+Set this key to @code{yes} to print explicit nesting levels in the output.
+This exists for use by GCC developers.
+
+@end table
+
+@cindex SARIF file output sink
+@opindex fdiagnostics-add-output=sarif
+@item sarif
+Emit diagnostics to a file in SARIF format.
+
+Supported keys for the @code{sarif} scheme are:
+
+@table @gcctabopt
+
+@item file=@var{FILENAME}
+Specify the filename to write the SARIF output to, potentially with a
+leading absolute or relative path.  If not specified, it defaults to
+@file{@var{source}.sarif}.
+
+@item serialization=@r{[}json@r{]}
+Specify the serialization format to use when writing out the SARIF.
+Currently this can only be @code{json}, but is present as an
+extension point for experimenting with other serializations.
+
+@item version=@r{[}2.1@r{|}2.2-prerelease@r{]}
+Specify the version of SARIF to use for the output.  If not specified,
+defaults to 2.1.  @code{2.2-prerelease} uses an unofficial draft of the
+future SARIF 2.2 specification and should only be used for experimentation
+in this release.
+
+@end table
+
+There is also this key intended for use by GCC developers, rather than
+end-users, and subject to change or removal without notice:
+
+@table @gcctabopt
+
+@item state-graphs=@r{[}yes@r{|}no@r{]}
+This is a debugging feature and defaults to @code{no}.
+If @code{state-graphs=yes}, then attempt to capture detailed state
+information from @option{-fanalyzer} in the generated SARIF.
+
+@end table
+
+@opindex fdiagnostics-add-output=experimental-html
+@item experimental-html
+Emit diagnostics to a file in HTML format.  This scheme is experimental,
+and may go away in future GCC releases.  The keys and details of the output
+are also subject to change.
+
+Supported keys for the @code{experimental-html} scheme are:
+
+@table @gcctabopt
+
+@item css=@r{[}yes@r{|}no@r{]}
+Add an embedded <style> to the generated HTML.  Defaults to yes.
+
+@item file=@var{FILENAME}
+Specify the filename to write the HTML output to, potentially with a
+leading absolute or relative path.  If not specified, it defaults to
+@file{@var{source}.html}.
+
+@item javascript=@r{[}yes@r{|}no@r{]}
+Add an embedded <script> to the generated HTML providing a barebones UI
+for viewing results.  Defaults to yes.
+
+@end table
+
+There are also these keys intended for use by GCC developers, rather than
+end-users, and subject to change or removal without notice:
+
+@table @gcctabopt
+
+@item show-state-diagrams=@r{[}yes@r{|}no@r{]}
+This is a debugging feature and defaults to @code{no}.
+If @code{show-state-diagrams=yes}, then attempt to use @command{dot} to
+generate SVG diagrams in the generated HTML, visualizing the state at each
+event in a diagnostic path.
+These are visible by pressing ``j'' and ``k'' to single-step forward and
+backward through events.  Enabling this option will slow down
+HTML generation.
+
+@item show-graph-dot-src=@r{[}yes@r{|}no@r{]}
+This is a debugging feature and defaults to @code{no}.
+If @code{show-graph-dot-src=yes}
+then if @code{show-state-diagrams=yes},
+the generated state diagrams will also show the .dot source input to
+GraphViz used for the diagram.
+
+@item show-graph-sarif=@r{[}yes@r{|}no@r{]}
+This is a debugging feature and defaults to @code{no}.
+If @code{show-graph-sarif=yes}
+then if @code{show-state-diagrams=yes}, the generated state diagrams will
+also show a SARIF representation of the state.
+
+@end table
+
+@end table
+
+As well as scheme-specific keys, the following GCC-related key is usable
+on sinks of any scheme:
+
+@table @gcctabopt
+
+@item cfgs=@r{[}yes@r{|}no@r{]}
+If @code{cfgs=yes} for a sink, then GCC will attempt to send information
+to that sink about the control flow graphs for the functions it is compiling.
+Text sinks ignore the information.  SARIF sinks will add the graphs within
+@code{theRun.graphs}.  HTML sinks will generate SVG displaying the graphs.
+The precise form of the information is subject to change without notice.
+
+@end table
+
+For example,
+
+@smallexample
+-fdiagnostics-add-output=sarif:version=2.1,file=foo.2.1.sarif
+-fdiagnostics-add-output=sarif:version=2.2-prerelease,file=foo.2.2.sarif
+@end smallexample
+
+would add a pair of outputs, each writing to a different file, using
+versions 2.1 and 2.2 of the SARIF standard respectively.
+
+In EBNF:
+
+@smallexample
+
+@var{diagnostics-output-specifier} = @var{diagnostics-output-name}
+                                   | @var{diagnostics-output-name}, ":", @var{key-value-pairs};
+
+@var{diagnostics-output-name} = "text" | "sarif" | "experimental-html";
+
+@var{key-value-pairs} = @var{key-value-pair}
+                      | @var{key-value-pair} "," @var{key-value-pairs};
+
+@var{key-value-pair} = @var{key} "=" @var{value};
+
+@var{key} = ? string without a '=' ? ;
+@var{value} = ? string without a ',' ? ;
+
+@end smallexample
+
+@opindex fdiagnostics-set-output
+@item -fdiagnostics-set-output=@var{DIAGNOSTICS-OUTPUT-SPEC}
+This works in a similar way to @option{-fdiagnostics-add-output=} except
+that instead of adding an additional ``output sink'' for diagnostics, it
+replaces all existing output sinks, such as from @option{-fdiagnostics-format=},
+@option{-fdiagnostics-add-output=}, or a prior call to
+@option{-fdiagnostics-set-output=}.
+
+@opindex fno-diagnostics-json-formatting
+@opindex fdiagnostics-json-formatting
+@item -fno-diagnostics-json-formatting
+By default, when JSON is emitted for diagnostics (via
+@option{-fdiagnostics-format=sarif-stderr} or
+@option{-fdiagnostics-format=sarif-file}),
+GCC will add newlines and indentation to visually emphasize the
+hierarchical structure of the JSON.
+
+Use @option{-fno-diagnostics-json-formatting} to suppress this whitespace.
+It must be passed before the option it is to affect.
+
+This is intended for compatibility with tools that do not expect the output
+to contain newlines, such as that emitted by older GCC releases.
+
+@end table
+

@@ -1,0 +1,226 @@
+@c GCC 16.1.0 | BLOQUE 0147 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 32938-33159 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -mallow-string-insns
+@itemx -mno-allow-string-insns
+Enables or disables the use of the string manipulation instructions
+@code{SMOVF}, @code{SCMPU}, @code{SMOVB}, @code{SMOVU}, @code{SUNTIL}
+@code{SWHILE} and also the @code{RMPA} instruction.  These
+instructions may prefetch data, which is not safe to do if accessing
+an I/O register.  (See section 12.2.7 of the RX62N Group User's Manual
+for more information).
+
+The default is to allow these instructions, but it is not possible for
+GCC to reliably detect all circumstances where a string instruction
+might be used to access an I/O register, so their use cannot be
+disabled automatically.  Instead it is reliant upon the programmer to
+use the @option{-mno-allow-string-insns} option if their program
+accesses I/O space.
+
+When the instructions are enabled GCC defines the C preprocessor
+symbol @code{__RX_ALLOW_STRING_INSNS__}, otherwise it defines the
+symbol @code{__RX_DISALLOW_STRING_INSNS__}.
+
+@opindex mjsr
+@opindex mno-jsr
+@item -mjsr
+@itemx -mno-jsr
+Use only (or not only) @code{JSR} instructions to access functions.
+This option can be used when code size exceeds the range of @code{BSR}
+instructions.  Note that @option{-mno-jsr} does not mean to not use
+@code{JSR} but instead means that any type of branch may be used.
+
+@opindex mlra
+@opindex mno-lra
+@item -mlra
+Use the new LRA register allocator.  By default, the old ``reload''
+allocator is used.
+@end table
+
+@emph{Note:} The generic GCC command-line option @option{-ffixed-@var{reg}}
+has special significance to the RX port when used with the
+@code{interrupt} function attribute.  This attribute indicates a
+function intended to process fast interrupts.  GCC ensures
+that it only uses the registers @code{r10}, @code{r11}, @code{r12}
+and/or @code{r13} and only provided that the normal use of the
+corresponding registers have been restricted via the
+@option{-ffixed-@var{reg}} or @option{-mint-register} command-line
+options.
+
+@node S/390 and zSeries Options
+@subsection S/390 and zSeries Options
+@cindex S/390 and zSeries Options
+
+These are the @samp{-m} options defined for the S/390 and zSeries architecture.
+
+@table @gcctabopt
+@opindex mhard-float
+@opindex msoft-float
+@item -mhard-float
+@itemx -msoft-float
+Use (do not use) the hardware floating-point instructions and registers
+for floating-point operations.  When @option{-msoft-float} is specified,
+functions in @file{libgcc.a} are used to perform floating-point
+operations.  When @option{-mhard-float} is specified, the compiler
+generates IEEE floating-point instructions.  This is the default.
+
+@opindex mhard-dfp
+@opindex mno-hard-dfp
+@item -mhard-dfp
+@itemx -mno-hard-dfp
+Use (do not use) the hardware decimal-floating-point instructions for
+decimal-floating-point operations.  When @option{-mno-hard-dfp} is
+specified, functions in @file{libgcc.a} are used to perform
+decimal-floating-point operations.  When @option{-mhard-dfp} is
+specified, the compiler generates decimal-floating-point hardware
+instructions.  This is the default for @option{-march=z9-ec} or higher.
+
+@opindex mlong-double-64
+@opindex mlong-double-128
+@item -mlong-double-64
+@itemx -mlong-double-128
+These switches control the size of @code{long double} type. A size
+of 64 bits makes the @code{long double} type equivalent to the @code{double}
+type. This is the default.
+
+@opindex mbackchain
+@opindex mno-backchain
+@item -mbackchain
+@itemx -mno-backchain
+Store (do not store) the address of the caller's frame as backchain pointer
+into the callee's stack frame.
+A backchain may be needed to allow debugging using tools that do not understand
+DWARF call frame information.
+When @option{-mno-packed-stack} is in effect, the backchain pointer is stored
+at the bottom of the stack frame; when @option{-mpacked-stack} is in effect,
+the backchain is placed into the topmost word of the 96/160 byte register
+save area.
+
+In general, code compiled with @option{-mbackchain} is call-compatible with
+code compiled with @option{-mno-backchain}; however, use of the backchain
+for debugging purposes usually requires that the whole binary is built with
+@option{-mbackchain}.  Note that the combination of @option{-mbackchain},
+@option{-mpacked-stack} and @option{-mhard-float} is not supported.  In order
+to build a linux kernel use @option{-msoft-float}.
+
+The default is to not maintain the backchain.
+
+@opindex mpacked-stack
+@opindex mno-packed-stack
+@item -mpacked-stack
+@itemx -mno-packed-stack
+Use (do not use) the packed stack layout.  When @option{-mno-packed-stack} is
+specified, the compiler uses the all fields of the 96/160 byte register save
+area only for their default purpose; unused fields still take up stack space.
+When @option{-mpacked-stack} is specified, register save slots are densely
+packed at the top of the register save area; unused space is reused for other
+purposes, allowing for more efficient use of the available stack space.
+However, when @option{-mbackchain} is also in effect, the topmost word of
+the save area is always used to store the backchain, and the return address
+register is always saved two words below the backchain.
+
+As long as the stack frame backchain is not used, code generated with
+@option{-mpacked-stack} is call-compatible with code generated with
+@option{-mno-packed-stack}.  Note that some non-FSF releases of GCC 2.95 for
+S/390 or zSeries generated code that uses the stack frame backchain at run
+time, not just for debugging purposes.  Such code is not call-compatible
+with code compiled with @option{-mpacked-stack}.  Also, note that the
+combination of @option{-mbackchain},
+@option{-mpacked-stack} and @option{-mhard-float} is not supported.  In order
+to build a linux kernel use @option{-msoft-float}.
+
+The default is to not use the packed stack layout.
+
+@opindex msmall-exec
+@opindex mno-small-exec
+@item -msmall-exec
+@itemx -mno-small-exec
+Generate (or do not generate) code using the @code{bras} instruction
+to do subroutine calls.
+This only works reliably if the total executable size does not
+exceed 64k.  The default is to use the @code{basr} instruction instead,
+which does not have this limitation.
+
+@opindex m64
+@opindex m31
+@item -m64
+@itemx -m31
+When @option{-m31} is specified, generate code compliant to the
+GNU/Linux for S/390 ABI@.  When @option{-m64} is specified, generate
+code compliant to the GNU/Linux for zSeries ABI@.  This allows GCC in
+particular to generate 64-bit instructions.  For the @samp{s390}
+targets, the default is @option{-m31}, while the @samp{s390x}
+targets default to @option{-m64}.  Note, @option{-m31} is deprecated and
+support will be removed.
+
+@opindex mzarch
+@opindex mesa
+@item -mzarch
+@itemx -mesa
+When @option{-mzarch} is specified, generate code using the
+instructions available on z/Architecture.
+When @option{-mesa} is specified, generate code using the
+instructions available on ESA/390.  Note that @option{-mesa} is
+not possible with @option{-m64}.
+When generating code compliant to the GNU/Linux for S/390 ABI,
+the default is @option{-mesa}.  When generating code compliant
+to the GNU/Linux for zSeries ABI, the default is @option{-mzarch}.
+
+@opindex mhtm
+@opindex mno-htm
+@item -mhtm
+@itemx -mno-htm
+The @option{-mhtm} option enables a set of builtins making use of
+instructions available with the transactional execution facility
+introduced with the IBM zEnterprise EC12 machine generation
+@ref{S/390 System z Built-in Functions}.
+@option{-mhtm} is enabled by default when using @option{-march=zEC12}.
+
+@opindex mvx
+@opindex mno-vx
+@item -mvx
+@itemx -mno-vx
+When @option{-mvx} is specified, generate code using the instructions
+available with the vector extension facility introduced with the IBM
+z13 machine generation.
+This option changes the ABI for some vector type values with regard to
+alignment and calling conventions.  In case vector type values are
+being used in an ABI-relevant context, a GAS @samp{.gnu_attribute}
+command is added to mark the resulting binary with the ABI used.
+@option{-mvx} is enabled by default when using @option{-march=z13}.
+
+@opindex mzvector
+@opindex mno-zvector
+@item -mzvector
+@itemx -mno-zvector
+The @option{-mzvector} option enables vector language extensions and
+builtins using instructions available with the vector extension
+facility introduced with the IBM z13 machine generation.
+This option adds support for @samp{vector} to be used as a keyword to
+define vector type variables and arguments.  @samp{vector} is only
+available when GNU extensions are enabled.  It is not expanded
+when requesting strict standard compliance e.g.@: with @option{-std=c99}.
+In addition to the GCC low-level builtins, @option{-mzvector} enables
+a set of builtins added for compatibility with AltiVec-style
+implementations like Power and Cell.  In order to make use of these
+builtins, you must include the header file @file{vecintrin.h}.
+@option{-mzvector} is disabled by default.
+
+@opindex mmvcle
+@opindex mno-mvcle
+@item -mmvcle
+@itemx -mno-mvcle
+Generate (or do not generate) code using the @code{mvcle} instruction
+to perform block moves.  When @option{-mno-mvcle} is specified,
+use a @code{mvc} loop instead.  This is the default unless optimizing for
+size.
+
+@opindex mdebug
+@opindex mno-debug
+@item -mdebug
+@itemx -mno-debug
+Print (or do not print) additional debug information when compiling.
+The default is to not print debug information.
+
+@opindex march

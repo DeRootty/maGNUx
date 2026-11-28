@@ -1,0 +1,284 @@
+@c GCC 16.1.0 | BLOQUE 0202 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 6441-6720 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item no_gccisr
+This attribute applies to functions.
+
+It specifies that GCC should not use the @code{__gcc_isr}
+@uref{https://sourceware.org/binutils/docs/as/AVR-Pseudo-Instructions.html,pseudo instruction}
+in a function with
+the @code{interrupt} or @code{signal} attribute aka. interrupt
+service routine (ISR).
+Use this attribute if the preamble of the ISR prologue should always read
+@smallexample
+push  __zero_reg__
+push  __tmp_reg__
+in    __tmp_reg__, __SREG__
+push  __tmp_reg__
+clr   __zero_reg__
+@end smallexample
+@noindent
+and accordingly for the postamble of the epilogue---no matter whether
+the mentioned registers are actually used in the ISR or not.
+Situations where you might want to use this attribute include:
+@itemize @bullet
+@item
+Code that (effectively) clobbers bits of @code{SREG} other than the
+@code{I}-flag by writing to the memory location of @code{SREG}.
+@item
+Code that uses inline assembler to jump to a different function which
+expects (parts of) the prologue code as outlined above to be present.
+@end itemize
+
+To disable @code{__gcc_isr} generation for the whole compilation unit,
+use option @option{-mno-gas-isr-prologues}, @pxref{AVR Options}.
+
+@atindex @code{OS_main}, AVR
+@atindex @code{OS_task}, AVR
+@item OS_main
+@itemx OS_task
+This attribute applies to functions.
+
+On AVR, functions with the @code{OS_main} or @code{OS_task} attribute
+do not save/restore any call-saved register in their prologue/epilogue.
+
+The @code{OS_main} attribute can be used when there @emph{is
+guarantee} that interrupts are disabled at the time when the function
+is entered.  This saves resources when the stack pointer has to be
+changed to set up a frame for local variables.
+
+The @code{OS_task} attribute can be used when there is @emph{no
+guarantee} that interrupts are disabled at that time when the function
+is entered like for, e@.g@. task functions in a multi-threading operating
+system. In that case, changing the stack pointer register is
+guarded by save/clear/restore of the global interrupt enable flag.
+
+The differences to the @code{naked} function attribute are:
+@itemize @bullet
+@item @code{naked} functions do not have a return instruction whereas 
+@code{OS_main} and @code{OS_task} functions have a @code{RET} or
+@code{RETI} return instruction.
+@item @code{naked} functions do not set up a frame for local variables
+or a frame pointer whereas @code{OS_main} and @code{OS_task} do this
+as needed.
+@end itemize
+
+@atindex @code{progmem}, AVR
+@item progmem
+This attribute applies to variables.
+
+The @code{progmem} attribute is used on the AVR to place read-only
+data in the non-volatile program memory (flash). The @code{progmem}
+attribute accomplishes this by putting respective variables into a
+section whose name starts with @code{.progmem}.
+
+This attribute works similar to the @code{section} attribute
+but adds additional checking.
+
+@table @asis
+@item @bullet{} Ordinary AVR cores with 32 general purpose registers:
+@code{progmem} affects the location
+of the data but not how this data is accessed.
+In order to read data located with the @code{progmem} attribute
+(inline) assembler must be used.
+@smallexample
+/* Use custom macros from AVR-LibC */
+#include <avr/pgmspace.h>
+
+/* Locate var in flash memory */
+const int var[2] PROGMEM = @{ 1, 2 @};
+
+int read_var (int i)
+@{
+    /* Access var[] by accessor macro from avr/pgmspace.h */
+    return (int) pgm_read_word (& var[i]);
+@}
+@end smallexample
+
+AVR is a Harvard architecture processor and data and read-only data
+normally resides in the data memory (RAM).
+
+See also the @ref{AVR Named Address Spaces} section for
+an alternate way to locate and access data in flash memory.
+
+@item @bullet{} AVR cores with flash memory visible in the RAM address range:
+On such devices, there is no need for attribute @code{progmem} or
+@ref{AVR Named Address Spaces,,@code{__flash}} qualifier at all.
+Just use standard C / C++.  The compiler will generate @code{LD*}
+instructions.  As flash memory is visible in the RAM address range,
+and the default linker script does @emph{not} locate @code{.rodata} in
+RAM, no special features are needed in order not to waste RAM for
+read-only data or to read from flash.  You might even get slightly better
+performance by
+avoiding @code{progmem} and @code{__flash}.  This applies to devices from
+families @code{avrtiny} and @code{avrxmega3}, see @ref{AVR Options} for
+an overview.
+
+@item @bullet{} Reduced AVR Tiny cores like ATtiny40:
+The compiler adds @code{0x4000}
+to the addresses of objects and declarations in @code{progmem} and locates
+the objects in flash memory, namely in section @code{.progmem.data}.
+The offset is needed because the flash memory is visible in the RAM
+address space starting at address @code{0x4000}.
+
+Data in @code{progmem} can be accessed by means of ordinary C@tie{}code,
+no special functions or macros are needed.
+
+@smallexample
+/* var is located in flash memory */
+extern const int var[2] __attribute__((progmem));
+
+int read_var (int i)
+@{
+    return var[i];
+@}
+@end smallexample
+
+Please notice that on these devices, there is no need for @code{progmem}
+at all.
+
+@end table
+
+@atindex @code{io}, AVR
+@item io
+@itemx io (@var{addr})
+This attribute applies to variables.
+
+Variables with the @code{io} attribute are used to address
+memory-mapped peripherals in the I/O address range.
+No memory is allocated.
+If an address is specified, the variable
+is assigned that address, and the value is interpreted as an
+address in the data address space.
+Example:
+
+@smallexample
+volatile int porta __attribute__((io (__AVR_SFR_OFFSET__ + 0x2)));
+@end smallexample
+
+Otherwise, the variable is not assigned an address, but the
+compiler will still use @code{in} and @code{out} instructions where applicable,
+assuming some other module assigns an address in the I/O address range.
+Example:
+
+@smallexample
+extern volatile int porta __attribute__((io));
+@end smallexample
+
+@atindex @code{io_low}, AVR
+@item io_low
+@itemx io_low (@var{addr})
+The @code{io_low} attribute applies to variables.
+
+This is like the @code{io} attribute, but additionally it informs the
+compiler that the object lies in the lower half of the I/O area,
+allowing the use of @code{cbi}, @code{sbi}, @code{sbic} and @code{sbis}
+instructions.
+
+@atindex @code{address}, AVR
+@item address (@var{addr})
+This attribute applies to variables.
+
+Variables with the @code{address} attribute can be used to address
+memory-mapped peripherals that may lie outside the I/O address range.
+Just like with the @code{io} and @code{io_low} attributes, no memory is
+allocated.
+
+@smallexample
+volatile int porta __attribute__((address (0x600)));
+@end smallexample
+
+This attribute can also be used to define symbols in C/C++
+code which otherwise would require assembly, a linker description file
+or command-line options like @code{-Wl,--defsym,a_symbol=@var{value}}.
+For example,
+@smallexample
+int a_symbol __attribute__((weak, address (1234)));
+@end smallexample
+will be compiled to
+@smallexample
+.weak a_symbol
+a_symbol = 1234
+@end smallexample
+
+@atindex @code{absdata}, AVR
+@item absdata
+This attribute applies to variables.
+
+Variables in static storage and with the @code{absdata} attribute can
+be accessed by the @code{LDS} and @code{STS} instructions which take
+absolute addresses.
+
+@itemize @bullet
+@item
+This attribute is only supported for the reduced AVR Tiny core
+like ATtiny40.
+
+@item
+You must make sure that respective data is located in the
+address range @code{0x40}@dots{}@code{0xbf} accessible by
+@code{LDS} and @code{STS}.  One way to achieve this as an
+appropriate linker description file.
+
+@item
+If the location does not fit the address range of @code{LDS}
+and @code{STS}, there is currently (Binutils 2.26) just an unspecific
+warning like
+@quotation
+@code{module.cc:(.text+0x1c): warning: internal error: out of range error}
+@end quotation
+
+@end itemize
+
+See also the @option{-mabsdata} @ref{AVR Options,command-line option}.
+
+@end table
+
+@anchor{Blackfin Function Attributes}
+@anchor{Blackfin Variable Attributes}
+@node Blackfin Attributes
+@subsubsection Blackfin Attributes
+
+These attributes are supported by the Blackfin back end:
+
+@table @code
+
+@atindex @code{exception_handler}, Blackfin
+@cindex exception handler functions, Blackfin
+@item exception_handler
+This attribute applies to functions.
+
+Use this attribute on the Blackfin to indicate that the specified function
+is an exception handler.  The compiler generates function entry and
+exit sequences suitable for use in an exception handler when this
+attribute is present.
+
+@atindex @code{interrupt_handler}, Blackfin
+@item interrupt_handler
+This attribute applies to functions.
+
+Use this attribute to
+indicate that the specified function is an interrupt handler.  The compiler
+generates function entry and exit sequences suitable for use in an
+interrupt handler when this attribute is present.
+
+@atindex @code{kspisusp}, Blackfin
+@cindex User stack pointer in interrupts on the Blackfin
+@item kspisusp
+This attribute applies to functions.
+
+When used together with @code{interrupt_handler}, @code{exception_handler}
+or @code{nmi_handler}, code is generated to load the stack pointer
+from the USP register in the function prologue.
+
+@atindex @code{l1_text}, Blackfin
+@item l1_text
+This attribute applies to functions.
+
+It specifies that the function should be placed into L1 Instruction
+SRAM@. The function is put into a specific section named @code{.l1.text}.
+With @option{-mfdpic}, function calls with a such function as the callee
+or caller uses inlined PLT.
+
+@atindex @code{l2}, Blackfin

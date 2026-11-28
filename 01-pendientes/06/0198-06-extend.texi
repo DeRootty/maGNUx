@@ -1,0 +1,272 @@
+@c GCC 16.1.0 | BLOQUE 0198 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 5314-5581 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@xref{Vector Extensions}, for details of manipulating objects of vector types.
+
+@atindex @code{visibility}
+@cindex visibility of symbols
+@cindex linker visibility
+@item visibility ("@var{visibility_type}")
+This attribute can be applied to functions, variables, and types.
+
+It affects the linkage of the declaration to which it is attached.
+There are four supported @var{visibility_type} values: @code{default},
+@code{hidden}, @code{protected}, or @code{internal} visibility.
+
+@smallexample
+[[gnu::visibility ("protected")]]
+void f () @{ /* @r{Do something.} */; @}
+
+int i [[gnu::visibility ("hidden")]];
+@end smallexample
+
+The possible values of @var{visibility_type} correspond to the
+visibility settings in the ELF gABI.
+
+@table @code
+@c keep this list of visibilities in alphabetical order.
+
+@item default
+Default visibility is the normal case for the object file format.
+This value is available for the visibility attribute to override other
+options that may change the assumed visibility of entities.
+
+On ELF, default visibility means that the declaration is visible to other
+modules and, in shared libraries, means that the declared entity may be
+overridden.
+
+On Darwin, default visibility means that the declaration is visible to
+other modules.
+
+Default visibility corresponds to ``external linkage'' in the language.
+
+@item hidden
+Hidden visibility indicates that the entity declared has a new
+form of linkage, which we call ``hidden linkage''.  Two
+declarations of an object with hidden linkage refer to the same object
+if they are in the same shared object.
+
+@item internal
+Internal visibility is like hidden visibility, but with additional
+processor specific semantics.  Unless otherwise specified by the
+psABI, GCC defines internal visibility to mean that a function is
+@emph{never} called from another module.  Compare this with hidden
+functions which, while they cannot be referenced directly by other
+modules, can be referenced indirectly via function pointers.  By
+indicating that a function cannot be called from outside the module,
+GCC may for instance omit the load of a PIC register since it is known
+that the calling function loaded the correct value.
+
+@item protected
+Protected visibility is like default visibility except that it
+indicates that references within the defining module bind to the
+definition in that module.  That is, the declared entity cannot be
+overridden by another module.
+
+@end table
+
+All visibilities are supported on many, but not all, ELF targets
+(supported when the assembler supports the @samp{.visibility}
+pseudo-op).  Default visibility is supported everywhere.  Hidden
+visibility is supported on Darwin targets.
+
+The visibility attribute should be applied only to declarations that
+would otherwise have external linkage.  The attribute should be applied
+consistently, so that the same entity should not be declared with
+different settings of the attribute.
+
+In C++, the visibility attribute applies to types as well as functions
+and objects, because in C++ types have linkage.  A class must not have
+greater visibility than its non-static data member types and bases,
+and class members default to the visibility of their class.  Also, a
+declaration without explicit visibility is limited to the visibility
+of its type.
+
+In C++, you can mark member functions and static member variables of a
+class with the visibility attribute.  This is useful if you know a
+particular method or static member variable should only be used from
+one shared object; then you can mark it hidden while the rest of the
+class has default visibility.  Care must be taken to avoid breaking
+the One Definition Rule; for example, it is usually not useful to mark
+an inline method as hidden without marking the whole class as hidden.
+
+A C++ namespace declaration can also have the visibility attribute.
+
+@smallexample
+namespace nspace1 __attribute__ ((visibility ("protected")))
+@{ /* @r{Do something.} */; @}
+@end smallexample
+
+This attribute applies only to the particular namespace body, not to
+other definitions of the same namespace; it is equivalent to using
+@samp{#pragma GCC visibility} before and after the namespace
+definition (@pxref{Visibility Pragmas}).
+
+In C++, if a template argument has limited visibility, this
+restriction is implicitly propagated to the template instantiation.
+Otherwise, template instantiations and specializations default to the
+visibility of their template.
+
+If both the template and enclosing class have explicit visibility, the
+visibility from the template is used.
+
+In C++, attribute visibility can also be
+applied to class, struct, union and enum types.  Unlike other type
+attributes, the attribute must appear between the initial keyword and
+the name of the type; it cannot appear after the body of the type.
+
+Note that the type visibility is applied to vague linkage entities
+associated with the class (vtable, typeinfo node, etc.).  In
+particular, if a class is thrown as an exception in one shared object
+and caught in another, the class must have default visibility.
+Otherwise the two shared objects are unable to use the same
+typeinfo node and exception handling will break.
+
+@cindex @code{warn_if_not_aligned} attribute
+@cindex alignment of structure fields
+@item warn_if_not_aligned (@var{alignment})
+This attribute applies to structure fields.
+
+It specifies an alignment threshold, measured in bytes, for the field.
+If the structure field is aligned below the threshold, a
+warning is issued.
+
+For example, the declaration:
+
+@smallexample
+struct foo
+@{
+  int i1;
+  int i2;
+  unsigned long long x __attribute__ ((warn_if_not_aligned (16)));
+@};
+@end smallexample
+
+@noindent
+causes the compiler to issue an warning on @code{struct foo}, like
+@samp{warning: alignment 8 of 'struct foo' is less than 16}.
+The compiler also issues a warning, like @samp{warning: 'x' offset
+8 in 'struct foo' isn't aligned to 16}, when the structure field has
+the misaligned offset:
+
+@smallexample
+struct __attribute__ ((aligned (16))) foo
+@{
+  int i1;
+  int i2;
+  unsigned long long x __attribute__ ((warn_if_not_aligned (16)));
+@};
+@end smallexample
+
+This attribute can also be applied to a typedef, in which case it applies
+to all structure fields of that type.
+
+For example, this code:
+
+@smallexample
+typedef unsigned long long __u64
+  [[gnu::aligned (4), gnu::warn_if_not_aligned (8)]];
+
+struct foo
+@{
+  int i1;
+  int i2;
+  __u64 x;
+@};
+@end smallexample
+
+@noindent
+has similar behavior to the first example above.
+
+This warning can be disabled by @option{-Wno-if-not-aligned}.
+
+@atindex @code{warn_unused_result}
+@cindex unused function result
+@cindex functions whose return value must be used
+@item warn_unused_result
+This attribute applies to functions.
+
+The @code{warn_unused_result} attribute causes a warning to be emitted
+if a caller of the function with this attribute does not use its
+return value.  This is useful for functions where not checking
+the result is either a security problem or always a bug, such as
+@code{realloc}.
+
+@smallexample
+[[gnu::warn_unused_result]] int fn (void);
+int foo (void)
+@{
+  if (fn () < 0) return -1;
+  fn ();
+  return 0;
+@}
+@end smallexample
+
+@noindent
+results in a warning on line 5.
+
+@atindex @code{weak}
+@cindex weak symbols
+@item weak
+This attribute applies to function and variable declarations.
+
+The @code{weak} attribute causes a declaration of an external symbol
+to be emitted as a weak symbol rather than a global.  This is primarily
+useful in defining library functions that can be overridden in user code,
+though it can also be used with non-function declarations.  The overriding
+symbol must have the same type as the weak symbol.  In addition, if it
+designates a variable it must also have the same size and alignment as
+the weak symbol.  Weak symbols are supported for ELF targets, and also
+for a.out targets when using the GNU assembler and linker.
+
+@atindex @code{weakref}
+@cindex weak symbols
+@item weakref
+@itemx weakref ("@var{target}")
+This attribute applies to function or variable declarations.
+
+The @code{weakref} attribute marks the declaration of the entity
+as a weak reference.
+Without arguments, it should be accompanied by an @code{alias} attribute
+naming the target symbol.  Alternatively, @var{target} may be given as
+an argument to @code{weakref} itself, naming the target definition of
+the alias.  The @var{target} must have the same type as the declaration.
+In addition, if it designates a variable it must also have the same size
+and alignment as the declaration.  In either form of the declaration
+@code{weakref} implicitly marks the declared symbol as @code{weak}.  Without
+a @var{target} given as an argument to @code{weakref} or to @code{alias},
+@code{weakref} is equivalent to @code{weak} (in that case the declaration
+may be @code{extern}).
+
+@smallexample
+/* Given the declaration: */
+extern int y (void);
+
+/* the following... */
+static int x (void) __attribute__ ((weakref ("y")));
+
+/* is equivalent to... */
+static int x (void) __attribute__ ((weakref, alias ("y")));
+
+/* or, alternatively, to... */
+static int x (void) __attribute__ ((weakref));
+static int x (void) __attribute__ ((alias ("y")));
+@end smallexample
+
+A weak reference is an alias that does not by itself require a
+definition to be given for the target symbol.  If the target symbol is
+only referenced through weak references, then it becomes a @code{weak}
+undefined symbol.  If it is directly referenced, however, then such
+strong references prevail, and a definition is required for the
+symbol, not necessarily in the same translation unit.
+
+The effect is equivalent to moving all references to the alias to a
+separate translation unit, renaming the alias to the aliased symbol,
+declaring it as weak, compiling the two separate translation units and
+performing a link with relocatable output (i.e.@: @code{ld -r}) on them.
+
+A declaration to which @code{weakref} is attached and that is associated
+with a named @code{target} must be @code{static}.
+
+@atindex @code{zero_call_used_regs}

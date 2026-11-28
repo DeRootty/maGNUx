@@ -1,0 +1,234 @@
+@c GCC 16.1.0 | BLOQUE 0033 | 03-09
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 9522-9751 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -Wzero-length-bounds
+Warn about accesses to elements of zero-length array members that might
+overlap other members of the same object.  Declaring interior zero-length
+arrays is discouraged because accesses to them are undefined.
+@xref{Zero Length}.
+
+For example, the first two stores in function @code{bad} are diagnosed
+because the array elements overlap the subsequent members @code{b} and
+@code{c}.  The third store is diagnosed by @option{-Warray-bounds}
+because it is beyond the bounds of the enclosing object.
+
+@smallexample
+struct X @{ int a[0]; int b, c; @};
+struct X x;
+
+void bad (void)
+@{
+  x.a[0] = 0;   // -Wzero-length-bounds
+  x.a[1] = 1;   // -Wzero-length-bounds
+  x.a[2] = 2;   // -Warray-bounds
+@}
+@end smallexample
+
+Option @option{-Wzero-length-bounds} is enabled by @option{-Warray-bounds}.
+
+@opindex Wno-div-by-zero
+@opindex Wdiv-by-zero
+@item -Wno-div-by-zero
+Do not warn about compile-time integer division by zero.  Floating-point
+division by zero is not warned about, as it can be a legitimate way of
+obtaining infinities and NaNs.
+
+@opindex Wsystem-headers
+@opindex Wno-system-headers
+@cindex warnings from system headers
+@cindex system headers, warnings from
+@item -Wsystem-headers
+Print warning messages for constructs found in system header files.
+Warnings from system headers are normally suppressed, on the assumption
+that they usually do not indicate real problems and would only make the
+compiler output harder to read.  Using this command-line option tells
+GCC to emit warnings from system headers as if they occurred in user
+code.  However, note that using @option{-Wall} in conjunction with this
+option does @emph{not} warn about unknown pragmas in system
+headers---for that, @option{-Wunknown-pragmas} must also be used.
+
+@opindex Wtautological-compare
+@opindex Wno-tautological-compare
+@item -Wtautological-compare
+Warn if a self-comparison always evaluates to true or false.  This
+warning detects various mistakes such as:
+@smallexample
+int i = 1;
+@dots{}
+if (i > i) @{ @dots{} @}
+@end smallexample
+
+This warning also warns about bitwise comparisons that always evaluate
+to true or false, for instance:
+@smallexample
+if ((a & 16) == 10) @{ @dots{} @}
+@end smallexample
+will always be false.
+
+This warning is enabled by @option{-Wall}.
+
+@opindex Wtrailing-whitespace
+@opindex Wno-trailing-whitespace
+@opindex Wtrailing-whitespace=
+@item -Wtrailing-whitespace
+@itemx -Wtrailing-whitespace=@var{kind}
+Warn about trailing whitespace at the end of lines, including inside of
+comments, but excluding trailing whitespace in raw string literals.
+@code{-Wtrailing-whitespace} is equivalent to
+@code{-Wtrailing-whitespace=blanks} and warns just about trailing space and
+horizontal tab characters.  @code{-Wtrailing-whitespace=any} warns about
+those or trailing form feed or vertical tab characters.
+@code{-Wno-trailing-whitespace} or @code{-Wtrailing-whitespace=none}
+disables the warning, which is the default.
+This is a coding style warning.
+
+@opindex Wleading-whitespace=
+@item -Wleading-whitespace=@var{kind}
+Warn about style issues in leading whitespace, but not about the amount of
+indentation.  Some projects use coding styles where only spaces are used
+for indentation, others use only tabs, others use zero or more tabs (for
+multiples of @code{-ftabstop=@var{n}}) followed by zero or fewer than @var{n}
+spaces.  No warning is emitted on lines which contain solely whitespace
+(although @code{-Wtrailing-whitespace=} warning might be emitted), no
+warnings are emitted inside of raw string literals.  Warnings are also emitted
+for leading whitespace inside of multi-line comments.
+@code{-Wleading-whitespace=spaces} warns about leading whitespace other than
+spaces for projects which want to indent just by spaces.
+@code{-Wleading-whitespace=tabs} warns about leading whitespace other than
+horizontal tabs for projects which want to indent just by horizontal tabs.
+@code{-Wleading-whitespace=blanks} warns about leading whitespace other than
+spaces and horizontal tabs, or about horizontal tab after a space in the
+leading whitespace, or about @var{n} or more consecutive spaces in leading
+whitespace (where @var{n} is argument of @code{-ftabstop=@var{n}}, 8 by
+default).
+@code{-Wleading-whitespace=none} disables the warning, which is the default.
+This is a coding style warning.
+
+@opindex Wtrampolines
+@opindex Wno-trampolines
+@item -Wtrampolines
+Warn about trampolines generated for pointers to nested functions.
+A trampoline is a small piece of data or code that is created at run
+time on the stack when the address of a nested function is taken, and is
+used to call the nested function indirectly.  For some targets, it is
+made up of data only and thus requires no special treatment.  But, for
+most targets, it is made up of code and thus requires the stack to be
+made executable in order for the program to work properly.
+
+@opindex Wfloat-equal
+@opindex Wno-float-equal
+@item -Wfloat-equal
+Warn if floating-point values are used in equality comparisons.
+
+The idea behind this is that sometimes it is convenient (for the
+programmer) to consider floating-point values as approximations to
+infinitely precise real numbers.  If you are doing this, then you need
+to compute (by analyzing the code, or in some other way) the maximum or
+likely maximum error that the computation introduces, and allow for it
+when performing comparisons (and when producing output, but that's a
+different problem).  In particular, instead of testing for equality, you
+should check to see whether the two values have ranges that overlap; and
+this is done with the relational operators, so equality comparisons are
+probably mistaken.
+
+@opindex Wtraditional
+@opindex Wno-traditional
+@item -Wtraditional @r{(C and Objective-C only)}
+Warn about certain constructs that behave differently in traditional and
+ISO C@.  Also warn about ISO C constructs that have no traditional C
+equivalent, and/or problematic constructs that should be avoided.
+
+@itemize @bullet
+@item
+Macro parameters that appear within string literals in the macro body.
+In traditional C macro replacement takes place within string literals,
+but in ISO C it does not.
+
+@item
+In traditional C, some preprocessor directives did not exist.
+Traditional preprocessors only considered a line to be a directive
+if the @samp{#} appeared in column 1 on the line.  Therefore
+@option{-Wtraditional} warns about directives that traditional C
+understands but ignores because the @samp{#} does not appear as the
+first character on the line.  It also suggests you hide directives like
+@code{#pragma} not understood by traditional C by indenting them.  Some
+traditional implementations do not recognize @code{#elif}, so this option
+suggests avoiding it altogether.
+
+@item
+A function-like macro that appears without arguments.
+
+@item
+The unary plus operator.
+
+@item
+The @samp{U} integer constant suffix, or the @samp{F} or @samp{L} floating-point
+constant suffixes.  (Traditional C does support the @samp{L} suffix on integer
+constants.)  Note, these suffixes appear in macros defined in the system
+headers of most modern systems, e.g.@: the @samp{_MIN}/@samp{_MAX} macros in @code{<limits.h>}.
+Use of these macros in user code might normally lead to spurious
+warnings, however GCC's integrated preprocessor has enough context to
+avoid warning in these cases.
+
+@item
+A function declared external in one block and then used after the end of
+the block.
+
+@item
+A @code{switch} statement has an operand of type @code{long}.
+
+@item
+A non-@code{static} function declaration follows a @code{static} one.
+This construct is not accepted by some traditional C compilers.
+
+@item
+The ISO type of an integer constant has a different width or
+signedness from its traditional type.  This warning is only issued if
+the base of the constant is ten.  I.e.@: hexadecimal or octal values, which
+typically represent bit patterns, are not warned about.
+
+@item
+Usage of ISO string concatenation is detected.
+
+@item
+Initialization of automatic aggregates.
+
+@item
+Identifier conflicts with labels.  Traditional C lacks a separate
+namespace for labels.
+
+@item
+Initialization of unions.  If the initializer is zero, the warning is
+omitted.  This is done under the assumption that the zero initializer in
+user code appears conditioned on e.g.@: @code{__STDC__} to avoid missing
+initializer warnings and relies on default initialization to zero in the
+traditional C case.
+
+@item
+Conversions by prototypes between fixed/floating-point values and vice
+versa.  The absence of these prototypes when compiling with traditional
+C causes serious problems.  This is a subset of the possible
+conversion warnings; for the full set use @option{-Wtraditional-conversion}.
+
+@item
+Use of ISO C style function definitions.  This warning intentionally is
+@emph{not} issued for prototype declarations or variadic functions
+because these ISO C features appear in your code when using
+libiberty's traditional C compatibility macros, @code{PARAMS} and
+@code{VPARAMS}.  This warning is also bypassed for nested functions
+because that feature is already a GCC extension and thus not relevant to
+traditional C compatibility.
+@end itemize
+
+@opindex Wtraditional-conversion
+@opindex Wno-traditional-conversion
+@item -Wtraditional-conversion @r{(C and Objective-C only)}
+Warn if a prototype causes a type conversion that is different from what
+would happen to the same argument in the absence of a prototype.  This
+includes conversions of fixed point to floating and vice versa, and
+conversions changing the width or signedness of a fixed-point argument
+except when the same as the default promotion.
+
+@opindex Wdeclaration-after-statement
+@opindex Wno-declaration-after-statement

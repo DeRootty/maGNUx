@@ -1,0 +1,279 @@
+@c GCC 16.1.0 | BLOQUE 0307 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 23478-23752 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+v16i8 __builtin_msa_sld_b (v16i8, v16i8, i32);
+v8i16 __builtin_msa_sld_h (v8i16, v8i16, i32);
+v4i32 __builtin_msa_sld_w (v4i32, v4i32, i32);
+v2i64 __builtin_msa_sld_d (v2i64, v2i64, i32);
+
+v16i8 __builtin_msa_sldi_b (v16i8, v16i8, imm0_15);
+v8i16 __builtin_msa_sldi_h (v8i16, v8i16, imm0_7);
+v4i32 __builtin_msa_sldi_w (v4i32, v4i32, imm0_3);
+v2i64 __builtin_msa_sldi_d (v2i64, v2i64, imm0_1);
+
+v16i8 __builtin_msa_sll_b (v16i8, v16i8);
+v8i16 __builtin_msa_sll_h (v8i16, v8i16);
+v4i32 __builtin_msa_sll_w (v4i32, v4i32);
+v2i64 __builtin_msa_sll_d (v2i64, v2i64);
+
+v16i8 __builtin_msa_slli_b (v16i8, imm0_7);
+v8i16 __builtin_msa_slli_h (v8i16, imm0_15);
+v4i32 __builtin_msa_slli_w (v4i32, imm0_31);
+v2i64 __builtin_msa_slli_d (v2i64, imm0_63);
+
+v16i8 __builtin_msa_splat_b (v16i8, i32);
+v8i16 __builtin_msa_splat_h (v8i16, i32);
+v4i32 __builtin_msa_splat_w (v4i32, i32);
+v2i64 __builtin_msa_splat_d (v2i64, i32);
+
+v16i8 __builtin_msa_splati_b (v16i8, imm0_15);
+v8i16 __builtin_msa_splati_h (v8i16, imm0_7);
+v4i32 __builtin_msa_splati_w (v4i32, imm0_3);
+v2i64 __builtin_msa_splati_d (v2i64, imm0_1);
+
+v16i8 __builtin_msa_sra_b (v16i8, v16i8);
+v8i16 __builtin_msa_sra_h (v8i16, v8i16);
+v4i32 __builtin_msa_sra_w (v4i32, v4i32);
+v2i64 __builtin_msa_sra_d (v2i64, v2i64);
+
+v16i8 __builtin_msa_srai_b (v16i8, imm0_7);
+v8i16 __builtin_msa_srai_h (v8i16, imm0_15);
+v4i32 __builtin_msa_srai_w (v4i32, imm0_31);
+v2i64 __builtin_msa_srai_d (v2i64, imm0_63);
+
+v16i8 __builtin_msa_srar_b (v16i8, v16i8);
+v8i16 __builtin_msa_srar_h (v8i16, v8i16);
+v4i32 __builtin_msa_srar_w (v4i32, v4i32);
+v2i64 __builtin_msa_srar_d (v2i64, v2i64);
+
+v16i8 __builtin_msa_srari_b (v16i8, imm0_7);
+v8i16 __builtin_msa_srari_h (v8i16, imm0_15);
+v4i32 __builtin_msa_srari_w (v4i32, imm0_31);
+v2i64 __builtin_msa_srari_d (v2i64, imm0_63);
+
+v16i8 __builtin_msa_srl_b (v16i8, v16i8);
+v8i16 __builtin_msa_srl_h (v8i16, v8i16);
+v4i32 __builtin_msa_srl_w (v4i32, v4i32);
+v2i64 __builtin_msa_srl_d (v2i64, v2i64);
+
+v16i8 __builtin_msa_srli_b (v16i8, imm0_7);
+v8i16 __builtin_msa_srli_h (v8i16, imm0_15);
+v4i32 __builtin_msa_srli_w (v4i32, imm0_31);
+v2i64 __builtin_msa_srli_d (v2i64, imm0_63);
+
+v16i8 __builtin_msa_srlr_b (v16i8, v16i8);
+v8i16 __builtin_msa_srlr_h (v8i16, v8i16);
+v4i32 __builtin_msa_srlr_w (v4i32, v4i32);
+v2i64 __builtin_msa_srlr_d (v2i64, v2i64);
+
+v16i8 __builtin_msa_srlri_b (v16i8, imm0_7);
+v8i16 __builtin_msa_srlri_h (v8i16, imm0_15);
+v4i32 __builtin_msa_srlri_w (v4i32, imm0_31);
+v2i64 __builtin_msa_srlri_d (v2i64, imm0_63);
+
+void __builtin_msa_st_b (v16i8, void *, imm_n512_511);
+void __builtin_msa_st_h (v8i16, void *, imm_n1024_1022);
+void __builtin_msa_st_w (v4i32, void *, imm_n2048_2044);
+void __builtin_msa_st_d (v2i64, void *, imm_n4096_4088);
+
+v16i8 __builtin_msa_subs_s_b (v16i8, v16i8);
+v8i16 __builtin_msa_subs_s_h (v8i16, v8i16);
+v4i32 __builtin_msa_subs_s_w (v4i32, v4i32);
+v2i64 __builtin_msa_subs_s_d (v2i64, v2i64);
+
+v16u8 __builtin_msa_subs_u_b (v16u8, v16u8);
+v8u16 __builtin_msa_subs_u_h (v8u16, v8u16);
+v4u32 __builtin_msa_subs_u_w (v4u32, v4u32);
+v2u64 __builtin_msa_subs_u_d (v2u64, v2u64);
+
+v16u8 __builtin_msa_subsus_u_b (v16u8, v16i8);
+v8u16 __builtin_msa_subsus_u_h (v8u16, v8i16);
+v4u32 __builtin_msa_subsus_u_w (v4u32, v4i32);
+v2u64 __builtin_msa_subsus_u_d (v2u64, v2i64);
+
+v16i8 __builtin_msa_subsuu_s_b (v16u8, v16u8);
+v8i16 __builtin_msa_subsuu_s_h (v8u16, v8u16);
+v4i32 __builtin_msa_subsuu_s_w (v4u32, v4u32);
+v2i64 __builtin_msa_subsuu_s_d (v2u64, v2u64);
+
+v16i8 __builtin_msa_subv_b (v16i8, v16i8);
+v8i16 __builtin_msa_subv_h (v8i16, v8i16);
+v4i32 __builtin_msa_subv_w (v4i32, v4i32);
+v2i64 __builtin_msa_subv_d (v2i64, v2i64);
+
+v16i8 __builtin_msa_subvi_b (v16i8, imm0_31);
+v8i16 __builtin_msa_subvi_h (v8i16, imm0_31);
+v4i32 __builtin_msa_subvi_w (v4i32, imm0_31);
+v2i64 __builtin_msa_subvi_d (v2i64, imm0_31);
+
+v16i8 __builtin_msa_vshf_b (v16i8, v16i8, v16i8);
+v8i16 __builtin_msa_vshf_h (v8i16, v8i16, v8i16);
+v4i32 __builtin_msa_vshf_w (v4i32, v4i32, v4i32);
+v2i64 __builtin_msa_vshf_d (v2i64, v2i64, v2i64);
+
+v16u8 __builtin_msa_xor_v (v16u8, v16u8);
+
+v16u8 __builtin_msa_xori_b (v16u8, imm0_255);
+@end smallexample
+
+@node Other MIPS Built-in Functions
+@subsection Other MIPS Built-in Functions
+
+GCC provides other MIPS-specific built-in functions:
+
+@table @code
+@item void __builtin_mips_cache (int @var{op}, const volatile void *@var{addr})
+Insert a @samp{cache} instruction with operands @var{op} and @var{addr}.
+GCC defines the preprocessor macro @code{___GCC_HAVE_BUILTIN_MIPS_CACHE}
+when this function is available.
+
+@item unsigned int __builtin_mips_get_fcsr (void)
+@itemx void __builtin_mips_set_fcsr (unsigned int @var{value})
+Get and set the contents of the floating-point control and status register
+(FPU control register 31).  These functions are only available in hard-float
+code but can be called in both MIPS16 and non-MIPS16 contexts.
+
+@code{__builtin_mips_set_fcsr} can be used to change any bit of the
+register except the condition codes, which GCC assumes are preserved.
+@end table
+
+@node MSP430 Built-in Functions
+@subsection MSP430 Built-in Functions
+
+GCC provides a couple of special builtin functions to aid in the
+writing of interrupt handlers in C.
+
+@table @code
+@item __bic_SR_register_on_exit (int @var{mask})
+This clears the indicated bits in the saved copy of the status register
+currently residing on the stack.  This only works inside interrupt
+handlers and the changes to the status register will only take affect
+once the handler returns.
+
+@item __bis_SR_register_on_exit (int @var{mask})
+This sets the indicated bits in the saved copy of the status register
+currently residing on the stack.  This only works inside interrupt
+handlers and the changes to the status register will only take affect
+once the handler returns.
+
+@item __delay_cycles (long long @var{cycles})
+This inserts an instruction sequence that takes exactly @var{cycles}
+cycles (between 0 and about 17E9) to complete.  The inserted sequence
+may use jumps, loops, or no-ops, and does not interfere with any other
+instructions.  Note that @var{cycles} must be a compile-time constant
+integer - that is, you must pass a number, not a variable that may be
+optimized to a constant later.  The number of cycles delayed by this
+builtin is exact.
+@end table
+
+@node NDS32 Built-in Functions
+@subsection NDS32 Built-in Functions
+
+These built-in functions are available for the NDS32 target:
+
+@defbuiltin{void __builtin_nds32_isync (int *@var{addr})}
+Insert an ISYNC instruction into the instruction stream where
+@var{addr} is an instruction address for serialization.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_nds32_isb (void)}
+Insert an ISB instruction into the instruction stream.
+@enddefbuiltin
+
+@defbuiltin{int __builtin_nds32_mfsr (int @var{sr})}
+Return the content of a system register which is mapped by @var{sr}.
+@enddefbuiltin
+
+@defbuiltin{int __builtin_nds32_mfusr (int @var{usr})}
+Return the content of a user space register which is mapped by @var{usr}.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_nds32_mtsr (int @var{value}, int @var{sr})}
+Move the @var{value} to a system register which is mapped by @var{sr}.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_nds32_mtusr (int @var{value}, int @var{usr})}
+Move the @var{value} to a user space register which is mapped by @var{usr}.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_nds32_setgie_en (void)}
+Enable global interrupt.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_nds32_setgie_dis (void)}
+Disable global interrupt.
+@enddefbuiltin
+
+@node Nvidia PTX Built-in Functions
+@subsection Nvidia PTX Built-in Functions
+
+These built-in functions are available for the Nvidia PTX target:
+
+@defbuiltin{{unsigned int} __builtin_nvptx_brev (unsigned int @var{x})}
+Reverse the bit order of a 32-bit unsigned integer.
+@enddefbuiltin
+
+@defbuiltin{{unsigned long long} __builtin_nvptx_brevll (unsigned long long @var{x})}
+Reverse the bit order of a 64-bit unsigned integer.
+@enddefbuiltin
+
+@node Basic PowerPC Built-in Functions
+@subsection Basic PowerPC Built-in Functions
+
+@menu
+* Basic PowerPC Built-in Functions Available on all Configurations::
+* Basic PowerPC Built-in Functions Available on ISA 2.05::
+* Basic PowerPC Built-in Functions Available on ISA 2.06::
+* Basic PowerPC Built-in Functions Available on ISA 2.07::
+* Basic PowerPC Built-in Functions Available on ISA 3.0::
+* Basic PowerPC Built-in Functions Available on ISA 3.1::
+@end menu
+
+This section describes PowerPC built-in functions that do not require
+the inclusion of any special header files to declare prototypes or
+provide macro definitions.  The sections that follow describe
+additional PowerPC built-in functions.
+
+@node Basic PowerPC Built-in Functions Available on all Configurations
+@subsubsection Basic PowerPC Built-in Functions Available on all Configurations
+
+@defbuiltin{void __builtin_cpu_init (void)}
+This function is a @code{nop} on the PowerPC platform and is included solely
+to maintain API compatibility with the x86 builtins.
+@enddefbuiltin
+
+@defbuiltin{int __builtin_cpu_is (const char *@var{cpuname})}
+This function returns a value of @code{1} if the run-time CPU is of type
+@var{cpuname} and returns @code{0} otherwise
+
+The @code{__builtin_cpu_is} function requires GLIBC 2.23 or newer
+which exports the hardware capability bits.  GCC defines the macro
+@code{__BUILTIN_CPU_SUPPORTS__} if the @code{__builtin_cpu_supports}
+built-in function is fully supported.
+
+If GCC was configured to use a GLIBC before 2.23, the built-in
+function @code{__builtin_cpu_is} always returns a 0 and the compiler
+issues a warning.
+
+The following CPU names can be detected:
+
+@table @samp
+@item power10
+IBM POWER10 Server CPU.
+@item power9
+IBM POWER9 Server CPU.
+@item power8
+IBM POWER8 Server CPU.
+@item power7
+IBM POWER7 Server CPU.
+@item power6x
+IBM POWER6 Server CPU (RAW mode).
+@item power6
+IBM POWER6 Server CPU (Architected mode).
+@item power5+
+IBM POWER5+ Server CPU.
+@item power5
+IBM POWER5 Server CPU.
+@item ppc970
+IBM 970 Server CPU (ie, Apple G5).

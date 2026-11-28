@@ -1,0 +1,235 @@
+@c GCC 16.1.0 | BLOQUE 0059 | 03-12
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 15053-15283 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -ftree-loop-distribute-patterns
+Perform loop distribution of patterns that can be code generated with
+calls to a library.  This flag is enabled by default at @option{-O2} and
+higher, and by @option{-fprofile-use} and @option{-fauto-profile}.
+
+This pass distributes the initialization loops and generates a call to
+memset zero.  For example, the loop
+@smallexample
+DO I = 1, N
+  A(I) = 0
+  B(I) = A(I) + I
+ENDDO
+@end smallexample
+is transformed to
+@smallexample
+DO I = 1, N
+   A(I) = 0
+ENDDO
+DO I = 1, N
+   B(I) = A(I) + I
+ENDDO
+@end smallexample
+and the initialization loop is transformed into a call to memset zero.
+
+@opindex floop-interchange
+@opindex fno-loop-interchange
+@item -floop-interchange
+Perform loop interchange outside of graphite.  This flag can improve cache
+performance on loop nest and allow further loop optimizations, like
+vectorization, to take place.  For example, the loop
+@smallexample
+for (int i = 0; i < N; i++)
+  for (int j = 0; j < N; j++)
+    for (int k = 0; k < N; k++)
+      c[i][j] = c[i][j] + a[i][k]*b[k][j];
+@end smallexample
+is transformed to
+@smallexample
+for (int i = 0; i < N; i++)
+  for (int k = 0; k < N; k++)
+    for (int j = 0; j < N; j++)
+      c[i][j] = c[i][j] + a[i][k]*b[k][j];
+@end smallexample
+This flag is enabled by default at @option{-O3}.
+It is also enabled by @option{-fprofile-use} and @option{-fauto-profile}.
+
+@opindex floop-unroll-and-jam
+@opindex fno-loop-unroll-and-jam
+@item -floop-unroll-and-jam
+Apply unroll and jam transformations on feasible loops.  In a loop
+nest this unrolls the outer loop by some factor and fuses the resulting
+multiple inner loops.  This flag is enabled by default at @option{-O3}.
+It is also enabled by @option{-fprofile-use} and @option{-fauto-profile}.
+
+@opindex ftree-loop-im
+@opindex fno-tree-loop-im
+@item -ftree-loop-im
+Perform loop invariant motion on trees.  This pass moves only invariants that
+are hard to handle at RTL level (function calls, operations that expand to
+nontrivial sequences of insns).  With @option{-funswitch-loops} it also moves
+operands of conditions that are invariant out of the loop, so that we can use
+just trivial invariantness analysis in loop unswitching.  The pass also includes
+store motion.
+
+@opindex ftree-loop-ivcanon
+@opindex fno-tree-loop-ivcanon
+@item -ftree-loop-ivcanon
+Create a canonical counter for number of iterations in loops for which
+determining number of iterations requires complicated analysis.  Later
+optimizations then may determine the number easily.  Useful especially
+in connection with unrolling.
+
+@opindex ftree-scev-cprop
+@opindex fno-tree-scev-cprop
+@item -ftree-scev-cprop
+Perform final value replacement.  If a variable is modified in a loop
+in such a way that its value when exiting the loop can be determined using
+only its initial value and the number of loop iterations, replace uses of
+the final value by such a computation, provided it is sufficiently cheap.
+This reduces data dependencies and may allow further simplifications.
+Enabled by default at @option{-O1} and higher.
+
+@opindex fivopts
+@opindex fno-ivopts
+@item -fivopts
+Perform induction variable optimizations (strength reduction, induction
+variable merging and induction variable elimination) on trees.
+Enabled by default at @option{-O1} and higher.
+
+@opindex ftree-parallelize-loops
+@opindex fno-tree-parallelize-loops
+@item -ftree-parallelize-loops
+@itemx -ftree-parallelize-loops=@var{n}
+Parallelize loops, i.e., split their iteration space to run in multiple threads.
+This is only possible for loops whose iterations are independent
+and can be arbitrarily reordered.  The optimization is only
+profitable on multiprocessor machines, for loops that are CPU-intensive,
+rather than constrained e.g.@: by memory bandwidth.  This option
+implies @option{-pthread}, and thus is only supported on targets
+that have support for @option{-pthread}.
+
+When a positive value @var{n} is specified, the number of threads is fixed
+at compile time and cannot be changed after compilation. The compiler
+generates ``#pragma omp parallel num_threads(@var{n})''.
+
+When used without @code{=@var{n}} (i.e., @option{-ftree-parallelize-loops}),
+the number of threads is determined at program execution time via the
+@env{OMP_NUM_THREADS} environment variable. If @env{OMP_NUM_THREADS} is not
+set, the OpenMP runtime automatically detects the number of available
+processors and uses that value. This enables creating binaries that
+adapt to different hardware configurations without recompilation.
+
+@opindex ftree-pta
+@opindex fno-tree-pta
+@item -ftree-pta
+Perform function-local points-to analysis on trees.  This flag is
+enabled by default at @option{-O1} and higher, except for @option{-Og}.
+
+@opindex ftree-sra
+@opindex fno-tree-sra
+@item -ftree-sra
+Perform scalar replacement of aggregates.  This pass replaces structure
+references with scalars to prevent committing structures to memory too
+early.  This flag is enabled by default at @option{-O1} and higher,
+except for @option{-Og}.
+
+@opindex fstore-merging
+@opindex fno-store-merging
+@item -fstore-merging
+Perform merging of narrow stores to consecutive memory addresses.  This pass
+merges contiguous stores of immediate values narrower than a word into fewer
+wider stores to reduce the number of instructions.  This is enabled by default
+at @option{-O2} and higher as well as @option{-Os}.
+
+@opindex ftree-ter
+@opindex fno-tree-ter
+@item -ftree-ter
+Perform temporary expression replacement during the SSA->normal phase.  Single
+use/single def temporaries are replaced at their use location with their
+defining expression.  This results in non-GIMPLE code, but gives the expanders
+much more complex trees to work on resulting in better RTL generation.  This is
+enabled by default at @option{-O1} and higher.
+
+@opindex ftree-slsr
+@opindex fno-tree-slsr
+@item -ftree-slsr
+Perform straight-line strength reduction on trees.  This recognizes related
+expressions involving multiplications and replaces them by less expensive
+calculations when possible.  This is enabled by default at @option{-O1} and
+higher.
+
+@opindex ftree-vectorize
+@opindex fno-tree-vectorize
+@item -ftree-vectorize
+Perform vectorization on trees. This flag enables @option{-ftree-loop-vectorize}
+and @option{-ftree-slp-vectorize} if not explicitly specified.
+
+@opindex ftree-loop-vectorize
+@opindex fno-tree-loop-vectorize
+@item -ftree-loop-vectorize
+Perform loop vectorization on trees. This flag is enabled by default at
+@option{-O2} and by @option{-ftree-vectorize}, @option{-fprofile-use},
+and @option{-fauto-profile}.
+
+@opindex ftree-slp-vectorize
+@opindex fno-tree-slp-vectorize
+@item -ftree-slp-vectorize
+Perform basic block vectorization on trees. This flag is enabled by default at
+@option{-O2} and by @option{-ftree-vectorize}, @option{-fprofile-use},
+and @option{-fauto-profile}.
+
+@opindex ftrivial-auto-var-init
+@item -ftrivial-auto-var-init=@var{choice}
+Initialize automatic variables or temporary objects with either a pattern or with
+zeroes to increase the security and predictability of a program by preventing
+uninitialized memory disclosure and use.
+GCC still considers an automatic variable that doesn't have an explicit
+initializer as uninitialized, @option{-Wuninitialized} and
+@option{-Wanalyzer-use-of-uninitialized-value} will still report
+warning messages on such automatic variables or temporary objects and the
+compiler will perform optimization as if the variable were uninitialized.
+With this option, GCC will also initialize any padding of automatic variables
+or temporary objects that have structure or union types to zeroes.
+However, the current implementation cannot initialize automatic variables
+whose initialization is bypassed through @code{switch} or @code{goto}
+statement.  Using @option{-Wtrivial-auto-var-init} to report all such cases.
+
+The three values of @var{choice} are:
+
+@itemize @bullet
+@item
+@samp{uninitialized} doesn't initialize any automatic variables.
+
+@item
+@samp{pattern} Initialize automatic variables with values which will likely
+transform logic bugs into crashes down the line, are easily recognized in a
+crash dump and without being values that programmers can rely on for useful
+program semantics.
+The current value is byte-repeatable pattern with byte "0xFE".
+The values used for pattern initialization might be changed in the future.
+
+@item
+@samp{zero} Initialize automatic variables with zeroes.
+@end itemize
+
+The default is @samp{uninitialized} except for C++26, in which case
+if @option{-ftrivial-auto-var-init=} is not specified at all automatic
+variables or temporary objects are zero initialized, but zero initialization
+of padding bits does not happen.
+
+Note that the initializer values, whether @samp{zero} or @samp{pattern},
+refer to data representation (in memory or machine registers), rather
+than to their interpretation as numerical values.  This distinction may
+be important in languages that support types with biases or implicit
+multipliers, and with such extensions as @samp{hardbool} (@pxref{Common
+Attributes}).  For example, a variable that uses 8 bits to represent
+(biased) quantities in the @code{range 160..400} will be initialized
+with the bit patterns @code{0x00} or @code{0xFE}, depending on
+@var{choice}, whether or not these representations stand for values in
+that range, and even if they do, the interpretation of the value held by
+the variable will depend on the bias.  A @samp{hardbool} variable that
+uses say @code{0x5A} and @code{0xA5} for @code{false} and @code{true},
+respectively, will trap with either @samp{choice} of trivial
+initializer, i.e., @samp{zero} initialization will not convert to the
+representation for @code{false}, even if it would for a @code{static}
+variable of the same type.  This means the initializer pattern doesn't
+generally depend on the type of the initialized variable.  One notable
+exception is that (non-hardened) boolean variables that fit in registers
+are initialized with @code{false} (zero), even when @samp{pattern} is
+requested.
+

@@ -1,0 +1,369 @@
+@c GCC 16.1.0 | BLOQUE 0099 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 22090-22454 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item truncate
+This is the mode used for floating-point calculations with
+truncating (i.e.@: round towards zero) rounding mode.  That includes
+conversion from floating point to integer.
+
+@item round-nearest
+This is the mode used for floating-point calculations with
+round-to-nearest-or-even rounding mode.
+
+@item int
+This is the mode used to perform integer calculations in the FPU, e.g.@:
+integer multiply, or integer multiply-and-accumulate.
+@end table
+
+The default is @option{-mfp-mode=caller}
+
+@opindex mmay-round-for-trunc
+@opindex mno-may-round-for-trunc
+@item -mmay-round-for-trunc
+@itemx -mno-may-round-for-trunc
+This option allows floating point to integer truncation to be replaced
+with rounding to save mode switching.  It's disabled by default.
+
+@opindex mfp-iarith
+@opindex mno-fp-iarith
+@item -mfp-iarith
+@itemx -mno-fp-iarith
+This option enables use of the floating-point unit for integer add and
+subtract.  It's disabled by default.
+
+@opindex mno-split-lohi
+@opindex msplit-lohi
+@opindex mno-post-inc
+@opindex mpost-inc
+@opindex mno-postmodify
+@opindex mpost-modify
+@item -msplit-lohi
+@itemx -mno-split-lohi
+@itemx -mpost-inc
+@itemx -mno-post-inc
+@itemx -mpost-modify
+@itemx -mno-post-modify
+Code generation tweaks that control, respectively, splitting of 32-bit
+loads, generation of post-increment addresses, and generation of
+post-modify addresses.  The defaults are @option{msplit-lohi},
+@option{-mpost-inc}, and @option{-mpost-modify}.
+
+@opindex mno-vect-double
+@opindex mvect-double
+@item -mno-vect-double
+Change the preferred SIMD mode to SImode.  The default is
+@option{-mvect-double}, which uses DImode as preferred SIMD mode.
+
+@opindex max-vect-align
+@item -max-vect-align=@var{num}
+The maximum alignment for SIMD vector mode types.
+@var{num} may be 4 or 8.  The default is 8.
+Note that this is an ABI change, even though many library function
+interfaces are unaffected if they don't use SIMD vector modes
+in places that affect size and/or alignment of relevant types.
+
+@opindex msplit-vecmove-early
+@opindex mno-split-vecmove-early
+@item -msplit-vecmove-early
+@itemx -mno-split-vecmove-early
+Split vector moves into single word moves before reload.  In theory this
+can give better register allocation, but so far the reverse seems to be
+generally the case.
+
+@opindex m1reg-
+@item -m1reg-@var{reg}
+Specify a register to hold the constant @minus{}1, which makes loading small negative
+constants and certain bitmasks faster.
+Allowable values for @var{reg} are @samp{r43} and @samp{r63},
+which specify use of that register as a fixed register,
+and @samp{none}, which means that no register is used for this
+purpose.  The default is @option{-m1reg-none}.
+
+@end table
+
+@node AMD GCN Options
+@subsection AMD GCN Options
+@cindex AMD GCN Options
+
+These options are defined specifically for the AMD GCN port.
+
+@table @gcctabopt
+
+@opindex march
+@opindex mtune
+@item -march=@var{gpu}
+@itemx -mtune=@var{gpu}
+Set architecture type or tuning for @var{gpu}. Supported values for @var{gpu}
+are
+
+@table @samp
+@item gfx900
+Compile for GCN5 Vega 10 devices (gfx900).
+
+@item gfx902
+Compile for GCN5 Vega gfx902 devices. (Experimental)
+
+@item gfx904
+Compile for GCN5 Vega gfx904 devices. (Experimental)
+
+@item gfx906
+Compile for GCN5 Vega 20 devices (gfx906).
+
+@item gfx908
+Compile for CDNA1 Instinct MI100 series devices (gfx908).
+
+@item gfx909
+Compile for GCN5 Vega gfx909 devices. (Experimental)
+
+@item gfx90a
+Compile for CDNA2 Instinct MI200 series devices (gfx90a).
+
+@item gfx90c
+Compile for GCN5 Vega 7 devices (gfx90c).
+
+@item gfx942
+Compile for CDNA3 Instinct MI300 series devices (gfx942). (Experimental)
+
+@item gfx950
+Compile for the CDNA3 gfx950 devices. (Experimental)
+
+@item gfx9-generic
+Compile generic code for Vega devices, executable on the following subset of
+GFX9 devices: gfx900, gfx902, gfx904, gfx906, gfx909 and gfx90c.
+
+@item gfx9-4-generic
+Compile generic code for CDNA3 devices, executable on the following subset of
+GFX9 devices: gfx942 and gfx950. (Experimental)
+
+@item gfx1030
+Compile for RDNA2 gfx1030 devices (GFX10 series).
+
+@item gfx1031
+Compile for RDNA2 gfx1031 devices (GFX10 series). (Experimental)
+
+@item gfx1032
+Compile for RDNA2 gfx1032 devices (GFX10 series). (Experimental)
+
+@item gfx1033
+Compile for RDNA2 gfx1033 devices (GFX10 series). (Experimental)
+
+@item gfx1034
+Compile for RDNA2 gfx1034 devices (GFX10 series). (Experimental)
+
+@item gfx1035
+Compile for RDNA2 gfx1035 devices (GFX10 series). (Experimental)
+
+@item gfx1036
+Compile for RDNA2 gfx1036 devices (GFX10 series).
+
+@item gfx10-3-generic
+Compile generic code for GFX10-3 devices, executable on gfx1030,
+gfx1031, gfx1032, gfx1033, gfx1034, gfx1035, and gfx1036.
+
+@item gfx1100
+Compile for RDNA3 gfx1100 devices (GFX11 series).
+
+@item gfx1101
+Compile for RDNA3 gfx1101 devices (GFX11 series). (Experimental)
+
+@item gfx1102
+Compile for RDNA3 gfx1102 devices (GFX11 series). (Experimental)
+
+@item gfx1103
+Compile for RDNA3 gfx1103 devices (GFX11 series).
+
+@item gfx1150
+Compile for RDNA3 gfx1150 devices (GFX11 series). (Experimental)
+
+@item gfx1151
+Compile for RDNA3 gfx1151 devices (GFX11 series). (Experimental)
+
+@item gfx1152
+Compile for RDNA3 gfx1152 devices (GFX11 series). (Experimental)
+
+@item gfx1153
+Compile for RDNA3 gfx1153 devices (GFX11 series). (Experimental)
+
+@item gfx11-generic
+Compile generic code for GFX11 devices, executable on gfx1100, gfx1101,
+gfx1102, gfx1103, gfx1150, gfx1151, gfx1152, and gfx1153.
+@end table
+
+@opindex mgang-private-size
+@item -mgang-private-size=@var{bytes}
+Set the amount of local data-share (LDS) memory to reserve for
+gang-private variables.  The default is 512.
+
+@opindex msram-ecc
+@item -msram-ecc=on
+@itemx -msram-ecc=off
+@itemx -msram-ecc=any
+Compile binaries suitable for devices with the SRAM-ECC feature enabled,
+disabled, or either mode.  This feature can be enabled per-process on some
+devices.  The compiled code must match the device mode. The default is
+@samp{any}, for devices that support it.
+
+@opindex mxnack
+@item -mxnack=on
+@itemx -mxnack=off
+@itemx -mxnack=any
+Compile binaries suitable for devices with the XNACK feature enabled, disabled,
+or either mode.  Some devices always require XNACK and some allow the user to
+configure XNACK.  The compiled code must match the device mode.
+The default is @samp{-mxnack=any} on devices that support Unified Shared
+Memory, and @samp{-mxnack=no} otherwise.
+
+@opindex Wopenacc-dims
+@opindex Wno-openacc-dims
+@item -Wopenacc-dims
+@itemx -Wno-openacc-dims
+Control warnings about invalid OpenACC dimensions.
+
+@end table
+
+@node ARC Options
+@subsection ARC Options
+@cindex ARC options
+
+The following options control the architecture variant for which code
+is being compiled:
+
+@c architecture variants
+@table @gcctabopt
+
+@opindex mbarrel-shifter
+@opindex mno-barrel-shifter
+@item -mbarrel-shifter
+Generate instructions supported by barrel shifter.  This is the default
+unless @option{-mcpu=ARC601} or @samp{-mcpu=ARCEM} is in effect.
+
+@opindex mjli-always
+@opindex mno-mjli-always
+@item -mjli-always
+Force to call a function using jli_s instruction.  This option is
+valid only for ARCv2 architecture.
+
+@opindex mcpu
+@item -mcpu=@var{cpu}
+Set architecture type, register usage, and instruction scheduling
+parameters for @var{cpu}.  There are also shortcut alias options
+available for backward compatibility and convenience.  Supported
+values for @var{cpu} are
+
+@table @samp
+@opindex mA6
+@opindex mARC600
+@item arc600
+Compile for ARC600.  Aliases: @option{-mA6}, @option{-mARC600}.
+
+@opindex mARC601
+@item arc601
+Compile for ARC601.  Alias: @option{-mARC601}.
+
+@opindex mA7
+@opindex mARC700
+@item arc700
+Compile for ARC700.  Aliases: @option{-mA7}, @option{-mARC700}.
+This is the default when configured with @option{--with-cpu=arc700}@.
+
+@item arcem
+Compile for ARC EM.
+
+@item archs
+Compile for ARC HS.
+
+@item em
+Compile for ARC EM CPU with no hardware extensions.
+
+@item em4
+Compile for ARC EM4 CPU.
+
+@item em4_dmips
+Compile for ARC EM4 DMIPS CPU.
+
+@item em4_fpus
+Compile for ARC EM4 DMIPS CPU with the single-precision floating-point
+extension.
+
+@item em4_fpuda
+Compile for ARC EM4 DMIPS CPU with single-precision floating-point and
+double assist instructions.
+
+@item hs
+Compile for ARC HS CPU with no hardware extensions except the atomic
+instructions.
+
+@item hs34
+Compile for ARC HS34 CPU.
+
+@item hs38
+Compile for ARC HS38 CPU.
+
+@item hs38_linux
+Compile for ARC HS38 CPU with all hardware extensions on.
+
+@item hs4x
+Compile for ARC HS4x CPU.
+
+@item hs4xd
+Compile for ARC HS4xD CPU.
+
+@item hs4x_rel31
+Compile for ARC HS4x CPU release 3.10a.
+
+@item arc600_norm
+Compile for ARC 600 CPU with @code{norm} instructions enabled.
+
+@item arc600_mul32x16
+Compile for ARC 600 CPU with @code{norm} and 32x16-bit multiply
+instructions enabled.
+
+@item arc600_mul64
+Compile for ARC 600 CPU with @code{norm} and @code{mul64}-family
+instructions enabled.
+
+@item arc601_norm
+Compile for ARC 601 CPU with @code{norm} instructions enabled.
+
+@item arc601_mul32x16
+Compile for ARC 601 CPU with @code{norm} and 32x16-bit multiply
+instructions enabled.
+
+@item arc601_mul64
+Compile for ARC 601 CPU with @code{norm} and @code{mul64}-family
+instructions enabled.
+
+@item nps400
+Compile for ARC 700 on NPS400 chip.
+
+@item em_mini
+Compile for ARC EM minimalist configuration featuring reduced register
+set.
+
+@end table
+
+@opindex mdpfp
+@opindex mno-dpfp
+@opindex mdpfp-compact
+@opindex mno-dpfp-compact
+@item -mdpfp
+@itemx -mdpfp-compact
+Generate double-precision FPX instructions, tuned for the compact
+implementation.
+
+@opindex mdpfp-fast
+@opindex mno-dpfp-fast
+@item -mdpfp-fast
+Generate double-precision FPX instructions, tuned for the fast
+implementation.
+
+@opindex mno-dpfp-lrsr
+@opindex mdpfp-lrsr
+@item -mno-dpfp-lrsr
+@itemx -mdpfp-lrsr
+Control whether @code{lr} and @code{sr} instructions use FPX extension
+aux registers.  This is enabled by default.
+
+@opindex mea
+@opindex mno-ea

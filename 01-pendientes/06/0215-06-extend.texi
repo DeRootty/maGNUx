@@ -1,0 +1,290 @@
+@c GCC 16.1.0 | BLOQUE 0215 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 10075-10360 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Pragmas
+@section Pragmas Accepted by GCC
+@cindex pragmas
+@cindex @code{#pragma}
+
+GCC supports several types of pragmas, primarily in order to compile
+code originally written for other compilers.  Note that in general
+we do not recommend the use of pragmas; attributes (@pxref{Attributes})
+are usually a better and more portable solution.
+
+The GNU C preprocessor recognizes several pragmas in addition to the
+compiler pragmas documented here.  Refer to the CPP manual for more
+information.
+
+GCC additionally recognizes OpenMP pragmas when the @option{-fopenmp}
+option is specified, and OpenACC pragmas when the @option{-fopenacc}
+option is specified.  @xref{OpenMP}, and @ref{OpenACC}.
+
+@menu
+* AArch64 Pragmas::
+* ARM Pragmas::
+* LoongArch Pragmas::
+* M32C Pragmas::
+* PRU Pragmas::
+* RS/6000 and PowerPC Pragmas::
+* S/390 Pragmas::
+* Darwin Pragmas::
+* Solaris Pragmas::
+* Symbol-Renaming Pragmas::
+* Structure-Layout Pragmas::
+* Weak Pragmas::
+* Diagnostic Pragmas::
+* Visibility Pragmas::
+* Push/Pop Macro Pragmas::
+* Function Specific Option Pragmas::
+* Loop-Specific Pragmas::
+@end menu
+
+@node AArch64 Pragmas
+@subsection AArch64 Pragmas
+
+The pragmas defined by the AArch64 target correspond to the AArch64
+target function attributes.  They can be specified as below:
+@smallexample
+#pragma GCC target("string")
+@end smallexample
+
+where @code{@var{string}} can be any string accepted as an AArch64 target
+attribute.  @xref{AArch64 Attributes}, for more details
+on the permissible values of @code{string}.
+
+@node ARM Pragmas
+@subsection ARM Pragmas
+
+The ARM target defines pragmas for controlling the default addition of
+@code{long_call} and @code{short_call} attributes to functions.
+@xref{Attributes}, for information about the effects of these
+attributes.
+
+@table @code
+@cindex pragma, long_calls
+@item long_calls
+Set all subsequent functions to have the @code{long_call} attribute.
+
+@cindex pragma, no_long_calls
+@item no_long_calls
+Set all subsequent functions to have the @code{short_call} attribute.
+
+@cindex pragma, long_calls_off
+@item long_calls_off
+Do not affect the @code{long_call} or @code{short_call} attributes of
+subsequent functions.
+@end table
+
+@node LoongArch Pragmas
+@subsection LoongArch Pragmas
+
+The list of attributes supported by pragma is the same as that of target
+function attributes.  @xref{LoongArch Attributes}.
+
+Example:
+
+@smallexample
+#pragma GCC target("strict-align")
+@end smallexample
+
+@node M32C Pragmas
+@subsection M32C Pragmas
+
+@table @code
+@cindex pragma, memregs
+@item GCC memregs @var{number}
+Overrides the command-line option @code{-memregs=} for the current
+file.  Use with care!  This pragma must be before any function in the
+file, and mixing different memregs values in different objects may
+make them incompatible.  This pragma is useful when a
+performance-critical function uses a memreg for temporary values,
+as it may allow you to reduce the number of memregs used.
+
+@cindex pragma, address
+@item ADDRESS @var{name} @var{address}
+For any declared symbols matching @var{name}, this does three things
+to that symbol: it forces the symbol to be located at the given
+address (a number), it forces the symbol to be volatile, and it
+changes the symbol's scope to be static.  This pragma exists for
+compatibility with other compilers, but note that the common
+@code{1234H} numeric syntax is not supported (use @code{0x1234}
+instead).  Example:
+
+@smallexample
+#pragma ADDRESS port3 0x103
+char port3;
+@end smallexample
+
+@end table
+
+@node PRU Pragmas
+@subsection PRU Pragmas
+
+@table @code
+
+@cindex pragma, ctable_entry
+@item ctable_entry @var{index} @var{constant_address}
+Specifies that the PRU CTABLE entry given by @var{index} has the value
+@var{constant_address}.  This enables GCC to emit LBCO/SBCO instructions
+when the load/store address is known and can be addressed with some CTABLE
+entry.  For example:
+
+@smallexample
+/* will compile to "sbco Rx, 2, 0x10, 4" */
+#pragma ctable_entry 2 0x4802a000
+*(unsigned int *)0x4802a010 = val;
+@end smallexample
+
+@end table
+
+@node RS/6000 and PowerPC Pragmas
+@subsection RS/6000 and PowerPC Pragmas
+
+The RS/6000 and PowerPC targets define one pragma for controlling
+whether or not the @code{longcall} attribute is added to function
+declarations by default.  This pragma overrides the @option{-mlongcall}
+option, but not the @code{longcall} and @code{shortcall} attributes.
+@xref{RS/6000 and PowerPC Options}, for more information about when long
+calls are and are not necessary.
+
+@table @code
+@cindex pragma, longcall
+@item longcall (1)
+Apply the @code{longcall} attribute to all subsequent function
+declarations.
+
+@item longcall (0)
+Do not apply the @code{longcall} attribute to subsequent function
+declarations.
+@end table
+
+@c Describe h8300 pragmas here.
+@c Describe sh pragmas here.
+@c Describe v850 pragmas here.
+
+@node S/390 Pragmas
+@subsection S/390 Pragmas
+
+The pragmas defined by the S/390 target correspond to the S/390
+target function attributes and some the additional options:
+
+@table @samp
+@item zvector
+@itemx no-zvector
+@end table
+
+Note that options of the pragma, unlike options of the target
+attribute, do change the value of preprocessor macros like
+@code{__VEC__}.  They can be specified as below:
+
+@smallexample
+#pragma GCC target("string[,string]...")
+#pragma GCC target("string"[,"string"]...)
+@end smallexample
+
+@node Darwin Pragmas
+@subsection Darwin Pragmas
+
+The following pragmas are available for all architectures running the
+Darwin operating system.  These are useful for compatibility with other
+macOS compilers.
+
+@table @code
+@cindex pragma, mark
+@item mark @var{tokens}@dots{}
+This pragma is accepted, but has no effect.
+
+@cindex pragma, options align
+@item options align=@var{alignment}
+This pragma sets the alignment of fields in structures.  The values of
+@var{alignment} may be @code{mac68k}, to emulate m68k alignment, or
+@code{power}, to emulate PowerPC alignment.  Uses of this pragma nest
+properly; to restore the previous setting, use @code{reset} for the
+@var{alignment}.
+
+@cindex pragma, segment
+@item segment @var{tokens}@dots{}
+This pragma is accepted, but has no effect.
+
+@cindex pragma, unused
+@item unused (@var{var} [, @var{var}]@dots{})
+This pragma declares variables to be possibly unused.  GCC does not
+produce warnings for the listed variables.  The effect is similar to
+that of the @code{unused} attribute, except that this pragma may appear
+anywhere within the variables' scopes.
+@end table
+
+@node Solaris Pragmas
+@subsection Solaris Pragmas
+
+The Solaris target supports @code{#pragma redefine_extname}
+(@pxref{Symbol-Renaming Pragmas}).  It also supports additional
+@code{#pragma} directives for compatibility with the system compiler.
+
+@table @code
+@cindex pragma, align
+@item align @var{alignment} (@var{variable} [, @var{variable}]...)
+
+Increase the minimum alignment of each @var{variable} to @var{alignment}.
+This is the same as GCC's @code{aligned} attribute (@pxref{Common
+Attributes}).  Macro expansion occurs on the arguments to this pragma
+when compiling C and Objective-C@.  It does not currently occur when
+compiling C++, but this is a bug which may be fixed in a future
+release.
+
+@cindex pragma, fini
+@item fini (@var{function} [, @var{function}]...)
+
+This pragma causes each listed @var{function} to be called after
+main, or during shared module unloading, by adding a call to the
+@code{.fini} section.
+
+@cindex pragma, init
+@item init (@var{function} [, @var{function}]...)
+
+This pragma causes each listed @var{function} to be called during
+initialization (before @code{main}) or during shared module loading, by
+adding a call to the @code{.init} section.
+
+@end table
+
+@node Symbol-Renaming Pragmas
+@subsection Symbol-Renaming Pragmas
+
+GCC supports a @code{#pragma} directive that changes the name used in
+assembly for a given declaration. While this pragma is supported on all
+platforms, it is intended primarily to provide compatibility with the
+Solaris system headers. This effect can also be achieved using the asm
+labels extension (@pxref{Asm Labels}).
+
+@table @code
+@cindex pragma, redefine_extname
+@item redefine_extname @var{oldname} @var{newname}
+
+This pragma gives the C function @var{oldname} the assembly symbol
+@var{newname}.  The preprocessor macro @code{__PRAGMA_REDEFINE_EXTNAME}
+is defined if this pragma is available (currently on all platforms).
+@end table
+
+This pragma and the @code{asm} labels extension interact in a complicated
+manner.  Here are some corner cases you may want to be aware of:
+
+@enumerate
+@item This pragma silently applies only to declarations with external
+linkage.  The @code{asm} label feature does not have this restriction.
+
+@item In C++, this pragma silently applies only to declarations with
+``C'' linkage.  Again, @code{asm} labels do not have this restriction.
+
+@item If either of the ways of changing the assembly name of a
+declaration are applied to a declaration whose assembly name has
+already been determined (either by a previous use of one of these
+features, or because the compiler needed the assembly name in order to
+generate code), and the new name is different, a warning issues and
+the name does not change.
+
+@item The @var{oldname} used by @code{#pragma redefine_extname} is
+always the C-language name.
+@end enumerate
+

@@ -1,0 +1,264 @@
+@c GCC 16.1.0 | BLOQUE 0008 | 03-05
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 3890-4149 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -fext-numeric-literals @r{(C++ and Objective-C++ only)}
+Accept imaginary, fixed-point, or machine-defined
+literal number suffixes as GNU extensions.
+When this option is turned off these suffixes are treated
+as C++11 user-defined literal numeric suffixes.
+This is on by default for all pre-C++11 dialects and all GNU dialects:
+@option{-std=c++98}, @option{-std=gnu++98}, @option{-std=gnu++11},
+@option{-std=gnu++14}.
+This option is off by default
+for ISO C++11 onwards (@option{-std=c++11}, ...).
+
+@opindex nostdinc++
+@item -nostdinc++
+Do not search for header files in the standard directories specific to
+C++, but do still search the other standard directories.  (This option
+is used when building the C++ library.)
+
+@opindex flang-info-include-translate
+@opindex fno-lang-info-include-translate
+@opindex flang-info-include-translate-not
+@opindex fno-lang-info-include-translate-not
+@item -flang-info-include-translate
+@itemx -flang-info-include-translate-not
+@itemx -flang-info-include-translate=@var{header}
+Inform of include translation events.  The first will note accepted
+include translations, the second will note declined include
+translations.  The @var{header} form will inform of include
+translations relating to that specific header.  If @var{header} is of
+the form @code{"user"} or @code{<system>} it will be resolved to a
+specific user or system header using the include path.
+
+@opindex flang-info-module-cmi
+@opindex fno-lang-info-module-cmi
+@item -flang-info-module-cmi
+@itemx -flang-info-module-cmi=@var{module}
+Inform of Compiled Module Interface pathnames.  The first will note
+all read CMI pathnames.  The @var{module} form will note reading a
+specific module's CMI.  @var{module} may be a named module or a
+header-unit (the latter indicated by either being a pathname containing
+directory separators or enclosed in @code{<>} or @code{""}).
+
+@opindex stdlib
+@item -stdlib=@var{libstdc++,libc++}
+When G++ is configured to support this option, it allows specification of
+alternate C++ runtime libraries.  Two options are available: @var{libstdc++}
+(the default, native C++ runtime for G++) and @var{libc++} which is the
+C++ runtime installed on some operating systems (e.g. Darwin versions from
+Darwin11 onwards).  The option switches G++ to use the headers from the
+specified library and to emit @code{-lstdc++} or @code{-lc++} respectively,
+when a C++ runtime is required for linking.
+@end table
+
+In addition, these warning options have meanings only for C++ programs:
+
+@table @gcctabopt
+@opindex Wabi-tag
+@opindex Wno-abi-tag
+@item -Wabi-tag @r{(C++ and Objective-C++ only)}
+Warn when a type with an ABI tag is used in a context that does not
+have that ABI tag.  See @ref{C++ Attributes} for more information
+about ABI tags.
+
+@opindex Wabbreviated-auto-in-template-arg
+@opindex Wno-abbreviated-auto-in-template-arg
+@item -Wno-abbreviated-auto-in-template-arg
+Disable the error for an @code{auto} placeholder type used within a
+template argument list to declare a C++20 abbreviated function
+template, e.g.
+
+@smallexample
+void f(S<auto>);
+@end smallexample
+
+This feature was proposed in the Concepts TS, but was not adopted into
+C++20; in the standard, a placeholder in a parameter declaration must
+appear as a decl-specifier.  The error can also be reduced to a
+warning by @option{-fpermissive} or
+@option{-Wno-error=abbreviated-auto-in-template-arg}.
+
+@opindex Wcomma-subscript
+@opindex Wno-comma-subscript
+@item -Wcomma-subscript @r{(C++ and Objective-C++ only)}
+Warn about uses of a comma expression within a subscripting expression.
+This usage was deprecated in C++20 and is going to be removed in C++23.
+However, a comma expression wrapped in @code{( )} is not deprecated.  Example:
+
+@smallexample
+@group
+void f(int *a, int b, int c) @{
+    a[b,c];     // deprecated in C++20, invalid in C++23
+    a[(b,c)];   // OK
+@}
+@end group
+@end smallexample
+
+In C++23 it is valid to have comma separated expressions in a subscript
+when an overloaded subscript operator is found and supports the right
+number and types of arguments.  G++ will accept the formerly valid syntax
+for code that is not valid in C++23 but used to be valid but deprecated
+in C++20 with a pedantic warning that can be disabled with
+@option{-Wno-comma-subscript}.
+
+Enabled by default with @option{-std=c++20} unless
+@option{-Wno-deprecated}, and after @option{-std=c++23} regardless of
+@option{-Wno-deprecated}.  Before @option{-std=c++20}, enabled with
+explicit @option{-Wdeprecated}.
+
+This warning is upgraded to an error by @option{-pedantic-errors} in
+C++23 mode or later.
+
+@opindex Wctad-maybe-unsupported
+@opindex Wno-ctad-maybe-unsupported
+@item -Wctad-maybe-unsupported @r{(C++ and Objective-C++ only)}
+Warn when performing class template argument deduction (CTAD) on a type with
+no explicitly written deduction guides.  This warning will point out cases
+where CTAD succeeded only because the compiler synthesized the implicit
+deduction guides, which might not be what the programmer intended.  Certain
+style guides allow CTAD only on types that specifically "opt-in"; i.e., on
+types that are designed to support CTAD.  This warning can be suppressed with
+the following pattern:
+
+@smallexample
+struct allow_ctad_t; // any name works
+template <typename T> struct S @{
+  S(T) @{ @}
+@};
+// Guide with incomplete parameter type will never be considered.
+S(allow_ctad_t) -> S<void>;
+@end smallexample
+
+@opindex Wctor-dtor-privacy
+@opindex Wno-ctor-dtor-privacy
+@item -Wctor-dtor-privacy @r{(C++ and Objective-C++ only)}
+Warn when a class seems unusable because all the constructors or
+destructors in that class are private, and it has neither friends nor
+public static member functions.  Also warn if there are no non-private
+methods, and there's at least one private member function that isn't
+a constructor or destructor.
+
+@opindex Wdangling-reference
+@opindex Wno-dangling-reference
+@item -Wdangling-reference @r{(C++ and Objective-C++ only)}
+Warn when a reference is bound to a temporary whose lifetime has ended.
+For example:
+
+@smallexample
+int n = 1;
+const int& r = std::max(n - 1, n + 1); // r is dangling
+@end smallexample
+
+In the example above, two temporaries are created, one for each
+argument, and a reference to one of the temporaries is returned.
+However, both temporaries are destroyed at the end of the full
+expression, so the reference @code{r} is dangling.  This warning
+also detects dangling references in member initializer lists:
+
+@smallexample
+const int& f(const int& i) @{ return i; @}
+struct S @{
+  const int &r; // r is dangling
+  S() : r(f(10)) @{ @}
+@};
+@end smallexample
+
+Member functions are checked as well, but only their object argument:
+
+@smallexample
+struct S @{
+   const S& self () @{ return *this; @}
+@};
+const S& s = S().self(); // s is dangling
+@end smallexample
+
+Certain functions are safe in this respect, for example @code{std::use_facet}:
+they take and return a reference, but they don't return one of its arguments,
+which can fool the warning.  Such functions can be excluded from the warning
+by wrapping them in a @code{#pragma}:
+
+@smallexample
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdangling-reference"
+const T& foo (const T&) @{ @dots{} @}
+#pragma GCC diagnostic pop
+@end smallexample
+
+The @code{#pragma} can also surround the class; in that case, the warning
+will be disabled for all the member functions.
+
+@option{-Wdangling-reference} also warns about code like
+
+@smallexample
+auto p = std::minmax(1, 2);
+@end smallexample
+
+where @code{std::minmax} returns @code{std::pair<const int&, const int&>}, and
+both references dangle after the end of the full expression that contains
+the call to @code{std::minmax}.
+
+The warning does not warn for @code{std::span}-like classes.  We consider
+classes of the form:
+
+@smallexample
+template<typename T>
+struct Span @{
+  T* data_;
+  std::size len_;
+@};
+@end smallexample
+
+as @code{std::span}-like; that is, the class is a non-union class
+that has a pointer data member and a trivial destructor.
+
+The warning can be disabled by using the @code{gnu::no_dangling} attribute
+(@pxref{C++ Attributes}).
+
+This warning is enabled by @option{-Wextra}.
+
+@opindex Wdelete-non-virtual-dtor
+@opindex Wno-delete-non-virtual-dtor
+@item -Wdelete-non-virtual-dtor @r{(C++ and Objective-C++ only)}
+Warn when @code{delete} is used to destroy an instance of a class that
+has virtual functions and non-virtual destructor. It is unsafe to delete
+an instance of a derived class through a pointer to a base class if the
+base class does not have a virtual destructor.  This warning is enabled
+by @option{-Wall}.
+
+@opindex Wdeprecated-copy
+@opindex Wno-deprecated-copy
+@item -Wdeprecated-copy @r{(C++ and Objective-C++ only)}
+Warn that the implicit declaration of a copy constructor or copy
+assignment operator is deprecated if the class has a user-provided
+copy constructor or copy assignment operator, in C++11 and up.  This
+warning is enabled by @option{-Wextra}.
+
+@opindex Wdeprecated-copy-dtor
+@opindex Wno-deprecated-copy-dtor
+@item -Wdeprecated-copy-dtor @r{(C++ and Objective-C++ only)}
+Similar to @option{-Wdeprecated-copy}, but also deprecate if the class has a
+user-provided destructor.
+
+@opindex Wdeprecated-enum-enum-conversion
+@opindex Wno-deprecated-enum-enum-conversion
+@item -Wno-deprecated-enum-enum-conversion @r{(C++ and Objective-C++ only)}
+Disable the warning about the case when the usual arithmetic conversions
+are applied on operands where one is of enumeration type and the other is
+of a different enumeration type.  This conversion was deprecated in C++20.
+For example:
+
+@smallexample
+enum E1 @{ e @};
+enum E2 @{ f @};
+int k = f - e;
+@end smallexample
+
+@option{-Wdeprecated-enum-enum-conversion} is enabled by default with
+@option{-std=c++20}.  In pre-C++20 dialects, this warning can be enabled
+by @option{-Wenum-conversion} or @option{-Wdeprecated}.
+
+@opindex Wdeprecated-enum-float-conversion
+@opindex Wno-deprecated-enum-float-conversion

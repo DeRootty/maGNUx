@@ -1,0 +1,257 @@
+@c GCC 16.1.0 | BLOQUE 0197 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 5061-5313 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item transparent_union
+This attribute applies to @code{union} type definitions.
+
+It indicates
+that any function parameter having that union type causes calls to that
+function to be treated in a special way.
+
+First, the argument corresponding to a transparent union type can be of
+any type in the union; no cast is required.  Also, if the union contains
+a pointer type, the corresponding argument can be a null pointer
+constant or a void pointer expression; and if the union contains a void
+pointer type, the corresponding argument can be any pointer expression.
+If the union member type is a pointer, qualifiers like @code{const} on
+the referenced type must be respected, just as with normal pointer
+conversions.
+
+Second, the argument is passed to the function using the calling
+conventions of the first member of the transparent union, not the calling
+conventions of the union itself.  All members of the union must have the
+same machine representation; this is necessary for this argument passing
+to work properly.
+
+Transparent unions are designed for library functions that have multiple
+interfaces for compatibility reasons.  For example, suppose the
+@code{wait} function must accept either a value of type @code{int *} to
+comply with POSIX, or a value of type @code{union wait *} to comply with
+the 4.1BSD interface.  If @code{wait}'s parameter were @code{void *},
+@code{wait} would accept both kinds of arguments, but it would also
+accept any other pointer type and this would make argument type checking
+less useful.  Instead, @code{<sys/wait.h>} might define the interface
+as follows:
+
+@smallexample
+typedef union __attribute__ ((__transparent_union__))
+  @{
+    int *__ip;
+    union wait *__up;
+  @} wait_status_ptr_t;
+
+pid_t wait (wait_status_ptr_t);
+@end smallexample
+
+@noindent
+This interface allows either @code{int *} or @code{union wait *}
+arguments to be passed, using the @code{int *} calling convention.
+The program can call @code{wait} with arguments of either type:
+
+@smallexample
+int w1 () @{ int w; return wait (&w); @}
+int w2 () @{ union wait w; return wait (&w); @}
+@end smallexample
+
+@noindent
+With this interface, @code{wait}'s implementation might look like this:
+
+@smallexample
+pid_t wait (wait_status_ptr_t p)
+@{
+  return waitpid (-1, p.__ip, 0);
+@}
+@end smallexample
+
+@atindex @code{unavailable}
+@item unavailable
+@itemx unavailable (@var{msg})
+The @code{unavailable} attribute can apply to functions, variables, types,
+or enumerators.
+
+It results in an error if the entity it applies to
+is used anywhere in the source file.  This is useful when identifying
+entities that have been removed from a particular
+variation of an
+interface.  Other than emitting an error rather than a warning, the
+@code{unavailable} attribute behaves in the same manner as
+@code{deprecated}.
+
+@atindex @code{uninitialized}
+@item uninitialized
+This variable applies to variables with automatic storage.
+
+It means that
+the variable should not be automatically initialized by the compiler when
+the option @code{-ftrivial-auto-var-init} presents.
+
+With the option @code{-ftrivial-auto-var-init}, all the automatic variables
+that do not have explicit initializers are initialized by the compiler.
+These additional compiler initializations might incur run-time overhead,
+sometimes dramatically.  This attribute can be used to mark some variables
+to be excluded from such automatic initialization in order to reduce runtime
+overhead.
+
+This attribute has no effect when the option @code{-ftrivial-auto-var-init}
+is not present.
+
+@atindex @code{unsequenced}
+@cindex functions that have no side effects
+@item unsequenced
+This type attribute can appear on both function declarations and declarations
+of function types.
+
+It is a GNU counterpart of the C23 @code{[[unsequenced]]}
+attribute, used to specify function pointers to effectless, idempotent,
+stateless and independent functions according to the C23 definition.
+
+Unlike the standard C23 attribute it can be also specified in attributes
+which appertain to function declarations and applies to the their function
+type even in that case.
+
+Unsequenced functions without pointer or reference arguments are similar
+to functions with the @code{const} attribute, except that @code{const}
+attribute also requires finiteness.  So, both functions with @code{const}
+and with @code{unsequenced} attributes can be optimized by common
+subexpression elimination, but only functions with @code{const}
+attribute can be optimized by dead code elimination if their result is
+unused or is used only by dead code.  Unsequenced functions without pointer
+or reference arguments with @code{void} return type are diagnosed because
+they can't store any results and don't have other observable side-effects
+either.
+
+Unsequenced functions with pointer or reference arguments can inspect
+objects through the passed pointers or references or references to pointers
+or can store additional results through those pointers or references or
+references to pointers.
+
+The @code{unsequenced} attribute imposes greater restrictions than
+the similar @code{reproducible} attribute and fewer restrictions than
+the @code{const} attribute, so during optimization @code{const} has
+precedence over @code{unsequenced} which has precedence over
+@code{reproducible}.
+
+@atindex @code{unused}
+@cindex unused entities
+@item unused
+This attribute can be attached to a function, variable, structure field,
+type declaration, or label.
+
+When applied to a function, variable, structure field, or label
+it means that the
+entity it applies to is meant to be possibly unused.  It suppresses GCC's
+normal warnings about unused entities.
+
+When attached to a type (including a @code{union} or a @code{struct}),
+this attribute means that variables of that type are meant to appear
+possibly unused.  GCC does not produce a warning for any variables of
+that type, even if the variable appears to do nothing.  This is often
+the case with lock or thread classes, which are usually defined and then
+not referenced, but contain constructors and destructors that have
+nontrivial bookkeeping functions.
+
+The @code{unused} label attribute
+is intended for program-generated code that may contain
+unused labels, but which is compiled with @option{-Wall}.  It is
+not normally appropriate to use it in human-written code, though it
+could be useful in cases where the code that jumps to the label is
+contained within an @code{#ifdef} conditional.
+
+@atindex @code{used}
+@cindex used entities
+@item used
+The @code{used} attribute applies to functions and variables.
+
+When attached to a function, this attribute means that code must be emitted
+for the function even if it appears that the function is not referenced.
+This is useful, for example, when the function is referenced only in
+inline assembly.
+
+When applied to a member function of a C++ class template, the
+attribute also means that the function is instantiated if the
+class itself is instantiated.
+
+This attribute, attached to a variable with static storage, means that
+the variable must be emitted even if it appears that the variable is not
+referenced.
+
+When applied to a static data member of a C++ class template, the
+attribute also means that the member is instantiated if the
+class itself is instantiated.
+
+@atindex @code{vector_size}
+@cindex vector types
+@item vector_size (@var{bytes})
+The @code{vector_size} attribute can be attached to type, variable,
+and function declarations.
+
+When attached to a variable declaration, it applies to the type of the
+variable; when attached to a function declaration, it applies to the
+return type.
+
+This attribute specifies the vector size for the type, measured in bytes.
+The type to which it applies is known as the @dfn{base type}.  The @var{bytes}
+argument must be a positive power-of-two multiple of the base type size.  For
+example, the following declarations using the legacy attribute syntax:
+
+@smallexample
+typedef __attribute__ ((vector_size (32))) int int_vec32_t ;
+typedef __attribute__ ((vector_size (32))) int* int_vec32_ptr_t;
+typedef __attribute__ ((vector_size (32))) int int_vec32_arr3_t[3];
+@end smallexample
+
+@noindent
+or, alternatively, these declarations using the standard syntax:
+
+@smallexample
+typedef int int_vec32_t [[gnu::vector_size (32)]];
+typedef int * int_vec32_ptr_t [[gnu::vector_size (32)]];
+typedef int int_vec32_arr3_t[3] [[gnu::vector_size (32)]];
+@end smallexample
+
+@noindent
+both
+define @code{int_vec32_t} to be a 32-byte vector type composed of @code{int}
+sized units.  With @code{int} having a size of 4 bytes, the type defines
+a vector of eight units, four bytes each.  The mode of variables of type
+@code{int_vec32_t} is @code{V8SI}.  @code{int_vec32_ptr_t} is then defined
+to be a pointer to such a vector type, and @code{int_vec32_arr3_t} to be
+an array of three such vectors.
+
+Here is an example involving a function declaration:
+@smallexample
+__attribute__ ((vector_size (16))) float get_flt_vec16 (void);
+@end smallexample
+
+@noindent
+This code declares @code{get_flt_vec16} to be a function returning
+a 16-byte vector with the base type @code{float}.
+
+This example:
+@smallexample
+int foo [[gnu::vector_size (16)]];
+@end smallexample
+
+@noindent
+causes the compiler to set the mode for @code{foo} to be 16 bytes,
+divided into @code{int} sized units.  Assuming a 32-bit @code{int},
+@code{foo}'s type is a vector of four units of four bytes each, and
+the corresponding mode of @code{foo} is @code{V4SI}.
+
+This attribute is only applicable to integral and floating scalar base types,
+although arrays, pointers, and function return values are allowed in
+conjunction with this construct.
+
+Aggregates with this attribute are invalid, even if they are of the same
+size as a corresponding scalar.  For example, the declaration:
+
+@smallexample
+struct S @{ int a; @};
+struct S  __attribute__ ((vector_size (16))) foo;
+@end smallexample
+
+@noindent
+is invalid even if the size of the structure is the same as the size of
+the @code{int}.
+

@@ -1,0 +1,240 @@
+@c GCC 16.1.0 | BLOQUE 0032 | 03-09
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 9286-9521 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -Warray-compare
+Warn about equality and relational comparisons between two operands of array
+type.  This comparison was deprecated in C++20.  For example:
+
+@smallexample
+int arr1[5];
+int arr2[5];
+bool same = arr1 == arr2;
+@end smallexample
+
+@option{-Warray-compare} is enabled by @option{-Wall}.
+
+@opindex Wno-array-parameter
+@opindex Warray-parameter
+@item -Warray-parameter
+@itemx -Warray-parameter=@var{n}
+Warn about redeclarations of functions involving parameters of array or
+pointer types of inconsistent kinds or forms, and enable the detection
+of out-of-bounds accesses to such parameters by warnings such as
+@option{-Warray-bounds}.
+
+If the first function declaration uses the array form for a parameter
+declaration, the bound specified
+in the array is assumed to be the minimum number of elements expected to
+be provided in calls to the function and the maximum number of elements
+accessed by it.  Failing to provide arguments of sufficient size or accessing
+more than the maximum number of elements may be diagnosed by warnings such
+as @option{-Warray-bounds} or @option{-Wstringop-overflow}.
+At level 1, the warning diagnoses inconsistencies
+involving array parameters declared using the @code{T[static N]} form.
+
+For example, the warning triggers for the second declaration of @code{f}
+because the first one with the keyword @code{static} specifies that
+the array argument must have at least four elements, while the second
+allows an array of any size to be passed to @code{f}.
+
+@smallexample
+void f (int[static 4]);
+void f (int[]);           // warning (inconsistent array form)
+
+void g (void)
+@{
+  int *p = (int *)malloc (1 * sizeof (int));
+  f (p);                  // warning (array too small)
+  @dots{}
+@}
+@end smallexample
+
+At level 2 the warning also triggers for redeclarations involving any other
+inconsistency in array or pointer argument forms denoting array sizes.
+Pointers and arrays of unspecified bound are considered equivalent and do
+not trigger a warning.
+
+@smallexample
+void g (int*);
+void g (int[]);     // no warning
+void g (int[8]);    // warning (inconsistent array bound)
+@end smallexample
+
+@option{-Warray-parameter=2} is included in @option{-Wall}.  The
+@option{-Wvla-parameter} option triggers warnings for similar inconsistencies
+involving Variable Length Array arguments.
+
+The short form of the option @option{-Warray-parameter} is equivalent to
+@option{-Warray-parameter=2}.  The negative form @option{-Wno-array-parameter}
+is equivalent to @option{-Warray-parameter=0}.
+
+@opindex Wattribute-alias
+@opindex Wno-attribute-alias
+@item -Wattribute-alias=@var{n}
+@itemx -Wno-attribute-alias
+Warn about declarations using the @code{alias} and similar attributes whose
+target is incompatible with the type of the alias.
+@xref{Common Attributes}.
+
+@table @gcctabopt
+@item -Wattribute-alias=1
+The default warning level of the @option{-Wattribute-alias} option diagnoses
+incompatibilities between the type of the alias declaration and that of its
+target.  Such incompatibilities are typically indicative of bugs.
+
+@item -Wattribute-alias=2
+
+At this level @option{-Wattribute-alias} also diagnoses cases where
+the attributes of the alias declaration are more restrictive than the
+attributes applied to its target.  These mismatches can potentially
+result in incorrect code generation.  In other cases they may be
+benign and could be resolved simply by adding the missing attribute to
+the target.  For comparison, see the @option{-Wmissing-attributes}
+option, which controls diagnostics when the alias declaration is less
+restrictive than the target, rather than more restrictive.
+
+Attributes considered include @code{alloc_align}, @code{alloc_size},
+@code{cold}, @code{const}, @code{hot}, @code{leaf}, @code{malloc},
+@code{nonnull}, @code{noreturn}, @code{nothrow}, @code{pure},
+@code{returns_nonnull}, and @code{returns_twice}.
+@end table
+
+@option{-Wattribute-alias} is equivalent to @option{-Wattribute-alias=1}.
+This is the default.  You can disable these warnings with either
+@option{-Wno-attribute-alias} or @option{-Wattribute-alias=0}.
+
+@opindex Wbidi-chars=
+@opindex Wbidi-chars
+@opindex Wno-bidi-chars
+@item -Wbidi-chars=@r{[}none@r{|}unpaired@r{|}any@r{|}ucn@r{]}
+Warn about possibly misleading UTF-8 bidirectional control characters in
+comments, string literals, character constants, and identifiers.  Such
+characters can change left-to-right writing direction into right-to-left
+(and vice versa), which can cause confusion between the logical order and
+visual order.  This may be dangerous; for instance, it may seem that a piece
+of code is not commented out, whereas it in fact is.
+
+There are three levels of warning supported by GCC@.  The default is
+@option{-Wbidi-chars=unpaired}, which warns about improperly terminated
+bidi contexts.  @option{-Wbidi-chars=none} turns the warning off.
+@option{-Wbidi-chars=any} warns about any use of bidirectional control
+characters.
+
+By default, this warning does not warn about UCNs.  It is, however, possible
+to turn on such checking by using @option{-Wbidi-chars=unpaired,ucn} or
+@option{-Wbidi-chars=any,ucn}.  Using @option{-Wbidi-chars=ucn} is valid,
+and is equivalent to @option{-Wbidi-chars=unpaired,ucn}, if no previous
+@option{-Wbidi-chars=any} was specified.
+
+@opindex Wno-bool-compare
+@opindex Wbool-compare
+@item -Wbool-compare
+Warn about boolean expression compared with an integer value different from
+@code{true}/@code{false}.  For instance, the following comparison is
+always false:
+@smallexample
+int n = 5;
+@dots{}
+if ((n > 1) == 2) @{ @dots{} @}
+@end smallexample
+This warning is enabled by @option{-Wall}.
+
+@opindex Wno-bool-operation
+@opindex Wbool-operation
+@item -Wbool-operation
+Warn about suspicious operations on expressions of a boolean type.  For
+instance, bitwise negation of a boolean is very likely a bug in the program.
+For C, this warning also warns about incrementing or decrementing a boolean,
+which rarely makes sense.  (In C++, decrementing a boolean is always invalid.
+Incrementing a boolean is invalid in C++17, and deprecated otherwise.)
+
+This warning is enabled by @option{-Wall}.
+
+@opindex Wno-duplicated-branches
+@opindex Wduplicated-branches
+@item -Wduplicated-branches
+Warn when an if-else has identical branches.  This warning detects cases like
+@smallexample
+if (p != NULL)
+  return 0;
+else
+  return 0;
+@end smallexample
+It doesn't warn when both branches contain just a null statement.  This warning
+also warn for conditional operators:
+@smallexample
+  int i = x ? *p : *p;
+@end smallexample
+
+@opindex Wno-duplicated-cond
+@opindex Wduplicated-cond
+@item -Wduplicated-cond
+Warn about duplicated conditions in an if-else-if chain.  For instance,
+warn for the following code:
+@smallexample
+if (p->q != NULL) @{ @dots{} @}
+else if (p->q != NULL) @{ @dots{} @}
+@end smallexample
+
+@opindex Wno-frame-address
+@opindex Wframe-address
+@item -Wframe-address
+Warn when the @samp{__builtin_frame_address} or @samp{__builtin_return_address}
+is called with an argument greater than 0.  Such calls may return indeterminate
+values or crash the program.  The warning is included in @option{-Wall}.
+
+@opindex Wno-discarded-qualifiers
+@opindex Wdiscarded-qualifiers
+@item -Wno-discarded-qualifiers @r{(C and Objective-C only)}
+Do not warn if type qualifiers on pointers are being discarded.
+Typically, the compiler warns if a @code{const char *} variable is
+passed to a function that takes a @code{char *} parameter.  This option
+can be used to suppress such a warning.
+
+@opindex Wno-discarded-array-qualifiers
+@opindex Wdiscarded-array-qualifiers
+@item -Wno-discarded-array-qualifiers @r{(C and Objective-C only)}
+Do not warn if type qualifiers on arrays which are pointer targets
+are being discarded.  Typically, the compiler warns if a
+@code{const int (*)[]} variable is passed to a function that
+takes a @code{int (*)[]} parameter.  This option can be used to
+suppress such a warning.
+
+@opindex Wno-incompatible-pointer-types
+@opindex Wincompatible-pointer-types
+@item -Wno-incompatible-pointer-types @r{(C and Objective-C only)}
+Do not warn when there is a conversion between pointers that have incompatible
+types.  This warning is for cases not covered by @option{-Wno-pointer-sign},
+which warns for pointer argument passing or assignment with different
+signedness.
+
+By default, in C99 and later dialects of C, GCC treats this issue as an
+error.  The error can be downgraded to a warning using
+@option{-fpermissive} (along with certain other errors), or for this
+error alone, with @option{-Wno-error=incompatible-pointer-types}.
+
+This warning is upgraded to an error by @option{-pedantic-errors}.
+
+@opindex Wno-int-conversion
+@opindex Wint-conversion
+@item -Wno-int-conversion @r{(C and Objective-C only)}
+Do not warn about incompatible integer to pointer and pointer to integer
+conversions.  This warning is about implicit conversions; for explicit
+conversions the warnings @option{-Wno-int-to-pointer-cast} and
+@option{-Wno-pointer-to-int-cast} may be used.
+
+By default, in C99 and later dialects of C, GCC treats this issue as an
+error.  The error can be downgraded to a warning using
+@option{-fpermissive} (along with certain other errors), or for this
+error alone, with @option{-Wno-error=int-conversion}.
+
+This warning is upgraded to an error by @option{-pedantic-errors}.
+
+@opindex Wzero-as-null-pointer-constant
+@opindex Wno-zero-as-null-pointer-constant
+@item -Wzero-as-null-pointer-constant
+Warn when a literal @samp{0} is used as null pointer constant.
+
+@opindex Wzero-length-bounds
+@opindex Wno-zero-length-bounds

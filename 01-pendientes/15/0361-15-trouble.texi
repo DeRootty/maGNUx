@@ -1,0 +1,228 @@
+@c GCC 16.1.0 | BLOQUE 0361 | 15
+@c Fuente: gcc/doc/trouble.texi | blob: ad13357c30a7540755cbde108c6aa2c121ea111a
+@c Lineas originales: 456-679 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Fixed Headers
+@section Fixed Header Files
+
+GCC needs to install corrected versions of some system header files.
+This is because most target systems have some header files that won't
+work with GCC unless they are changed.  Some have bugs, some are
+incompatible with ISO C, and some depend on special features of other
+compilers.
+
+Installing GCC automatically creates and installs the fixed header
+files, by running a program called @code{fixincludes}.  Normally, you
+don't need to pay attention to this.  But there are cases where it
+doesn't do the right thing automatically.
+
+@itemize @bullet
+@item
+If you update the system's header files, such as by installing a new
+system version, the fixed header files of GCC are not automatically
+updated.  They can be updated using the @command{mkheaders} script
+installed in
+@file{@var{libexecdir}/gcc/@var{target}/@var{version}/install-tools/}.
+
+@item
+On some systems, header file directories contain
+machine-specific symbolic links in certain places.  This makes it
+possible to share most of the header files among hosts running the
+same version of the system on different machine models.
+
+The programs that fix the header files do not understand this special
+way of using symbolic links; therefore, the directory of fixed header
+files is good only for the machine model used to build it.
+
+It is possible to make separate sets of fixed header files for the
+different machine models, and arrange a structure of symbolic links so
+as to use the proper set, but you'll have to do this by hand.
+@end itemize
+
+@node Standard Libraries
+@section Standard Libraries
+
+@opindex Wall
+GCC by itself attempts to provide the compiler part of a conforming
+implementation, but only a limited subset of the library part of such
+an implementation.
+@xref{Standards,,Language Standards Supported by GCC}, for details of
+what this means.  Beyond the limited library facilities described
+there, the rest of the C library is supplied by the vendor of
+the operating system.  If that C library doesn't conform to the C
+standards, then your programs might get warnings (especially when using
+@option{-Wall}) that you don't expect.
+
+For example, the @code{sprintf} function on SunOS 4.1.3 returns
+@code{char *} while the C standard says that @code{sprintf} returns an
+@code{int}.  The @code{fixincludes} program could make the prototype for
+this function match the Standard, but that would be wrong, since the
+function will still return @code{char *}.
+
+If you need a Standard compliant library, then you need to find one, as
+GCC does not provide one.  The GNU C library (called @code{glibc})
+provides ISO C, POSIX, BSD, SystemV and X/Open compatibility for
+GNU/Linux and HURD-based GNU systems; no recent version of it supports
+other systems, though some very old versions did.  Version 2.2 of the
+GNU C library includes nearly complete C99 support.  You could also ask
+your operating system vendor if newer libraries are available.
+
+@node Disappointments
+@section Disappointments and Misunderstandings
+
+These problems are perhaps regrettable, but we don't know any practical
+way around them.
+
+@itemize @bullet
+@item
+Certain local variables aren't recognized by debuggers when you compile
+with optimization.
+
+This occurs because sometimes GCC optimizes the variable out of
+existence.  There is no way to tell the debugger how to compute the
+value such a variable ``would have had'', and it is not clear that would
+be desirable anyway.  So GCC simply does not mention the eliminated
+variable when it writes debugging information.
+
+You have to expect a certain amount of disagreement between the
+executable and your source code, when you use optimization.
+
+@cindex conflicting types
+@cindex scope of declaration
+@item
+Users often think it is a bug when GCC reports an error for code
+like this:
+
+@smallexample
+int foo (struct mumble *);
+
+struct mumble @{ @dots{} @};
+
+int foo (struct mumble *x)
+@{ @dots{} @}
+@end smallexample
+
+This code really is erroneous, because the scope of @code{struct
+mumble} in the prototype is limited to the argument list containing it.
+It does not refer to the @code{struct mumble} defined with file scope
+immediately below---they are two unrelated types with similar names in
+different scopes.
+
+But in the definition of @code{foo}, the file-scope type is used
+because that is available to be inherited.  Thus, the definition and
+the prototype do not match, and you get an error.
+
+This behavior may seem silly, but it's what the ISO standard specifies.
+It is easy enough for you to make your code work by moving the
+definition of @code{struct mumble} above the prototype.  It's not worth
+being incompatible with ISO C just to avoid an error for the example
+shown above.
+
+@item
+Accesses to bit-fields even in volatile objects works by accessing larger
+objects, such as a byte or a word.  You cannot rely on what size of
+object is accessed in order to read or write the bit-field; it may even
+vary for a given bit-field according to the precise usage.
+
+If you care about controlling the amount of memory that is accessed, use
+volatile but do not use bit-fields.
+
+@item
+GCC comes with shell scripts to fix certain known problems in system
+header files.  They install corrected copies of various header files in
+a special directory where only GCC will normally look for them.  The
+scripts adapt to various systems by searching all the system header
+files for the problem cases that we know about.
+
+If new system header files are installed, nothing automatically arranges
+to update the corrected header files.  They can be updated using the
+@command{mkheaders} script installed in
+@file{@var{libexecdir}/gcc/@var{target}/@var{version}/install-tools/}.
+
+@cindex floating point precision
+@item
+On 68000 and x86 systems, for instance, you can get paradoxical results
+if you test the precise values of floating point numbers.  For example,
+you can find that a floating point value which is not a NaN is not equal
+to itself.  This results from the fact that the floating point registers
+hold a few more bits of precision than fit in a @code{double} in memory.
+Compiled code moves values between memory and floating point registers
+at its convenience, and moving them into memory truncates them.
+
+@opindex ffloat-store
+You can partially avoid this problem by using the @option{-ffloat-store}
+option (@pxref{Optimize Options}).
+
+@item
+On AIX and other platforms without weak symbol support, templates
+need to be instantiated explicitly and symbols for static members
+of templates will not be generated.
+
+@item
+On AIX, GCC scans object files and library archives for static
+constructors and destructors when linking an application before the
+linker prunes unreferenced symbols.  This is necessary to prevent the
+AIX linker from mistakenly assuming that static constructor or
+destructor are unused and removing them before the scanning can occur.
+All static constructors and destructors found will be referenced even
+though the modules in which they occur may not be used by the program.
+This may lead to both increased executable size and unexpected symbol
+references.
+@end itemize
+
+@node C++ Misunderstandings
+@section Common Misunderstandings with GNU C++
+
+@cindex misunderstandings in C++
+@cindex surprises in C++
+@cindex C++ misunderstandings
+C++ is a complex language and an evolving one, and its standard
+definition (the ISO C++ standard) was only recently completed.  As a
+result, your C++ compiler may occasionally surprise you, even when its
+behavior is correct.  This section discusses some areas that frequently
+give rise to questions of this sort.
+
+@menu
+* Static Definitions::  Static member declarations are not definitions
+* Name lookup::         Name lookup, templates, and accessing members of base classes
+* Temporaries::         Temporaries may vanish before you expect
+* Copy Assignment::     Copy Assignment operators copy virtual bases twice
+@end menu
+
+@node Static Definitions
+@subsection Declare @emph{and} Define Static Members
+
+@cindex C++ static data, declaring and defining
+@cindex static data in C++, declaring and defining
+@cindex declaring static data in C++
+@cindex defining static data in C++
+When a class has static data members, it is not enough to @emph{declare}
+the static member; you must also @emph{define} it.  For example:
+
+@smallexample
+class Foo
+@{
+  @dots{}
+  void method();
+  static int bar;
+@};
+@end smallexample
+
+This declaration only establishes that the class @code{Foo} has an
+@code{int} named @code{Foo::bar}, and a member function named
+@code{Foo::method}.  But you still need to define @emph{both}
+@code{method} and @code{bar} elsewhere.  According to the ISO
+standard, you must supply an initializer in one (and only one) source
+file, such as:
+
+@smallexample
+int Foo::bar = 0;
+@end smallexample
+
+Other C++ compilers may not correctly implement the standard behavior.
+As a result, when you switch to @command{g++} from one of these compilers,
+you may discover that a program that appeared to work correctly in fact
+does not conform to the standard: @command{g++} reports as undefined
+symbols any static data members that lack definitions.
+
+

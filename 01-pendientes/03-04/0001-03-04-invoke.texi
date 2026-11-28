@@ -1,0 +1,284 @@
+@c GCC 16.1.0 | BLOQUE 0001 | 03-04
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 2448-2727 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node C Dialect Options
+@section Options Controlling C Dialect
+@cindex dialect options
+@cindex language dialect options
+@cindex options, dialect
+
+The following options control the dialect of C (or languages derived
+from C, such as C++, Objective-C and Objective-C++) that the compiler
+accepts:
+
+@table @gcctabopt
+@cindex ANSI support
+@cindex ISO support
+@opindex ansi
+@item -ansi
+@itemx --ansi
+In C mode, this is equivalent to @option{-std=c90}. In C++ mode, it is
+equivalent to @option{-std=c++98}.
+
+@opindex std
+@item -std=
+Determine the language standard. @xref{Standards,,Language Standards
+Supported by GCC}, for details of these standard versions.  This option
+is currently only supported when compiling C or C++.
+
+The compiler can accept several base standards, such as @samp{c90} or
+@samp{c++98}, and GNU dialects of those standards, such as
+@samp{gnu90} or @samp{gnu++98}.  When a base standard is specified, the
+compiler accepts all programs following that standard plus those
+using GNU extensions that do not contradict it.  For example,
+@option{-std=c90} turns off certain features of GCC that are
+incompatible with ISO C90, such as the @code{asm} and @code{typeof}
+keywords, but not other GNU extensions that do not have a meaning in
+ISO C90, such as omitting the middle term of a @code{?:}
+expression. On the other hand, when a GNU dialect of a standard is
+specified, all features supported by the compiler are enabled, even when
+those features change the meaning of the base standard.  As a result, some
+strict-conforming programs may be rejected.  The particular standard
+is used by @option{-Wpedantic} to identify which features are GNU
+extensions given that version of the standard. For example
+@option{-std=gnu90 -Wpedantic} warns about C++ style @samp{//}
+comments, while @option{-std=gnu99 -Wpedantic} does not.
+
+A value for this option must be provided; possible values are
+
+@table @samp
+@item c90
+@itemx c89
+@itemx iso9899:1990
+Support all ISO C90 programs (certain GNU extensions that conflict
+with ISO C90 are disabled). Same as @option{-ansi} for C code.
+
+@item iso9899:199409
+ISO C90 as modified in amendment 1.
+
+@item c99
+@itemx c9x
+@itemx iso9899:1999
+@itemx iso9899:199x
+ISO C99.  This standard is substantially completely supported, modulo
+bugs and floating-point issues
+(mainly but not entirely relating to optional C99 features from
+Annexes F and G).  See
+@w{@uref{https://gcc.gnu.org/projects/c-status.html}} for more information.
+The names @samp{c9x} and @samp{iso9899:199x} are deprecated.
+
+@item c11
+@itemx c1x
+@itemx iso9899:2011
+ISO C11, the 2011 revision of the ISO C standard.  This standard is
+substantially completely supported, modulo bugs, floating-point issues
+(mainly but not entirely relating to optional C11 features from
+Annexes F and G) and the optional Annexes K (Bounds-checking
+interfaces) and L (Analyzability).  The name @samp{c1x} is deprecated.
+
+@item c17
+@itemx c18
+@itemx iso9899:2017
+@itemx iso9899:2018
+ISO C17, the 2017 revision of the ISO C standard
+(published in 2018).  This standard is
+same as C11 except for corrections of defects (all of which are also
+applied with @option{-std=c11}) and a new value of
+@code{__STDC_VERSION__}, and so is supported to the same extent as C11.
+
+@item c23
+@itemx c2x
+@itemx iso9899:2024
+ISO C23, the 2023 revision of the ISO C standard (published in 2024).  The
+name @samp{c2x} is deprecated.
+
+@item c2y
+The next version of the ISO C standard, still under development.  The
+support for this version is experimental and incomplete.
+
+@item gnu90
+@itemx gnu89
+GNU dialect of ISO C90 (including some C99 features).
+
+@item gnu99
+@itemx gnu9x
+GNU dialect of ISO C99.  The name @samp{gnu9x} is deprecated.
+
+@item gnu11
+@itemx gnu1x
+GNU dialect of ISO C11.
+The name @samp{gnu1x} is deprecated.
+
+@item gnu17
+@itemx gnu18
+GNU dialect of ISO C17.
+
+@item gnu23
+@itemx gnu2x
+GNU dialect of ISO C23.  This is the default for C code.  The name
+@samp{gnu2x} is deprecated.
+
+@item gnu2y
+The next version of the ISO C standard, still under development, plus
+GNU extensions.  The support for this version is experimental and
+incomplete.  The name @samp{gnu2x} is deprecated.
+
+@item c++98
+@itemx c++03
+The 1998 ISO C++ standard plus the 2003 technical corrigendum and some
+additional defect reports. Same as @option{-ansi} for C++ code.
+
+@item gnu++98
+@itemx gnu++03
+GNU dialect of @option{-std=c++98}.
+
+@item c++11
+@itemx c++0x
+The 2011 ISO C++ standard plus amendments.
+The name @samp{c++0x} is deprecated.
+
+@item gnu++11
+@itemx gnu++0x
+GNU dialect of @option{-std=c++11}.
+The name @samp{gnu++0x} is deprecated.
+
+@item c++14
+@itemx c++1y
+The 2014 ISO C++ standard plus amendments.
+The name @samp{c++1y} is deprecated.
+
+@item gnu++14
+@itemx gnu++1y
+GNU dialect of @option{-std=c++14}.
+The name @samp{gnu++1y} is deprecated.
+
+@item c++17
+@itemx c++1z
+The 2017 ISO C++ standard plus amendments.
+The name @samp{c++1z} is deprecated.
+
+@item gnu++17
+@itemx gnu++1z
+GNU dialect of @option{-std=c++17}.
+The name @samp{gnu++1z} is deprecated.
+
+@item c++20
+@itemx c++2a
+The 2020 ISO C++ standard plus amendments.
+C++20 modules support is still experimental and needs to be
+enabled with @option{-fmodules} option.
+The name @samp{c++2a} is deprecated.
+
+@item gnu++20
+@itemx gnu++2a
+GNU dialect of @option{-std=c++20}.
+This is the default for C++ code.
+C++20 modules support is still experimental and needs to be
+enabled with @option{-fmodules} option.
+The name @samp{gnu++2a} is deprecated.
+
+@item c++23
+@itemx c++2b
+The 2023 ISO C++ standard plus amendments (published in 2024).
+Support is experimental, and could change in incompatible ways in
+future releases.
+The name @samp{c++2b} is deprecated.
+
+@item gnu++23
+@itemx gnu++2b
+GNU dialect of @option{-std=c++23}.
+Support is experimental, and could change in incompatible ways in
+future releases.
+The name @samp{gnu++2b} is deprecated.
+
+@item c++2c
+@itemx c++26
+The next revision of the ISO C++ standard, planned for
+2026.  Support is highly experimental, and will almost certainly
+change in incompatible ways in future releases.
+
+@item gnu++2c
+@itemx gnu++26
+GNU dialect of @option{-std=c++2c}.  Support is highly experimental,
+and will almost certainly change in incompatible ways in future
+releases.
+@end table
+
+@opindex aux-info
+@item -aux-info @var{filename}
+Output to the given filename prototyped declarations for all functions
+declared and/or defined in a translation unit, including those in header
+files.  This option is silently ignored in any language other than C@.
+
+Besides declarations, the file indicates, in comments, the origin of
+each declaration (source file and line), whether the declaration was
+implicit, prototyped or unprototyped (@samp{I}, @samp{N} for new or
+@samp{O} for old, respectively, in the first character after the line
+number and the colon), and whether it came from a declaration or a
+definition (@samp{C} or @samp{F}, respectively, in the following
+character).  In the case of function definitions, a K&R-style list of
+arguments followed by their declarations is also provided, inside
+comments, after the declaration.
+
+@opindex fno-asm
+@opindex fasm
+@item -fno-asm
+Do not recognize @code{asm}, @code{inline} or @code{typeof} as a
+keyword, so that code can use these words as identifiers.  You can use
+the keywords @code{__asm__}, @code{__inline__} and @code{__typeof__}
+instead.  In C, @option{-ansi} implies @option{-fno-asm}.
+
+In C++, @code{inline} is a standard keyword and is not affected by
+this switch.  You may want to use the @option{-fno-gnu-keywords} flag
+instead, which disables @code{typeof} but not @code{asm} and
+@code{inline}.  In C99 mode (@option{-std=c99} or @option{-std=gnu99}),
+this switch only affects the @code{asm} and @code{typeof} keywords,
+since @code{inline} is a standard keyword in ISO C99.  In C23 mode
+(@option{-std=c23} or @option{-std=gnu23}), this switch only affects
+the @code{asm} keyword, since @code{typeof} is a standard keyword in
+ISO C23.
+
+@opindex fno-builtin
+@opindex fbuiltin
+@cindex built-in functions
+@item -fno-builtin
+@itemx -fno-builtin-@var{function}
+Don't recognize built-in functions that do not begin with
+@samp{__builtin_} as prefix.  @xref{Library Builtins},
+for details of the functions affected,
+including those which are not built-in functions when @option{-ansi} or
+@option{-std} options for strict ISO C conformance are used because they
+do not have an ISO standard meaning.
+
+GCC normally generates special code to handle certain built-in functions
+more efficiently; for instance, calls to @code{alloca} may become single
+instructions which adjust the stack directly, and calls to @code{memcpy}
+may become inline copy loops.  The resulting code is often both smaller
+and faster, but since the function calls no longer appear as such, you
+cannot set a breakpoint on those calls, nor can you change the behavior
+of the functions by linking with a different library.  In addition,
+when a function is recognized as a built-in function, GCC may use
+information about that function to warn about problems with calls to
+that function, or to generate more efficient code, even if the
+resulting code still contains calls to that function.  For example,
+warnings are given with @option{-Wformat} for bad calls to
+@code{printf} when @code{printf} is built in and @code{strlen} is
+known not to modify global memory.
+
+With the @option{-fno-builtin-@var{function}} option
+only the built-in function @var{function} is
+disabled.  @var{function} must not begin with @samp{__builtin_}.  If a
+function is named that is not built-in in this version of GCC, this
+option is ignored.  There is no corresponding
+@option{-fbuiltin-@var{function}} option; if you wish to enable
+built-in functions selectively when using @option{-fno-builtin} or
+@option{-ffreestanding}, you may define macros such as:
+
+@smallexample
+#define abs(n)          __builtin_abs ((n))
+#define strcpy(d, s)    __builtin_strcpy ((d), (s))
+@end smallexample
+
+@opindex fcond-mismatch
+@opindex fno-cond-mismatch

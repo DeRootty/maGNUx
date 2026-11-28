@@ -1,0 +1,332 @@
+@c GCC 16.1.0 | BLOQUE 0340 | 08
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 31002-31329 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@smallexample
+inline template class Foo<int>;
+static template class Foo<int>;
+@end smallexample
+@end enumerate
+
+@node Bound member functions
+@section Extracting the Function Pointer from a Bound Pointer to Member Function
+@cindex pmf
+@cindex pointer to member function
+@cindex bound pointer to member function
+
+In C++, pointer to member functions (PMFs) are implemented using a wide
+pointer of sorts to handle all the possible call mechanisms; the PMF
+needs to store information about how to adjust the @samp{this} pointer,
+and if the function pointed to is virtual, where to find the vtable, and
+where in the vtable to look for the member function.  If you are using
+PMFs in an inner loop, you should really reconsider that decision.  If
+that is not an option, you can extract the pointer to the function that
+would be called for a given object/PMF pair and call it directly inside
+the inner loop, to save a bit of time.
+
+Note that you still pay the penalty for the call through a
+function pointer; on most modern architectures, such a call defeats the
+branch prediction features of the CPU@.  This is also true of normal
+virtual function calls.
+
+The syntax for this extension is
+
+@smallexample
+extern A a;
+extern int (A::*fp)();
+typedef int (*fptr)(A *);
+
+fptr p = (fptr)(a.*fp);
+@end smallexample
+
+For PMF constants (i.e.@: expressions of the form @samp{&Klasse::Member}),
+no object is needed to obtain the address of the function.  They can be
+converted to function pointers directly:
+
+@smallexample
+fptr p1 = (fptr)(&A::foo);
+@end smallexample
+
+@opindex Wno-pmf-conversions
+You must specify @option{-Wno-pmf-conversions} to use this extension.
+
+@node C++ Attributes
+@section C++-Specific Variable, Function, and Type Attributes
+
+Some attributes only make sense for C++ programs.
+
+@table @code
+@atindex @code{abi_tag}
+@item abi_tag ("@var{tag}", ...)
+The @code{abi_tag} attribute can be applied to a function, variable, class
+declaration, or inline namespace.
+
+When applied to a function, variable, or class declaration, it
+modifies the mangled name of the entity to incorporate the tag name,
+in order to distinguish the function or class from an earlier version
+with a different ABI; perhaps the class has changed size, or the
+function has a different return type that is not encoded in the
+mangled name.
+
+When applied to an inline namespace, it does not
+affect the mangled name of the namespace; in this case it is only used
+for @option{-Wabi-tag} warnings and automatic tagging of functions and
+variables.  Tagging inline namespaces is generally preferable to
+tagging individual declarations, but the latter is sometimes
+necessary, such as when only certain members of a class need to be
+tagged.
+
+The argument can be a list of strings of arbitrary length.  The
+strings are sorted on output, so the order of the list is
+unimportant.
+
+A redeclaration of an entity must not add new ABI tags,
+since doing so would change the mangled name.
+
+The ABI tags apply to a name, so all instantiations and
+specializations of a template have the same tags.  The attribute is
+ignored if applied to an explicit specialization or instantiation.
+
+The @option{-Wabi-tag} flag enables a warning about a class which does
+not have all the ABI tags used by its subobjects and virtual functions;
+if your code
+needs to coexist with an earlier ABI, using this option can help
+to find all affected types that need to be tagged.
+
+When a type involving an ABI tag is used as the type of a variable or
+return type of a function where that tag is not already present in the
+signature of the function, the tag is automatically applied to the
+variable or function.  @option{-Wabi-tag} also warns about this
+situation; you can avoid this warning by explicitly tagging the
+variable or function or moving it into a tagged inline namespace.
+
+@atindex @code{init_priority}
+@item init_priority (@var{priority})
+This attribute applies to namespace-scope variables.
+
+In Standard C++, objects defined at namespace scope are guaranteed to be
+initialized in an order in strict accordance with that of their definitions
+@emph{in a given translation unit}.  No guarantee is made for initializations
+across translation units.  However, GNU C++ allows you to control the
+order of initialization of objects defined at namespace scope with the
+@code{init_priority} attribute by specifying a relative @var{priority},
+with the same meaning as for the @code{constructor} attribute
+(@pxref{Common Attributes}).
+
+In the following example, @code{A} is normally created before
+@code{B}, but the @code{init_priority} attribute reverses that order:
+
+@smallexample
+Some_Class  A  __attribute__ ((init_priority (2000)));
+Some_Class  B  __attribute__ ((init_priority (543)));
+@end smallexample
+
+@noindent
+Note that the particular values of @var{priority} do not matter; only their
+relative ordering.
+
+As with the @var{priority} argument to the @code{constructor} and
+@code{destructor} attributes, a few targets do not support the
+@code{init_priority} attribute.  In that case the attribute is rejected
+with an error rather than ignored.
+
+@atindex @code{no_dangling}
+@item no_dangling
+
+This attribute can be applied to a class type, function, or member
+function.
+
+Dangling references to classes marked with this attribute
+have the @option{-Wdangling-reference} diagnostic suppressed; so
+do references returned from the @code{gnu::no_dangling}-marked
+functions.  For example:
+
+@smallexample
+class [[gnu::no_dangling]] S @{ @dots{} @};
+@end smallexample
+
+@noindent
+Or:
+
+@smallexample
+class A @{
+  int *p;
+  [[gnu::no_dangling]] int &foo() @{ return *p; @}
+@};
+
+[[gnu::no_dangling]] const int &
+foo (const int &i)
+@{
+  @dots{}
+@}
+@end smallexample
+
+This attribute takes an optional argument, which must be an expression that
+evaluates to true or false:
+
+@smallexample
+template <typename T>
+struct [[gnu::no_dangling(std::is_reference_v<T>)]] S @{
+  @dots{}
+@};
+@end smallexample
+
+@noindent
+Or:
+
+@smallexample
+template <typename T>
+[[gnu::no_dangling(std::is_lvalue_reference_v<T>)]]
+decltype(auto) foo(T&& t) @{
+  @dots{}
+@};
+@end smallexample
+
+@atindex @code{warn_unused}
+@item warn_unused
+This attribute applies to types.
+
+For C++ types with non-trivial constructors and/or destructors, it is
+impossible for the compiler to determine whether a variable of this
+type is truly unused if it is not referenced. This type attribute
+informs the compiler that variables of this type should be warned
+about if they appear to be unused, just like variables of fundamental
+types.
+
+This attribute is appropriate for types which just represent a value,
+such as @code{std::string}; it is not appropriate for types which
+control a resource, such as @code{std::lock_guard}.
+
+This attribute is also accepted in C, but it is unnecessary because C
+does not have constructors or destructors.
+
+@atindex @code{cold}
+@atindex @code{hot}
+@item cold
+@itemx hot
+In addition to functions and labels, GNU C++ allows the @code{cold} and
+@code{hot} attributes to be used on C++ classes, structs, or unions.
+
+Applying
+these attributes on a type has the effect of propagating it to every
+member function of the type, including implicit special member
+functions.  @xref{Common Attributes}.
+
+@end table
+
+@node Function Multiversioning
+@section Function Multiversioning
+@cindex function versions
+
+Function multiversioning is a mechanism that enables compiling multiple
+versions of a function, each specialized for different combinations of
+architecture extensions.  Additionally, the compiler generates a resolver that
+the dynamic linker uses to detect architecture support and choose the
+appropriate version at runtime.
+
+Function multiversioning relies on the indirect function extension to the ELF
+standard, and therefore Binutils version 2.20.1 or higher and GNU C Library
+version 2.11.1 are required to use this feature.
+
+There are two versions of function multiversioning supported by GCC.
+
+For targets supporting the @code{target_version} attribute
+(AArch64, LoongArch, and RISC-V),
+when compiling for C or C++, a function version set can be defined by a
+combination of function definitions with @code{target_version} and
+@code{target_clones} attributes, across translation units.
+
+For example:
+
+@smallexample
+// fmv.h:
+int foo ();
+int foo [[gnu::target_clones("sve", "sve2")]] ();
+int foo [[gnu::target_version("dotprod;priority=1")]] ();
+
+// fmv1.cc
+#include "fmv.h"
+
+int foo ()
+@{
+  // The default version of foo.
+  return 0;
+@}
+
+// fmv2.cc:
+#include "fmv.h"
+
+int foo [[gnu::target_clones("sve", "sve2")]] ()
+@{
+  // foo versions for sve and sve2
+  return 1;
+@}
+
+int foo [[gnu::target_version("dotprod")]] ()
+@{
+  // foo version for dotprod extension
+  return 2;
+@}
+
+// main.cc
+#include "fmv.h"
+
+int main ()
+@{
+  int (*p)() = &foo;
+  assert ((*p) () == foo ());
+  return 0;
+@}
+@end smallexample
+
+This example results in 4 versions of the foo function being generated, and
+a resolver which is used by the dynamic linker to choose the correct version.
+
+For the AArch64 target GCC implements function multiversioning, with the
+semantics and version strings as specified in the
+@ref{Arm C Language Extensions (ACLE)}.
+
+For targets that support multiversioning with the @code{target} attribute
+(x86) a multiversioned function can be defined with either multiple function
+definitions with the @code{target} attribute (in C++) within a translation unit,
+or a single definition with the @code{target_clones} attribute.
+
+Here is an example.
+
+@smallexample
+__attribute__ ((target ("default")))
+int foo ()
+@{
+  // The default version of foo.
+  return 0;
+@}
+
+__attribute__ ((target ("sse4.2")))
+int foo ()
+@{
+  // foo version for SSE4.2
+  return 1;
+@}
+
+__attribute__ ((target ("arch=atom")))
+int foo ()
+@{
+  // foo version for the Intel ATOM processor
+  return 2;
+@}
+
+__attribute__ ((target ("arch=amdfam10")))
+int foo ()
+@{
+  // foo version for the AMD Family 0x10 processors.
+  return 3;
+@}
+
+int main ()
+@{
+  int (*p)() = &foo;
+  assert ((*p) () == foo ());
+  return 0;
+@}
+@end smallexample
+

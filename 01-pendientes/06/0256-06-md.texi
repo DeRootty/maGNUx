@@ -1,0 +1,8 @@
+@c GCC 16.1.0 | BLOQUE 0256 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 4144-4147 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+@item Yz
+First SSE register (@code{%xmm0}).
+

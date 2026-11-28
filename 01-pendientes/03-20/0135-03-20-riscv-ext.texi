@@ -1,0 +1,249 @@
+@c GCC 16.1.0 | BLOQUE 0135 | 03-20
+@c Fuente: gcc/doc/riscv-ext.texi | blob: 36b4dff31ff4d58e45aa3a1a9730d3fd5a75ba7e
+@c Lineas originales: 509-753 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item @samp{smepmp}
+@tab 1.0
+@tab PMP enhancements for memory access and execution prevention on machine mode
+
+@item @samp{smmpm}
+@tab 1.0
+@tab Supervisor-mode pointer masking extension
+
+@item @samp{smnpm}
+@tab 1.0
+@tab Supervisor-mode pointer masking extension
+
+@item @samp{smrnmi}
+@tab 1.0
+@tab Resumable non-maskable interrupts
+
+@item @samp{smstateen}
+@tab 1.0
+@tab State enable extension
+
+@item @samp{smdbltrp}
+@tab 1.0
+@tab Double trap extensions
+
+@item @samp{ssaia}
+@tab 1.0
+@tab Advanced interrupt architecture extension for supervisor mode
+
+@item @samp{ssccptr}
+@tab 1.0
+@tab Main memory supports page table reads
+
+@item @samp{sscofpmf}
+@tab 1.0
+@tab Count overflow and filtering extension
+
+@item @samp{sscounterenw}
+@tab 1.0
+@tab Support writeable enables for any supported counter
+
+@item @samp{sscsrind}
+@tab 1.0
+@tab Supervisor-mode indirect CSR access
+
+@item @samp{ssnpm}
+@tab 1.0
+@tab Supervisor-mode pointer masking extension
+
+@item @samp{sspm}
+@tab 1.0
+@tab Supervisor-mode pointer masking extension
+
+@item @samp{ssstateen}
+@tab 1.0
+@tab Supervisor-mode state-enable extension
+
+@item @samp{sstc}
+@tab 1.0
+@tab Supervisor-mode timer interrupts extension
+
+@item @samp{sstvala}
+@tab 1.0
+@tab Stval provides all needed values
+
+@item @samp{sstvecd}
+@tab 1.0
+@tab Stvec supports direct mode
+
+@item @samp{ssstrict}
+@tab 1.0
+@tab Unimplemented reserved encodings raise illegal instruction exceptions and no non-conforming extensions are present
+
+@item @samp{ssdbltrp}
+@tab 1.0
+@tab Double trap extensions
+
+@item @samp{ssu64xl}
+@tab 1.0
+@tab UXLEN=64 must be supported
+
+@item @samp{supm}
+@tab 1.0
+@tab User-mode pointer masking extension
+
+@item @samp{svinval}
+@tab 1.0
+@tab Fine-grained address-translation cache invalidation extension
+
+@item @samp{svnapot}
+@tab 1.0
+@tab NAPOT translation contiguity extension
+
+@item @samp{svpbmt}
+@tab 1.0
+@tab Page-based memory types extension
+
+@item @samp{svvptc}
+@tab 1.0
+@tab Extension for obviating memory-management instructions after marking PTEs valid
+
+@item @samp{svadu}
+@tab 1.0
+@tab Hardware updating of A/D bits extension
+
+@item @samp{svade}
+@tab 1.0
+@tab Cause exception when hardware updating of A/D bits is disabled
+
+@item @samp{svbare}
+@tab 1.0
+@tab Satp mode bare is supported
+
+@item @samp{xcvalu}
+@tab 1.0
+@tab Core-V miscellaneous ALU extension
+
+@item @samp{xcvbi}
+@tab 1.0
+@tab Core-V immediate branch extension
+
+@item @samp{xcvelw}
+@tab 1.0
+@tab Core-V event load word extension
+
+@item @samp{xcvmac}
+@tab 1.0
+@tab Core-V multiply-accumulate extension
+
+@item @samp{xcvsimd}
+@tab 1.0
+@tab Core-V SIMD extension
+
+@item @samp{xsfcease}
+@tab 1.0
+@tab SiFive CEASE instruction extension
+
+@item @samp{xsfvcp}
+@tab 1.0
+@tab SiFive VCIX vector coprocessor extension
+
+@item @samp{xsfvfnrclipxfqf}
+@tab 1.0
+@tab SiFive FP32-to-int8 ranged clip instructions
+
+@item @samp{xsfvqmaccdod}
+@tab 1.0
+@tab SiFive int8 matrix multiplication extension
+
+@item @samp{xsfvqmaccqoq}
+@tab 1.0
+@tab SiFive int8 matrix multiplication extension
+
+@item @samp{xtheadba}
+@tab 1.0
+@tab T-head address calculation extension
+
+@item @samp{xtheadbb}
+@tab 1.0
+@tab T-head basic bit-manipulation extension
+
+@item @samp{xtheadbs}
+@tab 1.0
+@tab T-head single-bit instructions extension
+
+@item @samp{xtheadcmo}
+@tab 1.0
+@tab T-head cache management operations extension
+
+@item @samp{xtheadcondmov}
+@tab 1.0
+@tab T-head conditional move extension
+
+@item @samp{xtheadfmemidx}
+@tab 1.0
+@tab T-head indexed memory operations for floating-point registers extension
+
+@item @samp{xtheadfmv}
+@tab 1.0
+@tab T-head double floating-point high-bit data transmission extension
+
+@item @samp{xtheadint}
+@tab 1.0
+@tab T-head acceleration interruption extension
+
+@item @samp{xtheadmac}
+@tab 1.0
+@tab T-head multiply-accumulate extension
+
+@item @samp{xtheadmemidx}
+@tab 1.0
+@tab T-head indexed memory operation extension
+
+@item @samp{xtheadmempair}
+@tab 1.0
+@tab T-head two-GPR memory operation extension
+
+@item @samp{xtheadsync}
+@tab 1.0
+@tab T-head multi-core synchronization extension
+
+@item @samp{xtheadvector}
+@tab 1.0
+@tab T-head vector extension
+
+@item @samp{xventanacondops}
+@tab 1.0
+@tab Ventana integer conditional operations extension
+
+@item @samp{xmipscmov}
+@tab 1.0
+@tab Mips conditional move extension
+
+@item @samp{xmipscbop}
+@tab 1.0
+@tab Mips prefetch extension
+
+@item @samp{xandesperf}
+@tab 5.0
+@tab Andes performace extension
+
+@item @samp{xandesbfhcvt}
+@tab 5.0
+@tab Andes bfloat16 conversion extension
+
+@item @samp{xandesvbfhcvt}
+@tab 5.0
+@tab Andes vector bfloat16 conversion extension
+
+@item @samp{xandesvsintload}
+@tab 5.0
+@tab Andes vector INT4 load extension
+
+@item @samp{xandesvpackfph}
+@tab 5.0
+@tab Andes vector packed FP16 extension
+
+@item @samp{xandesvdot}
+@tab 5.0
+@tab Andes vector dot product extension
+
+@item @samp{xsmtvdot}
+@tab 1.0
+@tab SpacemiT vector dot product extension
+
+@end multitable

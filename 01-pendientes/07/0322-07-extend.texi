@@ -1,0 +1,213 @@
+@c GCC 16.1.0 | BLOQUE 0322 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 26655-26863 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@smallexample
+vector bool __int128 vec_cmpeq (vector signed __int128, vector signed __int128);
+vector bool __int128 vec_cmpeq (vector unsigned __int128, vector unsigned __int128);
+vector bool __int128 vec_cmpne (vector signed __int128, vector signed __int128);
+vector bool __int128 vec_cmpne (vector unsigned __int128, vector unsigned __int128);
+vector bool __int128 vec_cmpgt (vector signed __int128, vector signed __int128);
+vector bool __int128 vec_cmpgt (vector unsigned __int128, vector unsigned __int128);
+vector bool __int128 vec_cmplt (vector signed __int128, vector signed __int128);
+vector bool __int128 vec_cmplt (vector unsigned __int128, vector unsigned __int128);
+vector bool __int128 vec_cmpge (vector signed __int128, vector signed __int128);
+vector bool __int128 vec_cmpge (vector unsigned __int128, vector unsigned __int128);
+vector bool __int128 vec_cmple (vector signed __int128, vector signed __int128);
+vector bool __int128 vec_cmple (vector unsigned __int128, vector unsigned __int128);
+
+int vec_all_eq (vector signed __int128, vector signed __int128);
+int vec_all_eq (vector unsigned __int128, vector unsigned __int128);
+int vec_all_ne (vector signed __int128, vector signed __int128);
+int vec_all_ne (vector unsigned __int128, vector unsigned __int128);
+int vec_all_gt (vector signed __int128, vector signed __int128);
+int vec_all_gt (vector unsigned __int128, vector unsigned __int128);
+int vec_all_lt (vector signed __int128, vector signed __int128);
+int vec_all_lt (vector unsigned __int128, vector unsigned __int128);
+int vec_all_ge (vector signed __int128, vector signed __int128);
+int vec_all_ge (vector unsigned __int128, vector unsigned __int128);
+int vec_all_le (vector signed __int128, vector signed __int128);
+int vec_all_le (vector unsigned __int128, vector unsigned __int128);
+
+int vec_any_eq (vector signed __int128, vector signed __int128);
+int vec_any_eq (vector unsigned __int128, vector unsigned __int128);
+int vec_any_ne (vector signed __int128, vector signed __int128);
+int vec_any_ne (vector unsigned __int128, vector unsigned __int128);
+int vec_any_gt (vector signed __int128, vector signed __int128);
+int vec_any_gt (vector unsigned __int128, vector unsigned __int128);
+int vec_any_lt (vector signed __int128, vector signed __int128);
+int vec_any_lt (vector unsigned __int128, vector unsigned __int128);
+int vec_any_ge (vector signed __int128, vector signed __int128);
+int vec_any_ge (vector unsigned __int128, vector unsigned __int128);
+int vec_any_le (vector signed __int128, vector signed __int128);
+int vec_any_le (vector unsigned __int128, vector unsigned __int128);
+@end smallexample
+
+
+The following instances are extension of the existing overloaded built-ins
+@code{vec_sld}, @code{vec_sldw}, @code{vec_slo}, @code{vec_sro}, @code{vec_srl}
+that are documented in the PVIPR.
+
+@smallexample
+@exdent vector signed __int128 vec_sld (vector signed __int128,
+vector signed __int128, const unsigned int);
+@exdent vector unsigned __int128 vec_sld (vector unsigned __int128,
+vector unsigned __int128, const unsigned int);
+@exdent vector signed __int128 vec_sldw (vector signed __int128,
+vector signed __int128, const unsigned int);
+@exdent vector unsigned __int128 vec_sldw (vector unsigned __int,
+vector unsigned __int128, const unsigned int);
+@exdent vector signed __int128 vec_slo (vector signed __int128,
+vector signed char);
+@exdent vector signed __int128 vec_slo (vector signed __int128,
+vector unsigned char);
+@exdent vector unsigned __int128 vec_slo (vector unsigned __int128,
+vector signed char);
+@exdent vector unsigned __int128 vec_slo (vector unsigned __int128,
+vector unsigned char);
+@exdent vector signed __int128 vec_sro (vector signed __int128,
+vector signed char);
+@exdent vector signed __int128 vec_sro (vector signed __int128,
+vector unsigned char);
+@exdent vector unsigned __int128 vec_sro (vector unsigned __int128,
+vector signed char);
+@exdent vector unsigned __int128 vec_sro (vector unsigned __int128,
+vector unsigned char);
+@exdent vector signed __int128 vec_srl (vector signed __int128,
+vector unsigned char);
+@exdent vector unsigned __int128 vec_srl (vector unsigned __int128,
+vector unsigned char);
+@end smallexample
+
+@node PowerPC Hardware Transactional Memory Built-in Functions
+@subsection PowerPC Hardware Transactional Memory Built-in Functions
+GCC provides two interfaces for accessing the Hardware Transactional
+Memory (HTM) instructions available on some of the PowerPC family
+of processors (eg, POWER8).  The two interfaces come in a low level
+interface, consisting of built-in functions specific to PowerPC and a
+higher level interface consisting of inline functions that are common
+between PowerPC and S/390.
+
+@subsubsection PowerPC HTM Low Level Built-in Functions
+
+The following low level built-in functions are available with
+@option{-mhtm} or @option{-mcpu=CPU} where CPU is `power8' or later.
+They all generate the machine instruction that is part of the name.
+
+The HTM builtins (with the exception of @code{__builtin_tbegin}) return
+the full 4-bit condition register value set by their associated hardware
+instruction.  The header file @code{htmintrin.h} defines some macros that can
+be used to decipher the return value.  The @code{__builtin_tbegin} builtin
+returns a simple @code{true} or @code{false} value depending on whether a transaction was
+successfully started or not.  The arguments of the builtins match exactly the
+type and order of the associated hardware instruction's operands, except for
+the @code{__builtin_tcheck} builtin, which does not take any input arguments.
+Refer to the ISA manual for a description of each instruction's operands.
+
+@smallexample
+unsigned int __builtin_tbegin (unsigned int);
+unsigned int __builtin_tend (unsigned int);
+
+unsigned int __builtin_tabort (unsigned int);
+unsigned int __builtin_tabortdc (unsigned int, unsigned int, unsigned int);
+unsigned int __builtin_tabortdci (unsigned int, unsigned int, int);
+unsigned int __builtin_tabortwc (unsigned int, unsigned int, unsigned int);
+unsigned int __builtin_tabortwci (unsigned int, unsigned int, int);
+
+unsigned int __builtin_tcheck (void);
+unsigned int __builtin_treclaim (unsigned int);
+unsigned int __builtin_trechkpt (void);
+unsigned int __builtin_tsr (unsigned int);
+@end smallexample
+
+In addition to the above HTM built-ins, we have added built-ins for
+some common extended mnemonics of the HTM instructions:
+
+@smallexample
+unsigned int __builtin_tendall (void);
+unsigned int __builtin_tresume (void);
+unsigned int __builtin_tsuspend (void);
+@end smallexample
+
+Note that the semantics of the above HTM builtins are required to mimic
+the locking semantics used for critical sections.  Builtins that are used
+to create a new transaction or restart a suspended transaction must have
+lock acquisition like semantics while those builtins that end or suspend a
+transaction must have lock release like semantics.  Specifically, this must
+mimic lock semantics as specified by C++11, for example: Lock acquisition is
+as-if an execution of __atomic_exchange_n(&globallock,1,__ATOMIC_ACQUIRE)
+that returns 0, and lock release is as-if an execution of
+__atomic_store(&globallock,0,__ATOMIC_RELEASE), with globallock being an
+implicit implementation-defined lock used for all transactions.  The HTM
+instructions associated with with the builtins inherently provide the
+correct acquisition and release hardware barriers required.  However,
+the compiler must also be prohibited from moving loads and stores across
+the builtins in a way that would violate their semantics.  This has been
+accomplished by adding memory barriers to the associated HTM instructions
+(which is a conservative approach to provide acquire and release semantics).
+Earlier versions of the compiler did not treat the HTM instructions as
+memory barriers.  A @code{__TM_FENCE__} macro has been added, which can
+be used to determine whether the current compiler treats HTM instructions
+as memory barriers or not.  This allows the user to explicitly add memory
+barriers to their code when using an older version of the compiler.
+
+The following set of built-in functions are available to gain access
+to the HTM specific special purpose registers.
+
+@smallexample
+unsigned long __builtin_get_texasr (void);
+unsigned long __builtin_get_texasru (void);
+unsigned long __builtin_get_tfhar (void);
+unsigned long __builtin_get_tfiar (void);
+
+void __builtin_set_texasr (unsigned long);
+void __builtin_set_texasru (unsigned long);
+void __builtin_set_tfhar (unsigned long);
+void __builtin_set_tfiar (unsigned long);
+@end smallexample
+
+Example usage of these low level built-in functions may look like:
+
+@smallexample
+#include <htmintrin.h>
+
+int num_retries = 10;
+
+while (1)
+  @{
+    if (__builtin_tbegin (0))
+      @{
+        /* Transaction State Initiated.  */
+        if (is_locked (lock))
+          __builtin_tabort (0);
+        ... transaction code...
+        __builtin_tend (0);
+        break;
+      @}
+    else
+      @{
+        /* Transaction State Failed.  Use locks if the transaction
+           failure is "persistent" or we've tried too many times.  */
+        if (num_retries-- <= 0
+            || _TEXASRU_FAILURE_PERSISTENT (__builtin_get_texasru ()))
+          @{
+            acquire_lock (lock);
+            ... non transactional fallback path...
+            release_lock (lock);
+            break;
+          @}
+      @}
+  @}
+@end smallexample
+
+One final built-in function has been added that returns the value of
+the 2-bit Transaction State field of the Machine Status Register (MSR)
+as stored in @code{CR0}.
+
+@smallexample
+unsigned long __builtin_ttest (void)
+@end smallexample
+
+This built-in can be used to determine the current transaction state
+using the following code example:
+

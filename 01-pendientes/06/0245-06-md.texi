@@ -1,0 +1,18 @@
+@c GCC 16.1.0 | BLOQUE 0245 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 3448-3461 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+@item I
+A signed 16-bit constant.
+
+@item J
+An unsigned 16-bit constant shifted left 16 bits (use @code{L} instead
+for @code{SImode} constants).
+
+@item K
+An unsigned 16-bit constant.
+
+@item L
+A signed 16-bit constant shifted left 16 bits.
+

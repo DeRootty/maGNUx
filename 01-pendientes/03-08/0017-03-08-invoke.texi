@@ -1,0 +1,247 @@
+@c GCC 16.1.0 | BLOQUE 0017 | 03-08
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 5613-5855 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Diagnostic Message Formatting Options
+@section Options to Control Diagnostic Messages Formatting
+@cindex options to control diagnostics formatting
+@cindex diagnostic messages
+@cindex message formatting
+
+Traditionally, diagnostic messages have been formatted irrespective of
+the output device's aspect (e.g.@: its width, @dots{}).  You can use the
+options described below
+to control the formatting algorithm for diagnostic messages,
+e.g.@: how many characters per line, how often source location
+information should be reported.  Note that some language front ends may not
+honor these options.
+
+@table @gcctabopt
+@opindex fmessage-length
+@item -fmessage-length=@var{n}
+Try to format error messages so that they fit on lines of about
+@var{n} characters.  If @var{n} is zero, then no line-wrapping is
+done; each error message appears on a single line.  This is the
+default for all front ends.
+
+Note - this option also affects the display of the @samp{#error} and
+@samp{#warning} pre-processor directives, and the @samp{deprecated}
+function/type/variable attribute.  It does not however affect the
+@samp{pragma GCC warning} and @samp{pragma GCC error} pragmas.
+
+@opindex fdiagnostics-plain-output
+@item -fdiagnostics-plain-output
+This option requests that diagnostic output look as plain as possible, which
+may be useful when running @command{dejagnu} or other utilities that need to
+parse diagnostics output and prefer that it remain more stable over time.
+@option{-fdiagnostics-plain-output} is currently equivalent to the following
+options:
+@gccoptlist{-fno-diagnostics-show-caret
+-fno-diagnostics-show-line-numbers
+-fdiagnostics-color=never
+-fdiagnostics-urls=never
+-fdiagnostics-path-format=separate-events
+-fdiagnostics-text-art-charset=none
+-fno-diagnostics-show-event-links
+-fno-diagnostics-show-nesting}
+In the future, if GCC changes the default appearance of its diagnostics, the
+corresponding option to disable the new behavior will be added to this list.
+
+@opindex fdiagnostics-show-location
+@item -fdiagnostics-show-location=once
+Only meaningful in line-wrapping mode.  Instructs the diagnostic messages
+reporter to emit source location information @emph{once}; that is, in
+case the message is too long to fit on a single physical line and has to
+be wrapped, the source location won't be emitted (as prefix) again,
+over and over, in subsequent continuation lines.  This is the default
+behavior.
+
+@item -fdiagnostics-show-location=every-line
+Only meaningful in line-wrapping mode.  Instructs the diagnostic
+messages reporter to emit the same source location information (as
+prefix) for physical lines that result from the process of breaking
+a message which is too long to fit on a single line.
+
+@opindex fdiagnostics-color
+@opindex fno-diagnostics-color
+@cindex highlight, color
+@vindex GCC_COLORS @r{environment variable}
+@item -fdiagnostics-color[=@var{WHEN}]
+@itemx -fno-diagnostics-color
+Use color in diagnostics.  @var{WHEN} is @samp{never}, @samp{always},
+or @samp{auto}.  The default depends on how the compiler has been configured,
+it can be any of the above @var{WHEN} options or also @samp{never}
+if @env{GCC_COLORS} environment variable isn't present in the environment,
+and @samp{auto} otherwise.
+@samp{auto} makes GCC use color only when the standard error is a terminal,
+and when not executing in an emacs shell.
+The forms @option{-fdiagnostics-color} and @option{-fno-diagnostics-color} are
+aliases for @option{-fdiagnostics-color=always} and
+@option{-fdiagnostics-color=never}, respectively.
+
+The colors are defined by the environment variable @env{GCC_COLORS}.
+Its value is a colon-separated list of capabilities and Select Graphic
+Rendition (SGR) substrings. SGR commands are interpreted by the
+terminal or terminal emulator.  (See the section in the documentation
+of your text terminal for permitted values and their meanings as
+character attributes.)  These substring values are integers in decimal
+representation and can be concatenated with semicolons.
+Common values to concatenate include
+@samp{1} for bold,
+@samp{4} for underline,
+@samp{5} for blink,
+@samp{7} for inverse,
+@samp{39} for default foreground color,
+@samp{30} to @samp{37} for foreground colors,
+@samp{90} to @samp{97} for 16-color mode foreground colors,
+@samp{38;5;0} to @samp{38;5;255}
+for 88-color and 256-color modes foreground colors,
+@samp{49} for default background color,
+@samp{40} to @samp{47} for background colors,
+@samp{100} to @samp{107} for 16-color mode background colors,
+and @samp{48;5;0} to @samp{48;5;255}
+for 88-color and 256-color modes background colors.
+
+The default @env{GCC_COLORS} is
+@smallexample
+error=01;31:warning=01;35:note=01;36:range1=32:range2=34:locus=01:\
+quote=01:path=01;36:fixit-insert=32:fixit-delete=31:\
+diff-filename=01:diff-hunk=32:diff-delete=31:diff-insert=32:\
+type-diff=01;32:fnname=01;32:targs=35:valid=01;31:invalid=01;32\
+highlight-a=01;32:highlight-b=01;34
+@end smallexample
+@noindent
+where @samp{01;31} is bold red, @samp{01;35} is bold magenta,
+@samp{01;36} is bold cyan, @samp{32} is green, @samp{34} is blue,
+@samp{01} is bold, and @samp{31} is red.
+Setting @env{GCC_COLORS} to the empty string disables colors.
+Supported capabilities are as follows.
+
+@table @code
+@vindex error GCC_COLORS @r{capability}
+@item error=
+SGR substring for error: markers.
+
+@vindex warning GCC_COLORS @r{capability}
+@item warning=
+SGR substring for warning: markers.
+
+@vindex note GCC_COLORS @r{capability}
+@item note=
+SGR substring for note: markers.
+
+@vindex path GCC_COLORS @r{capability}
+@item path=
+SGR substring for colorizing paths of control-flow events as printed
+via @option{-fdiagnostics-path-format=}, such as the identifiers of
+individual events and lines indicating interprocedural calls and returns.
+
+@vindex range1 GCC_COLORS @r{capability}
+@item range1=
+SGR substring for first additional range.
+
+@vindex range2 GCC_COLORS @r{capability}
+@item range2=
+SGR substring for second additional range.
+
+@vindex locus GCC_COLORS @r{capability}
+@item locus=
+SGR substring for location information, @samp{file:line} or
+@samp{file:line:column} etc.
+
+@vindex quote GCC_COLORS @r{capability}
+@item quote=
+SGR substring for information printed within quotes.
+
+@vindex fnname GCC_COLORS @r{capability}
+@item fnname=
+SGR substring for names of C++ functions.
+
+@vindex targs GCC_COLORS @r{capability}
+@item targs=
+SGR substring for C++ function template parameter bindings.
+
+@vindex fixit-insert GCC_COLORS @r{capability}
+@item fixit-insert=
+SGR substring for fix-it hints suggesting text to
+be inserted or replaced.
+
+@vindex fixit-delete GCC_COLORS @r{capability}
+@item fixit-delete=
+SGR substring for fix-it hints suggesting text to
+be deleted.
+
+@vindex diff-filename GCC_COLORS @r{capability}
+@item diff-filename=
+SGR substring for filename headers within generated patches.
+
+@vindex diff-hunk GCC_COLORS @r{capability}
+@item diff-hunk=
+SGR substring for the starts of hunks within generated patches.
+
+@vindex diff-delete GCC_COLORS @r{capability}
+@item diff-delete=
+SGR substring for deleted lines within generated patches.
+
+@vindex diff-insert GCC_COLORS @r{capability}
+@item diff-insert=
+SGR substring for inserted lines within generated patches.
+
+@vindex type-diff GCC_COLORS @r{capability}
+@item type-diff=
+SGR substring for highlighting mismatching types within template
+arguments in the C++ frontend.
+
+@vindex valid GCC_COLORS @r{capability}
+@item valid=
+SGR substring for highlighting valid elements within text art diagrams.
+
+@vindex invalid GCC_COLORS @r{capability}
+@item invalid=
+SGR substring for highlighting invalid elements within text art diagrams.
+
+@vindex highlight-a GCC_COLORS @r{capability}
+@vindex highlight-b GCC_COLORS @r{capability}
+@item highlight-a=
+@item highlight-b=
+SGR substrings for contrasting two different things within diagnostics,
+such as a pair of mismatching types.
+See @option{-fdiagnostics-show-highlight-colors}.
+@end table
+
+@opindex fdiagnostics-urls
+@cindex urls
+@vindex GCC_URLS @r{environment variable}
+@vindex TERM_URLS @r{environment variable}
+@item -fdiagnostics-urls[=@var{WHEN}]
+Use escape sequences to embed URLs in diagnostics.  For example, when
+@option{-fdiagnostics-show-option} emits text showing the command-line
+option controlling a diagnostic, embed a URL for documentation of that
+option.
+
+@var{WHEN} is @samp{never}, @samp{always}, or @samp{auto}.
+@samp{auto} makes GCC use URL escape sequences only when the standard error
+is a terminal, and when not executing in an emacs shell or any graphical
+terminal which is known to be incompatible with this feature, see below.
+
+The default depends on how the compiler has been configured.
+It can be any of the above @var{WHEN} options.
+
+GCC can also be configured (via the
+@option{--with-diagnostics-urls=auto-if-env} configure-time option)
+so that the default is affected by environment variables.
+Under such a configuration, GCC defaults to using @samp{auto}
+if either @env{GCC_URLS} or @env{TERM_URLS} environment variables are
+present and non-empty in the environment of the compiler, or @samp{never}
+if neither are.
+
+However, even with @option{-fdiagnostics-urls=always} the behavior is
+dependent on those environment variables:
+If @env{GCC_URLS} is set to empty or @samp{no}, do not embed URLs in
+diagnostics.  If set to @samp{st}, URLs use ST escape sequences.
+If set to @samp{bel}, the default, URLs use BEL escape sequences.
+Any other non-empty value enables the feature.
+If @env{GCC_URLS} is not set, use @env{TERM_URLS} as a fallback.
+Note: ST is an ANSI escape sequence, string terminator @samp{ESC \},
+BEL is an ASCII character, CTRL-G that usually sounds like a beep.
+

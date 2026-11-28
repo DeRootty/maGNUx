@@ -1,0 +1,221 @@
+@c GCC 16.1.0 | BLOQUE 0272 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 15544-15760 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Numeric Builtins
+@section Additional Builtins for Numeric Operations
+@cindex built-in numeric functions
+@cindex numeric builtins
+
+GCC provides a large set of built-in functions for operating on GCC's
+extended set of floating-point and integer types (@pxref{Additional
+Numeric Types}).  The floating-point builtins include functions for
+building and testing infinities and NaNs.  On integer types, there are
+additional bit manipulation functions, byte-swapping, and CRC
+functions.
+
+Many of these builtins are type-generic and can operate on any
+floating-point or integer operand.
+
+@menu
+* Floating-Point Format Builtins:: Huge values, infinities, and NaNs.
+* Bit Operation Builtins::         Counting bits and similar functions.
+* Byte-Swapping Builtins::         Reversing byte order.
+* CRC Builtins::                   Compute cyclic redundancy checks.
+* Integer Overflow Builtins::      Built-in functions to perform arithmetics
+                                   and arithmetic overflow checking.
+@end menu
+
+@node Floating-Point Format Builtins
+@subsection Floating-Point Format Builtins
+@cindex floating-point format builtins
+@cindex NaN builtins
+@cindex infinity builtins
+@cindex huge value builtins
+
+@defbuiltin{double __builtin_huge_val (void)}
+Returns a positive infinity, if supported by the floating-point format,
+else @code{DBL_MAX}.  This function is suitable for implementing the
+ISO C macro @code{HUGE_VAL}.
+@enddefbuiltin
+
+@defbuiltin{float __builtin_huge_valf (void)}
+Similar to @code{__builtin_huge_val}, except the return type is @code{float}.
+@enddefbuiltin
+
+@defbuiltin{{long double} __builtin_huge_vall (void)}
+Similar to @code{__builtin_huge_val}, except the return
+type is @code{long double}.
+@enddefbuiltin
+
+@defbuiltin{_Float@var{n} __builtin_huge_valf@var{n} (void)}
+Similar to @code{__builtin_huge_val}, except the return type is
+@code{_Float@var{n}}.
+@enddefbuiltin
+
+@defbuiltin{_Float@var{n}x __builtin_huge_valf@var{n}x (void)}
+Similar to @code{__builtin_huge_val}, except the return type is
+@code{_Float@var{n}x}.
+@enddefbuiltin
+
+@defbuiltin{int __builtin_fpclassify (int, int, int, int, int, ...)}
+This built-in implements the C99 fpclassify functionality.  The first
+five int arguments should be the target library's notion of the
+possible FP classes and are used for return values.  They must be
+constant values and they must appear in this order: @code{FP_NAN},
+@code{FP_INFINITE}, @code{FP_NORMAL}, @code{FP_SUBNORMAL} and
+@code{FP_ZERO}.  The ellipsis is for exactly one floating-point value
+to classify.  GCC treats the last argument as type-generic, which
+means it does not do default promotion from float to double.
+@enddefbuiltin
+
+@defbuiltin{double __builtin_inf (void)}
+Similar to @code{__builtin_huge_val}, except a warning is generated
+if the target floating-point format does not support infinities.
+@enddefbuiltin
+
+@defbuiltin{_Decimal32 __builtin_infd32 (void)}
+Similar to @code{__builtin_inf}, except the return type is @code{_Decimal32}.
+@enddefbuiltin
+
+@defbuiltin{_Decimal64 __builtin_infd64 (void)}
+Similar to @code{__builtin_inf}, except the return type is @code{_Decimal64}.
+@enddefbuiltin
+
+@defbuiltin{_Decimal128 __builtin_infd128 (void)}
+Similar to @code{__builtin_inf}, except the return type is @code{_Decimal128}.
+@enddefbuiltin
+
+@defbuiltin{float __builtin_inff (void)}
+Similar to @code{__builtin_inf}, except the return type is @code{float}.
+This function is suitable for implementing the ISO C99 macro @code{INFINITY}.
+@enddefbuiltin
+
+@defbuiltin{{long double} __builtin_infl (void)}
+Similar to @code{__builtin_inf}, except the return
+type is @code{long double}.
+@enddefbuiltin
+
+@defbuiltin{_Float@var{n} __builtin_inff@var{n} (void)}
+Similar to @code{__builtin_inf}, except the return
+type is @code{_Float@var{n}}.
+@enddefbuiltin
+
+@defbuiltin{_Float@var{n} __builtin_inff@var{n}x (void)}
+Similar to @code{__builtin_inf}, except the return
+type is @code{_Float@var{n}x}.
+@enddefbuiltin
+
+@defbuiltin{int __builtin_isinf_sign (...)}
+Similar to @code{isinf}, except the return value is -1 for
+an argument of @code{-Inf} and 1 for an argument of @code{+Inf}.
+Note while the parameter list is an
+ellipsis, this function only accepts exactly one floating-point
+argument.  GCC treats this parameter as type-generic, which means it
+does not do default promotion from float to double.
+@enddefbuiltin
+
+@defbuiltin{double __builtin_nan (const char *@var{str})}
+This is an implementation of the ISO C99 function @code{nan}.
+
+Since ISO C99 defines this function in terms of @code{strtod}, which we
+do not implement, a description of the parsing is in order.  The string
+is parsed as by @code{strtol}; that is, the base is recognized by
+leading @samp{0} or @samp{0x} prefixes.  The number parsed is placed
+in the significand such that the least significant bit of the number
+is at the least significant bit of the significand.  The number is
+truncated to fit the significand field provided.  The significand is
+forced to be a quiet NaN@.
+
+This function, if given a string literal all of which would have been
+consumed by @code{strtol}, is evaluated early enough that it is considered a
+compile-time constant.
+@enddefbuiltin
+
+@defbuiltin{_Decimal32 __builtin_nand32 (const char *@var{str})}
+Similar to @code{__builtin_nan}, except the return type is @code{_Decimal32}.
+@enddefbuiltin
+
+@defbuiltin{_Decimal64 __builtin_nand64 (const char *@var{str})}
+Similar to @code{__builtin_nan}, except the return type is @code{_Decimal64}.
+@enddefbuiltin
+
+@defbuiltin{_Decimal128 __builtin_nand128 (const char *@var{str})}
+Similar to @code{__builtin_nan}, except the return type is @code{_Decimal128}.
+@enddefbuiltin
+
+@defbuiltin{float __builtin_nanf (const char *@var{str})}
+Similar to @code{__builtin_nan}, except the return type is @code{float}.
+@enddefbuiltin
+
+@defbuiltin{{long double} __builtin_nanl (const char *@var{str})}
+Similar to @code{__builtin_nan}, except the return type is @code{long double}.
+@enddefbuiltin
+
+@defbuiltin{_Float@var{n} __builtin_nanf@var{n} (const char *@var{str})}
+Similar to @code{__builtin_nan}, except the return type is
+@code{_Float@var{n}}.
+@enddefbuiltin
+
+@defbuiltin{_Float@var{n}x __builtin_nanf@var{n}x (const char *@var{str})}
+Similar to @code{__builtin_nan}, except the return type is
+@code{_Float@var{n}x}.
+@enddefbuiltin
+
+@defbuiltin{double __builtin_nans (const char *@var{str})}
+Similar to @code{__builtin_nan}, except the significand is forced
+to be a signaling NaN@.  The @code{nans} function is proposed by
+@uref{https://www.open-std.org/jtc1/sc22/wg14/www/docs/n965.htm,,WG14 N965}.
+@enddefbuiltin
+
+@defbuiltin{_Decimal32 __builtin_nansd32 (const char *@var{str})}
+Similar to @code{__builtin_nans}, except the return type is @code{_Decimal32}.
+@enddefbuiltin
+
+@defbuiltin{_Decimal64 __builtin_nansd64 (const char *@var{str})}
+Similar to @code{__builtin_nans}, except the return type is @code{_Decimal64}.
+@enddefbuiltin
+
+@defbuiltin{_Decimal128 __builtin_nansd128 (const char *@var{str})}
+Similar to @code{__builtin_nans}, except the return type is @code{_Decimal128}.
+@enddefbuiltin
+
+@defbuiltin{float __builtin_nansf (const char *@var{str})}
+Similar to @code{__builtin_nans}, except the return type is @code{float}.
+@enddefbuiltin
+
+@defbuiltin{{long double} __builtin_nansl (const char *@var{str})}
+Similar to @code{__builtin_nans}, except the return type is @code{long double}.
+@enddefbuiltin
+
+@defbuiltin{_Float@var{n} __builtin_nansf@var{n} (const char *@var{str})}
+Similar to @code{__builtin_nans}, except the return type is
+@code{_Float@var{n}}.
+@enddefbuiltin
+
+@defbuiltin{_Float@var{n}x __builtin_nansf@var{n}x (const char *@var{str})}
+Similar to @code{__builtin_nans}, except the return type is
+@code{_Float@var{n}x}.
+@enddefbuiltin
+
+@defbuiltin{int __builtin_issignaling (...)}
+Return non-zero if the argument is a signaling NaN and zero otherwise.
+Note while the parameter list is an
+ellipsis, this function only accepts exactly one floating-point
+argument.  GCC treats this parameter as type-generic, which means it
+does not do default promotion from float to double.
+This built-in function can work even without the non-default
+@code{-fsignaling-nans} option, although if a signaling NaN is computed,
+stored or passed as argument to some function other than this built-in
+in the current translation unit, it is safer to use @code{-fsignaling-nans}.
+With @code{-ffinite-math-only} option this built-in function will always
+return 0.
+@enddefbuiltin
+
+@defbuiltin{double __builtin_powi (double, int)}
+@defbuiltinx{float __builtin_powif (float, int)}
+@defbuiltinx{{long double} __builtin_powil (long double, int)}
+Returns the first argument raised to the power of the second.  Unlike the
+@code{pow} function no guarantees about precision and rounding are made.
+@enddefbuiltin
+

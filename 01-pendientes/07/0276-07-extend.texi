@@ -1,0 +1,217 @@
+@c GCC 16.1.0 | BLOQUE 0276 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 16331-16543 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Stack Allocation
+@section Builtins for Stack Allocation
+@cindex stack allocation builtins
+@cindex builtins for stack allocation
+
+@defbuiltin{{void *} __builtin_alloca (size_t @var{size})}
+The @code{__builtin_alloca} function must be called at block scope.
+The function allocates an object @var{size} bytes large on the stack
+of the calling function.  The object is aligned on the default stack
+alignment boundary for the target determined by the
+@code{__BIGGEST_ALIGNMENT__} macro.  The @code{__builtin_alloca}
+function returns a pointer to the first byte of the allocated object.
+The lifetime of the allocated object ends just before the calling
+function returns to its caller.   This is so even when
+@code{__builtin_alloca} is called within a nested block.
+
+For example, the following function allocates eight objects of @code{n}
+bytes each on the stack, storing a pointer to each in consecutive elements
+of the array @code{a}.  It then passes the array to function @code{g}
+which can safely use the storage pointed to by each of the array elements.
+
+@smallexample
+void f (unsigned n)
+@{
+  void *a [8];
+  for (int i = 0; i != 8; ++i)
+    a [i] = __builtin_alloca (n);
+
+  g (a, n);   // @r{safe}
+@}
+@end smallexample
+
+Since the @code{__builtin_alloca} function doesn't validate its argument
+it is the responsibility of its caller to make sure the argument doesn't
+cause it to exceed the stack size limit.
+The @code{__builtin_alloca} function is provided to make it possible to
+allocate on the stack arrays of bytes with an upper bound that may be
+computed at run time.  Since C99 Variable Length Arrays offer
+similar functionality under a portable, more convenient, and safer
+interface they are recommended instead, in both C99 and C++ programs
+where GCC provides them as an extension.
+@xref{Variable Length}, for details.
+
+@enddefbuiltin
+
+@defbuiltin{{void *} __builtin_alloca_with_align (size_t @var{size}, size_t @var{alignment})}
+The @code{__builtin_alloca_with_align} function must be called at block
+scope.  The function allocates an object @var{size} bytes large on
+the stack of the calling function.  The allocated object is aligned on
+the boundary specified by the argument @var{alignment} whose unit is given
+in bits (not bytes).  The @var{size} argument must be positive and not
+exceed the stack size limit.  The @var{alignment} argument must be a constant
+integer expression that evaluates to a power of 2 greater than or equal to
+@code{CHAR_BIT} and less than some unspecified maximum.  Invocations
+with other values are rejected with an error indicating the valid bounds.
+The function returns a pointer to the first byte of the allocated object.
+The lifetime of the allocated object ends at the end of the block in which
+the function was called.  The allocated storage is released no later than
+just before the calling function returns to its caller, but may be released
+at the end of the block in which the function was called.
+
+For example, in the following function the call to @code{g} is unsafe
+because when @code{overalign} is non-zero, the space allocated by
+@code{__builtin_alloca_with_align} may have been released at the end
+of the @code{if} statement in which it was called.
+
+@smallexample
+void f (unsigned n, bool overalign)
+@{
+  void *p;
+  if (overalign)
+    p = __builtin_alloca_with_align (n, 64 /* bits */);
+  else
+    p = __builtin_alloc (n);
+
+  g (p, n);   // @r{unsafe}
+@}
+@end smallexample
+
+Since the @code{__builtin_alloca_with_align} function doesn't validate its
+@var{size} argument it is the responsibility of its caller to make sure
+the argument doesn't cause it to exceed the stack size limit.
+The @code{__builtin_alloca_with_align} function is provided to make
+it possible to allocate on the stack overaligned arrays of bytes with
+an upper bound that may be computed at run time.  Since C99
+Variable Length Arrays offer the same functionality under
+a portable, more convenient, and safer interface they are recommended
+instead, in both C99 and C++ programs where GCC provides them as
+an extension.  @xref{Variable Length}, for details.
+
+@enddefbuiltin
+
+@defbuiltin{{void *} __builtin_alloca_with_align_and_max (size_t @var{size}, size_t @var{alignment}, size_t @var{max_size})}
+Similar to @code{__builtin_alloca_with_align} but takes an extra argument
+specifying an upper bound for @var{size} in case its value cannot be computed
+at compile time, for use by @option{-fstack-usage}, @option{-Wstack-usage}
+and @option{-Walloca-larger-than}.  @var{max_size} must be a constant integer
+expression, it has no effect on code generation and no attempt is made to
+check its compatibility with @var{size}.
+
+@enddefbuiltin
+
+@node Nonlocal Gotos
+@section Nonlocal Gotos
+@cindex nonlocal gotos
+
+GCC provides the built-in functions @code{__builtin_setjmp} and
+@code{__builtin_longjmp} which are similar to, but not interchangeable
+with, the C library functions @code{setjmp} and @code{longjmp}.
+The built-in versions are used internally by GCC's libraries
+to implement exception handling on some targets.  You should use the
+standard C library functions declared in @code{<setjmp.h>} in user code
+instead of the builtins.
+
+The built-in versions of these functions use GCC's normal
+mechanisms to save and restore registers using the stack on function
+entry and exit.  The jump buffer argument @var{buf} holds only the
+information needed to restore the stack frame, rather than the entire
+set of saved register values.
+
+An important caveat is that GCC arranges to save and restore only
+those registers known to the specific architecture variant being
+compiled for.  This can make @code{__builtin_setjmp} and
+@code{__builtin_longjmp} more efficient than their library
+counterparts in some cases, but it can also cause incorrect and
+mysterious behavior when mixing with code that uses the full register
+set.
+
+You should declare the jump buffer argument @var{buf} to the
+built-in functions as:
+
+@smallexample
+#include <stdint.h>
+intptr_t @var{buf}[5];
+@end smallexample
+
+@defbuiltin{{int} __builtin_setjmp (intptr_t *@var{buf})}
+This function saves the current stack context in @var{buf}.
+@code{__builtin_setjmp} returns 0 when returning directly,
+and 1 when returning from @code{__builtin_longjmp} using the same
+@var{buf}.
+@enddefbuiltin
+
+@defbuiltin{{void} __builtin_longjmp (intptr_t *@var{buf}, int @var{val})}
+This function restores the stack context in @var{buf},
+saved by a previous call to @code{__builtin_setjmp}.  After
+@code{__builtin_longjmp} is finished, the program resumes execution as
+if the matching @code{__builtin_setjmp} returns the value @var{val},
+which must be 1.
+
+Because @code{__builtin_longjmp} depends on the function return
+mechanism to restore the stack context, it cannot be called
+from the same function calling @code{__builtin_setjmp} to
+initialize @var{buf}.  It can only be called from a function called
+(directly or indirectly) from the function calling @code{__builtin_setjmp}.
+@enddefbuiltin
+
+@node Constructing Calls
+@section Constructing Function Calls
+@cindex constructing calls
+@cindex forwarding calls
+
+Using the built-in functions described below, you can record
+the arguments a function received, and call another function
+with the same arguments, without knowing the number or types
+of the arguments.
+
+You can also record the return value of that function call,
+and later return that value, without knowing what data type
+the function tried to return (as long as your caller expects
+that data type).
+
+However, these built-in functions may interact badly with some
+sophisticated features or other extensions of the language.  It
+is, therefore, not recommended to use them outside very simple
+functions acting as mere forwarders for their arguments.
+
+@defbuiltin{{void *} __builtin_apply_args ()}
+This built-in function returns a pointer to data
+describing how to perform a call with the same arguments as are passed
+to the current function.
+
+The function saves the arg pointer register, structure value address,
+and all registers that might be used to pass arguments to a function
+into a block of memory allocated on the stack.  Then it returns the
+address of that block.
+@enddefbuiltin
+
+@defbuiltin{{void *} __builtin_apply (void (*@var{function})(), void *@var{arguments}, size_t @var{size})}
+This built-in function invokes @var{function}
+with a copy of the parameters described by @var{arguments}
+and @var{size}.
+
+The value of @var{arguments} should be the value returned by
+@code{__builtin_apply_args}.  The argument @var{size} specifies the size
+of the stack argument data, in bytes.
+
+This function returns a pointer to data describing
+how to return whatever value is returned by @var{function}.  The data
+is saved in a block of memory allocated on the stack.
+
+It is not always simple to compute the proper value for @var{size}.  The
+value is used by @code{__builtin_apply} to compute the amount of data
+that should be pushed on the stack and copied from the incoming argument
+area.
+@enddefbuiltin
+
+@defbuiltin{{void} __builtin_return (void *@var{result})}
+This built-in function returns the value described by @var{result} from
+the containing function.  You should specify, for @var{result}, a value
+returned by @code{__builtin_apply}.
+@enddefbuiltin
+

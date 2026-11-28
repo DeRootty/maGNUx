@@ -1,0 +1,229 @@
+@c GCC 16.1.0 | BLOQUE 0007 | 03-05
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 3665-3889 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -fnothrow-opt
+Treat a @code{throw()} exception specification as if it were a
+@code{noexcept} specification to reduce or eliminate the text size
+overhead relative to a function with no exception specification.  If
+the function has local variables of types with non-trivial
+destructors, the exception specification actually makes the
+function smaller because the EH cleanups for those variables can be
+optimized away.  The semantic effect is that an exception thrown out of
+a function with such an exception specification results in a call
+to @code{terminate} rather than @code{unexpected}.
+
+@opindex fno-operator-names
+@opindex foperator-names
+@item -fno-operator-names
+Do not treat the operator name keywords @code{and}, @code{bitand},
+@code{bitor}, @code{compl}, @code{not}, @code{or} and @code{xor} as
+synonyms as keywords.
+
+@opindex fno-optional-diags
+@opindex foptional-diags
+@item -fno-optional-diags
+Disable diagnostics that the standard says a compiler does not need to
+issue.  Currently, the only such diagnostic issued by G++ is the one for
+a name having multiple meanings within a class.
+
+@opindex fno-pretty-templates
+@opindex fpretty-templates
+@item -fno-pretty-templates
+When an error message refers to a specialization of a function
+template, the compiler normally prints the signature of the
+template followed by the template arguments and any typedefs or
+typenames in the signature (e.g.@: @code{void f(T) [with T = int]}
+rather than @code{void f(int)}) so that it's clear which template is
+involved.  When an error message refers to a specialization of a class
+template, the compiler omits any template arguments that match
+the default template arguments for that template.  If either of these
+behaviors make it harder to understand the error message rather than
+easier, you can use @option{-fno-pretty-templates} to disable them.
+
+@opindex frange-for-ext-temps
+@opindex fno-range-for-ext-temps
+@item -frange-for-ext-temps
+Enable lifetime extension of C++ range based for temporaries.
+With @option{-std=c++23} and above this is part of the language standard,
+so lifetime of the temporaries is extended until the end of the loop
+by default.  This option allows enabling that behavior also
+in earlier versions of the standard.
+
+@opindex freflection
+@item -freflection
+Enable experimental C++26 Reflection.
+
+@opindex fno-rtti
+@opindex frtti
+@item -fno-rtti
+Disable generation of information about every class with virtual
+functions for use by the C++ run-time type identification features
+(@code{dynamic_cast} and @code{typeid}).  If you don't use those parts
+of the language, you can save some space by using this flag.  Note that
+exception handling uses the same information, but G++ generates it as
+needed. The @code{dynamic_cast} operator can still be used for casts that
+do not require run-time type information, i.e.@: casts to @code{void *} or to
+unambiguous base classes.
+
+Mixing code compiled with @option{-frtti} with that compiled with
+@option{-fno-rtti} may not work.  For example, programs may
+fail to link if a class compiled with @option{-fno-rtti} is used as a base
+for a class compiled with @option{-frtti}.
+
+@opindex fsized-deallocation
+@opindex fno-sized-deallocation
+@item -fsized-deallocation
+Enable the built-in global declarations
+@smallexample
+void operator delete (void *, std::size_t) noexcept;
+void operator delete[] (void *, std::size_t) noexcept;
+@end smallexample
+as introduced in C++14.  This is useful for user-defined replacement
+deallocation functions that, for example, use the size of the object
+to make deallocation faster.  Enabled by default under
+@option{-std=c++14} and above.  The flag @option{-Wsized-deallocation}
+warns about places that might want to add a definition.
+
+@opindex fstrict-enums
+@opindex fno-strict-enums
+@item -fstrict-enums
+Allow the compiler to optimize using the assumption that a value of
+enumerated type can only be one of the values of the enumeration (as
+defined in the C++ standard; basically, a value that can be
+represented in the minimum number of bits needed to represent all the
+enumerators).  This assumption may not be valid if the program uses a
+cast to convert an arbitrary integer value to the enumerated type.
+This option has no effect for an enumeration type with a fixed underlying
+type.
+
+@opindex fstrong-eval-order
+@opindex fno-strong-eval-order
+@item -fstrong-eval-order
+@itemx -fstrong-eval-order=@var{kind}
+Evaluate member access, array subscripting, and shift expressions in
+left-to-right order, and evaluate assignment in right-to-left order,
+as adopted for C++17.  @option{-fstrong-eval-order} is equivalent to
+@option{-fstrong-eval-order=all},
+and is enabled by default with @option{-std=c++17} or later.
+
+@option{-fstrong-eval-order=some} enables just the ordering of member
+access and shift expressions, and is the default for C++ dialects prior to
+C++17.
+
+@option{-fstrong-eval-order=none} is equivalent to
+@option{-fno-strong-eval-order}.
+
+@opindex ftemplate-backtrace-limit
+@item -ftemplate-backtrace-limit=@var{n}
+Set the maximum number of template instantiation notes for a single
+warning or error to @var{n}.  The default value is 10.
+
+@opindex ftemplate-depth
+@item -ftemplate-depth=@var{n}
+Set the maximum instantiation depth for template classes to @var{n}.
+A limit on the template instantiation depth is needed to detect
+endless recursions during template class instantiation.  ANSI/ISO C++
+conforming programs must not rely on a maximum depth greater than 17
+(changed to 1024 in C++11).  The default value is 900, as the compiler
+can run out of stack space before hitting 1024 in some situations.
+
+@opindex fno-threadsafe-statics
+@opindex fthreadsafe-statics
+@item -fno-threadsafe-statics
+Do not emit the extra code to use the routines specified in the C++
+ABI for thread-safe initialization of local statics.  You can use this
+option to reduce code size slightly in code that doesn't need to be
+thread-safe.
+
+@opindex fuse-cxa-atexit
+@opindex fno-use-cxa-atexit
+@item -fuse-cxa-atexit
+Register destructors for objects with static storage duration with the
+@code{__cxa_atexit} function rather than the @code{atexit} function.
+This option is required for fully standards-compliant handling of static
+destructors, but only works if your C library supports
+@code{__cxa_atexit}.
+
+@opindex fno-use-cxa-get-exception-ptr
+@opindex fuse-cxa-get-exception-ptr
+@item -fno-use-cxa-get-exception-ptr
+Don't use the @code{__cxa_get_exception_ptr} runtime routine.  This
+causes @code{std::uncaught_exception} to be incorrect, but is necessary
+if the runtime routine is not available.
+
+@opindex fvisibility-inlines-hidden
+@opindex fno-visibility-inlines-hidden
+@item -fvisibility-inlines-hidden
+This switch declares that the user does not attempt to compare
+pointers to inline functions or methods where the addresses of the two functions
+are taken in different shared objects.
+
+The effect of this is that GCC may, effectively, mark inline methods with
+@code{__attribute__ ((visibility ("hidden")))} so that they do not
+appear in the export table of a DSO and do not require a PLT indirection
+when used within the DSO@.  Enabling this option can have a dramatic effect
+on load and link times of a DSO as it massively reduces the size of the
+dynamic export table when the library makes heavy use of templates.
+
+The behavior of this switch is not quite the same as marking the
+methods as hidden directly, because it does not affect static variables
+local to the function or cause the compiler to deduce that
+the function is defined in only one shared object.
+
+You may mark a method as having a visibility explicitly to negate the
+effect of the switch for that method.  For example, if you do want to
+compare pointers to a particular inline method, you might mark it as
+having default visibility.  Marking the enclosing class with explicit
+visibility has no effect.
+
+Explicitly instantiated inline methods are unaffected by this option
+as their linkage might otherwise cross a shared library boundary.
+@xref{Template Instantiation}.
+
+@opindex fvisibility-ms-compat
+@opindex fno-visibility-ms-compat
+@item -fvisibility-ms-compat
+This flag attempts to use visibility settings to make GCC's C++
+linkage model compatible with that of Microsoft Visual Studio.
+
+The flag makes these changes to GCC's linkage model:
+
+@enumerate
+@item
+It sets the default visibility to @code{hidden}, like
+@option{-fvisibility=hidden}.
+
+@item
+Types, but not their members, are not hidden by default.
+
+@item
+The One Definition Rule is relaxed for types without explicit
+visibility specifications that are defined in more than one
+shared object: those declarations are permitted if they are
+permitted when this option is not used.
+@end enumerate
+
+In new code it is better to use @option{-fvisibility=hidden} and
+export those classes that are intended to be externally visible.
+Unfortunately it is possible for code to rely, perhaps accidentally,
+on the Visual Studio behavior.
+
+Among the consequences of these changes are that static data members
+of the same type with the same name but defined in different shared
+objects are different, so changing one does not change the other;
+and that pointers to function members defined in different shared
+objects may not compare equal.  When this flag is given, it is a
+violation of the ODR to define types with the same name differently.
+
+@opindex fno-weak
+@opindex fweak
+@item -fno-weak
+Do not use weak symbol support, even if it is provided by the linker.
+By default, G++ uses weak symbols if they are available.  This
+option exists only for testing, and should not be used by end-users;
+it results in inferior code and has no benefits.  This option may
+be removed in a future release of G++.
+
+@opindex fext-numeric-literals
+@opindex fno-ext-numeric-literals

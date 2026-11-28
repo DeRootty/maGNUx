@@ -1,0 +1,389 @@
+@c GCC 16.1.0 | BLOQUE 0117 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 26295-26679 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item L1
+@itemx L2
+@itemx L3
+@itemx main
+The compiler contains estimates of the number of clock cycles for
+``typical'' EV4 & EV5 hardware for the Level 1, 2 & 3 caches
+(also called Dcache, Scache, and Bcache), as well as to main memory.
+Note that L3 is only valid for EV5.
+
+@end table
+
+@opindex mtls-kernel
+@opindex mno-tls-kernel
+@item -mtls-kernel
+Emit @code{rdval} instead of @code{rduniq} for thread pointer.
+
+@opindex mtls-size
+@item -mtls-size=@var{bitsize}
+Specify bit size of immediate TLS offsets.  Valid values for @var{bitsize}
+are 16, 32, and 64; it defaults to 32.
+
+@opindex mlong-double-128
+@opindex mlong-double-64
+@item -mlong-double-128
+@itemx -mlong-double-64
+Specify the size of the @code{long double} type.  Note that
+@option{-mlong-double-128} is incompatible with VAX floating point.
+
+@end table
+
+@node eBPF Options
+@subsection eBPF Options
+@cindex eBPF Options
+
+@table @gcctabopt
+@opindex mframe-limit
+@item -mframe-limit=@var{bytes}
+This specifies the hard limit for frame sizes, in bytes.  Currently,
+the value that can be specified should be less than or equal to
+@samp{32767}.  Defaults to whatever limit is imposed by the version of
+the Linux kernel targeted.
+
+@opindex mbig-endian
+@item -mbig-endian
+Generate code for a big-endian target.
+
+@opindex mlittle-endian
+@item -mlittle-endian
+Generate code for a little-endian target.  This is the default.
+
+@opindex mjmpext
+@opindex mno-jmpext
+@item -mjmpext
+@itemx -mno-jmpext
+Enable or disable generation of extra conditional-branch instructions.
+Enabled for CPU v2 and above.
+
+@opindex mjmp32
+@opindex mno-jmp32
+@item -mjmp32
+@itemx -mno-jmp32
+Enable or disable generation of 32-bit jump instructions.
+Enabled for CPU v3 and above.
+
+@opindex malu32
+@opindex mno-alu32
+@item -malu32
+@itemx -mno-alu32
+Enable or disable generation of 32-bit ALU instructions.
+Enabled for CPU v3 and above.
+
+@opindex mv3-atomics
+@opindex mno-v3-atomics
+@item -mv3-atomics
+@itemx -mno-v3-atomics
+Enable or disable instructions for general atomic operations introduced
+in CPU v3.  Enabled for CPU v3 and above.
+
+@opindex mbswap
+@opindex mno-bswap
+@item -mbswap
+@itemx -mno-bswap
+Enable or disable byte swap instructions.  Enabled for CPU v4 and above.
+
+@opindex msdiv
+@opindex mno-sdiv
+@item -msdiv
+@itemx -mno-sdiv
+Enable or disable signed division and modulus instructions.  Enabled for
+CPU v4 and above.
+
+@opindex msmov
+@opindex mno-smov
+@item -msmov
+@itemx -mno-smov
+Enable or disable sign-extending move and memory load instructions.
+Enabled for CPU v4 and above.
+
+@opindex mcpu
+@item -mcpu=@var{version}
+This specifies which version of the eBPF ISA to target. Newer versions
+may not be supported by all kernels. The default is @samp{v4}.
+
+Supported values for @var{version} are:
+
+@table @samp
+@item v1
+The first stable eBPF ISA with no special features or extensions.
+
+@item v2
+Supports the jump extensions, as in @option{-mjmpext}.
+
+@item v3
+All features of v2, plus:
+@itemize @minus
+@item 32-bit jump operations, as in @option{-mjmp32}
+@item 32-bit ALU operations, as in @option{-malu32}
+@item general atomic operations, as in @option{-mv3-atomics}
+@end itemize
+
+@item v4
+All features of v3, plus:
+@itemize @minus
+@item Byte swap instructions, as in @option{-mbswap}
+@item Signed division and modulus instructions, as in @option{-msdiv}
+@item Sign-extending move and memory load instructions, as in @option{-msmov}
+@end itemize
+@end table
+
+@opindex mco-re
+@opindex mno-co-re
+@item -mco-re
+@itemx -mno-co-re
+Enable or disable BPF Compile Once - Run Everywhere (CO-RE) support.
+BPF CO-RE support is enabled by default when generating BTF debug
+information for the BPF target (@option{-gbtf}).
+
+@opindex mxbpf
+@opindex mno-xbpf
+@item -mxbpf
+Generate code for an expanded version of BPF, which relaxes some of
+the restrictions imposed by the BPF architecture:
+@itemize @minus
+@item Save and restore callee-saved registers at function entry and
+exit, respectively.
+@end itemize
+
+@opindex masm=@var{dialect}
+@item -masm=@var{dialect}
+Outputs assembly instructions using eBPF selected @var{dialect}.  The default
+is @samp{pseudoc}.
+
+Supported values for @var{dialect} are:
+
+@table @samp
+@item normal
+Outputs normal assembly dialect.
+
+@item pseudoc
+Outputs pseudo-c assembly dialect.
+
+@end table
+
+@opindex minline-memops-threshold
+@item -minline-memops-threshold=@var{bytes}
+Specifies a size threshold in bytes at or below which memmove, memcpy
+and memset shall always be expanded inline.  Operations dealing with
+sizes larger than this threshold would have to be implemented using
+a library call instead of being expanded inline, but since BPF doesn't
+allow libcalls, exceeding this threshold results in a compile-time
+error.  The default is @samp{1024} bytes.
+
+@opindex Wco-re
+@item -Wco-re
+Enable warnings for scenarios where -mco-re is enabled, but it may not be
+possible to generate CO-RE compatible code.
+
+@end table
+
+@node FR30 Options
+@subsection FR30 Options
+@cindex FR30 Options
+
+These options are defined specifically for the FR30 port.
+
+@table @gcctabopt
+
+@opindex msmall-model
+@opindex mno-small-model
+@item -msmall-model
+Use the small address space model.  This can produce smaller code, but
+it does assume that all symbolic values and addresses fit into a
+20-bit range.
+
+@opindex mno-lsim
+@item -mno-lsim
+Assume that runtime support has been provided and so there is no need
+to include the simulator library (@file{libsim.a}) on the linker
+command line.
+
+@end table
+
+@node FRV Options
+@subsection FRV Options
+@cindex FRV Options
+
+@table @gcctabopt
+@opindex mgpr-32
+@item -mgpr-32
+
+Only use the first 32 general-purpose registers.
+
+@opindex mgpr-64
+@item -mgpr-64
+
+Use all 64 general-purpose registers.
+
+@opindex mfpr-32
+@item -mfpr-32
+
+Use only the first 32 floating-point registers.
+
+@opindex mfpr-64
+@item -mfpr-64
+
+Use all 64 floating-point registers.
+
+@opindex mhard-float
+@item -mhard-float
+
+Use hardware instructions for floating-point operations.
+
+@opindex msoft-float
+@item -msoft-float
+
+Use library routines for floating-point operations.
+
+@opindex malloc-cc
+@item -malloc-cc
+
+Dynamically allocate condition code registers.
+
+@opindex mfixed-cc
+@item -mfixed-cc
+
+Do not try to dynamically allocate condition code registers, only
+use @code{icc0} and @code{fcc0}.
+
+@opindex mdword
+@opindex mno-dword
+@item -mdword
+@itemx -mno-dword
+
+Control whether the ABI uses double-word instructions.
+
+@opindex mdouble
+@opindex mno-double
+@item -mdouble
+@itemx -mno-double
+
+Enable or disable use of floating-point double instructions.
+
+@opindex mmedia
+@opindex mno-media
+@item -mmedia
+@itemx -mno-media
+
+Enable or disable use of media instructions.
+
+@opindex mmuladd
+@opindex mno-muladd
+@item -mmuladd
+@itemx -mno-muladd
+
+Enable or disable use of multiply and add/subtract instructions.
+
+@opindex mfdpic
+@opindex mno-fdpic
+@item -mfdpic
+
+Select the FDPIC ABI, which uses function descriptors to represent
+pointers to functions.  Without any PIC/PIE-related options, it
+implies @option{-fPIE}.  With @option{-fpic} or @option{-fpie}, it
+assumes GOT entries and small data are within a 12-bit range from the
+GOT base address; with @option{-fPIC} or @option{-fPIE}, GOT offsets
+are computed with 32 bits.
+With a @samp{bfin-elf} target, this option implies @option{-msim}.
+
+@opindex minline-plt
+@opindex mno-inline-plt
+@item -minline-plt
+
+Enable inlining of PLT entries in function calls to functions that are
+not known to bind locally.  It has no effect without @option{-mfdpic}.
+It's enabled by default if optimizing for speed and compiling for
+shared libraries (i.e., @option{-fPIC} or @option{-fpic}), or when an
+optimization option such as @option{-O3} or above is present in the
+command line.
+
+@opindex mTLS
+@item -mTLS
+
+Assume a large TLS segment when generating thread-local code.
+
+@opindex mtls
+@item -mtls
+
+Do not assume a large TLS segment when generating thread-local code.
+
+@opindex mgprel-ro
+@opindex mno-gprel-ro
+@item -mgprel-ro
+
+Enable the use of @code{GPREL} relocations in the FDPIC ABI for data
+that is known to be in read-only sections.  It's enabled by default,
+except for @option{-fpic} or @option{-fpie}: even though it may help
+make the global offset table smaller, it trades 1 instruction for 4.
+With @option{-fPIC} or @option{-fPIE}, it trades 3 instructions for 4,
+one of which may be shared by multiple symbols, and it avoids the need
+for a GOT entry for the referenced symbol, so it's more likely to be a
+win.  If it is not, @option{-mno-gprel-ro} can be used to disable it.
+
+@opindex multilib-library-pic
+@item -multilib-library-pic
+
+Link with the (library, not FD) pic libraries.  It's implied by
+@option{-mlibrary-pic}, as well as by @option{-fPIC} and
+@option{-fpic} without @option{-mfdpic}.  You should never have to use
+it explicitly.
+
+@opindex mlinked-fp
+@opindex mno-linked-fp
+@item -mlinked-fp
+
+Follow the EABI requirement of always creating a frame pointer whenever
+a stack frame is allocated.  This option is enabled by default and can
+be disabled with @option{-mno-linked-fp}.
+
+@opindex mlong-calls
+@opindex mno-long-calls
+@item -mlong-calls
+
+Use indirect addressing to call functions outside the current
+compilation unit.  This allows the functions to be placed anywhere
+within the 32-bit address space.
+
+@opindex malign-labels
+@opindex mno-align-labels
+@item -malign-labels
+
+Try to align labels to an 8-byte boundary by inserting NOPs into the
+previous packet.  This option only has an effect when VLIW packing
+is enabled.  It doesn't create new packets; it merely adds NOPs to
+existing ones.
+
+@opindex mlibrary-pic
+@opindex mno-library-pic
+@item -mlibrary-pic
+
+Generate position-independent EABI code.
+
+@opindex macc-4
+@item -macc-4
+
+Use only the first four media accumulator registers.
+
+@opindex macc-8
+@item -macc-8
+
+Use all eight media accumulator registers.
+
+@opindex mpack
+@opindex mno-pack
+@item -mpack
+@item -mno-pack
+
+Enable or disable packing VLIW instructions.
+
+@opindex mno-eflags
+@item -mno-eflags
+
+Do not mark ABI switches in e_flags.
+
+@opindex mcond-move
+@opindex mno-cond-move

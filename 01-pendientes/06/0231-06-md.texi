@@ -1,0 +1,26 @@
+@c GCC 16.1.0 | BLOQUE 0231 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 1447-1468 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@ifclear INTERNALS
+Any operand whatsoever is allowed.
+@end ifclear
+
+@cindex @samp{0} in constraint
+@cindex digits in constraint
+@item @samp{0}, @samp{1}, @samp{2}, @dots{} @samp{9}
+An operand that matches the specified operand number is allowed.  If a
+digit is used together with letters within the same alternative, the
+digit should come last.
+
+This number is allowed to be more than a single digit.  If multiple
+digits are encountered consecutively, they are interpreted as a single
+decimal integer.  There is scant chance for ambiguity, since to-date
+it has never been desirable that @samp{10} be interpreted as matching
+either operand 1 @emph{or} operand 0.  Should this be desired, one
+can use multiple alternatives instead.
+
+@cindex matching constraint
+@cindex constraint, matching
+This is called a @dfn{matching constraint} and what it really means is
+that the assembler has only a single operand that fills two roles

@@ -1,0 +1,284 @@
+@c GCC 16.1.0 | BLOQUE 0158 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 35925-36204 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -mamx-bf16
+Support AMX-BF16 built-in functions and code generation.
+
+@opindex mhreset
+@opindex mno-hreset
+@item -mhreset
+Support HRESET built-in functions and code generation.
+
+@opindex mkl
+@opindex mno-kl
+@item -mkl
+Support KL built-in functions and code generation.
+
+@opindex mwidekl
+@opindex mno-widekl
+@item -mwidekl
+Support WIDEKL built-in functions and code generation.
+
+@opindex mcmpccxadd
+@opindex mno-cmpccxadd
+@item -mcmpccxadd
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2, and
+CMPCCXADD build-in functions and code generation.
+
+@opindex mamx-fp16
+@opindex mno-amx-fp16
+@item -mamx-fp16
+Support AMX-FP16 built-in functions and code generation.
+
+@opindex mprefetchi
+@opindex mno-prefetchi
+@item -mprefetchi
+Support PREFETCHI built-in functions and code generation.
+
+@opindex mraoint
+@opindex mno-raoint
+@item -mraoint
+Support RAOINT built-in functions and code generation.
+
+@opindex mamx-complex
+@opindex mno-amx-complex
+@item -mamx-complex
+Support AMX-COMPLEX built-in functions and code generation.
+
+@opindex msm3
+@opindex mno-sm3
+@item -msm3
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX and
+SM3 built-in functions and code generation.
+
+@opindex msm4
+@opindex mno-sm4
+@item -msm4
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX and
+SM4 built-in functions and code generation.
+
+@opindex msha512
+@opindex mno-sha512
+@item -msha512
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX and
+SHA512 built-in functions and code generation.
+
+@opindex mapxf
+@opindex mno-apxf
+@item -mapxf
+Support code generation for APX features, including EGPR, PUSH2POP2,
+NDD, PPX, NF, CCMP and ZU.
+
+@opindex musermsr
+@opindex mno-usermsr
+@item -musermsr
+Support USER_MSR built-in functions and code generation.
+
+@opindex mamx-avx512
+@opindex mno-amx-avx512
+@item -mamx-avx512
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2,
+AVX10.1, AVX10.2 and AMX-AVX512 built-in functions and code generation.
+
+@opindex mamx-tf32
+@opindex mno-amx-tf32
+@item -mamx-tf32
+Support AMX-TF32 built-in functions and code generation.
+
+@opindex mamx-fp8
+@opindex mno-amx-fp8
+@item -mamx-fp8
+Support AMX-FP8 built-in functions and code generation.
+
+@opindex mmovrs
+@opindex mno-movrs
+@item -mmovrs
+Support MOVRS built-in functions and code generation.
+
+@opindex mamx-movrs
+@opindex mno-amx-movrs
+@item -mamx-movrs
+Support AMX-MOVRS built-in functions and code generation.
+@end table
+
+These additional options are available for the x86 processor family.
+
+@table @gcctabopt
+
+@opindex mfpmath
+@item -mfpmath=@var{unit}
+Generate floating-point arithmetic for selected unit @var{unit}.  The choices
+for @var{unit} are:
+
+@table @samp
+@item 387
+Use the standard 387 floating-point coprocessor present on the majority
+of chips and emulated otherwise.
+Code compiled with this option runs almost everywhere.
+The temporary results are computed in 80-bit precision instead of the precision
+specified by the type, resulting in slightly different results compared to most
+of other chips.  See @option{-ffloat-store} for more detailed description.
+
+This is the default choice for non-Darwin x86-32 targets.
+
+@item sse
+Use scalar floating-point instructions present in the SSE instruction set.
+This instruction set is supported by Pentium III and newer chips,
+and in the AMD line by Athlon-4, Athlon XP and Athlon MP chips.
+The earlier version of the SSE
+instruction set supports only single-precision arithmetic, thus the double and
+extended-precision arithmetic are still done using 387.
+A later version, present only in Pentium 4 and AMD x86-64 chips,
+supports double-precision arithmetic too.
+
+For the x86-32 compiler, you must use @option{-march=@var{cpu-type}},
+@option{-msse}
+or @option{-msse2} switches to enable SSE extensions and make this option
+effective.  For the x86-64 compiler, these extensions are enabled by default.
+
+The resulting code should be considerably faster in the majority of cases
+and avoid
+the numerical instability problems of 387 code, but may break some existing
+code that expects temporaries to be 80 bits.
+
+This is the default choice for the x86-64 compiler, Darwin x86-32 targets,
+and the default choice for x86-32 targets with the SSE2 instruction set
+when @option{-ffast-math} is enabled.
+
+GCC depresses SSE instructions when @option{-mavx} (or another option
+enabling AVX extensions) is used.  Instead, it
+generates new AVX instructions or AVX equivalents for all SSE instructions
+when needed.
+
+@item sse,387
+@itemx sse+387
+@itemx both
+Attempt to utilize both instruction sets at once.  This effectively doubles the
+amount of available registers, and on chips with separate execution units for
+387 and SSE the execution resources too.  Use this option with care, as it is
+still experimental, because the GCC register allocator does not model separate
+functional units well, resulting in unstable performance.
+@end table
+
+@opindex mieee-fp
+@opindex mno-ieee-fp
+@item -mieee-fp
+@itemx -mno-ieee-fp
+Control whether or not the compiler uses IEEE floating-point
+comparisons.  These correctly handle the case where the result of a
+comparison is unordered.
+
+@opindex m80387
+@opindex mhard-float
+@item -m80387
+@itemx -mhard-float
+Generate output containing 80387 instructions for floating point.
+
+@opindex mno-80387
+@opindex msoft-float
+@item -mno-80387
+@itemx -msoft-float
+Generate output containing library calls for floating point.
+
+@strong{Warning:} the requisite libraries are not part of GCC@.
+Normally the facilities of the machine's usual C compiler are used, but
+this cannot be done directly in cross-compilation.  You must make your
+own arrangements to provide suitable library functions for
+cross-compilation.
+
+On machines where a function returns floating-point results in the 80387
+register stack, some floating-point opcodes may be emitted even if
+@option{-msoft-float} is used.
+
+@opindex mno-fp-ret-in-387
+@opindex mfp-ret-in-387
+@item -mno-fp-ret-in-387
+Do not use the FPU registers for return values of functions.
+
+The usual calling convention has functions return values of types
+@code{float} and @code{double} in an FPU register, even if there
+is no FPU@.  The idea is that the operating system should emulate
+an FPU@.
+
+The option @option{-mno-fp-ret-in-387} causes such values to be returned
+in ordinary CPU registers instead.
+
+@opindex mno-fancy-math-387
+@opindex mfancy-math-387
+@item -mno-fancy-math-387
+Some 387 emulators do not support the @code{sin}, @code{cos} and
+@code{sqrt} instructions for the 387.  Specify this option to avoid
+generating those instructions.
+This option is overridden when @option{-march}
+indicates that the target CPU always has an FPU and so the
+instruction does not need emulation.  These
+instructions are not generated unless you also use the
+@option{-funsafe-math-optimizations} switch.
+
+@opindex malign-double
+@opindex mno-align-double
+@item -malign-double
+@itemx -mno-align-double
+Control whether GCC aligns @code{double}, @code{long double}, and
+@code{long long} variables on a two-word boundary or a one-word
+boundary.  Aligning @code{double} variables on a two-word boundary
+produces code that runs somewhat faster on a Pentium at the
+expense of more memory.
+
+On x86-64, @option{-malign-double} is enabled by default.
+
+@strong{Warning:} if you use the @option{-malign-double} switch,
+structures containing the above types are aligned differently than
+the published application binary interface specifications for the x86-32
+and are not binary compatible with structures in code compiled
+without that switch.
+
+@opindex m96bit-long-double
+@opindex m128bit-long-double
+@item -m96bit-long-double
+@itemx -m128bit-long-double
+These switches control the size of @code{long double} type.  The x86-32
+application binary interface specifies the size to be 96 bits,
+so @option{-m96bit-long-double} is the default in 32-bit mode.
+
+Modern architectures (Pentium and newer) prefer @code{long double}
+to be aligned to an 8- or 16-byte boundary.  In arrays or structures
+conforming to the ABI, this is not possible.  So specifying
+@option{-m128bit-long-double} aligns @code{long double}
+to a 16-byte boundary by padding the @code{long double} with an additional
+32-bit zero.
+
+In the x86-64 compiler, @option{-m128bit-long-double} is the default choice as
+its ABI specifies that @code{long double} is aligned on 16-byte boundary.
+
+Notice that neither of these options enable any extra precision over the x87
+standard of 80 bits for a @code{long double}.
+
+@strong{Warning:} if you override the default value for your target ABI, this
+changes the size of
+structures and arrays containing @code{long double} variables,
+as well as modifying the function calling convention for functions taking
+@code{long double}.  Hence they are not binary-compatible
+with code compiled without that switch.
+
+@opindex mlong-double-64
+@opindex mlong-double-80
+@opindex mlong-double-128
+@item -mlong-double-64
+@itemx -mlong-double-80
+@itemx -mlong-double-128
+These switches control the size of @code{long double} type. A size
+of 64 bits makes the @code{long double} type equivalent to the @code{double}
+type. This is the default for 32-bit Bionic C library.  A size
+of 128 bits makes the @code{long double} type equivalent to the
+@code{__float128} type. This is the default for 64-bit Bionic C library.
+
+@strong{Warning:} if you override the default value for your target ABI, this
+changes the size of
+structures and arrays containing @code{long double} variables,
+as well as modifying the function calling convention for functions taking
+@code{long double}.  Hence they are not binary-compatible
+with code compiled without that switch.
+
+@opindex malign-data

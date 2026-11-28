@@ -1,0 +1,420 @@
+@c GCC 16.1.0 | BLOQUE 0251 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 3557-3972 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+@end table
+
+@item PRU---@file{config/pru/constraints.md}
+@table @code
+@item I
+An unsigned 8-bit integer constant.
+
+@item J
+An unsigned 16-bit integer constant.
+
+@item L
+An unsigned 5-bit integer constant (for shift counts).
+
+@item T
+A text segment (program memory) constant label.
+
+@item Z
+Integer constant zero.
+
+@end table
+
+@item RL78---@file{config/rl78/constraints.md}
+@table @code
+
+@item Int3
+An integer constant in the range 1 @dots{} 7.
+@item Int8
+An integer constant in the range 0 @dots{} 255.
+@item J
+An integer constant in the range @minus{}255 @dots{} 0
+@item K
+The integer constant 1.
+@item L
+The integer constant -1.
+@item M
+The integer constant 0.
+@item N
+The integer constant 2.
+@item O
+The integer constant -2.
+@item P
+An integer constant in the range 1 @dots{} 15.
+@item Qbi
+The built-in compare types--eq, ne, gtu, ltu, geu, and leu.
+@item Qsc
+The synthetic compare types--gt, lt, ge, and le.
+@item Wab
+A memory reference with an absolute address.
+@item Wbc
+A memory reference using @code{BC} as a base register, with an optional offset.
+@item Wca
+A memory reference using @code{AX}, @code{BC}, @code{DE}, or @code{HL} for the address, for calls.
+@item Wcv
+A memory reference using any 16-bit register pair for the address, for calls.
+@item Wd2
+A memory reference using @code{DE} as a base register, with an optional offset.
+@item Wde
+A memory reference using @code{DE} as a base register, without any offset.
+@item Wfr
+Any memory reference to an address in the far address space.
+@item Wh1
+A memory reference using @code{HL} as a base register, with an optional one-byte offset.
+@item Whb
+A memory reference using @code{HL} as a base register, with @code{B} or @code{C} as the index register.
+@item Whl
+A memory reference using @code{HL} as a base register, without any offset.
+@item Ws1
+A memory reference using @code{SP} as a base register, with an optional one-byte offset.
+@item Y
+Any memory reference to an address in the near address space.
+@item A
+The @code{AX} register.
+@item B
+The @code{BC} register.
+@item D
+The @code{DE} register.
+@item R
+@code{A} through @code{L} registers.
+@item S
+The @code{SP} register.
+@item T
+The @code{HL} register.
+@item Z08W
+The 16-bit @code{R8} register.
+@item Z10W
+The 16-bit @code{R10} register.
+@item Zint
+The registers reserved for interrupts (@code{R24} to @code{R31}).
+@item a
+The @code{A} register.
+@item b
+The @code{B} register.
+@item c
+The @code{C} register.
+@item d
+The @code{D} register.
+@item e
+The @code{E} register.
+@item h
+The @code{H} register.
+@item l
+The @code{L} register.
+@item v
+The virtual registers.
+@item w
+The @code{PSW} register.
+@item x
+The @code{X} register.
+
+@end table
+
+@item RISC-V---@file{config/riscv/constraints.md}
+@table @code
+
+@item f
+A floating-point register (if available).
+
+@item I
+An I-type 12-bit signed immediate.
+
+@item J
+Integer zero.
+
+@item K
+A 5-bit unsigned immediate for CSR access instructions.
+
+@item A
+An address that is held in a general-purpose register.
+
+@item S
+A constraint that matches an absolute symbolic address.
+
+@item vr
+A vector register (if available)..
+
+@item vd
+A vector register, excluding v0 (if available).
+
+@item vm
+A vector register, only v0 (if available).
+
+@item cr
+RVC general purpose register (x8-x15).
+
+@item cf
+RVC floating-point registers (f8-f15), if available, reuse GPR as FPR when use
+zfinx.
+
+@item cR
+Even-odd RVC general purpose register pair.
+
+@item R
+Even-odd general purpose register pair.
+
+@end table
+
+@item RX---@file{config/rx/constraints.md}
+@table @code
+@item Q
+An address which does not involve register indirect addressing or
+pre/post increment/decrement addressing.
+
+@item Symbol
+A symbol reference.
+
+@item Int08
+A constant in the range @minus{}256 to 255, inclusive.
+
+@item Sint08
+A constant in the range @minus{}128 to 127, inclusive.
+
+@item Sint16
+A constant in the range @minus{}32768 to 32767, inclusive.
+
+@item Sint24
+A constant in the range @minus{}8388608 to 8388607, inclusive.
+
+@item Uint04
+A constant in the range 0 to 15, inclusive.
+
+@end table
+
+@item S/390 and zSeries---@file{config/s390/s390.h}
+@table @code
+@item a
+Address register (general purpose register except r0)
+
+@item c
+Condition code register
+
+@item d
+Data register (arbitrary general purpose register)
+
+@item f
+Floating-point register
+
+@item I
+Unsigned 8-bit constant (0--255)
+
+@item J
+Unsigned 12-bit constant (0--4095)
+
+@item K
+Signed 16-bit constant (@minus{}32768--32767)
+
+@item L
+Value appropriate as displacement.
+@table @code
+@item (0..4095)
+for short displacement
+@item (@minus{}524288..524287)
+for long displacement
+@end table
+
+@item M
+Constant integer with a value of 0x7fffffff.
+
+@item N
+Multiple letter constraint followed by 4 parameter letters.
+@table @code
+@item 0..9:
+number of the part counting from most to least significant
+@item H,Q:
+mode of the part
+@item D,S,H:
+mode of the containing operand
+@item 0,F:
+value of the other parts (F---all bits set)
+@end table
+The constraint matches if the specified part of a constant
+has a value different from its other parts.
+
+@item Q
+Memory reference without index register and with short displacement.
+
+@item R
+Memory reference with index register and short displacement.
+
+@item S
+Memory reference without index register but with long displacement.
+
+@item T
+Memory reference with index register and long displacement.
+
+@item U
+Pointer with short displacement.
+
+@item W
+Pointer with long displacement.
+
+@item Y
+Shift count operand.
+
+@end table
+
+@need 1000
+@item SPARC---@file{config/sparc/sparc.h}
+@table @code
+@item f
+Floating-point register on the SPARC-V8 architecture and
+lower floating-point register on the SPARC-V9 architecture.
+
+@item e
+Floating-point register.  It is equivalent to @samp{f} on the
+SPARC-V8 architecture and contains both lower and upper
+floating-point registers on the SPARC-V9 architecture.
+
+@item c
+Floating-point condition code register.
+
+@item d
+Lower floating-point register.  It is only valid on the SPARC-V9
+architecture when the Visual Instruction Set is available.
+
+@item b
+Floating-point register.  It is only valid on the SPARC-V9 architecture
+when the Visual Instruction Set is available.
+
+@item h
+64-bit global or out register for the SPARC-V8+ architecture.
+
+@item C
+The constant all-ones, for floating-point.
+
+@item A
+Signed 5-bit constant
+
+@item D
+A vector constant
+
+@item I
+Signed 13-bit constant
+
+@item J
+Zero
+
+@item K
+32-bit constant with the low 12 bits clear (a constant that can be
+loaded with the @code{sethi} instruction)
+
+@item L
+A constant in the range supported by @code{movcc} instructions (11-bit
+signed immediate)
+
+@item M
+A constant in the range supported by @code{movrcc} instructions (10-bit
+signed immediate)
+
+@item N
+Same as @samp{K}, except that it verifies that bits that are not in the
+lower 32-bit range are all zero.  Must be used instead of @samp{K} for
+modes wider than @code{SImode}
+
+@item O
+The constant 4096
+
+@item G
+Floating-point zero
+
+@item H
+Signed 13-bit constant, sign-extended to 32 or 64 bits
+
+@item P
+The constant -1
+
+@item Q
+Floating-point constant whose integral representation can
+be moved into an integer register using a single sethi
+instruction
+
+@item R
+Floating-point constant whose integral representation can
+be moved into an integer register using a single mov
+instruction
+
+@item S
+Floating-point constant whose integral representation can
+be moved into an integer register using a high/lo_sum
+instruction sequence
+
+@item T
+Memory address aligned to an 8-byte boundary
+
+@item W
+Memory address for @samp{e} constraint registers
+
+@item w
+Memory address with only a base register
+
+@item Y
+Vector zero
+
+@end table
+
+@item TI C6X family---@file{config/c6x/constraints.md}
+@table @code
+@item a
+Register file A (A0--A31).
+
+@item b
+Register file B (B0--B31).
+
+@item A
+Predicate registers in register file A (A0--A2 on C64X and
+higher, A1 and A2 otherwise).
+
+@item B
+Predicate registers in register file B (B0--B2).
+
+@item C
+A call-used register in register file B (B0--B9, B16--B31).
+
+@item Da
+Register file A, excluding predicate registers (A3--A31,
+plus A0 if not C64X or higher).
+
+@item Db
+Register file B, excluding predicate registers (B3--B31).
+
+@item Iu4
+Integer constant in the range 0 @dots{} 15.
+
+@item Iu5
+Integer constant in the range 0 @dots{} 31.
+
+@item In5
+Integer constant in the range @minus{}31 @dots{} 0.
+
+@item Is5
+Integer constant in the range @minus{}16 @dots{} 15.
+
+@item I5x
+Integer constant that can be the operand of an ADDA or a SUBA insn.
+
+@item IuB
+Integer constant in the range 0 @dots{} 65535.
+
+@item IsB
+Integer constant in the range @minus{}32768 @dots{} 32767.
+
+@item IsC
+Integer constant in the range @math{-2^{20}} @dots{} @math{2^{20} - 1}.
+
+@item Jc
+Integer constant that is a valid mask for the clr instruction.
+
+@item Js
+Integer constant that is a valid mask for the set instruction.
+
+@item Q
+Memory location with A base register.
+
+@item R
+Memory location with B base register.
+

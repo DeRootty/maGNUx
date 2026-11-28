@@ -1,0 +1,293 @@
+@c GCC 16.1.0 | BLOQUE 0179 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 625-913 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Variable Length
+@subsection Arrays of Variable Length
+@cindex variable-length arrays
+@cindex arrays of variable length
+@cindex VLAs
+
+Variable-length automatic arrays are allowed in ISO C99, and as an
+extension GCC accepts them in C90 mode and in C++.  These arrays are
+declared like any other automatic arrays, but with a length that is not
+a constant expression.  The storage is allocated at the point of
+declaration and deallocated when the block scope containing the declaration
+exits.  For
+example:
+
+@smallexample
+FILE *
+concat_fopen (char *s1, char *s2, char *mode)
+@{
+  char str[strlen (s1) + strlen (s2) + 1];
+  strcpy (str, s1);
+  strcat (str, s2);
+  return fopen (str, mode);
+@}
+@end smallexample
+
+@cindex scope of a variable length array
+@cindex variable-length array scope
+@cindex deallocating variable length arrays
+Jumping or breaking out of the scope of the array name deallocates the
+storage.  Jumping into the scope is not allowed; you get an error
+message for it.
+
+@cindex variable-length array in a structure
+As an extension, GCC accepts variable-length arrays as a member of
+a structure or a union.  For example:
+
+@smallexample
+void
+foo (int n)
+@{
+  struct S @{ int x[n]; @};
+@}
+@end smallexample
+
+@cindex @code{alloca} vs variable-length arrays
+You can use the function @code{alloca} to get an effect much like
+variable-length arrays.  The function @code{alloca} is available in
+many other C implementations (but not in all).  On the other hand,
+variable-length arrays are more elegant.
+
+There are other differences between these two methods.  Space allocated
+with @code{alloca} exists until the containing @emph{function} returns.
+The space for a variable-length array is deallocated as soon as the array
+name's scope ends, unless you also use @code{alloca} in this scope.
+
+You can also use variable-length arrays as arguments to functions:
+
+@smallexample
+struct entry
+tester (int len, char data[len][len])
+@{
+  /* @r{@dots{}} */
+@}
+@end smallexample
+
+The length of an array is computed once when the storage is allocated
+and is remembered for the scope of the array in case you access it with
+@code{sizeof}.
+
+If you want to pass the array first and the length afterward, you can
+use a forward declaration in the parameter list---another GNU extension.
+
+@smallexample
+struct entry
+tester (int len; char data[len][len], int len)
+@{
+  /* @r{@dots{}} */
+@}
+@end smallexample
+
+@cindex parameter forward declaration
+The @samp{int len} before the semicolon
+is a @dfn{parameter forward declaration},
+and it serves the purpose of making the name @code{len} known
+when the declaration of @code{data} is parsed.
+
+Lists of parameter forward declarations are terminated by semicolons,
+and parameter forward declarations are separated within such lists by commas,
+just like in the regular list of parameter declarations.
+
+You can write any number of lists of parameter forward declaration,
+but using more than one is unnecessary.
+The last semicolon is followed by the list of parameter declarations.
+Each parameter forward declaration must match
+a parameter declaration in parameter name and data type.
+ISO C99 does not support parameter forward declarations.
+
+@node Zero Length
+@subsection Arrays of Length Zero
+@cindex arrays of length zero
+@cindex zero-length arrays
+@cindex length-zero arrays
+@cindex flexible array members
+
+Declaring zero-length arrays is allowed in GNU C as an extension.
+A zero-length array can be useful as the last element of a structure
+that is really a header for a variable-length object:
+
+@smallexample
+struct line @{
+  int length;
+  char contents[0];
+@};
+
+struct line *thisline = (struct line *)
+  malloc (sizeof (struct line) + this_length);
+thisline->length = this_length;
+@end smallexample
+
+In this example, @code{thisline->contents} is an array of @code{char} that
+can hold up to @code{thisline->length} bytes.
+
+Although the size of a zero-length array is zero, an array member of
+this kind may increase the size of the enclosing type as a result of tail
+padding.  The offset of a zero-length array member from the beginning
+of the enclosing structure is the same as the offset of an array with
+one or more elements of the same type.  The alignment of a zero-length
+array is the same as the alignment of its elements.
+
+Declaring zero-length arrays in other contexts, including as interior
+members of structure objects or as non-member objects, is discouraged.
+Accessing elements of zero-length arrays declared in such contexts is
+undefined and may be diagnosed.
+
+In the absence of the zero-length array extension, in ISO C90
+the @code{contents} array in the example above would typically be declared
+to have a single element.  Unlike a zero-length array which only contributes
+to the size of the enclosing structure for the purposes of alignment,
+a one-element array always occupies at least as much space as a single
+object of the type.  Although using one-element arrays this way is
+discouraged, GCC handles accesses to trailing one-element array members
+analogously to zero-length arrays.
+
+The preferred mechanism to declare variable-length types like
+@code{struct line} above is the ISO C99 @dfn{flexible array member},
+with slightly different syntax and semantics:
+
+@itemize @bullet
+@item
+Flexible array members are written as @code{contents[]} without
+the @code{0}.
+
+@item
+Flexible array members have incomplete type, and so the @code{sizeof}
+operator may not be applied.  As a quirk of the original implementation
+of zero-length arrays, @code{sizeof} evaluates to zero.
+
+@item
+Flexible array members may only appear as the last member of a
+@code{struct} that is otherwise non-empty.
+
+@item
+A structure containing a flexible array member, or a union containing
+such a structure (possibly recursively), may not be a member of a
+structure or an element of an array.  (However, these uses are
+permitted by GCC as extensions, see details below.)
+@end itemize
+
+The GCC extension accepts a structure containing an ISO C99 @dfn{flexible array
+member}, or a union containing such a structure (possibly recursively)
+to be a member of a structure.
+
+There are two situations:
+
+@itemize @bullet
+@item
+A structure containing a C99 flexible array member, or a union containing
+such a structure, is the last field of another structure, for example:
+
+@smallexample
+struct flex  @{ int length; char data[]; @};
+union union_flex @{ int others; struct flex f; @};
+
+struct out_flex_struct @{ int m; struct flex flex_data; @};
+struct out_flex_union @{ int n; union union_flex flex_data; @};
+@end smallexample
+
+In the above, both @code{out_flex_struct.flex_data.data[]} and
+@code{out_flex_union.flex_data.f.data[]} are considered as flexible arrays too.
+
+@item
+A structure containing a C99 flexible array member, or a union containing
+such a structure, is not the last field of another structure, for example:
+
+@smallexample
+struct flex  @{ int length; char data[]; @};
+
+struct mid_flex @{ int m; struct flex flex_data; int n; @};
+@end smallexample
+
+In the above, accessing a member of the array @code{mid_flex.flex_data.data[]}
+might have undefined behavior.  Compilers do not handle such a case
+consistently.  Any code relying on this case should be modified to ensure
+that flexible array members only end up at the ends of structures.
+
+Please use the warning option @option{-Wflex-array-member-not-at-end} to
+identify all such cases in the source code and modify them.  This extension
+is now deprecated.
+@end itemize
+
+Non-empty initialization of zero-length
+arrays is treated like any case where there are more initializer
+elements than the array holds, in that a suitable warning about ``excess
+elements in array'' is given, and the excess elements (all of them, in
+this case) are ignored.
+
+GCC allows static initialization of flexible array members.
+This is equivalent to defining a new structure containing the original
+structure followed by an array of sufficient size to contain the data.
+E.g.@: in the following, @code{f1} is constructed as if it were declared
+like @code{f2}.
+
+@smallexample
+struct f1 @{
+  int x; int y[];
+@} f1 = @{ 1, @{ 2, 3, 4 @} @};
+
+struct f2 @{
+  struct f1 f1; int data[3];
+@} f2 = @{ @{ 1 @}, @{ 2, 3, 4 @} @};
+@end smallexample
+
+@noindent
+The convenience of this extension is that @code{f1} has the desired
+type, eliminating the need to consistently refer to @code{f2.f1}.
+
+This has symmetry with normal static arrays, in that an array of
+unknown size is also written with @code{[]}.
+
+Of course, this extension only makes sense if the extra data comes at
+the end of a top-level object, as otherwise we would be overwriting
+data at subsequent offsets.  To avoid undue complication and confusion
+with initialization of deeply nested arrays, we simply disallow any
+non-empty initialization except when the structure is the top-level
+object.  For example:
+
+@smallexample
+struct foo @{ int x; int y[]; @};
+struct bar @{ struct foo z; @};
+
+struct foo a = @{ 1, @{ 2, 3, 4 @} @};        // @r{Valid.}
+struct bar b = @{ @{ 1, @{ 2, 3, 4 @} @} @};    // @r{Invalid.}
+struct bar c = @{ @{ 1, @{ @} @} @};            // @r{Valid.}
+struct foo d[1] = @{ @{ 1, @{ 2, 3, 4 @} @} @};  // @r{Invalid.}
+@end smallexample
+
+@node Empty Structures
+@subsection Structures with No Members
+@cindex empty structures
+@cindex zero-size structures
+
+GCC permits a C structure to have no members:
+
+@smallexample
+struct empty @{
+@};
+@end smallexample
+
+The structure has size zero.  In C++, empty structures are part
+of the language.  G++ treats empty structures as if they had a single
+member of type @code{char}.
+
+@node Flexible Array Members in Unions
+@subsection Unions with Flexible Array Members
+@cindex unions with flexible array members
+@cindex unions with FAMs
+
+GCC permits a C99 flexible array member (FAM) to be in a union:
+
+@smallexample
+union with_fam @{
+  int a;
+  int b[];
+@};
+@end smallexample
+
+If every member of a union is a flexible array member, the size of
+such a union is zero.
+

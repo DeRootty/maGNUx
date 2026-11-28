@@ -1,0 +1,182 @@
+@c GCC 16.1.0 | BLOQUE 0087 | 03-18
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 19456-19633 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -fcall-used-@var{reg}
+Treat the register named @var{reg} as an allocable register that is
+clobbered by function calls.  It may be allocated for temporaries or
+variables that do not live across a call.  Functions compiled this way
+do not save and restore the register @var{reg}.
+
+It is an error to use this flag with the frame pointer or stack pointer.
+Use of this flag for other registers that have fixed pervasive roles in
+the machine's execution model produces disastrous results.
+
+This flag does not have a negative form, because it specifies a
+three-way choice.
+
+@opindex fcall-saved
+@item -fcall-saved-@var{reg}
+Treat the register named @var{reg} as an allocable register saved by
+functions.  It may be allocated even for temporaries or variables that
+live across a call.  Functions compiled this way save and restore
+the register @var{reg} if they use it.
+
+It is an error to use this flag with the frame pointer or stack pointer.
+Use of this flag for other registers that have fixed pervasive roles in
+the machine's execution model produces disastrous results.
+
+A different sort of disaster results from the use of this flag for
+a register in which function values may be returned.
+
+This flag does not have a negative form, because it specifies a
+three-way choice.
+
+@opindex fpack-struct
+@opindex fno-pack-struct
+@item -fpack-struct[=@var{n}]
+Without a value specified, pack all structure members together without
+holes.  When a value is specified (which must be a small power of two), pack
+structure members according to this value, representing the maximum
+alignment (that is, objects with default alignment requirements larger than
+this are output potentially unaligned at the next fitting location.
+
+@strong{Warning:} the @option{-fpack-struct} switch causes GCC to generate
+code that is not binary compatible with code generated without that switch.
+Additionally, it makes the code suboptimal.
+Use it to conform to a non-default application binary interface.
+
+@opindex fleading-underscore
+@opindex fno-leading-underscore
+@item -fleading-underscore
+This option and its counterpart, @option{-fno-leading-underscore}, forcibly
+change the way C symbols are represented in the object file.  One use
+is to help link with legacy assembly code.
+
+@strong{Warning:} the @option{-fleading-underscore} switch causes GCC to
+generate code that is not binary compatible with code generated without that
+switch.  Use it to conform to a non-default application binary interface.
+Not all targets provide complete support for this switch.
+
+@opindex ftls-model
+@item -ftls-model=@var{model}
+Alter the thread-local storage model to be used (@pxref{Thread-Local}).
+The @var{model} argument should be one of @samp{global-dynamic},
+@samp{local-dynamic}, @samp{initial-exec} or @samp{local-exec}.
+Note that the choice is subject to optimization: the compiler may use
+a more efficient model for symbols not visible outside of the translation
+unit, or if @option{-fpic} is not given on the command line.
+
+The default without @option{-fpic} is @samp{initial-exec}; with
+@option{-fpic} the default is @samp{global-dynamic}.
+
+@opindex ftrampolines
+@opindex fno-trampolines
+@item -ftrampolines
+For targets that normally need trampolines for nested functions, always
+generate them instead of using descriptors.  Otherwise, for targets that
+do not need them, like for example HP-PA or IA-64, do nothing.
+
+A trampoline is a small piece of code that is created at run time on the
+stack when the address of a nested function is taken, and is used to call
+the nested function indirectly.  Therefore, it requires the stack to be
+made executable in order for the program to work properly.
+
+@option{-fno-trampolines} is enabled by default on a language by language
+basis to let the compiler avoid generating them, if it computes that this
+is safe, and replace them with descriptors.  Descriptors are made up of data
+only, but the generated code must be prepared to deal with them.  As of this
+writing, @option{-fno-trampolines} is enabled by default only for Ada.
+
+Moreover, code compiled with @option{-ftrampolines} and code compiled with
+@option{-fno-trampolines} are not binary compatible if nested functions are
+present.  This option must therefore be used on a program-wide basis and be
+manipulated with extreme care.
+
+For languages other than Ada, the @code{-ftrampolines} and
+@code{-fno-trampolines} options currently have no effect, and
+trampolines are always generated on platforms that need them
+for nested functions.
+
+@opindex ftrampoline-impl
+@item -ftrampoline-impl=@r{[}stack@r{|}heap@r{]}
+By default, trampolines are generated on stack.  However, certain platforms
+(such as the Apple M1) do not permit an executable stack.  Compiling with
+@option{-ftrampoline-impl=heap} generate calls to
+@code{__gcc_nested_func_ptr_created} and
+@code{__gcc_nested_func_ptr_deleted} in order to allocate and
+deallocate trampoline space on the executable heap.  These functions are
+implemented in libgcc, and will only be provided on specific targets:
+x86_64 Darwin, x86_64 and aarch64 Linux.  @emph{PLEASE NOTE}: Heap
+trampolines are @emph{not} guaranteed to be correctly deallocated if you
+@code{setjmp}, instantiate nested functions, and then @code{longjmp} back
+to a state prior to having allocated those nested functions.
+
+@opindex fvisibility
+@item -fvisibility=@r{[}default@r{|}internal@r{|}hidden@r{|}protected@r{]}
+Set the default ELF image symbol visibility to the specified option---all
+symbols are marked with this unless overridden within the code.
+Using this feature can very substantially improve linking and
+load times of shared object libraries, produce more optimized
+code, provide near-perfect API export and prevent symbol clashes.
+It is @strong{strongly} recommended that you use this in any shared objects
+you distribute.
+
+Despite the nomenclature, @samp{default} always means public; i.e.,
+available to be linked against from outside the shared object.
+@samp{protected} and @samp{internal} are pretty useless in real-world
+usage so the only other commonly used option is @samp{hidden}.
+The default if @option{-fvisibility} isn't specified is
+@samp{default}, i.e., make every symbol public.
+
+A good explanation of the benefits offered by ensuring ELF
+symbols have the correct visibility is given by ``How To Write
+Shared Libraries'' by Ulrich Drepper (which can be found at
+@w{@uref{https://www.akkadia.org/drepper/}})---however a superior
+solution made possible by this option to marking things hidden when
+the default is public is to make the default hidden and mark things
+public.  This is the norm with DLLs on Windows and with @option{-fvisibility=hidden}
+and @code{__attribute__ ((visibility("default")))} instead of
+@code{__declspec(dllexport)} you get almost identical semantics with
+identical syntax.  This is a great boon to those working with
+cross-platform projects.
+
+For those adding visibility support to existing code, you may find
+@code{#pragma GCC visibility} of use.  This works by you enclosing
+the declarations you wish to set visibility for with (for example)
+@code{#pragma GCC visibility push(hidden)} and
+@code{#pragma GCC visibility pop}.
+Bear in mind that symbol visibility should be viewed @strong{as
+part of the API interface contract} and thus all new code should
+always specify visibility when it is not the default; i.e., declarations
+only for use within the local DSO should @strong{always} be marked explicitly
+as hidden as so to avoid PLT indirection overheads---making this
+abundantly clear also aids readability and self-documentation of the code.
+Note that due to ISO C++ specification requirements, @code{operator new} and
+@code{operator delete} must always be of default visibility.
+
+Be aware that headers from outside your project, in particular system
+headers and headers from any other library you use, may not be
+expecting to be compiled with visibility other than the default.  You
+may need to explicitly say @code{#pragma GCC visibility push(default)}
+before including any such headers.
+
+@code{extern} declarations are not affected by @option{-fvisibility}, so
+a lot of code can be recompiled with @option{-fvisibility=hidden} with
+no modifications.  However, this means that calls to @code{extern}
+functions with no explicit visibility use the PLT, so it is more
+effective to use @code{__attribute ((visibility))} and/or
+@code{#pragma GCC visibility} to tell the compiler which @code{extern}
+declarations should be treated as hidden.
+
+Note that @option{-fvisibility} does affect C++ vague linkage
+entities. This means that, for instance, an exception class that is
+be thrown between DSOs must be explicitly marked with default
+visibility so that the @samp{type_info} nodes are unified between
+the DSOs.
+
+An overview of these techniques, their benefits and how to use them
+is at @uref{https://gcc.gnu.org/@/wiki/@/Visibility}.
+
+@opindex fstrict-volatile-bitfields
+@opindex fno-strict-volatile-bitfields

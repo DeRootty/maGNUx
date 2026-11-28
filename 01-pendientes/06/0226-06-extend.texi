@@ -1,0 +1,12 @@
+@c GCC 16.1.0 | BLOQUE 0226 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 13004-13011 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item @code{W} @tab Print the position of a single bit cleared.
+@item @code{t} @tab Print a memory address which is a register.
+@item @code{u} @tab Print the lowest 16 bits of ''@code{CONST_INT}'', as an unsigned value.
+@item @code{o} @tab Print an operator.
+@end multitable
+
+@lowersections
+@include md.texi

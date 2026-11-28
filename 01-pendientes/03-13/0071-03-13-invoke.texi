@@ -1,0 +1,217 @@
+@c GCC 16.1.0 | BLOQUE 0071 | 03-13
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 17724-17936 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -fcf-protection=@r{[}full@r{|}branch@r{|}return@r{|}none@r{|}check@r{]}
+@itemx -fcf-protection
+Enable code instrumentation to increase
+program security by checking that target addresses of control-flow
+transfer instructions (such as indirect function call, function return,
+indirect jump) are valid.  This prevents diverting the flow of control
+to an unexpected target.  This is intended to protect against such
+threats as Return-oriented Programming (ROP), and similarly
+call/jmp-oriented programming (COP/JOP).
+
+The @option{-fcf-protection=} keywords are interpreted as follows.
+
+The value @code{branch} tells the compiler to implement checking of
+validity of control-flow transfer at the point of indirect branch
+instructions, i.e.@: call/jmp instructions.
+
+The value @code{return} implements checking of validity at the point of
+returning from a function.
+
+The value @code{full} is an alias for specifying both
+@code{branch} and @code{return}.
+
+The value @code{check} is used for the final link with link-time
+optimization (LTO).  An error is issued if LTO object files are
+compiled with different @option{-fcf-protection} values.  The
+value @code{check} is ignored at the compile time.
+
+The value @code{none} turns off instrumentation.
+
+@option{-fcf-protection} is an alias for @option{-fcf-protection=full}.
+To override a previous @option{-fcf-protection} option on the command
+line, add @option{-fcf-protection=none} and then
+@option{-fcf-protection=@var{kind}}.
+
+The macro @code{__CET__} is defined when @option{-fcf-protection} is
+used.  The first bit of @code{__CET__} is set to 1 for the value
+@code{branch} and the second bit of @code{__CET__} is set to 1 for
+the @code{return}.
+
+You can also use the @code{nocf_check} attribute to identify
+which functions and calls should be skipped from instrumentation
+(@pxref{Common Attributes}).
+
+Currently the x86 GNU/Linux target provides an implementation based
+on Intel Control-flow Enforcement Technology (CET) which works for
+i686 processor or newer.
+
+@opindex fharden-compares
+@opindex fno-harden-compares
+@item -fharden-compares
+For every logical test that survives gimple optimizations and is
+@emph{not} the condition in a conditional branch (for example,
+conditions tested for conditional moves, or to store in boolean
+variables), emit extra code to compute and verify the reversed
+condition, and to call @code{__builtin_trap} if the results do not
+match.  Use with @samp{-fharden-conditional-branches} to cover all
+conditionals.
+
+@opindex fharden-conditional-branches
+@opindex fno-harden-conditional-branches
+@item -fharden-conditional-branches
+For every non-vectorized conditional branch that survives gimple
+optimizations, emit extra code to compute and verify the reversed
+condition, and to call @code{__builtin_trap} if the result is
+unexpected.  Use with @samp{-fharden-compares} to cover all
+conditionals.
+
+@opindex fharden-control-flow-redundancy
+@opindex fno-harden-control-flow-redundancy
+@item -fharden-control-flow-redundancy
+Emit extra code to set booleans when entering basic blocks, and to
+verify and trap, at function exits, when the booleans do not form an
+execution path that is compatible with the control flow graph.
+
+Verification takes place before returns, before mandatory tail calls
+(see below) and, optionally, before escaping exceptions with
+@option{-fhardcfr-check-exceptions}, before returning calls with
+@option{-fhardcfr-check-returning-calls}, and before noreturn calls with
+@option{-fhardcfr-check-noreturn-calls}).
+
+Tail call optimization takes place too late to affect control flow
+redundancy, but calls annotated as mandatory tail calls by language
+front-ends, and any calls marked early enough as potential tail calls
+would also have verification issued before the call, but these
+possibilities are merely theoretical, as these conditions can only be
+met when using custom compiler plugins.
+
+@opindex fhardcfr-skip-leaf
+@opindex fno-hardcfr-skip-leaf
+@item -fhardcfr-skip-leaf
+Disable @option{-fharden-control-flow-redundancy} in leaf functions.
+
+@opindex fhardcfr-check-exceptions
+@opindex fno-hardcfr-check-exceptions
+@item -fhardcfr-check-exceptions
+When @option{-fharden-control-flow-redundancy} is active, check the
+recorded execution path against the control flow graph at exception
+escape points, as if the function body was wrapped with a cleanup
+handler that performed the check and reraised.  This option is enabled
+by default; use @option{-fno-hardcfr-check-exceptions} to disable it.
+
+@opindex fhardcfr-check-returning-calls
+@opindex fno-hardcfr-check-returning-calls
+@item -fhardcfr-check-returning-calls
+When @option{-fharden-control-flow-redundancy} is active, check the
+recorded execution path against the control flow graph before any
+function call immediately followed by a return of its result, if any, so
+as to not prevent tail-call optimization, whether or not it is
+ultimately optimized to a tail call.
+
+This option is enabled by default whenever sibling call optimizations
+are enabled (see @option{-foptimize-sibling-calls}), but it can be
+enabled (or disabled, using its negated form) explicitly, regardless of
+the optimizations.
+
+@opindex fhardcfr-check-noreturn-calls
+@item -fhardcfr-check-noreturn-calls=@r{[}always@r{|}no-xthrow@r{|}nothrow@r{|}never@r{]}
+When @option{-fharden-control-flow-redundancy} is active, check the
+recorded execution path against the control flow graph before
+@code{noreturn} calls, either all of them (@option{always}), those that
+aren't expected to return control to the caller through an exception
+(@option{no-xthrow}, the default), those that may not return control to
+the caller through an exception either (@option{nothrow}), or none of
+them (@option{never}).
+
+Checking before a @code{noreturn} function that may return control to
+the caller through an exception may cause checking to be performed more
+than once, if the exception is caught in the caller, whether by a
+handler or a cleanup.  When @option{-fhardcfr-check-exceptions} is also
+enabled, the compiler will avoid associating a @code{noreturn} call with
+the implicitly-added cleanup handler, since it would be redundant with
+the check performed before the call, but other handlers or cleanups in
+the function, if activated, will modify the recorded execution path and
+check it again when another checkpoint is hit.  The checkpoint may even
+be another @code{noreturn} call, so checking may end up performed
+multiple times.
+
+Various optimizers may cause calls to be marked as @code{noreturn}
+and/or @code{nothrow}, even in the absence of the corresponding
+attributes, which may affect the placement of checks before calls, as
+well as the addition of implicit cleanup handlers for them.  This
+unpredictability, and the fact that raising and reraising exceptions
+frequently amounts to implicitly calling @code{noreturn} functions, have
+made @option{no-xthrow} the default setting for this option: it excludes
+from the @code{noreturn} treatment only internal functions used to
+(re)raise exceptions, that are not affected by these optimizations.
+
+@opindex fhardened
+@opindex fno-hardened
+@item -fhardened
+Enable a set of flags for C and C++ that improve the security of the
+generated code without affecting its ABI.  The precise flags enabled
+may change between major releases of GCC, but are currently:
+
+@c Keep this in sync with print_help_hardened!
+@gccoptlist{
+-D_FORTIFY_SOURCE=3
+-D_GLIBCXX_ASSERTIONS
+-ftrivial-auto-var-init=zero
+-fPIE  -pie  -Wl,-z,relro,-z,now
+-fstack-protector-strong
+-fstack-clash-protection
+-fcf-protection=full @r{(x86 GNU/Linux only)}
+}
+
+The list of options enabled by @option{-fhardened} can be generated using
+the @option{--help=hardened} option.
+
+When the system glibc is older than 2.35, @option{-D_FORTIFY_SOURCE=2}
+is used instead.
+
+This option is intended to be used in production builds, not merely
+in debug builds.
+
+Currently, @option{-fhardened} is only supported on GNU/Linux targets.
+
+@option{-fhardened} only enables a particular option if it wasn't
+already specified anywhere on the command line.  For instance,
+@option{-fhardened} @option{-fstack-protector} will only enable
+@option{-fstack-protector}, but not @option{-fstack-protector-strong}.
+
+@opindex fstack-protector
+@opindex fno-stack-protector
+@item -fstack-protector
+Emit extra code to check for buffer overflows, such as stack smashing
+attacks.  This is done by adding a guard variable to functions with
+vulnerable objects.  This includes functions that call @code{alloca}, and
+functions with buffers larger than or equal to 8 bytes.  The guards are
+initialized when a function is entered and then checked when the function
+exits.  If a guard check fails, an error message is printed and the program
+exits.  Only variables that are actually allocated on the stack are
+considered, optimized away variables or variables allocated in registers
+don't count.
+
+@opindex fstack-protector-all
+@item -fstack-protector-all
+Like @option{-fstack-protector} except that all functions are protected.
+
+@opindex fstack-protector-strong
+@item -fstack-protector-strong
+Like @option{-fstack-protector} but includes additional functions to
+be protected --- those that have local array definitions, or have
+references to local frame addresses.  Only variables that are actually
+allocated on the stack are considered, optimized away variables or variables
+allocated in registers don't count.
+
+@opindex fstack-protector-explicit
+@item -fstack-protector-explicit
+Like @option{-fstack-protector} but only protects those functions which
+have the @code{stack_protect} attribute.
+
+@opindex fstack-check
+@opindex fno-stack-check

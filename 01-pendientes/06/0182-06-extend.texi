@@ -1,0 +1,266 @@
+@c GCC 16.1.0 | BLOQUE 0182 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 1529-1790 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item
+If you use one of the @code{__flash@var{N}} address spaces
+you must arrange your linker script to locate the
+@code{.progmem@var{N}.data} sections according to your needs.
+For an example, see the
+@w{@uref{https://gcc.gnu.org/wiki/avr-gcc#Address_Spaces,avr-gcc wiki}}
+
+@item
+Any data or pointers to the non-generic address spaces must
+be qualified as @code{const}, i.e.@: as read-only data.
+This still applies if the data in one of these address
+spaces like software version number or calibration lookup table are intended to
+be changed after load time by, say, a boot loader. In this case
+the right qualification is @code{const} @code{volatile} so that the compiler
+must not optimize away known values or insert them
+as immediates into operands of instructions.
+
+@item
+The following code initializes a variable @code{pfoo}
+located in static storage with a 24-bit address:
+@smallexample
+extern const __memx char foo;
+const __memx void *pfoo = &foo;
+@end smallexample
+
+@item
+On the reduced Tiny devices like ATtiny40, no address spaces are supported.
+Just use vanilla C / C++ code without overhead as outlined above.
+Attribute @code{progmem} is supported but works differently.
+
+@end itemize
+
+@subsection M32C Named Address Spaces
+@cindex @code{__far} M32C Named Address Spaces
+
+On the M32C target, with the R8C and M16C CPU variants, variables
+qualified with @code{__far} are accessed using 32-bit addresses in
+order to access memory beyond the first 64@tie{}Ki bytes.  If
+@code{__far} is used with the M32CM or M32C CPU variants, it has no
+effect.
+
+@subsection PRU Named Address Spaces
+@cindex @code{__regio_symbol} PRU Named Address Spaces
+
+On the PRU target, variables qualified with @code{__regio_symbol} are
+aliases used to access the special I/O CPU registers.  They must be
+declared as @code{extern} because such variables will not be allocated in
+any data memory.  They must also be marked as @code{volatile}, and can
+only be 32-bit integer types.  The only names those variables can have
+are @code{__R30} and @code{__R31}, representing respectively the
+@code{R30} and @code{R31} special I/O CPU registers.  Hence the following
+example is the only valid usage of @code{__regio_symbol}:
+
+@smallexample
+extern volatile __regio_symbol uint32_t __R30;
+extern volatile __regio_symbol uint32_t __R31;
+@end smallexample
+
+@subsection RL78 Named Address Spaces
+@cindex @code{__far} RL78 Named Address Spaces
+
+On the RL78 target, variables qualified with @code{__far} are accessed
+with 32-bit pointers (20-bit addresses) rather than the default 16-bit
+addresses.  Non-far variables are assumed to appear in the topmost
+64@tie{}KiB of the address space.
+
+@subsection x86 Named Address Spaces
+@cindex x86 named address spaces
+
+On the x86 target, variables may be declared as being relative
+to the @code{%fs} or @code{%gs} segments.
+
+@table @code
+@cindex @code{__seg_fs} x86 named address space
+@cindex @code{__seg_gs} x86 named address space
+@item __seg_fs
+@itemx __seg_gs
+The object is accessed with the respective segment override prefix.
+
+The respective segment base must be set via some method specific to
+the operating system.  Rather than require an expensive system call
+to retrieve the segment base, these address spaces are not considered
+to be subspaces of the generic (flat) address space.  This means that
+explicit casts are required to convert pointers between these address
+spaces and the generic address space.  In practice the application
+should cast to @code{uintptr_t} and apply the segment base offset
+that it installed previously.
+
+The preprocessor symbols @code{__SEG_FS} and @code{__SEG_GS} are
+defined when these address spaces are supported.
+@end table
+
+@anchor{Function Attributes}
+@anchor{Variable Attributes}
+@anchor{Type Attributes}
+@anchor{Label Attributes}
+@anchor{Enumerator Attributes}
+@anchor{Statement Attributes}
+@node Attributes
+@section Attributes Specific to GCC
+@cindex attributes
+@cindex declaring attributes
+@cindex GNU attributes
+
+Attributes provide a mechanism to declare additional properties of
+functions, variables, types, and statements.  For example, attributes
+can be used to control placement of objects in particular memory
+sections, or to specify properties that can allow the compiler to
+generate better code or diagnostics, such as declaring that a function
+never returns.  GCC supports a large number of such attributes, which
+are documented in this section.
+
+GCC provides two different ways to specify attributes: the traditional
+GNU syntax using @samp{__attribute__ ((...))} annotations, and the
+newer standard C and C++ syntax using @samp{[[...]]} with the
+@samp{gnu::} namespace prefix on attribute names.  Both syntaxes are
+accepted in all supported C and C++ dialects.  However, if you use the
+@option{-Wpedantic} option (@pxref{Warning Options}), GCC warns about
+uses of the standard attribute syntax in C dialects prior to C23 and
+C++ dialects prior to C++11, which did not include this feature.  You
+can suppress these warnings by prefixing the attribute name with the
+@code{__extension__} keyword; @xref{Alternate Keywords}.
+
+The traditional syntax is described in detail in @ref{Attribute Syntax}.
+Refer to the C or C++ standards for the exact rules regarding placement
+of standard attributes.
+
+Here are some examples showing the use of attributes.
+
+No matter which syntax is used, attributes in a variable declaration can be
+placed at the beginning of the declaration (in which case they apply
+to all declarators in the declaration), or after a particular
+declarator (applying only to that variable).
+
+@smallexample
+[[gnu::aligned (16)]] int v1 = 0;
+int v2 __attribute__ ((aligned (16))) = 0;
+int v3 [[gnu::aligned (16)]] = 0;
+int v4 __attribute__ ((aligned (16))) = 0;
+@end smallexample
+
+@cindex function attributes
+@cindex declaring attributes of functions
+Attributes for a function declaration or definition can appear first
+in both syntaxes:
+
+@smallexample
+[[gnu::section ("bar")]] extern void f1 (void);
+__attribute__ ((section ("bar"))) extern void f2 (void);
+@end smallexample
+
+@noindent
+But, watch out for the common style of placing of attributes after
+the argument list when using the GNU syntax.  With the standard
+syntax, attributes in this location are treated as modifying the
+@emph{type} of the function rather than the function itself, or its
+name.
+
+@smallexample
+extern void f3 (void) [[gnu::section ("bar")]];  /* Error!  */
+extern void f4 (void) __attribute__ ((section ("bar")));
+@end smallexample
+
+@noindent
+An error is diagnosed on the declaration of @code{f3} because the
+@code{section} attribute can't apply to types.  To apply it correctly
+to the function, either put the attribute at the beginning of the
+declaration, or put it after the name of the function, like this:
+
+@smallexample
+extern void f3 [[gnu::section ("bar")]] (void);
+@end smallexample
+
+Typedefs follow the same attribute placement rules for other as other
+declarations.  These declarations are all valid with similiar meanings.
+
+@smallexample
+[[gnu::unavailable]] typedef int *t1;
+typedef int *t2 [[gnu::unavailable]];
+__attribute__ ((unavailable)) typedef int *t3;
+typedef int *t4 __attribute__ ((unavailable));
+@end smallexample
+
+Members of a struct, union, or C++ class follow similar rules for
+attribute placement as other declarations, but beware that many
+attributes intended for use in top-level declarations, such as those
+that specify linker attributes of symbols, do not make sense here.
+
+Put attributes that apply to a @code{struct}, @code{union}, @code{class}, or
+@code{enum} type as a whole between the keyword and the type name:
+
+@smallexample
+struct [[gnu::aligned (8)]] s1 @{ short f[3]; @};
+struct __attribute__ ((aligned (8))) s2 @{ short f[3]; @};
+@end smallexample
+
+There are only a few attributes that apply to enumerators; those are
+placed directly after the enumerator name.
+
+Statement attributes are placed before a statement or label.  An
+attribute placed before an empty statement is a special case, an
+@dfn{attribute declaration}, with semantics that depend on the
+particular attribute.  Otherwise statement attributes usually apply to
+the statement or label they prefix.
+
+These two functions are equivalent:
+
+@smallexample
+int foo1 (int x, int y)
+@{
+  [[gnu::assume (x == 42)]];
+  return x + y;
+@}
+
+int foo2 (int x, int y)
+@{
+  __attribute__((assume(x == 42)));
+  return x + y;
+@}
+@end smallexample
+
+If you want to specify multiple attributes on the same entity, both
+syntaxes allow you to to list them in the same attribute specifier,
+separated by commas:
+
+@smallexample
+[[gnu::section ("bar"), gnu::weak]]
+void g1 (void) @{ f1 (); @}
+
+__attribute__ ((section ("bar"), weak))
+void g2 (void) @{ f2 (); @}
+@end smallexample
+
+@noindent
+Alternatively, you can use multiple attribute specifiers:
+
+@smallexample
+[[gnu::section ("bar")]] [[gnu::weak]]
+void g3 (void) @{ f1 (); @}
+
+__attribute__ ((section ("bar"))) __attribute__ ((weak))
+void g4 (void) @{ f2 (); @}
+@end smallexample
+
+In the sections that follow, either or both syntaxes may appear in code
+examples.  All attributes can be used with both syntaxes even if only one
+is used in the examples for a given attribute.
+
+Compatible attribute specifications on distinct declarations
+of the same entity are merged.  An attribute specification that is not
+compatible with attributes already applied to a declaration of the same
+entity is ignored with a warning.
+
+Every GNU-specific attribute has an alternate name that is prefixed
+and suffixed by two underscores; for example, the alternate name of
+@code{weak} is @code{__weak__}.  These alternate names are useful in
+library header files in case they are included into files that have
+redefined the base name of the attribute as a preprocessor macro.
+
+GCC also accepts the keyword @code{__attribute} as a synonym for
+@code{__attribute__}.
+

@@ -1,0 +1,210 @@
+@c GCC 16.1.0 | BLOQUE 0310 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 24165-24370 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Basic PowerPC Built-in Functions Available on ISA 3.0
+@subsubsection Basic PowerPC Built-in Functions Available on ISA 3.0
+
+The basic built-in functions described in this section are
+available on the PowerPC family of processors starting with ISA 3.0
+or later.  Unless specific options are explicitly disabled on the
+command line, specifying option @option{-mcpu=power9} has the effect of
+enabling all the same options as for @option{-mcpu=power8} in
+addition to the @option{-misel} option.
+
+The following built-in functions are available on Linux 64-bit systems
+that use the ISA 3.0 instruction set (@option{-mcpu=power9}):
+
+@defbuiltin{__float128 __builtin_addf128_round_to_odd (__float128, __float128)}
+Perform a 128-bit IEEE floating point add using round to odd as the
+rounding mode.
+@enddefbuiltin
+
+@defbuiltin{__float128 __builtin_subf128_round_to_odd (__float128, __float128)}
+Perform a 128-bit IEEE floating point subtract using round to odd as
+the rounding mode.
+@enddefbuiltin
+
+@defbuiltin{__float128 __builtin_mulf128_round_to_odd (__float128, __float128)}
+Perform a 128-bit IEEE floating point multiply using round to odd as
+the rounding mode.
+@enddefbuiltin
+
+@defbuiltin{__float128 __builtin_divf128_round_to_odd (__float128, __float128)}
+Perform a 128-bit IEEE floating point divide using round to odd as
+the rounding mode.
+@enddefbuiltin
+
+@defbuiltin{__float128 __builtin_sqrtf128_round_to_odd (__float128)}
+Perform a 128-bit IEEE floating point square root using round to odd
+as the rounding mode.
+@enddefbuiltin
+
+@defbuiltin{__float128 __builtin_fmaf128_round_to_odd (__float128, __float128, __float128)}
+Perform a 128-bit IEEE floating point fused multiply and add operation
+using round to odd as the rounding mode.
+@enddefbuiltin
+
+@defbuiltin{double __builtin_truncf128_round_to_odd (__float128)}
+Convert a 128-bit IEEE floating point value to @code{double} using
+round to odd as the rounding mode.
+@enddefbuiltin
+
+
+The following additional built-in functions are also available for the
+PowerPC family of processors, starting with ISA 3.0 or later:
+
+@defbuiltin{{long long} __builtin_darn (void)}
+@defbuiltinx{{long long} __builtin_darn_raw (void)}
+@defbuiltinx{int __builtin_darn_32 (void)}
+The @code{__builtin_darn} and @code{__builtin_darn_raw}
+functions require a
+64-bit environment supporting ISA 3.0 or later.
+The @code{__builtin_darn} function provides a 64-bit conditioned
+random number.  The @code{__builtin_darn_raw} function provides a
+64-bit raw random number.  The @code{__builtin_darn_32} function
+provides a 32-bit conditioned random number.
+@enddefbuiltin
+
+The following additional built-in functions are also available for the
+PowerPC family of processors, starting with ISA 3.0 or later:
+
+@smallexample
+int __builtin_byte_in_set (unsigned char u, unsigned long long set);
+int __builtin_byte_in_range (unsigned char u, unsigned int range);
+int __builtin_byte_in_either_range (unsigned char u, unsigned int ranges);
+
+int __builtin_dfp_dtstsfi_lt (unsigned int comparison, _Decimal64 value);
+int __builtin_dfp_dtstsfi_lt (unsigned int comparison, _Decimal128 value);
+int __builtin_dfp_dtstsfi_lt_dd (unsigned int comparison, _Decimal64 value);
+int __builtin_dfp_dtstsfi_lt_td (unsigned int comparison, _Decimal128 value);
+
+int __builtin_dfp_dtstsfi_gt (unsigned int comparison, _Decimal64 value);
+int __builtin_dfp_dtstsfi_gt (unsigned int comparison, _Decimal128 value);
+int __builtin_dfp_dtstsfi_gt_dd (unsigned int comparison, _Decimal64 value);
+int __builtin_dfp_dtstsfi_gt_td (unsigned int comparison, _Decimal128 value);
+
+int __builtin_dfp_dtstsfi_eq (unsigned int comparison, _Decimal64 value);
+int __builtin_dfp_dtstsfi_eq (unsigned int comparison, _Decimal128 value);
+int __builtin_dfp_dtstsfi_eq_dd (unsigned int comparison, _Decimal64 value);
+int __builtin_dfp_dtstsfi_eq_td (unsigned int comparison, _Decimal128 value);
+
+int __builtin_dfp_dtstsfi_ov (unsigned int comparison, _Decimal64 value);
+int __builtin_dfp_dtstsfi_ov (unsigned int comparison, _Decimal128 value);
+int __builtin_dfp_dtstsfi_ov_dd (unsigned int comparison, _Decimal64 value);
+int __builtin_dfp_dtstsfi_ov_td (unsigned int comparison, _Decimal128 value);
+
+double __builtin_mffsl(void);
+
+@end smallexample
+The @code{__builtin_byte_in_set} function requires a
+64-bit environment supporting ISA 3.0 or later.  This function returns
+a non-zero value if and only if its @code{u} argument exactly equals one of
+the eight bytes contained within its 64-bit @code{set} argument.
+
+The @code{__builtin_byte_in_range} and
+@code{__builtin_byte_in_either_range} require an environment
+supporting ISA 3.0 or later.  For these two functions, the
+@code{range} argument is encoded as 4 bytes, organized as
+@code{hi_1:lo_1:hi_2:lo_2}.
+The @code{__builtin_byte_in_range} function returns a
+non-zero value if and only if its @code{u} argument is within the
+range bounded between @code{lo_2} and @code{hi_2} inclusive.
+The @code{__builtin_byte_in_either_range} function returns non-zero if
+and only if its @code{u} argument is within either the range bounded
+between @code{lo_1} and @code{hi_1} inclusive or the range bounded
+between @code{lo_2} and @code{hi_2} inclusive.
+
+The @code{__builtin_dfp_dtstsfi_lt} function returns a non-zero value
+if and only if the number of significant digits of its @code{value} argument
+is less than its @code{comparison} argument.  The
+@code{__builtin_dfp_dtstsfi_lt_dd} and
+@code{__builtin_dfp_dtstsfi_lt_td} functions behave similarly, but
+require that the type of the @code{value} argument be
+@code{__Decimal64} and @code{__Decimal128} respectively.
+
+The @code{__builtin_dfp_dtstsfi_gt} function returns a non-zero value
+if and only if the number of significant digits of its @code{value} argument
+is greater than its @code{comparison} argument.  The
+@code{__builtin_dfp_dtstsfi_gt_dd} and
+@code{__builtin_dfp_dtstsfi_gt_td} functions behave similarly, but
+require that the type of the @code{value} argument be
+@code{__Decimal64} and @code{__Decimal128} respectively.
+
+The @code{__builtin_dfp_dtstsfi_eq} function returns a non-zero value
+if and only if the number of significant digits of its @code{value} argument
+equals its @code{comparison} argument.  The
+@code{__builtin_dfp_dtstsfi_eq_dd} and
+@code{__builtin_dfp_dtstsfi_eq_td} functions behave similarly, but
+require that the type of the @code{value} argument be
+@code{__Decimal64} and @code{__Decimal128} respectively.
+
+The @code{__builtin_dfp_dtstsfi_ov} function returns a non-zero value
+if and only if its @code{value} argument has an undefined number of
+significant digits, such as when @code{value} is an encoding of @code{NaN}.
+The @code{__builtin_dfp_dtstsfi_ov_dd} and
+@code{__builtin_dfp_dtstsfi_ov_td} functions behave similarly, but
+require that the type of the @code{value} argument be
+@code{__Decimal64} and @code{__Decimal128} respectively.
+
+The @code{__builtin_mffsl} uses the ISA 3.0 @code{mffsl} instruction to read
+the FPSCR.  The instruction is a lower latency version of the @code{mffs}
+instruction.  If the @code{mffsl} instruction is not available, then the
+builtin uses the older @code{mffs} instruction to read the FPSCR.
+
+@node Basic PowerPC Built-in Functions Available on ISA 3.1
+@subsubsection Basic PowerPC Built-in Functions Available on ISA 3.1
+
+The basic built-in functions described in this section are
+available on the PowerPC family of processors starting with ISA 3.1.
+Unless specific options are explicitly disabled on the
+command line, specifying option @option{-mcpu=power10} has the effect of
+enabling all the same options as for @option{-mcpu=power9}.
+
+The following built-in functions are available on Linux 64-bit systems
+that use a future architecture instruction set (@option{-mcpu=power10}):
+
+@defbuiltin{{unsigned long long} @
+            __builtin_cfuged (unsigned long long, unsigned long long)}
+Perform a 64-bit centrifuge operation, as if implemented by the
+@code{cfuged} instruction.
+@enddefbuiltin
+
+@defbuiltin{{unsigned long long} @
+            __builtin_cntlzdm (unsigned long long, unsigned long long)}
+Perform a 64-bit count leading zeros operation under mask, as if
+implemented by the @code{cntlzdm} instruction.
+@enddefbuiltin
+
+@defbuiltin{{unsigned long long} @
+            __builtin_cnttzdm (unsigned long long, unsigned long long)}
+Perform a 64-bit count trailing zeros operation under mask, as if
+implemented by the @code{cnttzdm} instruction.
+@enddefbuiltin
+
+@defbuiltin{{unsigned long long} @
+            __builtin_pdepd (unsigned long long, unsigned long long)}
+Perform a 64-bit parallel bits deposit operation, as if implemented by the
+@code{pdepd} instruction.
+@enddefbuiltin
+
+@defbuiltin{{unsigned long long} @
+            __builtin_pextd (unsigned long long, unsigned long long)}
+Perform a 64-bit parallel bits extract operation, as if implemented by the
+@code{pextd} instruction.
+@enddefbuiltin
+
+@defbuiltin{{vector signed __int128} vsx_xl_sext (signed long long, signed char *)}
+@defbuiltinx{{vector signed __int128} vsx_xl_sext (signed long long, signed short *)}
+@defbuiltinx{{vector signed __int128} vsx_xl_sext (signed long long, signed int *)}
+@defbuiltinx{{vector signed __int128} vsx_xl_sext (signed long long, signed long long *)}
+@defbuiltinx{{vector unsigned __int128} vsx_xl_zext (signed long long, unsigned char *)}
+@defbuiltinx{{vector unsigned __int128} vsx_xl_zext (signed long long, unsigned short *)}
+@defbuiltinx{{vector unsigned __int128} vsx_xl_zext (signed long long, unsigned int *)}
+@defbuiltinx{{vector unsigned __int128} vsx_xl_zext (signed long long, unsigned long long *)}
+
+Load (and sign extend) to an __int128 vector, as if implemented by the ISA 3.1
+@code{lxvrbx}, @code{lxvrhx}, @code{lxvrwx}, and  @code{lxvrdx}
+instructions.
+@enddefbuiltin
+

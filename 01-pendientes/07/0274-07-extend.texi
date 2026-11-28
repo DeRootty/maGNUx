@@ -1,0 +1,192 @@
+@c GCC 16.1.0 | BLOQUE 0274 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 15992-16179 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@defbuiltin{{unsigned int} __builtin_stdc_leading_zeros (@var{type} @var{arg})}
+The @code{__builtin_stdc_leading_zeros} function is available only
+in C.  It is type-generic, the argument can be any unsigned integer
+(standard, extended or bit-precise).  No integral argument promotions are
+performed on the argument.  It is equivalent to
+@code{(unsigned int) __builtin_clzg (@var{arg}, @var{prec})}
+@enddefbuiltin
+
+@defbuiltin{{unsigned int} __builtin_stdc_trailing_ones (@var{type} @var{arg})}
+The @code{__builtin_stdc_trailing_ones} function is available only
+in C.  It is type-generic, the argument can be any unsigned integer
+(standard, extended or bit-precise).  No integral argument promotions are
+performed on the argument.  It is equivalent to
+@code{(unsigned int) __builtin_ctzg ((@var{type}) ~@var{arg}, @var{prec})}
+@enddefbuiltin
+
+@defbuiltin{{unsigned int} __builtin_stdc_trailing_zeros (@var{type} @var{arg})}
+The @code{__builtin_stdc_trailing_zeros} function is available only
+in C.  It is type-generic, the argument can be any unsigned integer
+(standard, extended or bit-precise).  No integral argument promotions are
+performed on the argument.  It is equivalent to
+@code{(unsigned int) __builtin_ctzg (@var{arg}, @var{prec})}
+@enddefbuiltin
+
+@defbuiltin{@var{type1} __builtin_stdc_rotate_left (@var{type1} @var{arg1}, @var{type2} @var{arg2})}
+The @code{__builtin_stdc_rotate_left} function is available only
+in C.  It is type-generic, the first argument can be any unsigned integer
+(standard, extended or bit-precise) and second argument any signed or
+unsigned integer or @code{char}.  No integral argument promotions are
+performed on the arguments.  It is equivalent to
+@code{(@var{type1}) ((@var{arg1} << (@var{arg2} % @var{prec}))
+| (@var{arg1} >> ((-(unsigned @var{type2}) @var{arg2}) % @var{prec})))}
+where @var{prec} is bit width of @var{type1}, except that side-effects
+in @var{arg1} and @var{arg2} are evaluated just once.  The behavior is
+undefined if @var{arg2} is negative.
+@enddefbuiltin
+
+@defbuiltin{@var{type1} __builtin_stdc_rotate_right (@var{type1} @var{arg1}, @var{type2} @var{arg2})}
+The @code{__builtin_stdc_rotate_right} function is available only
+in C.  It is type-generic, the first argument can be any unsigned integer
+(standard, extended or bit-precise) and second argument any signed or
+unsigned integer or @code{char}.  No integral argument promotions are
+performed on the arguments.  It is equivalent to
+@code{(@var{type1}) ((@var{arg1} >> (@var{arg2} % @var{prec}))
+| (@var{arg1} << ((-(unsigned @var{type2}) @var{arg2}) % @var{prec})))}
+where @var{prec} is bit width of @var{type1}, except that side-effects
+in @var{arg1} and @var{arg2} are evaluated just once.  The behavior is
+undefined if @var{arg2} is negative.
+@enddefbuiltin
+
+@node Byte-Swapping Builtins
+@subsection Byte-Swapping Builtins
+@cindex byte-swapping builtins
+
+@defbuiltin{uint16_t __builtin_bswap16 (uint16_t @var{x})}
+Returns @var{x} with the order of the bytes reversed; for example,
+@code{0xabcd} becomes @code{0xcdab}.  Byte here always means
+exactly 8 bits.
+@enddefbuiltin
+
+@defbuiltin{uint32_t __builtin_bswap32 (uint32_t @var{x})}
+Similar to @code{__builtin_bswap16}, except the argument and return types
+are 32-bit.
+@enddefbuiltin
+
+@defbuiltin{uint64_t __builtin_bswap64 (uint64_t @var{x})}
+Similar to @code{__builtin_bswap32}, except the argument and return types
+are 64-bit.
+@enddefbuiltin
+
+@defbuiltin{uint128_t __builtin_bswap128 (uint128_t @var{x})}
+Similar to @code{__builtin_bswap64}, except the argument and return types
+are 128-bit.  Only supported on targets when 128-bit types are supported.
+@enddefbuiltin
+
+@node CRC Builtins
+@subsection CRC Builtins
+@cindex CRC builtins
+
+@defbuiltin{uint8_t __builtin_rev_crc8_data8 (uint8_t @var{crc}, uint8_t @var{data}, uint8_t @var{poly})}
+Returns the calculated 8-bit bit-reversed CRC using the initial CRC (8-bit),
+data (8-bit) and the polynomial (8-bit).
+@var{crc} is the initial CRC, @var{data} is the data and
+@var{poly} is the polynomial without leading 1. @var{poly} is required to be a compile-time constant.
+Table-based or clmul-based CRC may be used for the
+calculation, depending on the target architecture.
+@enddefbuiltin
+
+@defbuiltin{uint16_t __builtin_rev_crc16_data16 (uint16_t @var{crc}, uint16_t @var{data}, uint16_t @var{poly})}
+Similar to @code{__builtin_rev_crc8_data8}, except the argument and return types
+are 16-bit.
+@enddefbuiltin
+
+@defbuiltin{uint16_t __builtin_rev_crc16_data8 (uint16_t @var{crc}, uint8_t @var{data}, uint16_t @var{poly})}
+Similar to @code{__builtin_rev_crc16_data16}, except the @var{data} argument
+type is 8-bit.
+@enddefbuiltin
+
+@defbuiltin{uint32_t __builtin_rev_crc32_data32 (uint32_t @var{crc}, uint32_t @var{data}, uint32_t @var{poly})}
+Similar to @code{__builtin_rev_crc8_data8}, except the argument and return types
+are 32-bit and for the CRC calculation may be also used crc* machine instruction
+depending on the target and the polynomial.
+@enddefbuiltin
+
+@defbuiltin{uint32_t __builtin_rev_crc32_data8 (uint32_t @var{crc}, uint8_t @var{data}, uint32_t @var{poly})}
+Similar to @code{__builtin_rev_crc32_data32}, except the @var{data} argument
+type is 8-bit.
+@enddefbuiltin
+
+@defbuiltin{uint32_t __builtin_rev_crc32_data16 (uint32_t @var{crc}, uint16_t @var{data}, uint32_t @var{poly})}
+Similar to @code{__builtin_rev_crc32_data32}, except the @var{data} argument
+type is 16-bit.
+@enddefbuiltin
+
+@defbuiltin{uint64_t __builtin_rev_crc64_data64 (uint64_t @var{crc}, uint64_t @var{data}, uint64_t @var{poly})}
+Similar to @code{__builtin_rev_crc8_data8}, except the argument and return types
+are 64-bit.
+@enddefbuiltin
+
+@defbuiltin{uint64_t __builtin_rev_crc64_data8 (uint64_t @var{crc}, uint8_t @var{data}, uint64_t @var{poly})}
+Similar to @code{__builtin_rev_crc64_data64}, except the @var{data} argument type
+is 8-bit.
+@enddefbuiltin
+
+@defbuiltin{uint64_t __builtin_rev_crc64_data16 (uint64_t @var{crc}, uint16_t @var{data}, uint64_t @var{poly})}
+Similar to @code{__builtin_rev_crc64_data64}, except the @var{data} argument type
+is 16-bit.
+@enddefbuiltin
+
+@defbuiltin{uint64_t __builtin_rev_crc64_data32 (uint64_t @var{crc}, uint32_t @var{data}, uint64_t @var{poly})}
+Similar to @code{__builtin_rev_crc64_data64}, except the @var{data} argument type
+is 32-bit.
+@enddefbuiltin
+
+@defbuiltin{uint8_t __builtin_crc8_data8 (uint8_t @var{crc}, uint8_t @var{data}, uint8_t @var{poly})}
+Returns the calculated 8-bit bit-forward CRC using the initial CRC (8-bit),
+data (8-bit) and the polynomial (8-bit).
+@var{crc} is the initial CRC, @var{data} is the data and
+@var{poly} is the polynomial without leading 1. @var{poly} is required to be a compile-time constant.
+Table-based or clmul-based CRC may be used for the
+calculation, depending on the target architecture.
+@enddefbuiltin
+
+@defbuiltin{uint16_t __builtin_crc16_data16 (uint16_t @var{crc}, uint16_t @var{data}, uint16_t @var{poly})}
+Similar to @code{__builtin_crc8_data8}, except the argument and return types
+are 16-bit.
+@enddefbuiltin
+
+@defbuiltin{uint16_t __builtin_crc16_data8 (uint16_t @var{crc}, uint8_t @var{data}, uint16_t @var{poly})}
+Similar to @code{__builtin_crc16_data16}, except the @var{data} argument type
+is 8-bit.
+@enddefbuiltin
+
+@defbuiltin{uint32_t __builtin_crc32_data32 (uint32_t @var{crc}, uint32_t @var{data}, uint32_t @var{poly})}
+Similar to @code{__builtin_crc8_data8}, except the argument and return types
+are 32-bit.
+@enddefbuiltin
+
+@defbuiltin{uint32_t __builtin_crc32_data8 (uint32_t @var{crc}, uint8_t @var{data}, uint32_t @var{poly})}
+Similar to @code{__builtin_crc32_data32}, except the @var{data} argument type
+is 8-bit.
+@enddefbuiltin
+
+@defbuiltin{uint32_t __builtin_crc32_data16 (uint32_t @var{crc}, uint16_t @var{data}, uint32_t @var{poly})}
+Similar to @code{__builtin_crc32_data32}, except the @var{data} argument type
+is 16-bit.
+@enddefbuiltin
+
+@defbuiltin{uint64_t __builtin_crc64_data64 (uint64_t @var{crc}, uint64_t @var{data}, uint64_t @var{poly})}
+Similar to @code{__builtin_crc8_data8}, except the argument and return types
+are 64-bit.
+@enddefbuiltin
+
+@defbuiltin{uint64_t __builtin_crc64_data8 (uint64_t @var{crc}, uint8_t @var{data}, uint64_t @var{poly})}
+Similar to @code{__builtin_crc64_data64}, except the @var{data} argument type
+is 8-bit.
+@enddefbuiltin
+
+@defbuiltin{uint64_t __builtin_crc64_data16 (uint64_t @var{crc}, uint16_t @var{data}, uint64_t @var{poly})}
+Similar to @code{__builtin_crc64_data64}, except the @var{data} argument type
+is 16-bit.
+@enddefbuiltin
+
+@defbuiltin{uint64_t __builtin_crc64_data32 (uint64_t @var{crc}, uint32_t @var{data}, uint64_t @var{poly})}
+Similar to @code{__builtin_crc64_data64}, except the @var{data} argument type
+is 32-bit.
+@enddefbuiltin
+

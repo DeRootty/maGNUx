@@ -1,0 +1,317 @@
+@c GCC 16.1.0 | BLOQUE 0204 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 7011-7323 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node IA-64 Attributes
+@subsubsection IA-64 Attributes
+
+These attributes are supported on IA-64 targets:
+
+@table @code
+@atindex @code{syscall_linkage}, IA-64
+@item syscall_linkage
+This attribute applies to functions.
+
+It is used to modify the IA-64 calling convention by marking
+all input registers as live at all function exits.  This makes it possible
+to restart a system call after an interrupt without having to save/restore
+the input registers.  This also prevents kernel data from leaking into
+application code.
+
+@atindex @code{version_id}, IA-64
+@item version_id
+This attribute applies to global variables or functions.
+
+This IA-64 HP-UX attribute renames the
+symbol to contain a version string, thus allowing for function level
+versioning.  HP-UX system header files may use function level versioning
+for some system calls.
+
+@smallexample
+extern int foo () __attribute__((version_id ("20040821")));
+@end smallexample
+
+@noindent
+Calls to @code{foo} are mapped to calls to @code{foo@{20040821@}}.
+
+@atindex @code{model}, IA-64
+@item model (@var{model-name})
+This attribute applies to variables.
+
+On IA-64, use this attribute to set the addressability of an object.
+At present, the only supported identifier for @var{model-name} is
+@code{small}, indicating addressability via ``small'' (22-bit)
+addresses (so that their addresses can be loaded with the @code{addl}
+instruction).  Caveat: such addressing is by definition not position
+independent and hence this attribute must not be used for objects
+defined by shared libraries.
+@end table
+
+@anchor{LoongArch Function Attributes}
+@anchor{LoongArch Variable Attributes}
+@node LoongArch Attributes
+@subsubsection LoongArch Attributes
+
+The following attributes are supported by the LoongArch back end:
+
+@table @code
+
+@atindex @code{target}, LoongArch
+@item target (@var{options})
+This attribute applies to functions.
+
+As discussed in @ref{Common Attributes}, the @code{target} function attribute
+allows you to specify target-specific compilation options on a per-function
+basis.
+These options mirror the behavior of similar
+command-line options (@pxref{LoongArch Options}).
+
+Multiple @var{options} can be specified in the same attribute by
+separating them with a comma.  For example:
+
+@smallexample
+__attribute__((target("arch=la64v1.1,lasx")))
+int
+foo (int a)
+@{
+  return a + 5;
+@}
+@end smallexample
+
+@noindent
+is valid and compiles function @code{foo} for LA64V1.1 with @code{lasx}.
+
+These are the permitted options:
+
+@table @samp
+@atindex @code{target("strict-align")}, LoongArch
+@item strict-align
+@itemx no-strict-align
+@code{strict-align} indicates that the compiler should not assume that unaligned
+memory references are handled by the system.  To allow the compiler to assume
+that aligned memory references are handled by the system, the inverse attribute
+@code{no-strict-align} can be specified.  The behavior is same as for the
+command-line option @option{-mstrict-align} and @option{-mno-strict-align}.
+
+@atindex @code{target("cmodel=")}, LoongArch
+@item cmodel=
+Indicates that code should be generated for a particular code model for
+this function.  The behavior and permissible arguments are the same as
+for the command-line option @option{-mcmodel=}.
+
+@atindex @code{target("arch=")}, LoongArch
+@item arch=
+Specifies the architecture version and architectural extensions to use
+for this function.  The behavior and permissible arguments are the same as
+for the @option{-march=} command-line option.
+
+@atindex @code{target("tune=")}, LoongArch
+@item tune=
+Specifies the core for which to tune the performance of this function.
+The behavior and permissible arguments are the same as for the @option{-mtune=}
+command-line option.
+
+@atindex @code{target("lsx")}, LoongArch
+@item lsx
+@itemx no-lsx
+@code{lsx} indicates that vector instruction generation is allowed
+(not allowed) when compiling the function.
+The behavior is same as for the command-line option
+@option{-mlsx} and @option{-mno-lsx}.
+
+@atindex @code{target("lasx")}, LoongArch
+@item lasx
+@itemx no-lasx
+@code{lasx} indicates that lasx instruction generation is allowed (not allowed)
+when compiling the function.  The behavior is slightly different from the
+command-line option @option{-mno-lasx}.
+Example:
+
+@smallexample
+test.c:
+typedef int v4i32
+  __attribute__ ((vector_size(16),  aligned(16)));
+v4i32 a, b, c;
+#ifdef WITH_ATTR
+__attribute__ ((target("no-lasx"))) void
+#else
+void
+#endif
+test ()
+@{
+  c = a + b;
+@}
+@end smallexample
+
+@noindent
+Compiled with
+@smallexample
+$ gcc test.c -o test.s -O2 -mlasx -DWITH_ATTR
+@end smallexample
+
+@noindent
+128-bit vectorization is possible.
+But the following method cannot perform 128-bit vectorization.
+@smallexample
+$ gcc test.c -o test.s -O2 -mlasx -mno-lasx
+@end smallexample
+
+@atindex @code{target("recipe")}, LoongArch
+@item recipe
+@itemx no-recipe
+@code{recipe} indicates that frecipe.@{s/d@} and frsqrt.@{s/d@}
+instruction generation is allowed (not allowed) when compiling the function.
+The behavior is same as for the command-line options
+@option{-mrecipe} and @option{-mno-recipe}.
+
+@atindex @code{target("div32")}, LoongArch
+@item div32
+@itemx no-div32
+@code{div32} determines whether div.w[u] and mod.w[u] instructions on
+64-bit machines
+are evaluated based only on the lower 32 bits of the input registers.
+The behavior is same as for the command-line options
+@option{-mdiv32} and @option{-mno-div32}.
+
+@atindex @code{target("lam-bh")}, LoongArch
+@item lam-bh
+@itemx no-lam-bh
+@code{lam-bh} indicates that am@{swap/add@}[_db].@{b/h@} instruction generation
+is allowed (not allowed) when compiling the function.
+The behavior is same as for the command-line options
+@option{-mlam-bh} and @option{-mno-lam-bh}.
+
+@atindex @code{target("lamcas")}, LoongArch
+@item lamcas
+@itemx no-lamcas
+@code{lamcas} indicates that amcas[_db].@{b/h/w/d@} instruction generation
+is allowed (not allowed) when compiling the function.
+The behavior is same as for the command-line options
+@option{-mlamcas} and @option{-mno-lamcas}.
+
+@atindex @code{target("scq")}, LoongArch
+@item scq
+@itemx no-scq
+@code{scq} indicates that sc.q instruction generation is allowed (not allowed)
+when compiling the function.
+The behavior is same as for the command-line options
+@option{-mscq} and @option{-mno-scq}.
+
+@atindex @code{target("ld-seq-sa")}, LoongArch
+@item ld-seq-sa
+@itemx no-ld-seq-sa
+@code{ld-seq-sa} indicates that same-address load-load barriers (dbar 0x700)
+are needed.
+The behavior is same as for the command-line options
+@option{-mld-seq-sa} and @option{-mno-ld-seq-sa}.
+
+@end table
+
+Specifying @code{target} attributes on individual functions or performing
+link-time
+optimization across translation units compiled with different target options
+can affect function inlining rules.
+
+In particular, a function can be inlined only if the
+architectural features available to the callee are a subset of the features
+available to the caller.
+
+Note that when the callee function does not have the @code{always_inline}
+attribute,
+it is not inlined if the code model of the caller function is different
+from the code model of the callee function.
+
+@atindex @code{target_clones}, LoongArch
+@item target_clones (@var{options})
+This attribute applies to functions.
+
+As discussed in @ref{Common Attributes}, the @code{target_clones}
+attribute causes duplicate copies of the function to be compiled with each
+of the @var{options} provided.
+@xref{Function Multiversioning}, for more details.
+
+@var{options} is a list of comma-separated strings.
+These @var{options} are allowed, and have similar meaning to those for
+the @code{target} attribute:
+
+@itemize @bullet
+@item @samp{default}
+@item @samp{strict-align}
+@item @samp{arch=}
+@item @samp{lsx}
+@item @samp{lasx}
+@item @samp{frecipe}
+@item @samp{div32}
+@item @samp{lam-bh}
+@item @samp{lamcas}
+@item @samp{scq}
+@item @samp{ld-seq-sa}
+@end itemize
+
+You can also set the priority of options (except @samp{default}) in
+@code{target_clones}.
+For example:
+
+@smallexample
+__attribute__((target_clones ("default","arch=la64v1.1","lsx;priority=1")))
+int
+foo (int a)
+@{
+  return a + 5;
+@}
+@end smallexample
+
+The default priority from low to high is:
+@itemize @bullet
+@item @samp{default}
+@item @samp{arch=loongarch64}
+@item @samp{strict-align}
+@item @samp{frecipe}, @samp{div32}, @samp{lam-bh}, @samp{lamcas}, @samp{scq}, @samp{ld-seq-sa}
+@item @samp{lsx}
+@item @samp{arch=la64v1.0}
+@item @samp{arch=la64v1.1}
+@item @samp{lasx}
+@end itemize
+
+If a priority is set for a option in @code{target_clones},
+then the priority of this option is higher than @samp{lasx}.
+
+For example:
+
+@smallexample
+__attribute__((target_clones ("default","arch=la64v1.1","lsx;priority=1")))
+int
+foo (int a)
+@{
+  return a + 5;
+@}
+@end smallexample
+
+@noindent
+In this test case, the priority of @samp{lsx} is higher than that of
+@samp{arch=la64v1.1}.
+
+If the same priority is explicitly set for two options, the priority is still
+calculated according to the priority list above.
+
+For example:
+
+@smallexample
+__attribute__((target_clones ("default",
+                              "arch=la64v1.1;priority=1",
+                              "lsx;priority=1")))
+int
+foo (int a)
+@{
+  return a + 5;
+@}
+@end smallexample
+
+@noindent
+In this test case, the priority of @samp{arch=la64v1.1;priority=1} is higher
+than that of @samp{lsx;priority=1}.
+
+Note that the option values on the GCC command line are not considered when
+calculating the priority.
+
+@atindex @code{target_version}, LoongArch

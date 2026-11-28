@@ -1,0 +1,278 @@
+@c GCC 16.1.0 | BLOQUE 0210 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 8640-8913 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item interrupt_handler
+This attribute applies to functions.
+
+It indicates that the specified function is an interrupt handler.  The compiler
+generates function entry and exit sequences suitable for use in an
+interrupt handler when this attribute is present.
+
+@atindex @code{nosave_low_regs}, SH
+@item nosave_low_regs
+This attribute applies to functions.
+
+Use this attribute on SH targets to indicate that an @code{interrupt_handler}
+function should not save and restore registers R0..R7.  This can be used on SH3*
+and SH4* targets that have a second R0..R7 register bank for non-reentrant
+interrupt handlers.
+
+@atindex @code{renesas}, SH
+@item renesas
+This attribute applies to functions.
+
+On SH targets this attribute specifies that the function or struct follows the
+Renesas ABI.
+
+@atindex @code{resbank}, SH
+@item resbank
+This attribute applies to functions.
+
+On the SH2A target, this attribute enables the high-speed register
+saving and restoration using a register bank for @code{interrupt_handler}
+routines.  Saving to the bank is performed automatically after the CPU
+accepts an interrupt that uses a register bank.
+
+The nineteen 32-bit registers comprising general register R0 to R14,
+control register GBR, and system registers MACH, MACL, and PR and the
+vector table address offset are saved into a register bank.  Register
+banks are stacked in first-in last-out (FILO) sequence.  Restoration
+from the bank is executed by issuing a RESBANK instruction.
+
+@atindex @code{sp_switch}, SH
+@item sp_switch
+This attribute applies to functions.
+
+Use this attribute on the SH to indicate an @code{interrupt_handler}
+function should switch to an alternate stack.  It expects a string
+argument that names a global variable holding the address of the
+alternate stack.
+
+@smallexample
+void *alt_stack;
+void f () __attribute__ ((interrupt_handler,
+                          sp_switch ("alt_stack")));
+@end smallexample
+
+@atindex @code{trap_exit}, SH
+@item trap_exit
+This attribute applies to functions.
+
+Use this attribute on the SH for an @code{interrupt_handler} to return using
+@code{trapa} instead of @code{rte}.  This attribute expects an integer
+argument specifying the trap number to be used.
+
+@atindex @code{trapa_handler}, SH
+@item trapa_handler
+This attribute applies to functions.
+
+On SH targets this attribute is similar to @code{interrupt_handler}
+but it does not save and restore all registers.
+@end table
+
+@anchor{Symbian OS Function Attributes}
+@node Symbian OS Attributes
+@subsubsection Symbian OS Attributes
+
+@xref{Microsoft Windows Attributes}, for discussion of the
+@code{dllexport} and @code{dllimport} attributes.
+
+@anchor{V850 Function Attributes}
+@anchor{V850 Variable Attributes}
+@node V850 Attributes
+@subsubsection V850 Attributes
+
+The V850 back end supports these attributes:
+
+@table @code
+@atindex @code{interrupt}, V850
+@atindex @code{interrupt_handler}, V850
+@item interrupt
+@itemx interrupt_handler
+This attribute applies to functions.
+
+Use these attributes to indicate
+that the specified function is an interrupt handler.  The compiler generates
+function entry and exit sequences suitable for use in an interrupt handler
+when either attribute is present.
+
+@atindex @code{sda}, V850
+@item sda
+This attribute applies to variables.
+
+Use it to explicitly place a variable in the small data area,
+which can hold up to 64 kilobytes.
+
+@atindex @code{tda}, V850
+@item tda
+This attribute applies to variables.
+
+Use it to explicitly place a variable in the tiny data area,
+which can hold up to 256 bytes in total.
+
+@atindex @code{zda}, V850
+@item zda
+This attribute applies to variables.
+
+Use it to explicitly place a variable in the first 32 kilobytes
+of memory.
+@end table
+
+@anchor{Visium Function Attributes}
+@node Visium Attributes
+@subsubsection Visium Attributes
+
+These attributes are supported by the Visium back end:
+
+@table @code
+@atindex @code{interrupt}, Visium
+@item interrupt
+This attribute applies to functions.
+
+It indicates
+that the specified function is an interrupt handler.  The compiler generates
+function entry and exit sequences suitable for use in an interrupt handler
+when this attribute is present.
+@end table
+
+@anchor{x86 Function Attributes}
+@anchor{x86 Type Attributes}
+@anchor{x86 Variable Attributes}
+@node x86 Attributes
+@subsubsection x86 Attributes
+
+These attributes are supported by the x86 back end:
+
+@table @code
+@atindex @code{cdecl}, x86-32
+@cindex functions that pop the argument stack on x86-32
+@opindex mrtd
+@item cdecl
+This attribute applies to functions.
+
+On the x86-32 targets, the @code{cdecl} attribute causes the compiler to
+assume that the calling function pops off the stack space used to
+pass arguments.  This is
+useful to override the effects of the @option{-mrtd} switch.
+
+@atindex @code{fastcall}, x86-32
+@cindex functions that pop the argument stack on x86-32
+@item fastcall
+This attribute applies to functions.
+
+On x86-32 targets, the @code{fastcall} attribute causes the compiler to
+pass the first argument (if of integral type) in the register ECX and
+the second argument (if of integral type) in the register EDX@.  Subsequent
+and other typed arguments are passed on the stack.  The called function
+pops the arguments off the stack.  If the number of arguments is variable all
+arguments are pushed on the stack.
+
+@atindex @code{thiscall}, x86-32
+@cindex functions that pop the argument stack on x86-32
+@item thiscall
+This attribute applies to functions.
+
+On x86-32 targets, the @code{thiscall} attribute causes the compiler to
+pass the first argument (if of integral type) in the register ECX.
+Subsequent and other typed arguments are passed on the stack. The called
+function pops the arguments off the stack.
+If the number of arguments is variable all arguments are pushed on the
+stack.
+The @code{thiscall} attribute is intended for C++ non-static member functions.
+As a GCC extension, this calling convention can be used for C functions
+and for static member methods.
+
+@atindex @code{ms_abi}, x86
+@atindex @code{sysv_abi}, x86
+@item ms_abi
+@itemx sysv_abi
+These attributes apply to functions.
+
+On 32-bit and 64-bit x86 targets, you can use an ABI attribute
+to indicate which calling convention should be used for a function.  The
+@code{ms_abi} attribute tells the compiler to use the Microsoft ABI,
+while the @code{sysv_abi} attribute tells the compiler to use the System V
+ELF ABI, which is used on GNU/Linux and other systems.  The default is to use
+the Microsoft ABI when targeting Windows.  On all other systems, the default
+is the System V ELF ABI.
+
+Note, the @code{ms_abi} attribute for Microsoft Windows 64-bit targets currently
+requires the @option{-maccumulate-outgoing-args} option.
+
+@atindex @code{callee_pop_aggregate_return}, x86
+@item callee_pop_aggregate_return (@var{number})
+This attribute applies to functions.
+
+On x86-32 targets, you can use this attribute to control how
+aggregates are returned in memory.  If the caller is responsible for
+popping the hidden pointer together with the rest of the arguments, specify
+@var{number} equal to zero.  If callee is responsible for popping the
+hidden pointer, specify @var{number} equal to one.  
+
+The default x86-32 ABI assumes that the callee pops the
+stack for hidden pointer.  However, on x86-32 Microsoft Windows targets,
+the compiler assumes that the
+caller pops the stack for hidden pointer.
+
+@atindex @code{ms_hook_prologue}, x86
+@item ms_hook_prologue
+This attribute applies to functions.
+
+On 32-bit and 64-bit x86 targets, you can use
+this function attribute to make GCC generate the ``hot-patching'' function
+prologue used in Win32 API functions in Microsoft Windows XP Service Pack 2
+and newer.
+
+@atindex @code{regparm}, x86
+@cindex functions that are passed arguments in registers on x86-32
+@item regparm (@var{number})
+This attribute applies to functions.
+
+On x86-32 targets, the @code{regparm} attribute causes the compiler to
+pass arguments number one to @var{number} if they are of integral type
+in registers EAX, EDX, and ECX instead of on the stack.  Functions that
+take a variable number of arguments continue to be passed all of their
+arguments on the stack.
+
+Beware that on some ELF systems this attribute is unsuitable for
+global functions in shared libraries with lazy binding (which is the
+default).  Lazy binding sends the first call via resolving code in
+the loader, which might assume EAX, EDX and ECX can be clobbered, as
+per the standard calling conventions.  Solaris 8 is affected by this.
+Systems with the GNU C Library version 2.1 or higher
+and FreeBSD are believed to be
+safe since the loaders there save EAX, EDX and ECX.  (Lazy binding can be
+disabled with the linker or the loader if desired, to avoid the
+problem.)
+
+@atindex @code{sseregparm}, x86
+@item sseregparm
+This attribute applies to functions.
+
+On x86-32 targets with SSE support, the @code{sseregparm} attribute
+causes the compiler to pass up to 3 floating-point arguments in
+SSE registers instead of on the stack.  Functions that take a
+variable number of arguments continue to pass all of their
+floating-point arguments on the stack.
+
+@atindex @code{force_align_arg_pointer}, x86
+@item force_align_arg_pointer
+This attribute applies to functions.
+
+On x86 targets, the @code{force_align_arg_pointer} attribute may be
+applied to individual function definitions, generating an alternate
+prologue and epilogue that realigns the run-time stack if necessary.
+This supports mixing legacy codes that run with a 4-byte aligned stack
+with modern codes that keep a 16-byte stack for SSE compatibility.
+
+@atindex @code{stdcall}, x86-32
+@cindex functions that pop the argument stack on x86-32
+@item stdcall
+This attribute applies to functions.
+
+On x86-32 targets, the @code{stdcall} attribute causes the compiler to
+assume that the called function pops off the stack space used to
+pass arguments, unless it takes a variable number of arguments.
+
+@atindex @code{no_callee_saved_registers}, x86

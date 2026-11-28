@@ -1,0 +1,261 @@
+@c GCC 16.1.0 | BLOQUE 0141 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 31445-31701 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -madjust-lmul-cost
+@itemx -mno-adjust-lmul-cost
+This option adjusts the cost model used to schedule vector instructions to
+multiply the latency of instructions by the RVV length multiplier, LMUL.
+It is disabled by default.
+
+@opindex mautovec-segment
+@opindex mno-autovec-segment
+@item -mautovec-segment
+@itemx -mno-autovec-segment
+Enable or disable generation of vector segment load/store instructions.
+This option is enabled by default.
+@end table
+
+@node RL78 Options
+@subsection RL78 Options
+@cindex RL78 Options
+
+@table @gcctabopt
+
+@opindex msim
+@opindex mno-sim
+@item -msim
+Links in additional target libraries to support operation within a
+simulator.
+
+@opindex mmul
+@item -mmul=none
+@itemx -mmul=g10
+@itemx -mmul=g13
+@itemx -mmul=g14
+@itemx -mmul=rl78
+Specifies the type of hardware multiplication and division support to
+be used.  The simplest is @code{none}, which uses software for both
+multiplication and division.  This is the default.  The @code{g13}
+value is for the hardware multiply/divide peripheral found on the
+RL78/G13 (S2 core) targets.  The @code{g14} value selects the use of
+the multiplication and division instructions supported by the RL78/G14
+(S3 core) parts.  The value @code{rl78} is an alias for @code{g14} and
+the value @code{mg10} is an alias for @code{none}.
+
+In addition a C preprocessor macro is defined, based upon the setting
+of this option.  Possible values are: @code{__RL78_MUL_NONE__},
+@code{__RL78_MUL_G13__} or @code{__RL78_MUL_G14__}.
+
+@opindex mcpu
+@item -mcpu=g10
+@itemx -mcpu=g13
+@itemx -mcpu=g14
+@itemx -mcpu=rl78
+Specifies the RL78 core to target.  The default is the G14 core, also
+known as an S3 core or just RL78.  The G13 or S2 core does not have
+multiply or divide instructions, instead it uses a hardware peripheral
+for these operations.  The G10 or S1 core does not have register
+banks, so it uses a different calling convention.
+
+If this option is set it also selects the type of hardware multiply
+support to use, unless this is overridden by an explicit
+@option{-mmul=none} option on the command line.  Thus specifying
+@option{-mcpu=g13} enables the use of the G13 hardware multiply
+peripheral and specifying @option{-mcpu=g10} disables the use of
+hardware multiplications altogether.
+
+Note, although the RL78/G14 core is the default target, specifying
+@option{-mcpu=g14} or @option{-mcpu=rl78} on the command line does
+change the behavior of the toolchain since it also enables G14
+hardware multiply support.  If these options are not specified on the
+command line, then software multiplication routines are used even
+though the code targets the RL78 core.  This is for backward
+compatibility with older toolchains which did not have hardware
+multiply and divide support.
+
+In addition a C preprocessor macro is defined, based upon the setting
+of this option.  Possible values are: @code{__RL78_G10__},
+@code{__RL78_G13__} or @code{__RL78_G14__}.
+
+@opindex mg10
+@opindex mg13
+@opindex mg14
+@opindex mrl78
+@item -mg10
+@itemx -mg13
+@itemx -mg14
+@itemx -mrl78
+These are aliases for the corresponding @option{-mcpu=} option.  They
+are provided for backwards compatibility.
+
+@opindex mallregs
+@opindex mno-allregs
+@item -mallregs
+Allow the compiler to use all of the available registers.  By default
+registers @code{r24..r31} are reserved for use in interrupt handlers.
+With this option enabled these registers can be used in ordinary
+functions as well.
+
+@opindex mrelax
+@opindex mno-relax
+@item -mrelax
+@itemx -mno-relax
+Enable/disable assembler and linker relaxation.  This is enabled by
+default at @option{-Os}.
+
+@opindex mes0
+@opindex mno-es0
+@item -mes0
+Assume @code{ES} is zero throughout program execution, and use it
+to address read-only data.
+
+@opindex msave-mduc-in-interrupts
+@opindex mno-save-mduc-in-interrupts
+@item -msave-mduc-in-interrupts
+@itemx -mno-save-mduc-in-interrupts
+Specifies that interrupt handler functions should preserve the
+MDUC registers.  This is only necessary if normal code might use
+the MDUC registers, for example because it performs multiplication
+and division operations.  The default is to ignore the MDUC registers
+as this makes the interrupt handlers faster.  The target option @option{-mg13}
+needs to be passed for this to work as this feature is only available
+on the G13 target (S2 core).  The MDUC registers are only saved
+if the interrupt handler performs a multiplication or division
+operation or it calls another function.
+
+@end table
+
+@node RS/6000 and PowerPC Options
+@subsection IBM RS/6000 and PowerPC Options
+@cindex RS/6000 and PowerPC Options
+@cindex IBM RS/6000 and PowerPC Options
+
+These @samp{-m} options are defined for the IBM RS/6000 and PowerPC:
+
+@table @gcctabopt
+@opindex mcpu
+@item -mcpu=@var{cpu_type}
+Set architecture type, register usage, and
+instruction scheduling parameters for machine type @var{cpu_type}.
+Supported values for @var{cpu_type} are @samp{401}, @samp{403},
+@samp{405}, @samp{405fp}, @samp{440}, @samp{440fp}, @samp{464}, @samp{464fp},
+@samp{476}, @samp{476fp}, @samp{505}, @samp{601}, @samp{602}, @samp{603},
+@samp{603e}, @samp{604}, @samp{604e}, @samp{620}, @samp{630}, @samp{740},
+@samp{7400}, @samp{7450}, @samp{750}, @samp{801}, @samp{821}, @samp{823},
+@samp{860}, @samp{970}, @samp{8540}, @samp{a2}, @samp{e300c2},
+@samp{e300c3}, @samp{e500mc}, @samp{e500mc64}, @samp{e5500},
+@samp{e6500}, @samp{ec603e}, @samp{G3}, @samp{G4}, @samp{G5},
+@samp{titan}, @samp{power3}, @samp{power4}, @samp{power5}, @samp{power5+},
+@samp{power6}, @samp{power6x}, @samp{power7}, @samp{power8},
+@samp{power9}, @samp{power10}, @samp{power11}, @samp{powerpc}, @samp{powerpc64},
+@samp{powerpc64le}, @samp{rs64}, and @samp{native}.
+
+@option{-mcpu=powerpc}, @option{-mcpu=powerpc64}, and
+@option{-mcpu=powerpc64le} specify pure 32-bit PowerPC (either
+endian), 64-bit big endian PowerPC and 64-bit little endian PowerPC
+architecture machine types, with an appropriate, generic processor
+model assumed for scheduling purposes.
+
+Specifying @samp{native} as cpu type detects and selects the
+architecture option that corresponds to the host processor of the
+system performing the compilation.
+@option{-mcpu=native} has no effect if GCC does not recognize the
+processor.
+
+The other options specify a specific processor.  Code generated under
+those options runs best on that processor, and may not run at all on
+others.
+
+The @option{-mcpu} options automatically enable or disable the
+following options:
+
+@gccoptlist{-maltivec  -mfprnd  -mhard-float  -mmfcrf  -mmultiple
+-mpopcntb  -mpopcntd  -mpowerpc64
+-mpowerpc-gpopt  -mpowerpc-gfxopt
+-mmulhw  -mdlmzb  -mmfpgpr  -mvsx
+-mcrypto  -mhtm  -mpower8-fusion
+-mquad-memory  -mquad-memory-atomic  -mfloat128
+-mfloat128-hardware  -mprefixed  -mpcrel  -mmma
+-mrop-protect}
+
+The particular options set for any particular CPU varies between
+compiler versions, depending on what setting seems to produce optimal
+code for that CPU; it doesn't necessarily reflect the actual hardware's
+capabilities.  If you wish to set an individual option to a particular
+value, you may specify it after the @option{-mcpu} option, like
+@option{-mcpu=970 -mno-altivec}.
+
+On AIX, the @option{-maltivec} and @option{-mpowerpc64} options are
+not enabled or disabled by the @option{-mcpu} option at present because
+AIX does not have full support for these options.  You may still
+enable or disable them individually if you're sure it'll work in your
+environment.
+
+In other cases, we recommend you use the @option{-mcpu=@var{cpu_type}} option
+rather than the options that control generation of specific instructions.
+
+@opindex mtune
+@item -mtune=@var{cpu_type}
+Set the instruction scheduling parameters for machine type
+@var{cpu_type}, but do not set the architecture type or register usage,
+as @option{-mcpu=@var{cpu_type}} does.  The same
+values for @var{cpu_type} are used for @option{-mtune} as for
+@option{-mcpu}.  If both are specified, the code generated uses the
+architecture and registers set by @option{-mcpu}, but the
+scheduling parameters set by @option{-mtune}.
+
+@opindex mpowerpc64
+@opindex mno-powerpc64
+@item -mpowerpc64
+@itemx -mno-powerpc64
+The @option{-mpowerpc64} option allows GCC to generate the additional
+64-bit instructions that are found in the full PowerPC64 architecture
+and to treat GPRs as 64-bit, doubleword quantities.  GCC defaults to
+@option{-mno-powerpc64}.
+
+@opindex mcmodel=
+@opindex mcmodel=small
+@item -mcmodel=small
+Generate PowerPC64 code for the small model: The TOC is limited to
+64k.
+
+@opindex mcmodel=medium
+@item -mcmodel=medium
+Generate PowerPC64 code for the medium model: The TOC and other static
+data may be up to a total of 4G in size.  This is the default for 64-bit
+Linux.
+
+@opindex mcmodel=large
+@item -mcmodel=large
+Generate PowerPC64 code for the large model: The TOC may be up to 4G
+in size.  Other data and code is only limited by the 64-bit address
+space.
+
+@opindex mprofile-kernel
+@opindex mno-profile-kernel
+@item -mprofile-kernel
+This option is available on PowerPC64 GNU/Linux targets.  When used with
+@option{-pg}, it causes calls to @code{mcount} to be inserted before the
+function prologue instead of after it.
+
+@opindex maltivec
+@opindex mno-altivec
+@item -maltivec
+@itemx -mno-altivec
+Generate code that uses (does not use) AltiVec instructions, and also
+enable the use of built-in functions that allow more direct access to
+the AltiVec instruction set.  You may also need to set
+@option{-mabi=altivec} to adjust the current ABI with AltiVec ABI
+enhancements.
+
+When @option{-maltivec} is used, the element order for AltiVec intrinsics
+such as @code{vec_splat}, @code{vec_extract}, and @code{vec_insert}
+match array element order corresponding to the endianness of the
+target.  That is, element zero identifies the leftmost element in a
+vector register when targeting a big-endian platform, and identifies
+the rightmost element in a vector register when targeting a
+little-endian platform.
+
+@opindex mpowerpc-gpopt
+@opindex mno-powerpc-gpopt

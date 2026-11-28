@@ -1,0 +1,213 @@
+@c GCC 16.1.0 | BLOQUE 0072 | 03-13
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 17937-18145 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -fstack-check
+Generate code to verify that you do not go beyond the boundary of the
+stack.  You should specify this flag if you are running in an
+environment with multiple threads, but you only rarely need to specify it in
+a single-threaded environment since stack overflow is automatically
+detected on nearly all systems if there is only one stack.
+
+Note that this switch does not actually cause checking to be done; the
+operating system or the language runtime must do that.  The switch causes
+generation of code to ensure that they see the stack being extended.
+
+You can additionally specify a string parameter: @samp{no} means no
+checking, @samp{generic} means force the use of old-style checking,
+@samp{specific} means use the best checking method and is equivalent
+to bare @option{-fstack-check}.
+
+Old-style checking is a generic mechanism that requires no specific
+target support in the compiler but comes with the following drawbacks:
+
+@enumerate
+@item
+Modified allocation strategy for large objects: they are always
+allocated dynamically if their size exceeds a fixed threshold.  Note this
+may change the semantics of some code.
+
+@item
+Fixed limit on the size of the static frame of functions: when it is
+topped by a particular function, stack checking is not reliable and
+a warning is issued by the compiler.
+
+@item
+Inefficiency: because of both the modified allocation strategy and the
+generic implementation, code performance is hampered.
+@end enumerate
+
+Note that old-style stack checking is also the fallback method for
+@samp{specific} if no target support has been added in the compiler.
+
+@samp{-fstack-check=} is designed for Ada's needs to detect infinite recursion
+and stack overflows.  @samp{specific} is an excellent choice when compiling
+Ada code.  It is not generally sufficient to protect against stack-clash
+attacks.  To protect against those you want @samp{-fstack-clash-protection}.
+
+@opindex fstack-clash-protection
+@opindex fno-stack-clash-protection
+@item -fstack-clash-protection
+Generate code to prevent stack clash style attacks.  When this option is
+enabled, the compiler will only allocate one page of stack space at a time
+and each page is accessed immediately after allocation.  Thus, it prevents
+allocations from jumping over any stack guard page provided by the
+operating system.
+
+Most targets do not fully support stack clash protection.  However, on
+those targets @option{-fstack-clash-protection} will protect dynamic stack
+allocations.  @option{-fstack-clash-protection} may also provide limited
+protection for static stack allocations if the target supports
+@option{-fstack-check=specific}.
+
+@opindex fstack-limit-register
+@opindex fstack-limit-symbol
+@opindex fno-stack-limit
+@item -fstack-limit-register=@var{reg}
+@itemx -fstack-limit-symbol=@var{sym}
+@itemx -fno-stack-limit
+Generate code to ensure that the stack does not grow beyond a certain value,
+either the value of a register or the address of a symbol.  If a larger
+stack is required, a signal is raised at run time.  For most targets,
+the signal is raised before the stack overruns the boundary, so
+it is possible to catch the signal without taking special precautions.
+
+For instance, if the stack starts at absolute address @samp{0x80000000}
+and grows downwards, you can use the flags
+@option{-fstack-limit-symbol=__stack_limit} and
+@option{-Wl,--defsym,__stack_limit=0x7ffe0000} to enforce a stack limit
+of 128KB@.  Note that this may only work with the GNU linker.
+
+You can locally override stack limit checking by using the
+@code{no_stack_limit} function attribute (@pxref{Common Attributes}).
+
+@opindex fsplit-stack
+@opindex fno-split-stack
+@item -fsplit-stack
+Generate code to automatically split the stack before it overflows.
+The resulting program has a discontiguous stack which can only
+overflow if the program is unable to allocate any more memory.  This
+is most useful when running threaded programs, as it is no longer
+necessary to calculate a good stack size to use for each thread.  This
+is currently only implemented for the x86 targets running
+GNU/Linux.
+
+When code compiled with @option{-fsplit-stack} calls code compiled
+without @option{-fsplit-stack}, there may not be much stack space
+available for the latter code to run.  If compiling all code,
+including library code, with @option{-fsplit-stack} is not an option,
+then the linker can fix up these calls so that the code compiled
+without @option{-fsplit-stack} always has a large stack.  Support for
+this is implemented in the gold linker in GNU Binutils release 2.21
+and later.
+
+@opindex fstrub=disable
+@item -fstrub=disable
+Disable stack scrubbing entirely, ignoring any @code{strub} attributes.
+@xref{Common Attributes}.
+
+@opindex fstrub=strict
+@item -fstrub=strict
+Functions default to @code{strub} mode @code{disabled}, and apply
+@option{strict}ly the restriction that only functions associated with
+@code{strub}-@code{callable} modes (@code{at-calls}, @code{callable} and
+@code{always_inline} @code{internal}) are @code{callable} by functions
+with @code{strub}-enabled modes (@code{at-calls} and @code{internal}).
+
+@opindex fstrub=relaxed
+@item -fstrub=relaxed
+Restore the default stack scrub (@code{strub}) setting, namely,
+@code{strub} is only enabled as required by @code{strub} attributes
+associated with function and data types.  @code{Relaxed} means that
+strub contexts are only prevented from calling functions explicitly
+associated with @code{strub} mode @code{disabled}.  This option is only
+useful to override other @option{-fstrub=*} options that precede it in
+the command line.
+
+@opindex fstrub=at-calls
+@item -fstrub=at-calls
+Enable @code{at-calls} @code{strub} mode where viable.  The primary use
+of this option is for testing.  It exercises the @code{strub} machinery
+in scenarios strictly local to a translation unit.  This @code{strub}
+mode modifies function interfaces, so any function that is visible to
+other translation units, or that has its address taken, will @emph{not}
+be affected by this option.  Optimization options may also affect
+viability.  See the @code{strub} attribute documentation for details on
+viability and eligibility requirements.
+
+@opindex fstrub=internal
+@item -fstrub=internal
+Enable @code{internal} @code{strub} mode where viable.  The primary use
+of this option is for testing.  This option is intended to exercise
+thoroughly parts of the @code{strub} machinery that implement the less
+efficient, but interface-preserving @code{strub} mode.  Functions that
+would not be affected by this option are quite uncommon.
+
+@opindex fstrub=all
+@item -fstrub=all
+Enable some @code{strub} mode where viable.  When both strub modes are
+viable, @code{at-calls} is preferred.  @option{-fdump-ipa-strubm} adds
+function attributes that tell which mode was selected for each function.
+The primary use of this option is for testing, to exercise thoroughly
+the @code{strub} machinery.
+
+@opindex fvtable-verify
+@item -fvtable-verify=@r{[}std@r{|}preinit@r{|}none@r{]}
+This option is only available when compiling C++ code.
+It turns on (or off, if using @option{-fvtable-verify=none}) the security
+feature that verifies at run time, for every virtual call, that
+the vtable pointer through which the call is made is valid for the type of
+the object, and has not been corrupted or overwritten.  If an invalid vtable
+pointer is detected at run time, an error is reported and execution of the
+program is immediately halted.
+
+This option causes run-time data structures to be built at program startup,
+which are used for verifying the vtable pointers.
+The options @samp{std} and @samp{preinit}
+control the timing of when these data structures are built.  In both cases the
+data structures are built before execution reaches @code{main}.  Using
+@option{-fvtable-verify=std} causes the data structures to be built after
+shared libraries have been loaded and initialized.
+@option{-fvtable-verify=preinit} causes them to be built before shared
+libraries have been loaded and initialized.
+
+If this option appears multiple times in the command line with different
+values specified, @samp{none} takes highest priority over both @samp{std} and
+@samp{preinit}; @samp{preinit} takes priority over @samp{std}.
+
+@opindex fvtv-debug
+@opindex fno-vtv-debug
+@item -fvtv-debug
+When used in conjunction with @option{-fvtable-verify=std} or
+@option{-fvtable-verify=preinit}, causes debug versions of the
+runtime functions for the vtable verification feature to be called.
+This flag also causes the compiler to log information about which
+vtable pointers it finds for each class.
+This information is written to a file named @file{vtv_set_ptr_data.log}
+in the directory named by the environment variable @env{VTV_LOGS_DIR}
+if that is defined or the current working directory otherwise.
+
+Note:  This feature @emph{appends} data to the log file. If you want a fresh log
+file, be sure to delete any existing one.
+
+@opindex fvtv-counts
+@opindex fno-vtv-counts
+@item -fvtv-counts
+This is a debugging flag.  When used in conjunction with
+@option{-fvtable-verify=std} or @option{-fvtable-verify=preinit}, this
+causes the compiler to keep track of the total number of virtual calls
+it encounters and the number of verifications it inserts.  It also
+counts the number of calls to certain run-time library functions
+that it inserts and logs this information for each compilation unit.
+The compiler writes this information to a file named
+@file{vtv_count_data.log} in the directory named by the environment
+variable @env{VTV_LOGS_DIR} if that is defined or the current working
+directory otherwise.  It also counts the size of the vtable pointer sets
+for each class, and writes this information to @file{vtv_class_set_sizes.log}
+in the same directory.
+
+Note:  This feature @emph{appends} data to the log files.  To get fresh log
+files, be sure to delete any existing ones.
+
+@opindex finstrument-functions
+@opindex fno-instrument-functions

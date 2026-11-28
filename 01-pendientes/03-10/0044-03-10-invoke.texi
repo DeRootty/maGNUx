@@ -1,0 +1,241 @@
+@c GCC 16.1.0 | BLOQUE 0044 | 03-10
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 11773-12009 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -Wno-analyzer-fd-type-mismatch
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-fd-type-mismatch}
+to disable it.
+
+This diagnostic warns for paths through code in which an
+operation is attempted on the wrong type of file descriptor.
+For example, it will warn on attempts to use socket operations
+on a file descriptor obtained via @code{open}, or when attempting
+to use a stream socket operation on a datagram socket.
+
+@opindex Wanalyzer-fd-use-after-close
+@opindex Wno-analyzer-fd-use-after-close
+@item -Wno-analyzer-fd-use-after-close
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-fd-use-after-close}
+to disable it.
+
+This diagnostic warns for paths through code in which a
+read or write is called on a closed file descriptor.
+
+This diagnostic also warns for paths through code in which
+a function with attribute @code{fd_arg (N)} or @code{fd_arg_read (N)}
+or @code{fd_arg_write (N)} is called with a closed file descriptor at
+referenced argument @code{N}.
+
+@opindex Wanalyzer-fd-use-without-check
+@opindex Wno-analyzer-fd-use-without-check
+@item -Wno-analyzer-fd-use-without-check
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-fd-use-without-check}
+to disable it.
+
+This diagnostic warns for paths through code in which a
+file descriptor is used without being checked for validity.
+
+This diagnostic also warns for paths through code in which
+a function with attribute @code{fd_arg (N)} or @code{fd_arg_read (N)}
+or @code{fd_arg_write (N)} is called with a file descriptor, at referenced
+argument @code{N}, without being checked for validity.
+
+@opindex Wanalyzer-file-leak
+@opindex Wno-analyzer-file-leak
+@item -Wno-analyzer-file-leak
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-file-leak}
+to disable it.
+
+This diagnostic warns for paths through the code in which a
+@code{<stdio.h>} @code{FILE *} stream object is leaked.
+
+See @uref{https://cwe.mitre.org/data/definitions/775.html, CWE-775: Missing Release of File Descriptor or Handle after Effective Lifetime}.
+
+@opindex Wanalyzer-free-of-non-heap
+@opindex Wno-analyzer-free-of-non-heap
+@item -Wno-analyzer-free-of-non-heap
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-free-of-non-heap}
+to disable it.
+
+This diagnostic warns for paths through the code in which @code{free}
+is called on a non-heap pointer (e.g. an on-stack buffer, or a global).
+
+See @uref{https://cwe.mitre.org/data/definitions/590.html, CWE-590: Free of Memory not on the Heap}.
+
+@opindex Wanalyzer-imprecise-fp-arithmetic
+@opindex Wno-analyzer-imprecise-fp-arithmetic
+@item -Wno-analyzer-imprecise-fp-arithmetic
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-imprecise-fp-arithmetic}
+to disable it.
+
+This diagnostic warns for paths through the code in which floating-point
+arithmetic is used in locations where precise computation is needed.  This
+diagnostic only warns on use of floating-point operands inside the
+calculation of an allocation size at the moment.
+
+@opindex Wanalyzer-infinite-loop
+@opindex Wno-analyzer-infinite-loop
+@item -Wno-analyzer-infinite-loop
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-infinite-loop} to disable it.
+
+This diagnostics warns for paths through the code which appear to
+lead to an infinite loop.
+
+Specifically, the analyzer will issue this warning when it "sees" a loop
+in which:
+@itemize @bullet
+@item
+no externally-visible work could be being done within the loop
+@item
+there is no way to escape from the loop
+@item
+the analyzer is sufficiently confident about the program state
+throughout the loop to know that the above are true
+@end itemize
+
+One way for this warning to be emitted is when there is an execution
+path through a loop for which taking the path on one iteration implies
+that the same path will be taken on all subsequent iterations.
+
+For example, consider:
+
+@smallexample
+  while (1)
+    @{
+      char opcode = *cpu_state.pc;
+      switch (opcode)
+       @{
+       case OPCODE_FOO:
+         handle_opcode_foo (&cpu_state);
+         break;
+       case OPCODE_BAR:
+         handle_opcode_bar (&cpu_state);
+         break;
+       @}
+    @}
+@end smallexample
+
+The analyzer will complain for the above case because if @code{opcode}
+ever matches none of the cases, the @code{switch} will follow the
+implicit @code{default} case, making the body of the loop be a ``no-op''
+with @code{cpu_state.pc} unchanged, and thus using the same value of
+@code{opcode} on all subseqent iterations, leading to an infinite loop.
+
+See @uref{https://cwe.mitre.org/data/definitions/835.html, CWE-835: Loop with Unreachable Exit Condition ('Infinite Loop')}.
+
+@opindex Wanalyzer-infinite-recursion
+@opindex Wno-analyzer-infinite-recursion
+@item -Wno-analyzer-infinite-recursion
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-infinite-recursion} to disable it.
+
+This diagnostics warns for paths through the code which appear to
+lead to infinite recursion.
+
+Specifically, when the analyzer "sees" a recursive call, it will compare
+the state of memory at the entry to the new frame with that at the entry
+to the previous frame of that function on the stack.  The warning is
+issued if nothing in memory appears to be changing; any changes observed
+to parameters or globals are assumed to lead to termination of the
+recursion and thus suppress the warning.
+
+This diagnostic is likely to miss cases of infinite recursion that
+are convered to iteration by the optimizer before the analyzer "sees"
+them.  Hence optimization should be disabled when attempting to trigger
+this diagnostic.
+
+Compare with @option{-Winfinite-recursion}, which provides a similar
+diagnostic, but is implemented in a different way.
+
+See @uref{https://cwe.mitre.org/data/definitions/674.html, CWE-674: Uncontrolled Recursion}.
+
+@opindex Wanalyzer-jump-through-null
+@opindex Wno-analyzer-jump-through-null
+@item -Wno-analyzer-jump-through-null
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-jump-through-null}
+to disable it.
+
+This diagnostic warns for paths through the code in which a @code{NULL}
+function pointer is called.
+
+@opindex Wanalyzer-malloc-leak
+@opindex Wno-analyzer-malloc-leak
+@item -Wno-analyzer-malloc-leak
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-malloc-leak}
+to disable it.
+
+This diagnostic warns for paths through the code in which a
+pointer allocated via an allocator is leaked: either @code{malloc},
+or a function marked with attribute @code{malloc}.
+
+See @uref{https://cwe.mitre.org/data/definitions/401.html, CWE-401: Missing Release of Memory after Effective Lifetime}.
+
+@opindex Wanalyzer-mismatching-deallocation
+@opindex Wno-analyzer-mismatching-deallocation
+@item -Wno-analyzer-mismatching-deallocation
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-mismatching-deallocation}
+to disable it.
+
+This diagnostic warns for paths through the code in which the
+wrong deallocation function is called on a pointer value, based on
+which function was used to allocate the pointer value.  The diagnostic
+will warn about mismatches between @code{free}, scalar @code{delete}
+and vector @code{delete[]}, and those marked as allocator/deallocator
+pairs using attribute @code{malloc}.
+
+See @uref{https://cwe.mitre.org/data/definitions/762.html, CWE-762: Mismatched Memory Management Routines}.
+
+@opindex Wanalyzer-out-of-bounds
+@opindex Wno-analyzer-out-of-bounds
+@item -Wno-analyzer-out-of-bounds
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-out-of-bounds} to disable it.
+
+This diagnostic warns for paths through the code in which a buffer is
+definitely read or written out-of-bounds.  The diagnostic applies for
+cases where the analyzer is able to determine a constant offset and for
+accesses past the end of a buffer, also a constant capacity.  Further,
+the diagnostic does limited checking for accesses past the end when the
+offset as well as the capacity is symbolic.
+
+See @uref{https://cwe.mitre.org/data/definitions/119.html, CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer}.
+
+For cases where the analyzer is able, it will emit a text art diagram
+visualizing the spatial relationship between the memory region that the
+analyzer predicts would be accessed, versus the range of memory that is
+valid to access: whether they overlap, are touching, are close or far
+apart; which one is before or after in memory, the relative sizes
+involved, the direction of the access (read vs write), and, in some
+cases, the values of data involved.  This diagram can be suppressed
+using @option{-fdiagnostics-text-art-charset=none}.
+
+@opindex Wanalyzer-overlapping-buffers
+@opindex Wno-analyzer-overlapping-buffers
+@item -Wno-analyzer-overlapping-buffers
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-overlapping-buffers} to disable it.
+
+This diagnostic warns for paths through the code in which overlapping
+buffers are passed to an API for which the behavior on such buffers
+is undefined.
+
+Specifically, the diagnostic occurs on calls to the following functions
+@itemize @bullet
+@item @code{memcpy}
+@item @code{strcat}
+@item @code{strcpy}
+@end itemize
+for cases where the buffers are known to overlap.
+
+@opindex Wanalyzer-possible-null-argument
+@opindex Wno-analyzer-possible-null-argument

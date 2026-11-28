@@ -1,0 +1,296 @@
+@c GCC 16.1.0 | BLOQUE 0126 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 28996-29287 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+Two additional variants of the o32 ABI are supported to enable
+a transition from 32-bit to 64-bit registers.  These are FPXX
+(@option{-mfpxx}) and FP64A (@option{-mfp64} @option{-mno-odd-spreg}).
+The FPXX extension mandates that all code must execute correctly
+when run using 32-bit or 64-bit registers.  The code can be interlinked
+with either FP32 or FP64, but not both.
+The FP64A extension is similar to the FP64 extension but forbids the
+use of odd-numbered single-precision registers.  This can be used
+in conjunction with the @code{FRE} mode of FPUs in MIPS32R5
+processors and allows both FP32 and FP64A code to interlink and
+run in the same process without changing FPU modes.
+
+@opindex mabicalls
+@opindex mno-abicalls
+@item -mabicalls
+@itemx -mno-abicalls
+Generate (do not generate) code that is suitable for SVR4-style
+dynamic objects.  @option{-mabicalls} is the default for SVR4-based
+systems.
+
+@opindex mshared
+@opindex mno-shared
+@item -mshared
+@itemx -mno-shared
+Generate (do not generate) code that is fully position-independent,
+and that can therefore be linked into shared libraries.  This option
+only affects @option{-mabicalls}.
+
+All @option{-mabicalls} code has traditionally been position-independent,
+regardless of options like @option{-fPIC} and @option{-fpic}.  However,
+as an extension, the GNU toolchain allows executables to use absolute
+accesses for locally-binding symbols.  It can also use shorter GP
+initialization sequences and generate direct calls to locally-defined
+functions.  This mode is selected by @option{-mno-shared}.
+
+@option{-mno-shared} depends on binutils 2.16 or higher and generates
+objects that can only be linked by the GNU linker.  However, the option
+does not affect the ABI of the final executable; it only affects the ABI
+of relocatable objects.  Using @option{-mno-shared} generally makes
+executables both smaller and quicker.
+
+@option{-mshared} is the default.
+
+@opindex mplt
+@opindex mno-plt
+@item -mplt
+@itemx -mno-plt
+Assume (do not assume) that the static and dynamic linkers
+support PLTs and copy relocations.  This option only affects
+@option{-mno-shared -mabicalls}.  For the n64 ABI, this option
+has no effect without @option{-msym32}.
+
+You can make @option{-mplt} the default by configuring
+GCC with @option{--with-mips-plt}.  The default is
+@option{-mno-plt} otherwise.
+
+@opindex mxgot
+@opindex mno-xgot
+@item -mxgot
+@itemx -mno-xgot
+Lift (do not lift) the usual restrictions on the size of the global
+offset table.
+
+GCC normally uses a single instruction to load values from the GOT@.
+While this is relatively efficient, it only works if the GOT
+is smaller than about 64k.  Anything larger causes the linker
+to report an error such as:
+
+@cindex relocation truncated to fit (MIPS)
+@smallexample
+relocation truncated to fit: R_MIPS_GOT16 foobar
+@end smallexample
+
+If this happens, you should recompile your code with @option{-mxgot}.
+This works with very large GOTs, although the code is also
+less efficient, since it takes three instructions to fetch the
+value of a global symbol.
+
+Note that some linkers can create multiple GOTs.  If you have such a
+linker, you should only need to use @option{-mxgot} when a single object
+file accesses more than 64k's worth of GOT entries.  Very few do.
+
+These options have no effect unless GCC is generating position
+independent code.
+
+@opindex mgp32
+@item -mgp32
+Assume that general-purpose registers are 32 bits wide.
+
+@opindex mgp64
+@item -mgp64
+Assume that general-purpose registers are 64 bits wide.
+
+@opindex mfp32
+@item -mfp32
+Assume that floating-point registers are 32 bits wide.
+
+@opindex mfp64
+@item -mfp64
+Assume that floating-point registers are 64 bits wide.
+
+@opindex mfpxx
+@item -mfpxx
+Do not assume the width of floating-point registers.
+
+@opindex mhard-float
+@item -mhard-float
+Use floating-point coprocessor instructions.
+
+@opindex msoft-float
+@item -msoft-float
+Do not use floating-point coprocessor instructions.  Implement
+floating-point calculations using library calls instead.
+
+@opindex mno-float
+@item -mno-float
+Equivalent to @option{-msoft-float}, but additionally asserts that the
+program being compiled does not perform any floating-point operations.
+This option is presently supported only by some bare-metal MIPS
+configurations, where it may select a special set of libraries
+that lack all floating-point support (including, for example, the
+floating-point @code{printf} formats).
+If code compiled with @option{-mno-float} accidentally contains
+floating-point operations, it is likely to suffer a link-time
+or run-time failure.
+
+@opindex msingle-float
+@item -msingle-float
+Assume that the floating-point coprocessor only supports single-precision
+operations.
+
+@opindex mdouble-float
+@item -mdouble-float
+Assume that the floating-point coprocessor supports double-precision
+operations.  This is the default.
+
+@opindex modd-spreg
+@opindex mno-odd-spreg
+@item -modd-spreg
+@itemx -mno-odd-spreg
+Enable the use of odd-numbered single-precision floating-point registers
+for the o32 ABI.  This is the default for processors that are known to
+support these registers.  When using the o32 FPXX ABI, @option{-mno-odd-spreg}
+is set by default.
+
+@opindex mabs=2008
+@opindex mabs=legacy
+@item -mabs=2008
+@itemx -mabs=legacy
+These options control the treatment of the special not-a-number (NaN)
+IEEE 754 floating-point data with the @code{abs.@i{fmt}} and
+@code{neg.@i{fmt}} machine instructions.
+
+By default or when @option{-mabs=legacy} is used the legacy
+treatment is selected.  In this case these instructions are considered
+arithmetic and avoided where correct operation is required and the
+input operand might be a NaN.  A longer sequence of instructions that
+manipulate the sign bit of floating-point datum manually is used
+instead unless the @option{-ffinite-math-only} option has also been
+specified.
+
+The @option{-mabs=2008} option selects the IEEE 754-2008 treatment.  In
+this case these instructions are considered non-arithmetic and therefore
+operating correctly in all cases, including in particular where the
+input operand is a NaN.  These instructions are therefore always used
+for the respective operations.
+
+@opindex mnan=2008
+@opindex mnan=legacy
+@item -mnan=2008
+@itemx -mnan=legacy
+These options control the encoding of the special not-a-number (NaN)
+IEEE 754 floating-point data.
+
+The @option{-mnan=legacy} option selects the legacy encoding.  In this
+case quiet NaNs (qNaNs) are denoted by the first bit of their trailing
+significand field being 0, whereas signaling NaNs (sNaNs) are denoted
+by the first bit of their trailing significand field being 1.
+
+The @option{-mnan=2008} option selects the IEEE 754-2008 encoding.  In
+this case qNaNs are denoted by the first bit of their trailing
+significand field being 1, whereas sNaNs are denoted by the first bit of
+their trailing significand field being 0.
+
+The default is @option{-mnan=legacy} unless GCC has been configured with
+@option{--with-nan=2008}.
+
+@opindex mllsc
+@opindex mno-llsc
+@item -mllsc
+@itemx -mno-llsc
+Use (do not use) @samp{ll}, @samp{sc}, and @samp{sync} instructions to
+implement atomic memory built-in functions.  When neither option is
+specified, GCC uses the instructions if the target architecture
+supports them.
+
+@option{-mllsc} is useful if the runtime environment can emulate the
+instructions and @option{-mno-llsc} can be useful when compiling for
+nonstandard ISAs.  You can make either option the default by
+configuring GCC with @option{--with-llsc} and @option{--without-llsc}
+respectively.  @option{--with-llsc} is the default for some
+configurations; see the installation documentation for details.
+
+@opindex mdsp
+@opindex mno-dsp
+@item -mdsp
+@itemx -mno-dsp
+Use (do not use) revision 1 of the MIPS DSP ASE@.
+@xref{MIPS DSP Built-in Functions}.  This option defines the
+preprocessor macro @code{__mips_dsp}.  It also defines
+@code{__mips_dsp_rev} to 1.
+
+@opindex mdspr2
+@opindex mno-dspr2
+@item -mdspr2
+@itemx -mno-dspr2
+Use (do not use) revision 2 of the MIPS DSP ASE@.
+@xref{MIPS DSP Built-in Functions}.  This option defines the
+preprocessor macros @code{__mips_dsp} and @code{__mips_dspr2}.
+It also defines @code{__mips_dsp_rev} to 2.
+
+@opindex msmartmips
+@opindex mno-smartmips
+@item -msmartmips
+@itemx -mno-smartmips
+Use (do not use) the MIPS SmartMIPS ASE.
+
+@opindex mpaired-single
+@opindex mno-paired-single
+@item -mpaired-single
+@itemx -mno-paired-single
+Use (do not use) paired-single floating-point instructions.
+@xref{MIPS Paired-Single Support}.  This option requires
+hardware floating-point support to be enabled.
+
+@opindex mdmx
+@opindex mno-mdmx
+@item -mdmx
+@itemx -mno-mdmx
+Use (do not use) MIPS Digital Media Extension instructions.
+This option can only be used when generating 64-bit code and requires
+hardware floating-point support to be enabled.
+
+@opindex mips3d
+@opindex mno-mips3d
+@item -mips3d
+@itemx -mno-mips3d
+Use (do not use) the MIPS-3D ASE@.  @xref{MIPS-3D Built-in Functions}.
+The option @option{-mips3d} implies @option{-mpaired-single}.
+
+@opindex mmicromips
+@opindex mno-mmicromips
+@item -mmicromips
+@itemx -mno-micromips
+Generate (do not generate) microMIPS code.
+
+MicroMIPS code generation can also be controlled on a per-function basis
+by means of @code{micromips} and @code{nomicromips} attributes.
+@xref{MIPS Attributes}, for more information.
+
+@opindex mmt
+@opindex mno-mt
+@item -mmt
+@itemx -mno-mt
+Use (do not use) MT Multithreading instructions.
+
+@opindex mmcu
+@opindex mno-mcu
+@item -mmcu
+@itemx -mno-mcu
+Use (do not use) the MIPS MCU ASE instructions.
+
+@opindex meva
+@opindex mno-eva
+@item -meva
+@itemx -mno-eva
+Use (do not use) the MIPS Enhanced Virtual Addressing instructions.
+
+@opindex mvirt
+@opindex mno-virt
+@item -mvirt
+@itemx -mno-virt
+Use (do not use) the MIPS Virtualization (VZ) instructions.
+
+@opindex mxpa
+@opindex mno-xpa
+@item -mxpa
+@itemx -mno-xpa
+Use (do not use) the MIPS eXtended Physical Address (XPA) instructions.
+
+@opindex mcrc
+@opindex mno-crc

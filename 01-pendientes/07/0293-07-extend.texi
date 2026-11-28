@@ -1,0 +1,266 @@
+@c GCC 16.1.0 | BLOQUE 0293 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 20203-20464 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Directly-mapped SX Builtin Functions
+@subsubsection Directly-mapped SX Builtin Functions
+
+For convenience, GCC defines functions @code{__lsx_vrepli_@{b/h/w/d@}} and
+@code{__lsx_b[n]z_@{v/b/h/w/d@}}, which are implemented as follows:
+
+@smallexample
+a. @code{__lsx_vrepli_@{b/h/w/d@}}: Implemented the case where the highest
+   bit of @code{vldi} instruction @code{i13} is 1.
+
+   i13[12] == 1'b0
+   case i13[11:10] of :
+     2'b00: __lsx_vrepli_b (imm_n512_511)
+     2'b01: __lsx_vrepli_h (imm_n512_511)
+     2'b10: __lsx_vrepli_w (imm_n512_511)
+     2'b11: __lsx_vrepli_d (imm_n512_511)
+
+b. @code{__lsx_b[n]z_@{v/b/h/w/d@}}: Since the @code{vseteqz} class directive
+   cannot be used on its own, this function is defined.
+
+   _lsx_bz_v  => vseteqz.v + bcnez
+   _lsx_bnz_v => vsetnez.v + bcnez
+   _lsx_bz_b  => vsetanyeqz.b + bcnez
+   _lsx_bz_h  => vsetanyeqz.h + bcnez
+   _lsx_bz_w  => vsetanyeqz.w + bcnez
+   _lsx_bz_d  => vsetanyeqz.d + bcnez
+   _lsx_bnz_b => vsetallnez.b + bcnez
+   _lsx_bnz_h => vsetallnez.h + bcnez
+   _lsx_bnz_w => vsetallnez.w + bcnez
+   _lsx_bnz_d => vsetallnez.d + bcnez
+@end smallexample
+
+@smallexample
+eg:
+  #include <lsxintrin.h>
+
+  extern __m128i @var{a};
+
+  void
+  test (void)
+  @{
+    if (__lsx_bz_v (@var{a}))
+      printf ("1\n");
+    else
+      printf ("2\n");
+  @}
+@end smallexample
+
+@emph{Note:} For directives where the intent operand is also the source operand
+(modifying only part of the bitfield of the intent register), the first parameter
+in the builtin call function is used as the intent operand.
+
+@smallexample
+eg:
+  #include <lsxintrin.h>
+
+  extern __m128i @var{dst};
+  extern int @var{src};
+
+  void
+  test (void)
+  @{
+    @var{dst} = __lsx_vinsgr2vr_b (@var{dst}, @var{src}, 3);
+  @}
+@end smallexample
+
+The intrinsics provided are listed below:
+@smallexample
+int __lsx_bnz_b (__m128i);
+int __lsx_bnz_d (__m128i);
+int __lsx_bnz_h (__m128i);
+int __lsx_bnz_v (__m128i);
+int __lsx_bnz_w (__m128i);
+int __lsx_bz_b (__m128i);
+int __lsx_bz_d (__m128i);
+int __lsx_bz_h (__m128i);
+int __lsx_bz_v (__m128i);
+int __lsx_bz_w (__m128i);
+__m128i __lsx_vabsd_b (__m128i, __m128i);
+__m128i __lsx_vabsd_bu (__m128i, __m128i);
+__m128i __lsx_vabsd_d (__m128i, __m128i);
+__m128i __lsx_vabsd_du (__m128i, __m128i);
+__m128i __lsx_vabsd_h (__m128i, __m128i);
+__m128i __lsx_vabsd_hu (__m128i, __m128i);
+__m128i __lsx_vabsd_w (__m128i, __m128i);
+__m128i __lsx_vabsd_wu (__m128i, __m128i);
+__m128i __lsx_vadda_b (__m128i, __m128i);
+__m128i __lsx_vadda_d (__m128i, __m128i);
+__m128i __lsx_vadda_h (__m128i, __m128i);
+__m128i __lsx_vadda_w (__m128i, __m128i);
+__m128i __lsx_vadd_b (__m128i, __m128i);
+__m128i __lsx_vadd_d (__m128i, __m128i);
+__m128i __lsx_vadd_h (__m128i, __m128i);
+__m128i __lsx_vaddi_bu (__m128i, imm0_31);
+__m128i __lsx_vaddi_du (__m128i, imm0_31);
+__m128i __lsx_vaddi_hu (__m128i, imm0_31);
+__m128i __lsx_vaddi_wu (__m128i, imm0_31);
+__m128i __lsx_vadd_q (__m128i, __m128i);
+__m128i __lsx_vadd_w (__m128i, __m128i);
+__m128i __lsx_vaddwev_d_w (__m128i, __m128i);
+__m128i __lsx_vaddwev_d_wu (__m128i, __m128i);
+__m128i __lsx_vaddwev_d_wu_w (__m128i, __m128i);
+__m128i __lsx_vaddwev_h_b (__m128i, __m128i);
+__m128i __lsx_vaddwev_h_bu (__m128i, __m128i);
+__m128i __lsx_vaddwev_h_bu_b (__m128i, __m128i);
+__m128i __lsx_vaddwev_q_d (__m128i, __m128i);
+__m128i __lsx_vaddwev_q_du (__m128i, __m128i);
+__m128i __lsx_vaddwev_q_du_d (__m128i, __m128i);
+__m128i __lsx_vaddwev_w_h (__m128i, __m128i);
+__m128i __lsx_vaddwev_w_hu (__m128i, __m128i);
+__m128i __lsx_vaddwev_w_hu_h (__m128i, __m128i);
+__m128i __lsx_vaddwod_d_w (__m128i, __m128i);
+__m128i __lsx_vaddwod_d_wu (__m128i, __m128i);
+__m128i __lsx_vaddwod_d_wu_w (__m128i, __m128i);
+__m128i __lsx_vaddwod_h_b (__m128i, __m128i);
+__m128i __lsx_vaddwod_h_bu (__m128i, __m128i);
+__m128i __lsx_vaddwod_h_bu_b (__m128i, __m128i);
+__m128i __lsx_vaddwod_q_d (__m128i, __m128i);
+__m128i __lsx_vaddwod_q_du (__m128i, __m128i);
+__m128i __lsx_vaddwod_q_du_d (__m128i, __m128i);
+__m128i __lsx_vaddwod_w_h (__m128i, __m128i);
+__m128i __lsx_vaddwod_w_hu (__m128i, __m128i);
+__m128i __lsx_vaddwod_w_hu_h (__m128i, __m128i);
+__m128i __lsx_vandi_b (__m128i, imm0_255);
+__m128i __lsx_vandn_v (__m128i, __m128i);
+__m128i __lsx_vand_v (__m128i, __m128i);
+__m128i __lsx_vavg_b (__m128i, __m128i);
+__m128i __lsx_vavg_bu (__m128i, __m128i);
+__m128i __lsx_vavg_d (__m128i, __m128i);
+__m128i __lsx_vavg_du (__m128i, __m128i);
+__m128i __lsx_vavg_h (__m128i, __m128i);
+__m128i __lsx_vavg_hu (__m128i, __m128i);
+__m128i __lsx_vavgr_b (__m128i, __m128i);
+__m128i __lsx_vavgr_bu (__m128i, __m128i);
+__m128i __lsx_vavgr_d (__m128i, __m128i);
+__m128i __lsx_vavgr_du (__m128i, __m128i);
+__m128i __lsx_vavgr_h (__m128i, __m128i);
+__m128i __lsx_vavgr_hu (__m128i, __m128i);
+__m128i __lsx_vavgr_w (__m128i, __m128i);
+__m128i __lsx_vavgr_wu (__m128i, __m128i);
+__m128i __lsx_vavg_w (__m128i, __m128i);
+__m128i __lsx_vavg_wu (__m128i, __m128i);
+__m128i __lsx_vbitclr_b (__m128i, __m128i);
+__m128i __lsx_vbitclr_d (__m128i, __m128i);
+__m128i __lsx_vbitclr_h (__m128i, __m128i);
+__m128i __lsx_vbitclri_b (__m128i, imm0_7);
+__m128i __lsx_vbitclri_d (__m128i, imm0_63);
+__m128i __lsx_vbitclri_h (__m128i, imm0_15);
+__m128i __lsx_vbitclri_w (__m128i, imm0_31);
+__m128i __lsx_vbitclr_w (__m128i, __m128i);
+__m128i __lsx_vbitrev_b (__m128i, __m128i);
+__m128i __lsx_vbitrev_d (__m128i, __m128i);
+__m128i __lsx_vbitrev_h (__m128i, __m128i);
+__m128i __lsx_vbitrevi_b (__m128i, imm0_7);
+__m128i __lsx_vbitrevi_d (__m128i, imm0_63);
+__m128i __lsx_vbitrevi_h (__m128i, imm0_15);
+__m128i __lsx_vbitrevi_w (__m128i, imm0_31);
+__m128i __lsx_vbitrev_w (__m128i, __m128i);
+__m128i __lsx_vbitseli_b (__m128i, __m128i, imm0_255);
+__m128i __lsx_vbitsel_v (__m128i, __m128i, __m128i);
+__m128i __lsx_vbitset_b (__m128i, __m128i);
+__m128i __lsx_vbitset_d (__m128i, __m128i);
+__m128i __lsx_vbitset_h (__m128i, __m128i);
+__m128i __lsx_vbitseti_b (__m128i, imm0_7);
+__m128i __lsx_vbitseti_d (__m128i, imm0_63);
+__m128i __lsx_vbitseti_h (__m128i, imm0_15);
+__m128i __lsx_vbitseti_w (__m128i, imm0_31);
+__m128i __lsx_vbitset_w (__m128i, __m128i);
+__m128i __lsx_vbsll_v (__m128i, imm0_31);
+__m128i __lsx_vbsrl_v (__m128i, imm0_31);
+__m128i __lsx_vclo_b (__m128i);
+__m128i __lsx_vclo_d (__m128i);
+__m128i __lsx_vclo_h (__m128i);
+__m128i __lsx_vclo_w (__m128i);
+__m128i __lsx_vclz_b (__m128i);
+__m128i __lsx_vclz_d (__m128i);
+__m128i __lsx_vclz_h (__m128i);
+__m128i __lsx_vclz_w (__m128i);
+__m128i __lsx_vdiv_b (__m128i, __m128i);
+__m128i __lsx_vdiv_bu (__m128i, __m128i);
+__m128i __lsx_vdiv_d (__m128i, __m128i);
+__m128i __lsx_vdiv_du (__m128i, __m128i);
+__m128i __lsx_vdiv_h (__m128i, __m128i);
+__m128i __lsx_vdiv_hu (__m128i, __m128i);
+__m128i __lsx_vdiv_w (__m128i, __m128i);
+__m128i __lsx_vdiv_wu (__m128i, __m128i);
+__m128i __lsx_vexth_du_wu (__m128i);
+__m128i __lsx_vexth_d_w (__m128i);
+__m128i __lsx_vexth_h_b (__m128i);
+__m128i __lsx_vexth_hu_bu (__m128i);
+__m128i __lsx_vexth_q_d (__m128i);
+__m128i __lsx_vexth_qu_du (__m128i);
+__m128i __lsx_vexth_w_h (__m128i);
+__m128i __lsx_vexth_wu_hu (__m128i);
+__m128i __lsx_vextl_q_d (__m128i);
+__m128i __lsx_vextl_qu_du (__m128i);
+__m128i __lsx_vextrins_b (__m128i, __m128i, imm0_255);
+__m128i __lsx_vextrins_d (__m128i, __m128i, imm0_255);
+__m128i __lsx_vextrins_h (__m128i, __m128i, imm0_255);
+__m128i __lsx_vextrins_w (__m128i, __m128i, imm0_255);
+__m128d __lsx_vfadd_d (__m128d, __m128d);
+__m128 __lsx_vfadd_s (__m128, __m128);
+__m128i __lsx_vfclass_d (__m128d);
+__m128i __lsx_vfclass_s (__m128);
+__m128i __lsx_vfcmp_caf_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_caf_s (__m128, __m128);
+__m128i __lsx_vfcmp_ceq_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_ceq_s (__m128, __m128);
+__m128i __lsx_vfcmp_cle_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_cle_s (__m128, __m128);
+__m128i __lsx_vfcmp_clt_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_clt_s (__m128, __m128);
+__m128i __lsx_vfcmp_cne_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_cne_s (__m128, __m128);
+__m128i __lsx_vfcmp_cor_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_cor_s (__m128, __m128);
+__m128i __lsx_vfcmp_cueq_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_cueq_s (__m128, __m128);
+__m128i __lsx_vfcmp_cule_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_cule_s (__m128, __m128);
+__m128i __lsx_vfcmp_cult_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_cult_s (__m128, __m128);
+__m128i __lsx_vfcmp_cun_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_cune_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_cune_s (__m128, __m128);
+__m128i __lsx_vfcmp_cun_s (__m128, __m128);
+__m128i __lsx_vfcmp_saf_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_saf_s (__m128, __m128);
+__m128i __lsx_vfcmp_seq_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_seq_s (__m128, __m128);
+__m128i __lsx_vfcmp_sle_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_sle_s (__m128, __m128);
+__m128i __lsx_vfcmp_slt_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_slt_s (__m128, __m128);
+__m128i __lsx_vfcmp_sne_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_sne_s (__m128, __m128);
+__m128i __lsx_vfcmp_sor_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_sor_s (__m128, __m128);
+__m128i __lsx_vfcmp_sueq_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_sueq_s (__m128, __m128);
+__m128i __lsx_vfcmp_sule_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_sule_s (__m128, __m128);
+__m128i __lsx_vfcmp_sult_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_sult_s (__m128, __m128);
+__m128i __lsx_vfcmp_sun_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_sune_d (__m128d, __m128d);
+__m128i __lsx_vfcmp_sune_s (__m128, __m128);
+__m128i __lsx_vfcmp_sun_s (__m128, __m128);
+__m128d __lsx_vfcvth_d_s (__m128);
+__m128i __lsx_vfcvt_h_s (__m128, __m128);
+__m128 __lsx_vfcvth_s_h (__m128i);
+__m128d __lsx_vfcvtl_d_s (__m128);
+__m128 __lsx_vfcvtl_s_h (__m128i);
+__m128 __lsx_vfcvt_s_d (__m128d, __m128d);
+__m128d __lsx_vfdiv_d (__m128d, __m128d);
+__m128 __lsx_vfdiv_s (__m128, __m128);
+__m128d __lsx_vffint_d_l (__m128i);
+__m128d __lsx_vffint_d_lu (__m128i);
+__m128d __lsx_vffinth_d_w (__m128i);
+__m128d __lsx_vffintl_d_w (__m128i);
+__m128 __lsx_vffint_s_l (__m128i, __m128i);
+__m128 __lsx_vffint_s_w (__m128i);

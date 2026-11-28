@@ -1,0 +1,234 @@
+@c GCC 16.1.0 | BLOQUE 0183 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 1791-2020 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+Some function attributes take one or more arguments that refer to
+the function's parameters by their positions within the function parameter
+list.  Such attribute arguments are referred to as @dfn{positional arguments}.
+Unless specified otherwise, positional arguments that specify properties
+of parameters with pointer types can also specify the same properties of
+the implicit C++ @code{this} argument in non-static member functions, and
+of parameters of reference to a pointer type.  For ordinary functions,
+position one refers to the first parameter on the list.  In C++ non-static
+member functions, position one refers to the implicit @code{this} pointer.
+
+The same restrictions and effects apply to function attributes used with
+ordinary functions or C++ member functions.
+
+@menu
+* Common Attributes::		Attributes supported on most targets.
+* Target-Specific Attributes::  Attributes supported on particular targets.
+* Attribute Syntax::            Formal syntax for traditional GNU attributes.
+@end menu
+
+@anchor{Common Function Attributes}
+@anchor{Common Variable Attributes}
+@anchor{Common Type Attributes}
+@node Common Attributes
+@subsection Common Attributes
+
+The following GNU-specific attributes are supported on most targets in
+both C and C++.  When using the standard syntax, you must prefix their
+names with @samp{gnu::}, such as @code{gnu::section}.
+
+@xref{C++ Attributes}, for additional GNU attributes that are specific
+to C++.
+
+With the @option{-fopenmp} option, GCC additionally recognizes OpenMP
+directives, with names prefixed with @samp{omp::}, using the standard
+@samp{[[]]} syntax.  @xref{OpenMP}.
+
+@table @code
+@c Keep this table alphabetized by attribute name.  Treat _ as space.
+@c Every entry should start with a sentence that says where the attribute
+@c may appear.
+
+@atindex @code{access}
+@cindex functions that restrict access to pointer arguments
+@item access (@var{access-mode}, @var{ref-index})
+@itemx access (@var{access-mode}, @var{ref-index}, @var{size-index})
+This attribute applies to functions.
+
+The @code{access} attribute enables the detection of invalid
+or unsafe accesses by functions or their callers, as well as
+write-only accesses to objects that are never read from.  Such accesses
+may be diagnosed by warnings such as @option{-Wstringop-overflow},
+@option{-Wuninitialized}, @option{-Wunused}, and others.
+
+The @code{access} attribute specifies that a pointer or reference argument
+to the function is accessed according to @var{access-mode}, which must be
+one of @code{read_only}, @code{read_write}, @code{write_only},
+or @code{none}.  The semantics of these modes are described below.
+
+The argument the attribute applies to is identifed by @var{ref-index}, which
+is an integer constant representing its position in the argument list.
+Argument numbering starts from 1.  You can specify multiple @code{access}
+attributes to describe the access modes of different arguments, but multiple
+@code{access} attributes applying to the same argument are not permitted.
+
+The optional @var{size-index} denotes the position of a function
+argument of integer type that specifies the maximum size of the access.
+The size is the number of elements of the type referenced by @var{ref-index},
+or the number of bytes when the pointer type is @code{void*}.  When no
+@var{size-index} argument is specified, the pointer argument must be either
+null or point to a space that is suitably aligned and large enough
+for at least one
+object of the referenced type (this implies that a past-the-end pointer is
+not a valid argument).  The actual size of the access may be less but it
+must not be more.
+
+The @code{read_only} access mode specifies that the pointer to which it
+applies is used to read the referenced object but not write to it.  Unless
+the argument specifying the size of the access denoted by @var{size-index}
+is zero, the referenced object must be initialized.  The mode implies
+a stronger guarantee than the @code{const} qualifier which, when cast away
+from a pointer, does not prevent the pointed-to object from being modified.
+Examples of the use of the @code{read_only} access mode is the argument to
+the @code{puts} function, or the second argument to
+the @code{memcpy} function.
+
+@smallexample
+[[gnu::access (read_only, 1)]]
+int puts (const char*);
+
+[[gnu::access (read_only, 2, 3)]]
+void* memcpy (void*, const void*, size_t);
+@end smallexample
+
+The @code{read_write} access mode applies to arguments of pointer types
+without the @code{const} qualifier.  It specifies that the pointer to which
+it applies is used to both read and write the referenced object.  Unless
+the argument specifying the size of the access denoted by @var{size-index}
+is zero, the object referenced by the pointer must be initialized.  An example
+of the use of the @code{read_write} access mode is the first argument to
+the @code{strcat} function.
+
+@smallexample
+[[gnu::access (read_write, 1), gnu::access (read_only, 2)]]
+char* strcat (char*, const char*);
+@end smallexample
+
+The @code{write_only} access mode applies to arguments of pointer types
+without the @code{const} qualifier.  It specifies that the pointer to which
+it applies is used to write to the referenced object but not read from it.
+The object referenced by the pointer need not be initialized.  An example
+of the use of the @code{write_only} access mode is the first argument to
+the @code{strcpy} function, or the first two arguments to the @code{fgets}
+function.
+
+@smallexample
+__attribute__ ((access (write_only, 1), access (read_only, 2)))
+char* strcpy (char*, const char*);
+
+__attribute__ ((access (write_only, 1, 2), access (read_write, 3)))
+int fgets (char*, int, FILE*);
+@end smallexample
+
+The access mode @code{none} specifies that the pointer argument
+to which it applies
+is not used to access the referenced object at all.  Unless the pointer is
+null, the pointed-to object must exist and have at least the size as denoted
+by the @var{size-index} argument.  When the optional @var{size-index}
+argument is omitted for an argument of @code{void*} type, the actual pointer
+argument is ignored.  The referenced object need not be initialized.
+The mode is intended to be used as a means to help validate the expected
+object size, for example in functions that call @code{__builtin_object_size}.
+@xref{Object Size Checking}.
+
+Note that the @code{access} attribute merely specifies how an object
+referenced by the pointer argument can be accessed; it does not imply that
+an access @strong{will} happen.  Also, the @code{access} attribute does not
+imply the attribute @code{nonnull} nor the attribute @code{nonnull_if_nonzero};
+it may be appropriate to add both attributes at the declaration of a function
+that unconditionally manipulates a buffer via a pointer argument.  See the
+@code{nonnull} or @code{nonnull_if_nonzero} function attributes,
+documented later in this section, for more information and
+caveats.
+
+@atindex @code{alias}
+@item alias ("@var{target}")
+This attribute applies to variables and functions.
+
+The @code{alias} attribute causes the declaration to be emitted
+as an alias for another symbol known as an @dfn{alias target}.
+
+For instance, the following
+
+@smallexample
+int var_target;
+extern int var_alias [[gnu::alias ("var_target")]];
+@end smallexample
+
+@noindent
+defines @code{var_alias} to be an alias for the @code{var_target} variable,
+and
+
+@smallexample
+void __f () @{ /* @r{Do something.} */; @}
+void f () __attribute__ ((weak, alias ("__f")));
+@end smallexample
+
+@noindent
+defines @samp{f} to be a weak alias for @samp{__f}.
+
+Except for top-level qualifiers the alias target must have the same type as
+the alias.  For variables, it must also have the same size and alignment.
+
+The alias target must be defined in the same translation
+unit as the alias.  In C++, the mangled name for the target must be used.
+
+Note that in the absence of the attribute GCC assumes that distinct
+declarations with external linkage denote distinct objects.  Using both
+the alias and the alias target to access the same object is undefined
+in a translation unit without a declaration of the alias with the attribute.
+
+This attribute requires assembler and object file support,
+and may not be available on all targets.
+
+@atindex @code{aligned}
+@cindex alignment of functions and data
+@item aligned
+@itemx aligned (@var{alignment})
+This attribute applies to functions, variables, typedefs, structs, and
+structure fields.
+
+The @code{aligned} attribute specifies a minimum alignment for the
+entity it applies to, measured in bytes.
+When specified, @var{alignment} must be an integer constant power of 2.
+
+For example, the declaration:
+
+@smallexample
+int x [[gnu::aligned (16)]] = 0;
+@end smallexample
+
+@noindent
+causes the compiler to allocate the global variable @code{x} on a
+16-byte boundary.
+
+These declarations:
+
+@smallexample
+struct __attribute__ ((aligned (8))) S @{ short f[3]; @};
+typedef int more_aligned_int __attribute__ ((aligned (8)));
+@end smallexample
+
+@noindent
+force the compiler to ensure (as far as it can) that each variable whose
+type is @code{struct S} or @code{more_aligned_int} is allocated and
+aligned @emph{at least} on a 8-byte boundary.
+
+When applied to a function, specifying no
+@var{alignment} argument implies the ideal alignment for the target.
+The @code{__alignof__} operator can be used to determine what that is
+(@pxref{Alignment}).  The attribute has no effect when a definition for
+the function is not provided in the same translation unit.
+
+The attribute cannot be used to decrease the alignment of a function
+previously declared with a more restrictive alignment; only to increase
+it.  Attempts to do otherwise are diagnosed.  Some targets specify
+a minimum default alignment for functions that is greater than 1.  On
+such targets, specifying a less restrictive alignment is silently ignored.
+Using the attribute overrides the effect of the @option{-falign-functions}
+(@pxref{Optimize Options}) option for this function.
+

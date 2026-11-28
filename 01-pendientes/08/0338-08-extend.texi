@@ -1,0 +1,215 @@
+@c GCC 16.1.0 | BLOQUE 0338 | 08
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 30577-30787 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node C++ Extensions
+@chapter Extensions to the C++ Language
+@cindex extensions, C++ language
+@cindex C++ language extensions
+
+The GNU compiler provides these extensions to the C++ language (and you
+can also use most of the C language extensions in your C++ programs).  If you
+want to write code that checks whether these features are available, you can
+test for the GNU compiler the same way as for C programs: check for a
+predefined macro @code{__GNUC__}.  You can also use @code{__GNUG__} to
+test specifically for GNU C++ (@pxref{Common Predefined Macros,,
+Predefined Macros,cpp,The GNU C Preprocessor}).
+
+@menu
+* C++ Volatiles::       What constitutes an access to a volatile object.
+* Restricted Pointers:: C99 restricted pointers and references.
+* Vague Linkage::       Where G++ puts inlines, vtables and such.
+* C++ Interface::       You can use a single C++ header file for both
+                        declarations and definitions.
+* Template Instantiation:: Methods for ensuring that exactly one copy of
+                        each needed template instantiation is emitted.
+* Bound member functions:: You can extract a function pointer to the
+                        method denoted by a @samp{->*} or @samp{.*} expression.
+* C++ Attributes::      Variable, function, and type attributes for C++ only.
+* Function Multiversioning::   Declaring multiple function versions.
+* Type Traits::         Compiler support for type traits.
+* Deprecated Features:: Things will disappear from G++.
+* Backwards Compatibility:: Compatibilities with earlier definitions of C++.
+@end menu
+
+@node C++ Volatiles
+@section When is a Volatile C++ Object Accessed?
+@cindex accessing volatiles
+@cindex volatile read
+@cindex volatile write
+@cindex volatile access
+
+The C++ standard differs from the C standard in its treatment of
+volatile objects.  It fails to specify what constitutes a volatile
+access, except to say that C++ should behave in a similar manner to C
+with respect to volatiles, where possible.  However, the different
+lvalueness of expressions between C and C++ complicate the behavior.
+G++ behaves the same as GCC for volatile access, @xref{C
+Extensions,,Volatiles}, for a description of GCC's behavior.
+
+The C and C++ language specifications differ when an object is
+accessed in a void context:
+
+@smallexample
+volatile int *src = @var{somevalue};
+*src;
+@end smallexample
+
+The C++ standard specifies that such expressions do not undergo lvalue
+to rvalue conversion, and that the type of the dereferenced object may
+be incomplete.  The C++ standard does not specify explicitly that it
+is lvalue to rvalue conversion that is responsible for causing an
+access.  There is reason to believe that it is, because otherwise
+certain simple expressions become undefined.  However, because it
+would surprise most programmers, G++ treats dereferencing a pointer to
+volatile object of complete type as GCC would do for an equivalent
+type in C@.  When the object has incomplete type, G++ issues a
+warning; if you wish to force an error, you must force a conversion to
+rvalue with, for instance, a static cast.
+
+When using a reference to volatile, G++ does not treat equivalent
+expressions as accesses to volatiles, but instead issues a warning that
+no volatile is accessed.  The rationale for this is that otherwise it
+becomes difficult to determine where volatile access occur, and not
+possible to ignore the return value from functions returning volatile
+references.  Again, if you wish to force a read, cast the reference to
+an rvalue.
+
+G++ implements the same behavior as GCC does when assigning to a
+volatile object---there is no reread of the assigned-to object, the
+assigned rvalue is reused.  Note that in C++ assignment expressions
+are lvalues, and if used as an lvalue, the volatile object is
+referred to.  For instance, @var{vref} refers to @var{vobj}, as
+expected, in the following example:
+
+@smallexample
+volatile int vobj;
+volatile int &vref = vobj = @var{something};
+@end smallexample
+
+@node Restricted Pointers
+@section Restricting Pointer Aliasing
+@cindex restricted pointers
+@cindex restricted references
+@cindex restricted this pointer
+
+As with the C front end, G++ understands the C99 feature of restricted pointers,
+specified with the @code{__restrict__}, or @code{__restrict} type
+qualifier.  Because you cannot compile C++ by specifying the @option{-std=c99}
+language flag, @code{restrict} is not a keyword in C++.
+
+In addition to allowing restricted pointers, you can specify restricted
+references, which indicate that the reference is not aliased in the local
+context.
+
+@smallexample
+void fn (int *__restrict__ rptr, int &__restrict__ rref)
+@{
+  /* @r{@dots{}} */
+@}
+@end smallexample
+
+@noindent
+In the body of @code{fn}, @var{rptr} points to an unaliased integer and
+@var{rref} refers to a (different) unaliased integer.
+
+You may also specify whether a member function's @var{this} pointer is
+unaliased by using @code{__restrict__} as a member function qualifier.
+
+@smallexample
+void T::fn () __restrict__
+@{
+  /* @r{@dots{}} */
+@}
+@end smallexample
+
+@noindent
+Within the body of @code{T::fn}, @var{this} has the effective
+definition @code{T *__restrict__ const this}.  Notice that the
+interpretation of a @code{__restrict__} member function qualifier is
+different to that of @code{const} or @code{volatile} qualifier, in that it
+is applied to the pointer rather than the object.  This is consistent with
+other compilers that implement restricted pointers.
+
+As with all outermost parameter qualifiers, @code{__restrict__} is
+ignored in function definition matching.  This means you only need to
+specify @code{__restrict__} in a function definition, rather than
+in a function prototype as well.
+
+@node Vague Linkage
+@section Vague Linkage
+@cindex vague linkage
+
+There are several constructs in C++ that require space in the object
+file but are not clearly tied to a single translation unit.  We say that
+these constructs have ``vague linkage''.  Typically such constructs are
+emitted wherever they are needed, though sometimes we can be more
+clever.
+
+@table @asis
+@item Inline Functions
+Inline functions are typically defined in a header file which can be
+included in many different compilations.  Hopefully they can usually be
+inlined, but sometimes an out-of-line copy is necessary, if the address
+of the function is taken or if inlining fails.  In general, we emit an
+out-of-line copy in all translation units where one is needed.  As an
+exception, we only emit inline virtual functions with the vtable, since
+it always requires a copy.
+
+Local static variables and string constants used in an inline function
+are also considered to have vague linkage, since they must be shared
+between all inlined and out-of-line instances of the function.
+
+@cindex vtable
+@item VTables
+C++ virtual functions are implemented in most compilers using a lookup
+table, known as a vtable.  The vtable contains pointers to the virtual
+functions provided by a class, and each object of the class contains a
+pointer to its vtable (or vtables, in some multiple-inheritance
+situations).  If the class declares any non-inline, non-pure virtual
+functions, the first one is chosen as the ``key method'' for the class,
+and the vtable is only emitted in the translation unit where the key
+method is defined.
+
+@emph{Note:} If the chosen key method is later defined as inline, the
+vtable is still emitted in every translation unit that defines it.
+Make sure that any inline virtuals are declared inline in the class
+body, even if they are not defined there.
+
+@cindex @code{type_info}
+@cindex RTTI
+@item @code{type_info} objects
+C++ requires information about types to be written out in order to
+implement @samp{dynamic_cast}, @samp{typeid} and exception handling.
+For polymorphic classes (classes with virtual functions), the @samp{type_info}
+object is written out along with the vtable so that @samp{dynamic_cast}
+can determine the dynamic type of a class object at run time.  For all
+other types, we write out the @samp{type_info} object when it is used: when
+applying @samp{typeid} to an expression, throwing an object, or
+referring to a type in a catch clause or exception specification.
+
+@item Template Instantiations
+Most everything in this section also applies to template instantiations,
+but there are other options as well.
+@xref{Template Instantiation,,Where's the Template?}.
+
+@end table
+
+When used with GNU ld version 2.8 or later on an ELF system such as
+GNU/Linux or Solaris 2, or on Microsoft Windows, duplicate copies of
+these constructs will be discarded at link time.  This is known as
+COMDAT support.
+
+On targets that don't support COMDAT, but do support weak symbols, GCC
+uses them.  This way one copy overrides all the others, but
+the unused copies still take up space in the executable.
+
+For targets that do not support either COMDAT or weak symbols,
+most entities with vague linkage are emitted as local symbols to
+avoid duplicate definition errors from the linker.  This does not happen
+for local statics in inlines, however, as having multiple copies
+almost certainly breaks things.
+
+@xref{C++ Interface,,Declarations and Definitions in One Header}, for
+another way to control placement of these constructs.
+

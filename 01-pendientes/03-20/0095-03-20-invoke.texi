@@ -1,0 +1,274 @@
+@c GCC 16.1.0 | BLOQUE 0095 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 21145-21414 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Target-Specific Options
+@section Target-Specific Options
+@cindex submodel options
+@cindex hardware-specific options
+@cindex target-specific options
+@cindex machine-specific options
+@cindex architecture-specific options
+@cindex operating-system-specific options
+
+Each target machine supported by GCC can have its own options---for
+example, to allow you to compile for a particular processor variant or
+ABI, or to control optimizations specific to that machine.  Similarly,
+GCC also has options that are specific to particular operating systems
+or runtime environments on the target.
+
+By convention, the names of machine-specific options start with
+@samp{-m}.  Some configurations of the compiler also support
+additional target-specific options, usually for compatibility with
+other compilers on the same platform.
+
+@c This list is ordered alphanumerically by subsection name.
+@c It should be the same order and spelling as these options are listed
+@c in Target-Specific Options
+
+@menu
+* AArch64 Options::
+* Adapteva Epiphany Options::
+* AMD GCN Options::
+* ARC Options::
+* ARM Options::
+* AVR Options::
+* Blackfin Options::
+* C6X Options::
+* CRIS Options::
+* C-SKY Options::
+* Cygwin and MinGW Options::
+* Darwin Options::
+* DEC Alpha Options::
+* eBPF Options::
+* FR30 Options::
+* FRV Options::
+* FT32 Options::
+* GNU/Linux Options::
+* H8/300 Options::
+* HPPA Options::
+* IA-64 Options::
+* LM32 Options::
+* LoongArch Options::
+* LynxOS Options::
+* M32C Options::
+* M32R/D Options::
+* M680x0 Options::
+* MCore Options::
+* MicroBlaze Options::
+* MIPS Options::
+* MMIX Options::
+* MN10300 Options::
+* Moxie Options::
+* MSP430 Options::
+* NDS32 Options::
+* Nvidia PTX Options::
+* OpenRISC Options::
+* PDP-11 Options::
+* Picolibc Options::
+* PowerPC Options::
+* PRU Options::
+* RISC-V Options::
+* RL78 Options::
+* RS/6000 and PowerPC Options::
+* RX Options::
+* S/390 and zSeries Options::
+* SH Options::
+* Solaris 2 Options::
+* SPARC Options::
+* System V Options::
+* V850 Options::
+* VAX Options::
+* Visium Options::
+* VMS Options::
+* VxWorks Options::
+* x86 Options::
+* x86 Windows Options::
+* Xstormy16 Options::
+* Xtensa Options::
+* zSeries Options::
+@end menu
+
+@node AArch64 Options
+@subsection AArch64 Options
+@cindex AArch64 Options
+
+These options are defined for AArch64 implementations:
+
+@table @gcctabopt
+
+@opindex mabi
+@item -mabi=@var{name}
+Generate code for the specified data model.  Permissible values
+are @samp{ilp32} for SysV-like data model where int, long int and pointers
+are 32 bits, and @samp{lp64} for SysV-like data model where int is 32 bits,
+but long int and pointers are 64 bits.
+
+The default depends on the specific target configuration.  Note that
+the LP64 and ILP32 ABIs are not link-compatible; you must compile your
+entire program with the same ABI, and link with a compatible set of libraries.
+
+The @samp{ilp32} model is deprecated.
+
+@opindex mbig-endian
+@item -mbig-endian
+Generate big-endian code.  This is the default when GCC is configured for an
+@samp{aarch64_be-*-*} target.
+
+@opindex mlittle-endian
+@item -mlittle-endian
+Generate little-endian code.  This is the default when GCC is configured for an
+@samp{aarch64-*-*} but not an @samp{aarch64_be-*-*} target.
+
+@opindex menable-sysreg-checking
+@item -menable-sysreg-checking
+Generates an error message if an attempt is made to access a system register
+which is not available on the target architecture.
+
+@opindex mgeneral-regs-only
+@item -mgeneral-regs-only
+Generate code that uses only the general-purpose registers.  This prevents
+the compiler from using floating-point and Advanced SIMD registers but does not
+impose any restrictions on the assembler.
+
+@opindex mcmodel=
+@opindex mcmodel=tiny
+@item -mcmodel=tiny
+Generate code for the tiny code model.  The program and its statically defined
+symbols must be within 1MB of each other.  Programs can be statically or
+dynamically linked.
+
+@opindex mcmodel=small
+@item -mcmodel=small
+Generate code for the small code model.  The program and its statically defined
+symbols must be within 4GB of each other.  Programs can be statically or
+dynamically linked.  This is the default code model.
+
+@opindex mcmodel=large
+@item -mcmodel=large
+Generate code for the large code model.  This makes no assumptions about
+addresses and sizes of sections.  Programs can be statically linked only.  The
+@option{-mcmodel=large} option is incompatible with @option{-mabi=ilp32},
+@option{-fpic} and @option{-fPIC}.
+
+@item -mtp=@var{name}
+@opindex mtp
+Specify the system register to use as a thread pointer.  The valid values
+are @samp{tpidr_el0}, @samp{tpidrro_el0}, @samp{tpidr_el1}, @samp{tpidr_el2},
+@samp{tpidr_el3}.  For backwards compatibility the aliases @samp{el0},
+@samp{el1}, @samp{el2}, @samp{el3} are also accepted.
+The default setting is @samp{tpidr_el0}.  It is recommended to compile all
+code intended to interoperate with the same value of this option to avoid
+accessing a different thread pointer from the wrong exception level.
+
+@opindex mstrict-align
+@opindex mno-strict-align
+@item -mstrict-align
+@itemx -mno-strict-align
+Avoid or allow generating memory accesses that may not be aligned on a natural
+object boundary as described in the architecture specification.
+
+@opindex momit-leaf-frame-pointer
+@opindex mno-omit-leaf-frame-pointer
+@item -momit-leaf-frame-pointer
+@itemx -mno-omit-leaf-frame-pointer
+Omit or keep the frame pointer in leaf functions.  The former behavior is the
+default.
+
+@opindex mstack-protector-guard
+@opindex mstack-protector-guard-reg
+@opindex mstack-protector-guard-offset
+@item -mstack-protector-guard=@var{guard}
+@itemx -mstack-protector-guard-reg=@var{reg}
+@itemx -mstack-protector-guard-offset=@var{offset}
+Generate stack protection code using canary at @var{guard}.  Supported
+locations are @samp{global} for a global canary or @samp{sysreg} for a
+canary in an appropriate system register.
+
+With the latter choice the options
+@option{-mstack-protector-guard-reg=@var{reg}} and
+@option{-mstack-protector-guard-offset=@var{offset}} furthermore specify
+which system register to use as base register for reading the canary,
+and from what offset from that base register. There is no default
+register or offset as this is entirely for use within the Linux
+kernel.
+
+@opindex mtls-dialect=desc
+@item -mtls-dialect=desc
+Use TLS descriptors as the thread-local storage mechanism for dynamic accesses
+of TLS variables.  This is the default.
+
+@opindex mtls-dialect=traditional
+@item -mtls-dialect=traditional
+Use traditional TLS as the thread-local storage mechanism for dynamic accesses
+of TLS variables.
+
+@opindex mtls-size
+@item -mtls-size=@var{size}
+Specify bit size of immediate TLS offsets.  Valid values are 12, 24, 32, 48.
+This option requires binutils 2.26 or newer.
+
+@opindex mfix-cortex-a53-835769
+@opindex mno-fix-cortex-a53-835769
+@item -mfix-cortex-a53-835769
+@itemx -mno-fix-cortex-a53-835769
+Enable or disable the workaround for the ARM Cortex-A53 erratum number 835769.
+This involves inserting a NOP instruction between memory instructions and
+64-bit integer multiply-accumulate instructions.  This flag will be ignored if
+an architecture or cpu is specified on the command line which does not need the
+workaround.
+
+@opindex mfix-cortex-a53-843419
+@opindex mno-fix-cortex-a53-843419
+@item -mfix-cortex-a53-843419
+@itemx -mno-fix-cortex-a53-843419
+Enable or disable the workaround for the ARM Cortex-A53 erratum number 843419.
+This erratum workaround is made at link time and this will only pass the
+corresponding flag to the linker.  This flag will be ignored if
+an architecture or cpu is specified on the command line which does not need the
+workaround.
+
+
+@opindex mlow-precision-recip-sqrt
+@opindex mno-low-precision-recip-sqrt
+@item -mlow-precision-recip-sqrt
+@itemx -mno-low-precision-recip-sqrt
+Enable or disable the reciprocal square root approximation.
+This option only has an effect if @option{-ffast-math} or
+@option{-funsafe-math-optimizations} is used as well.  Enabling this reduces
+precision of reciprocal square root results to about 16 bits for
+single precision and to 32 bits for double precision.
+
+@opindex mlow-precision-sqrt
+@opindex mno-low-precision-sqrt
+@item -mlow-precision-sqrt
+@itemx -mno-low-precision-sqrt
+Enable or disable the square root approximation.
+This option only has an effect if @option{-ffast-math} or
+@option{-funsafe-math-optimizations} is used as well.  Enabling this reduces
+precision of square root results to about 16 bits for
+single precision and to 32 bits for double precision.
+If enabled, it implies @option{-mlow-precision-recip-sqrt}.
+
+@opindex mlow-precision-div
+@opindex mno-low-precision-div
+@item -mlow-precision-div
+@itemx -mno-low-precision-div
+Enable or disable the division approximation.
+This option only has an effect if @option{-ffast-math} or
+@option{-funsafe-math-optimizations} is used as well.  Enabling this reduces
+precision of division results to about 16 bits for
+single precision and to 32 bits for double precision.
+
+@opindex mtrack-speculation
+@opindex mno-track-speculation
+@item -mtrack-speculation
+@itemx -mno-track-speculation
+Enable or disable generation of additional code to track speculative
+execution through conditional branches.  The tracking state can then
+be used by the compiler when expanding calls to
+@code{__builtin_speculation_safe_value} to permit a more efficient code
+sequence to be generated.
+
+@opindex moutline-atomics
+@opindex mno-outline-atomics

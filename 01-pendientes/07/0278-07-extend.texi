@@ -1,0 +1,227 @@
+@c GCC 16.1.0 | BLOQUE 0278 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 16731-16953 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Stack Scrubbing
+@section Stack scrubbing internal interfaces
+
+Stack scrubbing involves cooperation between a @code{strub} context,
+i.e., a function whose stack frame is to be zeroed-out, and its callers.
+The caller initializes a stack watermark, the @code{strub} context
+updates the watermark according to its stack use, and the caller zeroes
+it out once it regains control, whether by the callee's returning or by
+an exception.
+
+Each of these steps is performed by a different builtin function call.
+Calls to these builtins are introduced automatically, in response to
+@code{strub} attributes and command-line options; they are not expected
+to be explicitly called by source code.
+
+The functions that implement the builtins are available in libgcc but,
+depending on optimization levels, they are expanded internally, adjusted
+to account for inlining, and sometimes combined/deferred (e.g. passing
+the caller-supplied watermark on to callees, refraining from erasing
+stack areas that the caller will) to enable tail calls and to optimize
+for code size.
+
+@deftypefn {Built-in Function} {void} __builtin___strub_enter (void **@var{wmptr})
+This function initializes a stack @var{watermark} variable with the
+current top of the stack.  A call to this builtin function is introduced
+before entering a @code{strub} context.  It remains as a function call
+if optimization is not enabled.
+@end deftypefn
+
+@deftypefn {Built-in Function} {void} __builtin___strub_update (void **@var{wmptr})
+This function updates a stack @var{watermark} variable with the current
+top of the stack, if it tops the previous watermark.  A call to this
+builtin function is inserted within @code{strub} contexts, whenever
+additional stack space may have been used.  It remains as a function
+call at optimization levels lower than 2.
+@end deftypefn
+
+@deftypefn {Built-in Function} {void} __builtin___strub_leave (void **@var{wmptr})
+This function overwrites the memory area between the current top of the
+stack, and the @var{watermark}ed address.  A call to this builtin
+function is inserted after leaving a @code{strub} context.  It remains
+as a function call at optimization levels lower than 3, and it is guarded by
+a condition at level 2.
+@end deftypefn
+
+@node Vector Extensions
+@section Using Vector Instructions through Built-in Functions
+
+On some targets, the instruction set contains SIMD vector instructions which
+operate on multiple values contained in one large register at the same time.
+For example, on the x86 the MMX, 3DNow!@: and SSE extensions can be used
+this way.
+
+The first step in using these extensions is to provide the necessary data
+types.  This should be done using an appropriate @code{typedef}:
+
+@smallexample
+typedef int v4si __attribute__ ((vector_size (16)));
+@end smallexample
+
+@noindent
+The @code{int} type specifies the @dfn{base type} (which can be a
+@code{typedef}), while the attribute specifies the vector size for the
+variable, measured in bytes. For example, the declaration above causes
+the compiler to set the mode for the @code{v4si} type to be 16 bytes wide
+and divided into @code{int} sized units.  For a 32-bit @code{int} this
+means a vector of 4 units of 4 bytes, and the corresponding mode of
+@code{foo} is @acronym{V4SI}.
+
+The @code{vector_size} attribute is only applicable to integral and
+floating scalars, although arrays, pointers, and function return values
+are allowed in conjunction with this construct. Only sizes that are
+positive power-of-two multiples of the base type size are currently allowed.
+
+All the basic integer types can be used as base types, both as signed
+and as unsigned: @code{char}, @code{short}, @code{int}, @code{long},
+@code{long long}.  In addition, @code{float} and @code{double} can be
+used to build floating-point vector types.
+
+Specifying a combination that is not valid for the current architecture
+causes GCC to synthesize the instructions using a narrower mode.
+For example, if you specify a variable of type @code{V4SI} and your
+architecture does not allow for this specific SIMD type, GCC
+produces code that uses 4 @code{SIs}.
+
+The types defined in this manner can be used with a subset of normal C
+operations.  Currently, GCC allows using the following operators
+on these types: @code{+, -, *, /, unary minus, ^, |, &, ~, %}@.
+
+The operations behave like C++ @code{valarrays}.  Addition is defined as
+the addition of the corresponding elements of the operands.  For
+example, in the code below, each of the 4 elements in @var{a} is
+added to the corresponding 4 elements in @var{b} and the resulting
+vector is stored in @var{c}.
+
+@smallexample
+typedef int v4si __attribute__ ((vector_size (16)));
+
+v4si a, b, c;
+
+c = a + b;
+@end smallexample
+
+Subtraction, multiplication, division, and the logical operations
+operate in a similar manner.  Likewise, the result of using the unary
+minus or complement operators on a vector type is a vector whose
+elements are the negative or complemented values of the corresponding
+elements in the operand.
+
+It is possible to use shifting operators @code{<<}, @code{>>} on
+integer-type vectors. The operation is defined as following: @code{@{a0,
+a1, @dots{}, an@} >> @{b0, b1, @dots{}, bn@} == @{a0 >> b0, a1 >> b1,
+@dots{}, an >> bn@}}@.  Unlike OpenCL, values of @code{b} are not
+implicitly taken modulo bit width of the base type @code{B}, and the behavior
+is undefined if any @code{bi} is greater than or equal to @code{B}.
+
+In contrast to scalar operations in C and C++, operands of integer vector
+operations do not undergo integer promotions.
+
+Operands of binary vector operations must have the same number of
+elements. 
+
+For convenience, it is allowed to use a binary vector operation
+where one operand is a scalar. In that case the compiler transforms
+the scalar operand into a vector where each element is the scalar from
+the operation. The transformation happens only if the scalar could be
+safely converted to the vector-element type.
+Consider the following code.
+
+@smallexample
+typedef int v4si __attribute__ ((vector_size (16)));
+
+v4si a, b, c;
+long l;
+
+a = b + 1;    /* a = b + @{1,1,1,1@}; */
+a = 2 * b;    /* a = @{2,2,2,2@} * b; */
+
+a = l + a;    /* Error, cannot convert long to int. */
+@end smallexample
+
+Vectors can be subscripted as if the vector were an array with
+the same number of elements and base type.  Out of bound accesses
+invoke undefined behavior at run time.  Warnings for out of bound
+accesses for vector subscription can be enabled with
+@option{-Warray-bounds}.
+
+Vector comparison is supported with standard comparison operators:
+@code{==}, @code{!=}, @code{<}, @code{<=}, @code{>}, and
+@code{>=}. Comparison operands can be
+vector expressions of integer-type or real-type. Comparison between
+integer-type vectors and real-type vectors are not supported.  The
+result of the comparison is a vector of the same width and number of
+elements as the comparison operands with a signed integral element
+type.
+
+Vectors are compared elementwise producing 0 when the comparison is false
+and -1 (a constant of the appropriate type where all bits are set)
+otherwise. Consider the following example:
+
+@smallexample
+typedef int v4si __attribute__ ((vector_size (16)));
+
+v4si a = @{1,2,3,4@};
+v4si b = @{3,2,1,4@};
+v4si c;
+
+c = a >  b;     /* The result would be @{0, 0,-1, 0@}  */
+c = a == b;     /* The result would be @{0,-1, 0,-1@}  */
+@end smallexample
+
+In C++, the ternary operator @code{?:} is available. @code{a?b:c}, where
+@code{b} and @code{c} are vectors of the same type and @code{a} is an
+integer vector with the same number of elements of the same size as @code{b}
+and @code{c}, computes all three arguments and creates a vector
+@code{@{a[0]?b[0]:c[0], a[1]?b[1]:c[1], @dots{}@}}.  Note that unlike in
+OpenCL, @code{a} is thus interpreted as @code{a != 0} and not @code{a < 0}.
+As in the case of binary operations, this syntax is also accepted when
+one of @code{b} or @code{c} is a scalar that is then transformed into a
+vector. If both @code{b} and @code{c} are scalars and the type of
+@code{true?b:c} has the same size as the element type of @code{a}, then
+@code{b} and @code{c} are converted to a vector type whose elements have
+this type and with the same number of elements as @code{a}.
+
+In C++, the logic operators @code{!, &&, ||} are available for vectors.
+@code{!v} is equivalent to @code{v == 0}, @code{a && b} is equivalent to
+@code{a!=0 & b!=0} and @code{a || b} is equivalent to @code{a!=0 | b!=0}.
+For mixed operations between a scalar @code{s} and a vector @code{v},
+@code{s && v} is equivalent to @code{s?v!=0:0} (the evaluation is
+short-circuit) and @code{v && s} is equivalent to @code{v!=0 & (s?-1:0)}.
+
+@findex __builtin_shuffle
+Vector shuffling is available using functions
+@code{__builtin_shuffle (vec, mask)} and
+@code{__builtin_shuffle (vec0, vec1, mask)}.
+Both functions construct a permutation of elements from one or two
+vectors and return a vector of the same type as the input vector(s).
+The @var{mask} is an integral vector with the same width (@var{W})
+and element count (@var{N}) as the output vector.
+
+The elements of the input vectors are numbered in memory ordering of
+@var{vec0} beginning at 0 and @var{vec1} beginning at @var{N}.  The
+elements of @var{mask} are considered modulo @var{N} in the single-operand
+case and modulo @math{2*@var{N}} in the two-operand case.
+
+Consider the following example,
+
+@smallexample
+typedef int v4si __attribute__ ((vector_size (16)));
+
+v4si a = @{1,2,3,4@};
+v4si b = @{5,6,7,8@};
+v4si mask1 = @{0,1,1,3@};
+v4si mask2 = @{0,4,2,5@};
+v4si res;
+
+res = __builtin_shuffle (a, mask1);       /* res is @{1,2,2,4@}  */
+res = __builtin_shuffle (a, b, mask2);    /* res is @{1,5,3,6@}  */
+@end smallexample
+
+Note that @code{__builtin_shuffle} is intentionally semantically
+compatible with the OpenCL @code{shuffle} and @code{shuffle2} functions.
+

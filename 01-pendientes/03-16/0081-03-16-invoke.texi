@@ -1,0 +1,16 @@
+@c GCC 16.1.0 | BLOQUE 0081 | 03-16
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 18820-18831 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -Tbss=@var{addr}
+@itemx -Tdata=@var{addr}
+@itemx -Ttext=@var{addr}
+@itemx -N
+@itemx -n
+@itemx -t
+@itemx -Z
+@itemx -z @var{keyword}
+These options are passed through to the linker without interpretation by GCC.
+Refer to your linker documentation for the meanings of these options.
+@end table
+

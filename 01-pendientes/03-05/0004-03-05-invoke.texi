@@ -1,0 +1,234 @@
+@c GCC 16.1.0 | BLOQUE 0004 | 03-05
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 2990-3219 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node C++ Dialect Options
+@section Options Controlling C++ Dialect
+
+@cindex compiler options, C++
+@cindex C++ options, command-line
+@cindex options, C++
+This section describes the command-line options that are only meaningful
+for C++ programs.  You can also use most of the GNU compiler options
+regardless of what language your program is in.  For example, you
+might compile a file @file{firstClass.C} like this:
+
+@smallexample
+g++ -g -fstrict-enums -O -c firstClass.C
+@end smallexample
+
+@noindent
+In this example, only @option{-fstrict-enums} is an option meant
+only for C++ programs; you can use the other options with any
+language supported by GCC@.
+
+Some options for compiling C programs, such as @option{-std}, are also
+relevant for C++ programs.
+@xref{C Dialect Options,,Options Controlling C Dialect}.
+
+Here is a list of options that are @emph{only} for compiling C++ programs:
+
+@table @gcctabopt
+
+@opindex compile-std-module
+@item --compile-std-module
+Build the compiled module interfaces (@pxref{C++ Modules}) for the
+@samp{<bits/stdc++.h>} header unit and the @samp{std} and
+@samp{std.compat} modules before compiling any source files explicitly
+specified on the command line.  This is intended to be useful for
+building simple programs that use @samp{import std;} with a single
+command.
+
+@opindex fabi-version
+@item -fabi-version=@var{n}
+Use version @var{n} of the C++ ABI@.  The default is version 0.
+
+Version 0 refers to the version conforming most closely to
+the C++ ABI specification.  Therefore, the ABI obtained using version 0
+will change in different versions of G++ as ABI bugs are fixed.
+
+Version 1 is the version of the C++ ABI that first appeared in G++ 3.2.
+
+Version 2 is the version of the C++ ABI that first appeared in G++
+3.4, and was the default through G++ 4.9.
+
+Version 3 corrects an error in mangling a constant address as a
+template argument.
+
+Version 4, which first appeared in G++ 4.5, implements a standard
+mangling for vector types.
+
+Version 5, which first appeared in G++ 4.6, corrects the mangling of
+attribute const/volatile on function pointer types, decltype of a
+plain decl, and use of a function parameter in the declaration of
+another parameter.
+
+Version 6, which first appeared in G++ 4.7, corrects the promotion
+behavior of C++11 scoped enums and the mangling of template argument
+packs, const/static_cast, prefix ++ and --, and a class scope function
+used as a template argument.
+
+Version 7, which first appeared in G++ 4.8, that treats nullptr_t as a
+builtin type and corrects the mangling of lambdas in default argument
+scope.
+
+Version 8, which first appeared in G++ 4.9, corrects the substitution
+behavior of function types with function-cv-qualifiers.
+
+Version 9, which first appeared in G++ 5.2, corrects the alignment of
+@code{nullptr_t}.
+
+Version 10, which first appeared in G++ 6.1, adds mangling of
+attributes that affect type identity, such as ia32 calling convention
+attributes (e.g.@: @samp{stdcall}).
+
+Version 11, which first appeared in G++ 7, corrects the mangling of
+sizeof... expressions and operator names.  For multiple entities with
+the same name within a function, that are declared in different scopes,
+the mangling now changes starting with the twelfth occurrence.  It also
+implies @option{-fnew-inheriting-ctors}.
+
+Version 12, which first appeared in G++ 8, corrects the calling
+conventions for empty classes on the x86_64 target and for classes
+with only deleted copy/move constructors.  It accidentally changes the
+calling convention for classes with a deleted copy constructor and a
+trivial move constructor.
+
+Version 13, which first appeared in G++ 8.2, fixes the accidental
+change in version 12.
+
+Version 14, which first appeared in G++ 10, corrects the mangling of
+the nullptr expression.
+
+Version 15, which first appeared in G++ 10.3, corrects G++ 10 ABI
+tag regression.
+
+Version 16, which first appeared in G++ 11, changes the mangling of
+@code{__alignof__} to be distinct from that of @code{alignof}, and
+dependent operator names.
+
+Version 17, which first appeared in G++ 12, fixes layout of classes
+that inherit from aggregate classes with default member initializers
+in C++14 and up.
+
+Version 18, which first appeared in G++ 13, fixes manglings of lambdas
+that have additional context.
+
+Version 19, which first appeared in G++ 14, fixes manglings of
+structured bindings to include ABI tags, handling of cv-qualified
+[[no_unique_address]] members, and adds mangling of C++20 constraints
+on function templates.
+
+Version 20, which first appeared in G++ 15, fixes manglings of lambdas
+in static data member initializers.
+
+Version 21, which first appeared in G++ 16, fixes unnecessary captures
+in noexcept lambdas (c++/119764), layout of a base class with all explicitly
+defaulted constructors (c++/120012), and mangling of class and array
+objects with implicitly zero-initialized non-trailing subobjects (c++/121231).
+
+See also @option{-Wabi}.
+
+@opindex fabi-compat-version
+@item -fabi-compat-version=@var{n}
+On targets that support strong aliases, G++
+works around mangling changes by creating an alias with the correct
+mangled name when defining a symbol with an incorrect mangled name.
+This switch specifies which ABI version to use for the alias.
+
+With @option{-fabi-version=0} (the default), this defaults to 13 (GCC 8.2
+compatibility).  If another ABI version is explicitly selected, this
+defaults to 0.  For compatibility with GCC versions 3.2 through 4.9,
+use @option{-fabi-compat-version=2}.
+
+If this option is not provided but @option{-Wabi=@var{n}} is, that
+version is used for compatibility aliases.  If this option is provided
+along with @option{-Wabi} (without the version), the version from this
+option is used for the warning.
+
+@opindex fno-access-control
+@opindex faccess-control
+@item -fno-access-control
+Turn off all access checking.  This switch is mainly useful for working
+around bugs in the access control code.
+
+@opindex faligned-new
+@opindex fno-aligned-new
+@item -faligned-new
+@itemx -faligned-new=@var{alignment}
+Enable support for C++17 @code{new} of types that require more
+alignment than @code{void* ::operator new(std::size_t)} provides.  A
+numeric argument such as @code{-faligned-new=32} can be used to
+specify how much alignment (in bytes) is provided by that function,
+but few users will need to override the default of
+@code{alignof(std::max_align_t)}.
+
+This flag is enabled by default for @option{-std=c++17}.
+
+@opindex fno-assume-sane-operators-new-delete
+@opindex fassume-sane-operators-new-delete
+@item -fno-assume-sane-operators-new
+The C++ standard allows replacing the global @code{new}, @code{new[]},
+@code{delete} and @code{delete[]} operators, though a lot of C++ programs
+don't replace them and just use the implementation provided version.
+Furthermore, the C++ standard allows omitting those calls if they are
+made from new or delete expressions (and by extension the same is
+assumed if @code{__builtin_operator_new} or @code{__builtin_operator_delete}
+functions are used).
+This option allows control over some optimizations around calls
+to those operators.
+With @code{-fassume-sane-operators-new-delete} option GCC may assume that
+calls to the replaceable global operators from new or delete expressions or
+from @code{__builtin_operator_new} or @code{__builtin_operator_delete} calls
+don't read or modify any global variables or variables whose address could
+escape to the operators (global state; except for @code{errno} for the
+@code{new} and @code{new[]} operators).
+This allows most optimizations across those calls and is something that
+the implementation provided operators satisfy unless @code{malloc}
+implementation details are observable in the code or unless @code{malloc}
+hooks are used, but might not be satisfied if a program replaces those
+operators.  This behavior is enabled by default.
+With @code{-fno-assume-sane-operators-new-delete} option GCC must
+assume all these calls (whether from new or delete expressions or called
+directly) may read and write global state unless proven otherwise (e.g.@:
+when GCC compiles their implementation).  Use this option if those
+operators are or may be replaced and code needs to expect such behavior.
+
+@opindex fchar8_t
+@opindex fno-char8_t
+@item -fchar8_t
+@itemx -fno-char8_t
+Enable support for @code{char8_t} as adopted for C++20.  This includes
+the addition of a new @code{char8_t} fundamental type, changes to the
+types of UTF-8 string and character literals, new signatures for
+user-defined literals, associated standard library updates, and new
+@code{__cpp_char8_t} and @code{__cpp_lib_char8_t} feature test macros.
+
+This option enables functions to be overloaded for ordinary and UTF-8
+strings:
+
+@smallexample
+int f(const char *);    // #1
+int f(const char8_t *); // #2
+int v1 = f("text");     // Calls #1
+int v2 = f(u8"text");   // Calls #2
+@end smallexample
+
+@noindent
+and introduces new signatures for user-defined literals:
+
+@smallexample
+int operator""_udl1(char8_t);
+int v3 = u8'x'_udl1;
+int operator""_udl2(const char8_t*, std::size_t);
+int v4 = u8"text"_udl2;
+template<typename T, T...> int operator""_udl3();
+int v5 = u8"text"_udl3;
+@end smallexample
+
+@noindent
+The change to the types of UTF-8 string and character literals introduces
+incompatibilities with ISO C++11 and later standards.  For example, the
+following code is well-formed under ISO C++11, but is ill-formed when
+@option{-fchar8_t} is specified.
+

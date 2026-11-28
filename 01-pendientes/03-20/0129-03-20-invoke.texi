@@ -1,0 +1,287 @@
+@c GCC 16.1.0 | BLOQUE 0129 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 29800-30082 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -mcompact-branches=never
+@itemx -mcompact-branches=optimal
+@itemx -mcompact-branches=always
+These options control which form of branches are generated.  The
+default is @option{-mcompact-branches=optimal}.
+
+The @option{-mcompact-branches=never} option ensures that compact branch
+instructions are never generated.
+
+The @option{-mcompact-branches=always} option ensures that a compact
+branch instruction is generated if available for MIPS Release 6 onwards.
+If a compact branch instruction is not available (or pre-R6),
+a delay slot form of the branch is used instead.
+
+If it is used for MIPS16/microMIPS targets, it is just ignored now.
+The behavior for MIPS16/microMIPS may change in future,
+since they do have some compact branch instructions.
+
+The @option{-mcompact-branches=optimal} option causes a delay slot
+branch to be used if one is available in the current ISA and the delay
+slot is successfully filled.  If the delay slot is not filled, a compact
+branch is chosen if one is available.
+
+@opindex mfp-exceptions
+@opindex mno-fp-exceptions
+@item -mfp-exceptions
+@itemx -mno-fp-exceptions
+Specifies whether FP exceptions are enabled.  This affects how
+FP instructions are scheduled for some processors.
+The default is that FP exceptions are
+enabled.
+
+For instance, on the SB-1, if FP exceptions are disabled, and we are emitting
+64-bit code, then we can use both FP pipes.  Otherwise, we can only use one
+FP pipe.
+
+@opindex mvr4130-align
+@item -mvr4130-align
+@itemx -mno-vr4130-align
+The VR4130 pipeline is two-way superscalar, but can only issue two
+instructions together if the first one is 8-byte aligned.  When this
+option is enabled, GCC aligns pairs of instructions that it
+thinks should execute in parallel.
+
+This option only has an effect when optimizing for the VR4130.
+It normally makes code faster, but at the expense of making it bigger.
+It is enabled by default at optimization level @option{-O3}.
+
+@opindex msynci
+@opindex mno-synci
+@item -msynci
+@itemx -mno-synci
+Enable (disable) generation of @code{synci} instructions on
+architectures that support it.  The @code{synci} instructions (if
+enabled) are generated when @code{__builtin___clear_cache} is
+compiled.
+
+This option defaults to @option{-mno-synci}, but the default can be
+overridden by configuring GCC with @option{--with-synci}.
+
+When compiling code for single processor systems, it is generally safe
+to use @code{synci}.  However, on many multi-core (SMP) systems, it
+does not invalidate the instruction caches on all cores and may lead
+to undefined behavior.
+
+@opindex mrelax-pic-calls
+@opindex mno-relax-pic-calls
+@item -mrelax-pic-calls
+@itemx -mno-relax-pic-calls
+Try to turn PIC calls that are normally dispatched via register
+@code{$25} into direct calls.  This is only possible if the linker can
+resolve the destination at link time and if the destination is within
+range for a direct call.
+
+@option{-mrelax-pic-calls} is the default if GCC was configured to use
+an assembler and a linker that support the @code{.reloc} assembly
+directive and @option{-mexplicit-relocs} is in effect.  With
+@option{-mno-explicit-relocs}, this optimization can be performed by the
+assembler and the linker alone without help from the compiler.
+
+@opindex mmcount-ra-address
+@opindex mno-mcount-ra-address
+@item -mmcount-ra-address
+@itemx -mno-mcount-ra-address
+Emit (do not emit) code that allows @code{_mcount} to modify the
+calling function's return address.  When enabled, this option extends
+the usual @code{_mcount} interface with a new @var{ra-address}
+parameter, which has type @code{intptr_t *} and is passed in register
+@code{$12}.  @code{_mcount} can then modify the return address by
+doing both of the following:
+@itemize
+@item
+Returning the new address in register @code{$31}.
+@item
+Storing the new address in @code{*@var{ra-address}},
+if @var{ra-address} is nonnull.
+@end itemize
+
+The default is @option{-mno-mcount-ra-address}.
+
+@opindex mframe-header-opt
+@opindex mno-frame-header-opt
+@item -mframe-header-opt
+@itemx -mno-frame-header-opt
+Enable (disable) frame header optimization in the o32 ABI.  When using the
+o32 ABI, calling functions allocates 16 bytes on the stack for the called
+function to write out register arguments.  When enabled, this optimization
+suppresses the allocation of the frame header if it can be determined that
+it is unused.
+
+This optimization is off by default at all optimization levels.
+
+@opindex mlxc1-sxc1
+@opindex mno-lxc1-sxc1
+@item -mlxc1-sxc1
+@itemx -mno-lxc1-sxc1
+When applicable, enable (disable) the generation of @code{lwxc1},
+@code{swxc1}, @code{ldxc1}, @code{sdxc1} instructions.  Enabled by default.
+
+@opindex mmadd4
+@opindex mno-madd4
+@item -mmadd4
+@itemx -mno-madd4
+When applicable, enable (disable) the generation of 4-operand @code{madd.s},
+@code{madd.d} and related instructions.  Enabled by default.
+
+@end table
+
+@node MMIX Options
+@subsection MMIX Options
+@cindex MMIX Options
+
+These options are defined for the MMIX:
+
+@table @gcctabopt
+@opindex mlibfuncs
+@opindex mno-libfuncs
+@item -mlibfuncs
+@itemx -mno-libfuncs
+Specify that intrinsic library functions are being compiled, passing all
+values in registers, no matter the size.
+
+@opindex mepsilon
+@opindex mno-epsilon
+@item -mepsilon
+@itemx -mno-epsilon
+Generate floating-point comparison instructions that compare with respect
+to the @code{rE} epsilon register.
+
+@opindex mabi=mmixware
+@opindex mabi=gnu
+@item -mabi=mmixware
+@itemx -mabi=gnu
+Generate code that passes function parameters and return values that (in
+the called function) are seen as registers @code{$0} and up, as opposed to
+the GNU ABI which uses global registers @code{$231} and up.
+
+@opindex mzero-extend
+@opindex mno-zero-extend
+@item -mzero-extend
+@itemx -mno-zero-extend
+When reading data from memory in sizes shorter than 64 bits, use (do not
+use) zero-extending load instructions by default, rather than
+sign-extending ones.
+
+@opindex mknuthdiv
+@opindex mno-knuthdiv
+@item -mknuthdiv
+@itemx -mno-knuthdiv
+Make the result of a division yielding a remainder have the same sign as
+the divisor.  With the default, @option{-mno-knuthdiv}, the sign of the
+remainder follows the sign of the dividend.  Both methods are
+arithmetically valid, the latter being almost exclusively used.
+
+@opindex mtoplevel-symbols
+@opindex mno-toplevel-symbols
+@item -mtoplevel-symbols
+@itemx -mno-toplevel-symbols
+Prepend (do not prepend) a @samp{:} to all global symbols, so the assembly
+code can be used with the @code{PREFIX} assembly directive.
+
+@opindex melf
+@item -melf
+Generate an executable in the ELF format, rather than the default
+@samp{mmo} format used by the @command{mmix} simulator.
+
+@opindex mbranch-predict
+@opindex mno-branch-predict
+@item -mbranch-predict
+@itemx -mno-branch-predict
+Use (do not use) the probable-branch instructions, when static branch
+prediction indicates a probable branch.
+
+@opindex mbase-addresses
+@opindex mno-base-addresses
+@item -mbase-addresses
+@itemx -mno-base-addresses
+Generate (do not generate) code that uses @emph{base addresses}.  Using a
+base address automatically generates a request (handled by the assembler
+and the linker) for a constant to be set up in a global register.  The
+register is used for one or more base address requests within the range 0
+to 255 from the value held in the register.  The generally leads to short
+and fast code, but the number of different data items that can be
+addressed is limited.  This means that a program that uses lots of static
+data may require @option{-mno-base-addresses}.
+
+@opindex msingle-exit
+@opindex mno-single-exit
+@item -msingle-exit
+@itemx -mno-single-exit
+Force (do not force) generated code to have a single exit point in each
+function.
+
+@opindex mset-data-start
+@item -mset-data-start=@var{address}
+When linking, set the start of the data section to @var{address}.
+
+@opindex mset-program-start
+@opindex mno-set-program-start
+@item -mset-program-start=@var{address}
+@itemx -mno-set-program-start
+When linking, set the program start address to @var{address}.  It
+defaults to 0x100 unless @var{-mno-set-program-start} is used to suppress
+this option entirely.
+@end table
+
+@node MN10300 Options
+@subsection MN10300 Options
+@cindex MN10300 options
+
+These @option{-m} options are defined for Matsushita MN10300 architectures:
+
+@table @gcctabopt
+@opindex mmult-bug
+@opindex mno-mult-bug
+@item -mmult-bug
+@itemx -mno-mult-bug
+When enabled, generate code to avoid bugs in the multiply instructions
+for the MN10300 processors.  This is the default.
+
+@opindex mam33
+@opindex mno-am33
+@item -mam33
+@itemx -mno-am33
+Generate code using features specific to the AM33 processor.
+The default is @option{-mno-am33}.
+
+@opindex mam33-2
+@opindex mno-am33-2
+@item -mam33-2
+@itemx -mno-am33-2
+Generate code using features specific to the AM33/2.0 processor.
+The default is @option{-mno-am33-2}.
+
+@opindex mam34
+@opindex mno-am34
+@item -mam34
+@itemx -mno-am34
+Generate code using features specific to the AM34 processor.
+The default is @option{-mno-am34}.
+
+@opindex mtune
+@item -mtune=@var{cpu-type}
+Use the timing characteristics of the indicated CPU type when
+scheduling instructions.  This does not change the targeted processor
+type.  The CPU type must be one of @samp{mn10300}, @samp{am33},
+@samp{am33-2} or @samp{am34}.
+
+@opindex mreturn-pointer-on-d0
+@opindex mno-return-pointer-on-d0
+@item -mreturn-pointer-on-d0
+@itemx -mno-return-pointer-on-d0
+When generating a function that returns a pointer, return the pointer
+in both @code{a0} and @code{d0}.  Otherwise, the pointer is returned
+only in @code{a0}, and attempts to call such functions without a prototype
+result in errors.  Note that this option is on by default; use
+@option{-mno-return-pointer-on-d0} to disable it.
+
+@opindex mno-crt0
+@item -mno-crt0
+Do not link in the C run-time initialization object file.
+
+@opindex mrelax

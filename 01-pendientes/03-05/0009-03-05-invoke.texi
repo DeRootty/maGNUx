@@ -1,0 +1,249 @@
+@c GCC 16.1.0 | BLOQUE 0009 | 03-05
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 4150-4394 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -Wno-deprecated-enum-float-conversion @r{(C++ and Objective-C++ only)}
+Disable the warning about the case when the usual arithmetic conversions
+are applied on operands where one is of enumeration type and the other is
+of a floating-point type.  This conversion was deprecated in C++20.  For
+example:
+
+@smallexample
+enum E1 @{ e @};
+enum E2 @{ f @};
+bool b = e <= 3.7;
+@end smallexample
+
+@option{-Wdeprecated-enum-float-conversion} is enabled by default with
+@option{-std=c++20}.  In pre-C++20 dialects, this warning can be enabled
+by @option{-Wenum-conversion} or @option{-Wdeprecated}.
+
+@opindex Wdeprecated-literal-operator
+@opindex Wno-deprecated-literal-operator
+@item -Wdeprecated-literal-operator @r{(C++ and Objective-C++ only)}
+Warn that the declaration of a user-defined literal operator with a
+space before the suffix is deprecated.  This warning is enabled by
+default in C++23, or with explicit @option{-Wdeprecated}.
+
+@smallexample
+string operator "" _i18n(const char*, std::size_t); // deprecated
+string operator ""_i18n(const char*, std::size_t); // preferred
+@end smallexample
+
+@opindex Wdeprecated-variadic-comma-omission
+@opindex Wno-deprecated-variadic-comma-omission
+@item -Wdeprecated-variadic-comma-omission @r{(C++ and Objective-C++ only)}
+Warn that omitting a comma before the varargs @code{...} at the end of
+a function parameter list is deprecated.  This warning is enabled by
+default in C++26, or with explicit @option{-Wdeprecated}.
+
+@smallexample
+void f1(int...); // deprecated
+void f1(int, ...); // preferred
+template <typename ...T>
+void f2(T...); // ok
+template <typename ...T>
+void f3(T......); // deprecated
+@end smallexample
+
+@opindex Welaborated-enum-base
+@opindex Wno-elaborated-enum-base
+@item -Wno-elaborated-enum-base
+For C++11 and above, warn if an (invalid) additional enum-base is used
+in an elaborated-type-specifier.  That is, if an enum with given
+underlying type and no enumerator list is used in a declaration other
+than just a standalone declaration of the enum.  Enabled by default.  This
+warning is upgraded to an error with -pedantic-errors.
+
+@opindex Winit-list-lifetime
+@opindex Wno-init-list-lifetime
+@item -Wno-init-list-lifetime @r{(C++ and Objective-C++ only)}
+Do not warn about uses of @code{std::initializer_list} that are likely
+to result in dangling pointers.  Since the underlying array for an
+@code{initializer_list} is handled like a normal C++ temporary object,
+it is easy to inadvertently keep a pointer to the array past the end
+of the array's lifetime.  For example:
+
+@itemize @bullet
+@item
+If a function returns a temporary @code{initializer_list}, or a local
+@code{initializer_list} variable, the array's lifetime ends at the end
+of the return statement, so the value returned has a dangling pointer.
+
+@item
+If a new-expression creates an @code{initializer_list}, the array only
+lives until the end of the enclosing full-expression, so the
+@code{initializer_list} in the heap has a dangling pointer.
+
+@item
+When an @code{initializer_list} variable is assigned from a
+brace-enclosed initializer list, the temporary array created for the
+right side of the assignment only lives until the end of the
+full-expression, so at the next statement the @code{initializer_list}
+variable has a dangling pointer.
+
+@smallexample
+// li's initial underlying array lives as long as li
+std::initializer_list<int> li = @{ 1,2,3 @};
+// assignment changes li to point to a temporary array
+li = @{ 4, 5 @};
+// now the temporary is gone and li has a dangling pointer
+int i = li.begin()[0] // undefined behavior
+@end smallexample
+
+@item
+When a list constructor stores the @code{begin} pointer from the
+@code{initializer_list} argument, this doesn't extend the lifetime of
+the array, so if a class variable is constructed from a temporary
+@code{initializer_list}, the pointer is left dangling by the end of
+the variable declaration statement.
+
+@end itemize
+
+@opindex Winvalid-constexpr
+@opindex Wno-invalid-constexpr
+@item -Winvalid-constexpr
+
+Warn when a function never produces a constant expression.  In C++20
+and earlier, for every @code{constexpr} function and function template,
+there must be at least one set of function arguments in at least one
+instantiation such that an invocation of the function or constructor
+could be an evaluated subexpression of a core constant expression.
+C++23 removed this restriction, so it's possible to have a function
+or a function template marked @code{constexpr} for which no invocation
+satisfies the requirements of a core constant expression.
+
+This warning is enabled as a pedantic warning by default in C++20 and
+earlier.  In C++23, @option{-Winvalid-constexpr} can be turned on, in
+which case it will be an ordinary warning.  For example:
+
+@smallexample
+void f (int& i);
+constexpr void
+g (int& i)
+@{
+  // Warns by default in C++20, in C++23 only with -Winvalid-constexpr.
+  f(i);
+@}
+@end smallexample
+
+@opindex Winvalid-imported-macros
+@opindex Wno-invalid-imported-macros
+@item -Winvalid-imported-macros
+Verify all imported macro definitions are valid at the end of
+compilation.  This is not enabled by default, as it requires
+additional processing to determine.  It may be useful when preparing
+sets of header-units to ensure consistent macros.
+
+@opindex Wliteral-suffix
+@opindex Wno-literal-suffix
+@item -Wno-literal-suffix @r{(C++ and Objective-C++ only)}
+Do not warn when a string or character literal is followed by a
+ud-suffix which does not begin with an underscore.  As a conforming
+extension, GCC treats such suffixes as separate preprocessing tokens
+in order to maintain backwards compatibility with code that uses
+formatting macros from @code{<inttypes.h>}.  For example:
+
+@smallexample
+#define __STDC_FORMAT_MACROS
+#include <inttypes.h>
+#include <stdio.h>
+
+int main() @{
+  int64_t i64 = 123;
+  printf("My int64: %" PRId64"\n", i64);
+@}
+@end smallexample
+
+In this case, @code{PRId64} is treated as a separate preprocessing token.
+
+This option also controls warnings when a user-defined literal
+operator is declared with a literal suffix identifier that doesn't
+begin with an underscore. Literal suffix identifiers that don't begin
+with an underscore are reserved for future standardization.
+
+These warnings are enabled by default.
+
+@opindex Wnarrowing
+@opindex Wno-narrowing
+@item -Wno-narrowing @r{(C++ and Objective-C++ only)}
+For C++11 and later standards, narrowing conversions are diagnosed by default,
+as required by the standard.  A narrowing conversion from a constant produces
+an error, and a narrowing conversion from a non-constant produces a warning,
+but @option{-Wno-narrowing} suppresses the diagnostic.
+Note that this does not affect the meaning of well-formed code;
+narrowing conversions are still considered ill-formed in SFINAE contexts.
+
+With @option{-Wnarrowing} in C++98, warn when a narrowing
+conversion prohibited by C++11 occurs within
+@samp{@{ @}}, e.g.
+
+@smallexample
+int i = @{ 2.2 @}; // error: narrowing from double to int
+@end smallexample
+
+This flag is included in @option{-Wall} and @option{-Wc++11-compat}.
+
+@opindex Wnoexcept
+@opindex Wno-noexcept
+@item -Wnoexcept @r{(C++ and Objective-C++ only)}
+Warn when a noexcept-expression evaluates to false because of a call
+to a function that does not have a non-throwing exception
+specification (i.e. @code{throw()} or @code{noexcept}) but is known by
+the compiler to never throw an exception.
+
+@opindex Wnoexcept-type
+@opindex Wno-noexcept-type
+@item -Wnoexcept-type @r{(C++ and Objective-C++ only)}
+Warn if the C++17 feature making @code{noexcept} part of a function
+type changes the mangled name of a symbol relative to C++14.  Enabled
+by @option{-Wabi} and @option{-Wc++17-compat}.
+
+As an example:
+
+@smallexample
+template <class T> void f(T t) @{ t(); @};
+void g() noexcept;
+void h() @{ f(g); @}
+@end smallexample
+
+@noindent
+In C++14, @code{f} calls @code{f<void(*)()>}, but in
+C++17 it calls @code{f<void(*)()noexcept>}.
+
+@opindex Wclass-memaccess
+@opindex Wno-class-memaccess
+@item -Wclass-memaccess @r{(C++ and Objective-C++ only)}
+Warn when the destination of a call to a raw memory function such as
+@code{memset} or @code{memcpy} is an object of class type, and when writing
+into such an object might bypass the class non-trivial or deleted constructor
+or copy assignment, violate const-correctness or encapsulation, or corrupt
+virtual table pointers.  Modifying the representation of such objects may
+violate invariants maintained by member functions of the class.  For example,
+the call to @code{memset} below is undefined because it modifies a non-trivial
+class object and is, therefore, diagnosed.  The safe way to either initialize
+or clear the storage of objects of such types is by using the appropriate
+constructor or assignment operator, if one is available.
+@smallexample
+std::string str = "abc";
+memset (&str, 0, sizeof str);
+@end smallexample
+The @option{-Wclass-memaccess} option is enabled by @option{-Wall}.
+Explicitly casting the pointer to the class object to @code{void *} or
+to a type that can be safely accessed by the raw memory function suppresses
+the warning.
+
+@opindex Wnon-virtual-dtor
+@opindex Wno-non-virtual-dtor
+@item -Wnon-virtual-dtor @r{(C++ and Objective-C++ only)}
+Warn when a class has virtual functions and an accessible non-virtual
+destructor itself or in an accessible polymorphic base class, in which
+case it is possible but unsafe to delete an instance of a derived
+class through a pointer to the class itself or base class.  This
+warning is automatically enabled if @option{-Weffc++} is specified.
+The @option{-Wdelete-non-virtual-dtor} option (enabled by @option{-Wall})
+should be preferred because it warns about the unsafe cases without false
+positives.
+
+@opindex Wregister
+@opindex Wno-register

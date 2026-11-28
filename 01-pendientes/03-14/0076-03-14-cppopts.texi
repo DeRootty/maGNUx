@@ -1,0 +1,224 @@
+@c GCC 16.1.0 | BLOQUE 0076 | 03-14
+@c Fuente: gcc/doc/cppopts.texi | blob: 94490775509f4b240551d5e4b0592a721f99ad21
+@c Lineas originales: 254-473 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -fdirectives-only
+When preprocessing, handle directives, but do not expand macros.
+
+The option's behavior depends on the @option{-E} and @option{-fpreprocessed}
+options.
+
+With @option{-E}, preprocessing is limited to the handling of directives
+such as @code{#define}, @code{#ifdef}, and @code{#error}.  Other
+preprocessor operations, such as macro expansion and trigraph
+conversion are not performed.  In addition, the @option{-dD} option is
+implicitly enabled.
+
+With @option{-fpreprocessed}, predefinition of command line and most
+builtin macros is disabled.  Macros such as @code{__LINE__}, which are
+contextually dependent, are handled normally.  This enables compilation of
+files previously preprocessed with @code{-E -fdirectives-only}.
+
+With both @option{-E} and @option{-fpreprocessed}, the rules for
+@option{-fpreprocessed} take precedence.  This enables full preprocessing of
+files previously preprocessed with @code{-E -fdirectives-only}.
+
+@opindex fdollars-in-identifiers
+@opindex fno-dollars-in-identifiers
+@item -fdollars-in-identifiers
+@anchor{fdollars-in-identifiers}
+Accept @samp{$} in identifiers.
+@ifset cppmanual
+@xref{Identifier characters}.
+@end ifset
+
+@opindex fextended-identifiers
+@opindex fno-extended-identifiers
+@item -fextended-identifiers
+Accept universal character names and extended characters in
+identifiers.  This option is enabled by default for C99 (and later C
+standard versions) and C++.
+
+@opindex fcanonical-system-headers
+@opindex fno-canonical-system-headers
+@item -fno-canonical-system-headers
+When preprocessing, do not shorten system header paths with canonicalization.
+
+@opindex fmax-include-depth
+@item -fmax-include-depth=@var{depth}
+Set the maximum depth of the nested #include. The default is 200. 
+
+@opindex fsearch-include-path
+@opindex fno-search-include-path
+@item -fsearch-include-path@r{[}=@var{kind}@r{]}
+Look for input files on the #include path, not just the current
+directory.  This is particularly useful with C++20 modules, for which
+both header units and module interface units need to be compiled
+directly:
+
+@smallexample
+g++ -c -std=c++20 -fmodules -fsearch-include-path bits/stdc++.h bits/std.cc
+@end smallexample
+
+@var{kind} defaults to @samp{user}, which looks on the @code{#include
+"@dots{}"} search path; you can also explicitly specify @samp{system}
+for the @code{#include <@dots{}>} search path.
+
+@opindex ftabstop
+@item -ftabstop=@var{width}
+Set the distance between tab stops.  This helps the preprocessor report
+correct column numbers in warnings or errors, even if tabs appear on the
+line.  If the value is less than 1 or greater than 100, the option is
+ignored.  The default is 8.
+
+@opindex ftrack-macro-expansion
+@item -ftrack-macro-expansion@r{[}=@var{level}@r{]}
+Track locations of tokens across macro expansions. This allows the
+compiler to emit diagnostic about the current macro expansion stack
+when a compilation error occurs in a macro expansion. Using this
+option makes the preprocessor and the compiler consume more
+memory. The @var{level} parameter can be used to choose the level of
+precision of token location tracking thus decreasing the memory
+consumption if necessary. Value @samp{0} of @var{level} de-activates
+this option. Value @samp{1} tracks tokens locations in a
+degraded mode for the sake of minimal memory overhead. In this mode
+all tokens resulting from the expansion of an argument of a
+function-like macro have the same location. Value @samp{2} tracks
+tokens locations completely. This value is the most memory hungry.
+When this option is given no argument, the default parameter value is
+@samp{2}.
+
+Note that @code{-ftrack-macro-expansion=2} is activated by default.
+
+@opindex fmacro-prefix-map
+@item -fmacro-prefix-map=@var{old}=@var{new}
+When preprocessing files residing in directory @file{@var{old}},
+expand the @code{__FILE__} and @code{__BASE_FILE__} macros as if the
+files resided in directory @file{@var{new}} instead.  This can be used
+to change an absolute path to a relative path by using @file{.} for
+@var{new} which can result in more reproducible builds that are
+location independent.  This option also affects
+@code{__builtin_FILE()} during compilation.  See also
+@option{-ffile-prefix-map} and @option{-fcanon-prefix-map}.
+
+@opindex fexec-charset
+@cindex character set, execution
+@item -fexec-charset=@var{charset}
+Set the execution character set, used for string and character
+constants.  The default is UTF-8.  @var{charset} can be any encoding
+supported by the system's @code{iconv} library routine.
+
+@opindex fwide-exec-charset
+@cindex character set, wide execution
+@item -fwide-exec-charset=@var{charset}
+Set the wide execution character set, used for wide string and
+character constants.  The default is one of UTF-32BE, UTF-32LE, UTF-16BE,
+or UTF-16LE, whichever corresponds to the width of @code{wchar_t} and the
+big-endian or little-endian byte order being used for code generation.  As
+with @option{-fexec-charset}, @var{charset} can be any encoding supported
+by the system's @code{iconv} library routine; however, you will have
+problems with encodings that do not fit exactly in @code{wchar_t}.
+
+@opindex finput-charset
+@cindex character set, input
+@item -finput-charset=@var{charset}
+Set the input character set, used for translation from the character
+set of the input file to the source character set used by GCC@.  The
+default is UTF-8.  @var{charset} can be any encoding
+supported by the system's @code{iconv} library routine.
+
+If the input character set is UTF-8, warnings about ill-formed code
+unit sequences are issued if @option{-Winvalid-utf8} is enabled.
+Otherwise no diagnostics are issued when the input character set
+matches the execution character set.  If they are different,
+ill-formed code unit sequences result in an error during transcoding
+to the execution character set.
+
+@ifclear cppmanual
+@opindex fpch-deps
+@opindex fno-pch-deps
+@item -fpch-deps
+When using precompiled headers (@pxref{Precompiled Headers}), this flag
+causes the dependency-output flags to also list the files from the
+precompiled header's dependencies.  If not specified, only the
+precompiled header are listed and not the files that were used to
+create it, because those files are not consulted when a precompiled
+header is used.
+
+@opindex fpch-preprocess
+@opindex fno-pch-preprocess
+@item -fpch-preprocess
+This option allows use of a precompiled header (@pxref{Precompiled
+Headers}) together with @option{-E}.  It inserts a special @code{#pragma},
+@code{#pragma GCC pch_preprocess "@var{filename}"} in the output to mark
+the place where the precompiled header was found, and its @var{filename}.
+When @option{-fpreprocessed} is in use, GCC recognizes this @code{#pragma}
+and loads the PCH@.
+
+This option is off by default, because the resulting preprocessed output
+is only really suitable as input to GCC@.  It is switched on by
+@option{-save-temps}.
+
+You should not write this @code{#pragma} in your own code, but it is
+safe to edit the filename if the PCH file is available in a different
+location.  The filename may be absolute or it may be relative to GCC's
+current directory.
+@end ifclear
+
+@opindex fworking-directory
+@opindex fno-working-directory
+@item -fworking-directory
+Enable generation of linemarkers in the preprocessor output that
+let the compiler know the current working directory at the time of
+preprocessing.  When this option is enabled, the preprocessor
+emits, after the initial linemarker, a second linemarker with the
+current working directory followed by two slashes.  GCC uses this
+directory, when it's present in the preprocessed input, as the
+directory emitted as the current working directory in some debugging
+information formats.  This option is implicitly enabled if debugging
+information is enabled, but this can be inhibited with the negated
+form @option{-fno-working-directory}.  If the @option{-P} flag is
+present in the command line, this option has no effect, since no
+@code{#line} directives are emitted whatsoever.
+
+@c The documentation for this option is not helpful to users without
+@c the longer explanation that appears only in the CPP manual, plus
+@c it's been documented as obsolete and "do not use" since 2001!
+@ifset cppmanual
+@opindex A
+@opindex assert
+@item -A @var{predicate}=@var{answer}
+@itemx --assert @var{predicate}=@var{answer}
+@itemx --assert=@var{predicate}=@var{answer}
+Make an assertion with the predicate @var{predicate} and answer
+@var{answer}.  This form is preferred to the older form @option{-A
+@var{predicate}(@var{answer})}, which is still supported, because
+it does not use shell special characters.
+
+Assertions are an obsolete feature of the preprocessor, supported only
+for compatibility with legacy system headers on some targets.
+@xref{Obsolete Features}, for more details on use.
+
+@item -A -@var{predicate}=@var{answer}
+@itemx --assert -@var{predicate}=@var{answer}
+@itemx --assert=-@var{predicate}=@var{answer}
+Cancel an assertion with the predicate @var{predicate} and answer
+@var{answer}.
+@end ifset
+
+@opindex C
+@opindex comments
+@item -C
+@itemx --comments
+Do not discard comments.  All comments are passed through to the output
+file, except for comments in processed directives, which are deleted
+along with the directive.
+
+You should be prepared for side effects when using @option{-C}; it
+causes the preprocessor to treat comments as tokens in their own right.
+For example, comments appearing at the start of what would be a
+directive line have the effect of turning that line into an ordinary
+source line, since the first token on the line is no longer a @samp{#}.
+
+@opindex CC
+@opindex comments-in-macros

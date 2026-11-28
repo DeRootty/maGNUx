@@ -1,0 +1,266 @@
+@c GCC 16.1.0 | BLOQUE 0112 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 24924-25185 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -momit-leaf-frame-pointer
+Don't keep the frame pointer in a register for leaf functions.  This
+avoids the instructions to save, set up and restore frame pointers and
+makes an extra register available in leaf functions.
+
+@opindex mspecld-anomaly
+@opindex mno-specld-anomaly
+@item -mspecld-anomaly
+@itemx -mno-specld-anomaly
+When enabled, the compiler ensures that the generated code does not
+contain speculative loads after jump instructions. If this option is used,
+@code{__WORKAROUND_SPECULATIVE_LOADS} is defined.
+
+@opindex mcsync-anomaly
+@opindex mno-csync-anomaly
+@item -mcsync-anomaly
+@itemx -mno-csync-anomaly
+When enabled, the compiler ensures that the generated code does not
+contain CSYNC or SSYNC instructions too soon after conditional branches.
+If this option is used, @code{__WORKAROUND_SPECULATIVE_SYNCS} is defined.
+
+@opindex mlow64k
+@opindex mno-low64k
+@item -mlow64k
+@itemx -mno-low64k
+When enabled, the compiler is free to take advantage of the knowledge that
+the entire program fits into the low 64k of memory.  The default behavior
+is to assume that the program is arbitrarily large (@option{-mno-low64k}).
+
+@opindex mstack-check-l1
+@opindex mno-stack-check-l1
+@item -mstack-check-l1
+Do stack checking using information placed into L1 scratchpad memory by the
+uClinux kernel.
+
+@opindex mid-shared-library
+@opindex mno-id-shared-library
+@item -mid-shared-library
+@itemx -mno-id-shared-library
+Generate code that supports shared libraries via the library ID method.
+This allows for execute in place and shared libraries in an environment
+without virtual memory management.  This option implies @option{-fPIC}.
+With a @samp{bfin-elf} target, this option implies @option{-msim}.
+The default is @option{-mno-id-shared-library}, to generate
+code that doesn't assume ID-based shared libraries are being used.
+
+@opindex mleaf-id-shared-library
+@opindex mno-leaf-id-shared-library
+@item -mleaf-id-shared-library
+@itemx -mno-leaf-id-shared-library
+Generate code that supports shared libraries via the library ID method,
+but assumes that this library or executable won't link against any other
+ID shared libraries.  That allows the compiler to use faster code for jumps
+and calls.
+
+The default is @option{-mno-leaf-id-shared-library}, in which the
+no assumption is made that the code being compiled won't link
+against any ID shared libraries.  Slower code is generated for jump
+and call insns.
+
+@opindex mshared-library-id
+@item -mshared-library-id=n
+Specifies the identification number of the ID-based shared library being
+compiled.  Specifying a value of 0 generates more compact code; specifying
+other values forces the allocation of that number to the current
+library but is no more space- or time-efficient than omitting this option.
+
+@opindex msep-data
+@opindex mno-sep-data
+@item -msep-data
+@itemx -mno-sep-data
+Generate code that allows the data segment to be located in a different
+area of memory from the text segment.  This allows for execute in place in
+an environment without virtual memory management by eliminating relocations
+against the text section.  The default is @option{-mno-sep-data}, which
+tells GCC to generate code that assumes that the data segment follows
+the text segment.
+
+@opindex mlong-calls
+@opindex mno-long-calls
+@item -mlong-calls
+@itemx -mno-long-calls
+Tells the compiler to perform function calls by first loading the
+address of the function into a register and then performing a subroutine
+call on this register.  This switch is needed if the target function
+lies outside of the 24-bit addressing range of the offset-based
+version of subroutine call instruction.
+
+This feature is not enabled by default.  Specifying
+@option{-mno-long-calls} restores the default behavior.  Note these
+switches have no effect on how the compiler generates code to handle
+function calls via function pointers.
+
+@opindex mfast-fp
+@opindex mno-fast-fp
+@item -mfast-fp
+Link with the fast floating-point library. This library relaxes some of
+the IEEE floating-point standard's rules for checking inputs against
+Not-a-Number (NAN), in the interest of performance.
+
+@opindex minline-plt
+@opindex mno-inline-plt
+@item -minline-plt
+Enable inlining of PLT entries in function calls to functions that are
+not known to bind locally.  It has no effect without @option{-mfdpic}.
+
+@opindex mmulticore
+@opindex mno-multicore
+@item -mmulticore
+Build a standalone application for multicore Blackfin processors.
+This option causes proper start files and link scripts supporting
+multicore to be used, and defines the macro @code{__BFIN_MULTICORE}.
+It can only be used with @option{-mcpu=bf561@r{[}-@var{sirevision}@r{]}}.
+
+This option can be used with @option{-mcorea} or @option{-mcoreb}, which
+selects the one-application-per-core programming model.  Without
+@option{-mcorea} or @option{-mcoreb}, the single-application/dual-core
+programming model is used. In this model, the main function of Core B
+should be named as @code{coreb_main}.
+
+If this option is not used, the single-core application programming
+model is used.
+
+@opindex mcorea
+@opindex mno-corea
+@item -mcorea
+Build a standalone application for Core A of BF561 when using
+the one-application-per-core programming model. Proper start files
+and link scripts are used to support Core A, and the macro
+@code{__BFIN_COREA} is defined.
+This option can only be used in conjunction with @option{-mmulticore}.
+
+@opindex mcoreb
+@opindex mno-coreb
+@item -mcoreb
+Build a standalone application for Core B of BF561 when using
+the one-application-per-core programming model. Proper start files
+and link scripts are used to support Core B, and the macro
+@code{__BFIN_COREB} is defined. When this option is used, @code{coreb_main}
+should be used instead of @code{main}.
+This option can only be used in conjunction with @option{-mmulticore}.
+
+@opindex msdram
+@opindex mno-sdram
+@item -msdram
+Build a standalone application for SDRAM. Proper start files and
+link scripts are used to put the application into SDRAM, and the macro
+@code{__BFIN_SDRAM} is defined.
+The loader should initialize SDRAM before loading the application.
+
+@opindex micplb
+@opindex mno-icplb
+@item -micplb
+Assume that ICPLBs are enabled at run time.  This has an effect on certain
+anomaly workarounds.  For Linux targets, the default is to assume ICPLBs
+are enabled; for standalone applications the default is off.
+@end table
+
+@node C6X Options
+@subsection C6X Options
+@cindex C6X Options
+
+@table @gcctabopt
+@opindex march
+@item -march=@var{name}
+This specifies the name of the target architecture.  GCC uses this
+name to determine what kind of instructions it can emit when generating
+assembly code.  Permissible names are: @samp{c62x},
+@samp{c64x}, @samp{c64x+}, @samp{c67x}, @samp{c67x+}, @samp{c674x}.
+
+@opindex mbig-endian
+@item -mbig-endian
+Generate code for a big-endian target.
+
+@opindex mlittle-endian
+@item -mlittle-endian
+Generate code for a little-endian target.  This is the default.
+
+@opindex msim
+@item -msim
+Choose startup files and linker script suitable for the simulator.
+
+@opindex msdata=default
+@item -msdata=default
+Put small global and static data in the @code{.neardata} section,
+which is pointed to by register @code{B14}.  Put small uninitialized
+global and static data in the @code{.bss} section, which is adjacent
+to the @code{.neardata} section.  Put small read-only data into the
+@code{.rodata} section.  The corresponding sections used for large
+pieces of data are @code{.fardata}, @code{.far} and @code{.const}.
+
+@opindex msdata=all
+@item -msdata=all
+Put all data, not just small objects, into the sections reserved for
+small data, and use addressing relative to the @code{B14} register to
+access them.
+
+@opindex msdata=none
+@item -msdata=none
+Make no use of the sections reserved for small data, and use absolute
+addresses to access all data.  Put all initialized global and static
+data in the @code{.fardata} section, and all uninitialized data in the
+@code{.far} section.  Put all constant data into the @code{.const}
+section.
+
+@opindex mdsbt
+@opindex mno-dsbt
+@item -mdsbt
+Compile for the DSBT shared library ABI.  This option is required to
+compile with @option{-fpic} or @option{-fPIC}, and implies @option{-fpic}.
+
+@opindex mlong-calls
+@opindex mno-long-calls
+@item -mlong-calls
+Avoid generating PC-relative calls; use indirection instead.
+@end table
+
+@node CRIS Options
+@subsection CRIS Options
+@cindex CRIS Options
+
+These options are defined specifically for the CRIS ports.
+
+@table @gcctabopt
+@opindex march
+@opindex mcpu
+@item -march=@var{architecture-type}
+@itemx -mcpu=@var{architecture-type}
+Generate code for the specified architecture.  The choices for
+@var{architecture-type} are @samp{v3}, @samp{v8} and @samp{v10} for
+respectively ETRAX@w{ }4, ETRAX@w{ }100, and ETRAX@w{ }100@w{ }LX@.
+Default is @samp{v0}.
+
+@opindex mtune
+@item -mtune=@var{architecture-type}
+Tune to @var{architecture-type} everything applicable about the generated
+code, except for the ABI and the set of available instructions.  The
+choices for @var{architecture-type} are the same as for
+@option{-march=@var{architecture-type}}.
+
+@opindex mmax-stackframe
+@item -mmax-stackframe=@var{n}
+Warn when the stack frame of a function exceeds @var{n} bytes.
+
+@opindex metrax4
+@opindex metrax100
+@opindex mno-etrax4
+@opindex mno-etrax100
+@item -metrax4
+@itemx -metrax100
+The options @option{-metrax4} and @option{-metrax100} are synonyms for
+@option{-march=v3} and @option{-march=v8} respectively.
+
+@opindex mmul-bug-workaround
+@opindex mno-mul-bug-workaround
+@item -mmul-bug-workaround
+@itemx -mno-mul-bug-workaround
+Work around a bug in the @code{muls} and @code{mulu} instructions for CPU
+models where it applies.  This option is disabled by default.
+
+@opindex mpdebug
+@opindex mno-pddebug

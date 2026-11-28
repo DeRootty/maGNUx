@@ -1,0 +1,526 @@
+@c GCC 16.1.0 | BLOQUE 0380 | 23-colaboradores
+@c Fuente: gcc/doc/contrib.texi | blob: 6594fe78d2cbfe7619e09c2ef65ad4faf1d77221
+@c Lineas originales: 1074-1595 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item
+Michael Tiemann for random bug fixes, the first instruction scheduler,
+initial C++ support, function integration, NS32k, SPARC and M88k
+machine description work, delay slot scheduling.
+
+@item
+Andreas Tobler for his work porting libgcj to Darwin.
+
+@item
+Teemu Torma for thread safe exception handling support.
+
+@item
+Leonard Tower wrote parts of the parser, RTL generator, and RTL
+definitions, and of the VAX machine description.
+
+@item
+Daniel Towner and Hariharan Sandanagobalane contributed and
+maintain the picoChip port.
+
+@item
+Tom Tromey for internationalization support and for his many Java
+contributions and libgcj maintainership.
+
+@item
+Lassi Tuura for improvements to config.guess to determine HP processor
+types.
+
+@item
+Petter Urkedal for libstdc++ CXXFLAGS, math, and algorithms fixes.
+
+@item
+Andy Vaught for the design and initial implementation of the GNU Fortran
+front end.
+
+@item
+Brent Verner for work with the libstdc++ cshadow files and their
+associated configure steps.
+
+@item
+Todd Vierling for contributions for NetBSD ports.
+
+@item
+Andrew Waterman for contributing the RISC-V port, as well as maintaining it.
+
+@item
+Jonathan Wakely for contributing to and maintaining libstdc++.
+
+@item
+Dean Wakerley for converting the install documentation from HTML to texinfo
+in time for GCC 3.0.
+
+@item
+Krister Walfridsson for random bug fixes.
+
+@item
+Feng Wang for contributions to GNU Fortran.
+
+@item
+Stephen M. Webb for time and effort on making libstdc++ shadow files
+work with the tricky Solaris 8+ headers, and for pushing the build-time
+header tree. Also, for starting and driving the @code{<regex>} effort.
+
+@item
+John Wehle for various improvements for the x86 code generator,
+related infrastructure improvements to help x86 code generation,
+value range propagation and other work, WE32k port.
+
+@item
+Ulrich Weigand for work on the s390 port.
+
+@item
+Janus Weil for contributions to GNU Fortran.
+
+@item
+Zack Weinberg for major work on cpplib and various other bug fixes.
+
+@item
+Matt Welsh for help with Linux Threads support in GCJ@.
+
+@item
+Urban Widmark for help fixing java.io.
+
+@item
+Mark Wielaard for new Java library code and his work integrating with
+Classpath.
+
+@item
+Dale Wiles helped port GCC to the Tahoe.
+
+@item
+Bob Wilson from Tensilica, Inc.@: for the Xtensa port.
+
+@item
+Jim Wilson for his direction via the steering committee, tackling hard
+problems in various places that nobody else wanted to work on, strength
+reduction and other loop optimizations.
+
+@item
+Paul Woegerer and Tal Agmon for the CRX port.
+
+@item
+Carlo Wood for various fixes.
+
+@item
+Tom Wood for work on the m88k port.
+
+@item
+Chung-Ju Wu for his work on the Andes NDS32 port.
+
+@item
+Canqun Yang for work on GNU Fortran.
+
+@item
+Masanobu Yuhara of Fujitsu Laboratories implemented the machine
+description for the Tron architecture (specifically, the Gmicro).
+
+@item
+Kevin Zachmann helped port GCC to the Tahoe.
+
+@item
+Ayal Zaks for Swing Modulo Scheduling (SMS).
+
+@item
+Qirun Zhang for running automated regression testing of GCC and reporting
+numerous bugs.
+
+@item
+Xiaoqiang Zhang for work on GNU Fortran.
+
+@item
+Gilles Zunino for help porting Java to Irix.
+
+@end itemize
+
+The following people are recognized for their contributions to GNAT,
+the Ada front end of GCC:
+@itemize @bullet
+@item
+Bernard Banner
+
+@item
+Romain Berrendonner
+
+@item
+Geert Bosch
+
+@item
+Emmanuel Briot
+
+@item
+Joel Brobecker
+
+@item
+Ben Brosgol
+
+@item
+Vincent Celier
+
+@item
+Arnaud Charlet
+
+@item
+Chien Chieng
+
+@item
+Cyrille Comar
+
+@item
+Cyrille Crozes
+
+@item
+Robert Dewar
+
+@item
+Gary Dismukes
+
+@item
+Robert Duff
+
+@item
+Ed Falis
+
+@item
+Ramon Fernandez
+
+@item
+Sam Figueroa
+
+@item
+Vasiliy Fofanov
+
+@item
+Michael Friess
+
+@item
+Franco Gasperoni
+
+@item
+Ted Giering
+
+@item
+Matthew Gingell
+
+@item
+Laurent Guerby
+
+@item
+Jerome Guitton
+
+@item
+Olivier Hainque
+
+@item
+Jerome Hugues
+
+@item
+Hristian Kirtchev
+
+@item
+Jerome Lambourg
+
+@item
+Bruno Leclerc
+
+@item
+Albert Lee
+
+@item
+Sean McNeil
+
+@item
+Javier Miranda
+
+@item
+Laurent Nana
+
+@item
+Pascal Obry
+
+@item
+Dong-Ik Oh
+
+@item
+Laurent Pautet
+
+@item
+Brett Porter
+
+@item
+Thomas Quinot
+
+@item
+Nicolas Roche
+
+@item
+Pat Rogers
+
+@item
+Jose Ruiz
+
+@item
+Douglas Rupp
+
+@item
+Sergey Rybin
+
+@item
+Gail Schenker
+
+@item
+Ed Schonberg
+
+@item
+Nicolas Setton
+
+@item
+Samuel Tardieu
+
+@end itemize
+
+
+The following people are recognized for their contributions of new
+features, bug reports, testing and integration of classpath/libgcj for
+GCC version 4.1:
+@itemize @bullet
+@item
+Lillian Angel for @code{JTree} implementation and lots Free Swing
+additions and bug fixes.
+
+@item
+Wolfgang Baer for @code{GapContent} bug fixes.
+
+@item
+Anthony Balkissoon for @code{JList}, Free Swing 1.5 updates and mouse event
+fixes, lots of Free Swing work including @code{JTable} editing.
+
+@item
+Stuart Ballard for RMI constant fixes.
+
+@item
+Goffredo Baroncelli for @code{HTTPURLConnection} fixes.
+
+@item
+Gary Benson for @code{MessageFormat} fixes.
+
+@item
+Daniel Bonniot for @code{Serialization} fixes.
+
+@item
+Chris Burdess for lots of gnu.xml and http protocol fixes, @code{StAX}
+and @code{DOM xml:id} support.
+
+@item
+Ka-Hing Cheung for @code{TreePath} and @code{TreeSelection} fixes.
+
+@item
+Archie Cobbs for build fixes, VM interface updates,
+@code{URLClassLoader} updates.
+
+@item
+Kelley Cook for build fixes.
+
+@item
+Martin Cordova for Suggestions for better @code{SocketTimeoutException}.
+
+@item
+David Daney for @code{BitSet} bug fixes, @code{HttpURLConnection}
+rewrite and improvements.
+
+@item
+Thomas Fitzsimmons for lots of upgrades to the gtk+ AWT and Cairo 2D
+support. Lots of imageio framework additions, lots of AWT and Free
+Swing bug fixes.
+
+@item
+Jeroen Frijters for @code{ClassLoader} and nio cleanups, serialization fixes,
+better @code{Proxy} support, bug fixes and IKVM integration.
+
+@item
+Santiago Gala for @code{AccessControlContext} fixes.
+
+@item
+Nicolas Geoffray for @code{VMClassLoader} and @code{AccessController}
+improvements.
+
+@item
+David Gilbert for @code{basic} and @code{metal} icon and plaf support
+and lots of documenting, Lots of Free Swing and metal theme
+additions. @code{MetalIconFactory} implementation.
+
+@item
+Anthony Green for @code{MIDI} framework, @code{ALSA} and @code{DSSI}
+providers.
+
+@item
+Andrew Haley for @code{Serialization} and @code{URLClassLoader} fixes,
+gcj build speedups.
+
+@item
+Kim Ho for @code{JFileChooser} implementation.
+
+@item
+Andrew John Hughes for @code{Locale} and net fixes, URI RFC2986
+updates, @code{Serialization} fixes, @code{Properties} XML support and
+generic branch work, VMIntegration guide update.
+
+@item
+Bastiaan Huisman for @code{TimeZone} bug fixing.
+
+@item
+Andreas Jaeger for mprec updates.
+
+@item
+Paul Jenner for better @option{-Werror} support.
+
+@item
+Ito Kazumitsu for @code{NetworkInterface} implementation and updates.
+
+@item
+Roman Kennke for @code{BoxLayout}, @code{GrayFilter} and
+@code{SplitPane}, plus bug fixes all over. Lots of Free Swing work
+including styled text.
+
+@item
+Simon Kitching for @code{String} cleanups and optimization suggestions.
+
+@item
+Michael Koch for configuration fixes, @code{Locale} updates, bug and
+build fixes.
+
+@item
+Guilhem Lavaux for configuration, thread and channel fixes and Kaffe
+integration. JCL native @code{Pointer} updates. Logger bug fixes.
+
+@item
+David Lichteblau for JCL support library global/local reference
+cleanups.
+
+@item
+Aaron Luchko for JDWP updates and documentation fixes.
+
+@item
+Ziga Mahkovec for @code{Graphics2D} upgraded to Cairo 0.5 and new regex
+features.
+
+@item
+Sven de Marothy for BMP imageio support, CSS and @code{TextLayout}
+fixes. @code{GtkImage} rewrite, 2D, awt, free swing and date/time fixes and
+implementing the Qt4 peers.
+
+@item
+Casey Marshall for crypto algorithm fixes, @code{FileChannel} lock,
+@code{SystemLogger} and @code{FileHandler} rotate implementations, NIO
+@code{FileChannel.map} support, security and policy updates.
+
+@item
+Bryce McKinlay for RMI work.
+
+@item
+Audrius Meskauskas for lots of Free Corba, RMI and HTML work plus
+testing and documenting.
+
+@item
+Kalle Olavi Niemitalo for build fixes.
+
+@item
+Rainer Orth for build fixes.
+
+@item
+Andrew Overholt for @code{File} locking fixes.
+
+@item
+Ingo Proetel for @code{Image}, @code{Logger} and @code{URLClassLoader}
+updates.
+
+@item
+Olga Rodimina for @code{MenuSelectionManager} implementation.
+
+@item
+Jan Roehrich for @code{BasicTreeUI} and @code{JTree} fixes.
+
+@item
+Julian Scheid for documentation updates and gjdoc support.
+
+@item
+Christian Schlichtherle for zip fixes and cleanups.
+
+@item
+Robert Schuster for documentation updates and beans fixes,
+@code{TreeNode} enumerations and @code{ActionCommand} and various
+fixes, XML and URL, AWT and Free Swing bug fixes.
+
+@item
+Keith Seitz for lots of JDWP work.
+
+@item
+Christian Thalinger for 64-bit cleanups, Configuration and VM
+interface fixes and @code{CACAO} integration, @code{fdlibm} updates.
+
+@item
+Gael Thomas for @code{VMClassLoader} boot packages support suggestions.
+
+@item
+Andreas Tobler for Darwin and Solaris testing and fixing, @code{Qt4}
+support for Darwin / macOS, @code{Graphics2D} support, @code{gtk+}
+updates.
+
+@item
+Dalibor Topic for better @code{DEBUG} support, build cleanups and
+Kaffe integration. @code{Qt4} build infrastructure, @code{SHA1PRNG}
+and @code{GdkPixbugDecoder} updates.
+
+@item
+Tom Tromey for Eclipse integration, generics work, lots of bug fixes
+and gcj integration including coordinating The Big Merge.
+
+@item
+Mark Wielaard for bug fixes, packaging and release management,
+@code{Clipboard} implementation, system call interrupts and network
+timeouts and @code{GdkPixpufDecoder} fixes.
+
+@end itemize
+
+
+In addition to the above, all of which also contributed time and energy in
+testing GCC, we would like to thank the following for their contributions
+to testing:
+
+@itemize @bullet
+@item
+Michael Abd-El-Malek
+
+@item
+Thomas Arend
+
+@item
+Bonzo Armstrong
+
+@item
+Steven Ashe
+
+@item
+Chris Baldwin
+
+@item
+David Billinghurst
+
+@item
+Jim Blandy
+
+@item
+Stephane Bortzmeyer
+
+@item
+Horst von Brand
+
+@item
+Frank Braun
+
+@item
+Rodney Brown
+

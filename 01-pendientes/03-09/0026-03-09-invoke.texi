@@ -1,0 +1,245 @@
+@c GCC 16.1.0 | BLOQUE 0026 | 03-09
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 7816-8056 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -Wmissing-attributes
+Warn when a declaration of a function is missing one or more attributes
+that a related function is declared with and whose absence may adversely
+affect the correctness or efficiency of generated code.  For example,
+the warning is issued for declarations of aliases that use attributes
+to specify less restrictive requirements than those of their targets.
+This typically represents a potential optimization opportunity.
+By contrast, the @option{-Wattribute-alias=2} option controls warnings
+issued when the alias is more restrictive than the target, which could
+lead to incorrect code generation.
+Attributes considered include @code{alloc_align}, @code{alloc_size},
+@code{cold}, @code{const}, @code{hot}, @code{leaf}, @code{malloc},
+@code{nonnull}, @code{noreturn}, @code{nothrow}, @code{pure},
+@code{returns_nonnull}, and @code{returns_twice}.
+
+In C++, the warning is issued when an explicit specialization of a primary
+template declared with attribute @code{alloc_align}, @code{alloc_size},
+@code{assume_aligned}, @code{format}, @code{format_arg}, @code{malloc},
+or @code{nonnull} is declared without it.  Attributes @code{deprecated},
+@code{error}, and @code{warning} suppress the warning.
+(@pxref{Common Attributes}).
+
+You can use the @code{copy} attribute to apply the same
+set of attributes to a declaration as that on another declaration without
+explicitly enumerating the attributes. This attribute can be applied
+to declarations of functions, variables, or types.  @ref{Common Attributes}.
+
+@option{-Wmissing-attributes} is enabled by @option{-Wall}.
+
+For example, since the declaration of the primary function template
+below makes use of both attribute @code{malloc} and @code{alloc_size}
+the declaration of the explicit specialization of the template is
+diagnosed because it is missing one of the attributes.
+
+@smallexample
+template <class T>
+T* __attribute__ ((malloc, alloc_size (1)))
+allocate (size_t);
+
+template <>
+void* __attribute__ ((malloc))   // missing alloc_size
+allocate<void> (size_t);
+@end smallexample
+
+@opindex Wmissing-braces
+@opindex Wno-missing-braces
+@item -Wmissing-braces
+Warn if an aggregate or union initializer is not fully bracketed.  In
+the following example, the initializer for @code{a} is not fully
+bracketed, but that for @code{b} is fully bracketed.
+
+@smallexample
+int a[2][2] = @{ 0, 1, 2, 3 @};
+int b[2][2] = @{ @{ 0, 1 @}, @{ 2, 3 @} @};
+@end smallexample
+
+This warning is enabled by @option{-Wall}.
+
+@opindex Wmissing-include-dirs
+@opindex Wno-missing-include-dirs
+@item -Wmissing-include-dirs @r{(C, C++, Objective-C, Objective-C++ and Fortran only)}
+Warn if a user-supplied include directory does not exist. This option is disabled
+by default for C, C++, Objective-C and Objective-C++. For Fortran, it is partially
+enabled by default by warning for -I and -J, only.
+
+@opindex Wmissing-profile
+@opindex Wno-missing-profile
+@item -Wno-missing-profile
+This option controls warnings if feedback profiles are missing when using the
+@option{-fprofile-use} option.
+This option diagnoses those cases where a new function or a new file is added
+between compiling with @option{-fprofile-generate} and with
+@option{-fprofile-use}, without regenerating the profiles.
+In these cases, the profile feedback data files do not contain any
+profile feedback information for
+the newly added function or file respectively.  Also, in the case when profile
+count data (.gcda) files are removed, GCC cannot use any profile feedback
+information.  In all these cases, warnings are issued to inform you that a
+profile generation step is due.
+Ignoring the warning can result in poorly optimized code.
+@option{-Wno-missing-profile} can be used to
+disable the warning, but this is not recommended and should be done only
+when non-existent profile data is justified.
+
+@opindex Wmismatched-dealloc
+@opindex Wno-mismatched-dealloc
+@item -Wmismatched-dealloc
+
+Warn for calls to deallocation functions with pointer arguments returned
+from allocation functions for which the former isn't a suitable
+deallocator.  A pair of functions can be associated as matching allocators
+and deallocators by use of attribute @code{malloc}.  Unless disabled by
+the @option{-fno-builtin} option the standard functions @code{calloc},
+@code{malloc}, @code{realloc}, and @code{free}, as well as the corresponding
+forms of C++ @code{operator new} and @code{operator delete} are implicitly
+associated as matching allocators and deallocators.  In the following
+example @code{mydealloc} is the deallocator for pointers returned from
+@code{myalloc}.
+
+@smallexample
+void mydealloc (void*);
+
+__attribute__ ((malloc (mydealloc, 1))) void*
+myalloc (size_t);
+
+void f (void)
+@{
+  void *p = myalloc (32);
+  // @dots{}use p@dots{}
+  free (p);   // warning: not a matching deallocator for myalloc
+  mydealloc (p);   // ok
+@}
+@end smallexample
+
+In C++, the related option @option{-Wmismatched-new-delete} diagnoses
+mismatches involving either @code{operator new} or @code{operator delete}.
+
+Option @option{-Wmismatched-dealloc} is included in @option{-Wall}.
+
+@opindex Wmultistatement-macros
+@opindex Wno-multistatement-macros
+@item -Wmultistatement-macros
+Warn about unsafe multiple statement macros that appear to be guarded
+by a clause such as @code{if}, @code{else}, @code{for}, @code{switch}, or
+@code{while}, in which only the first statement is actually guarded after
+the macro is expanded.
+
+For example:
+
+@smallexample
+#define DOIT x++; y++
+if (c)
+  DOIT;
+@end smallexample
+
+will increment @code{y} unconditionally, not just when @code{c} holds.
+The can usually be fixed by wrapping the macro in a do-while loop:
+@smallexample
+#define DOIT do @{ x++; y++; @} while (0)
+if (c)
+  DOIT;
+@end smallexample
+
+This warning is enabled by @option{-Wall} in C and C++.
+
+@opindex Wparentheses
+@opindex Wno-parentheses
+@item -Wparentheses
+Warn if parentheses are omitted in certain contexts, such
+as when there is an assignment in a context where a truth value
+is expected, or when operators are nested whose precedence people
+often get confused about.
+
+Also warn if a comparison like @code{x<=y<=z} appears; this is
+equivalent to @code{(x<=y ? 1 : 0) <= z}, which is a different
+interpretation from that of ordinary mathematical notation.
+
+Also warn for dangerous uses of the GNU extension to
+@code{?:} with omitted middle operand. When the condition
+in the @code{?}: operator is a boolean expression, the omitted value is
+always 1.  Often programmers expect it to be a value computed
+inside the conditional expression instead.
+
+For C++ this also warns for some cases of unnecessary parentheses in
+declarations, which can indicate an attempt at a function call instead
+of a declaration:
+@smallexample
+@{
+  // Declares a local variable called mymutex.
+  std::unique_lock<std::mutex> (mymutex);
+  // User meant std::unique_lock<std::mutex> lock (mymutex);
+@}
+@end smallexample
+
+This warning is enabled by @option{-Wall}.
+
+@opindex Wself-move
+@opindex Wno-self-move
+@item -Wno-self-move @r{(C++ and Objective-C++ only)}
+This warning warns when a value is moved to itself with @code{std::move}.
+Such a @code{std::move} typically has no effect.
+
+@smallexample
+struct T @{
+@dots{}
+@};
+void fn()
+@{
+  T t;
+  @dots{}
+  t = std::move (t);
+@}
+@end smallexample
+
+This warning is enabled by @option{-Wall}.
+
+@opindex Wsequence-point
+@opindex Wno-sequence-point
+@item -Wsequence-point
+Warn about code that may have undefined semantics because of violations
+of sequence point rules in the C and C++ standards.
+
+The C and C++ standards define the order in which expressions in a C/C++
+program are evaluated in terms of @dfn{sequence points}, which represent
+a partial ordering between the execution of parts of the program: those
+executed before the sequence point, and those executed after it.  These
+occur after the evaluation of a full expression (one which is not part
+of a larger expression), after the evaluation of the first operand of a
+@code{&&}, @code{||}, @code{? :} or @code{,} (comma) operator, before a
+function is called (but after the evaluation of its arguments and the
+expression denoting the called function), and in certain other places.
+Other than as expressed by the sequence point rules, the order of
+evaluation of subexpressions of an expression is not specified.  All
+these rules describe only a partial order rather than a total order,
+since, for example, if two functions are called within one expression
+with no sequence point between them, the order in which the functions
+are called is not specified.  However, the standards committee have
+ruled that function calls do not overlap.
+
+It is not specified when between sequence points modifications to the
+values of objects take effect.  Programs whose behavior depends on this
+have undefined behavior; the C and C++ standards specify that ``Between
+the previous and next sequence point an object shall have its stored
+value modified at most once by the evaluation of an expression.
+Furthermore, the prior value shall be read only to determine the value
+to be stored.''.  If a program breaks these rules, the results on any
+particular implementation are entirely unpredictable.
+
+Examples of code with undefined behavior are @code{a = a++;}, @code{a[n]
+= b[n++]} and @code{a[i++] = i;}.  Some more complicated cases are not
+diagnosed by this option, and it may give an occasional false positive
+result, but in general it has been found fairly effective at detecting
+this sort of problem in programs.
+
+The C++17 standard will define the order of evaluation of operands in
+more cases: in particular it requires that the right-hand side of an
+assignment be evaluated before the left-hand side, so the above
+examples are no longer undefined.  But this option will still warn
+about them, to help people avoid writing code that is undefined in C
+and earlier revisions of C++.
+

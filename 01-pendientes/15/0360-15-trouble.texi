@@ -1,0 +1,250 @@
+@c GCC 16.1.0 | BLOQUE 0360 | 15
+@c Fuente: gcc/doc/trouble.texi | blob: ad13357c30a7540755cbde108c6aa2c121ea111a
+@c Lineas originales: 210-455 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Incompatibilities
+@section Incompatibilities of GCC
+@cindex incompatibilities of GCC
+@opindex traditional
+
+There are several noteworthy incompatibilities between GNU C and K&R
+(non-ISO) versions of C@.
+
+@itemize @bullet
+@cindex string constants
+@cindex read-only strings
+@cindex shared strings
+@item
+GCC normally makes string constants read-only.  If several
+identical-looking string constants are used, GCC stores only one
+copy of the string.
+
+@cindex @code{mktemp}, and constant strings
+One consequence is that you cannot call @code{mktemp} with a string
+constant argument.  The function @code{mktemp} always alters the
+string its argument points to.
+
+@cindex @code{sscanf}, and constant strings
+@cindex @code{fscanf}, and constant strings
+@cindex @code{scanf}, and constant strings
+Another consequence is that @code{sscanf} does not work on some very
+old systems when passed a string constant as its format control string
+or input.  This is because @code{sscanf} incorrectly tries to write
+into the string constant.  Likewise @code{fscanf} and @code{scanf}.
+
+The solution to these problems is to change the program to use
+@code{char}-array variables with initialization strings for these
+purposes instead of string constants.
+
+@item
+@code{-2147483648} is positive.
+
+This is because 2147483648 cannot fit in the type @code{int}, so
+(following the ISO C rules) its data type is @code{unsigned long int}.
+Negating this value yields 2147483648 again.
+
+@item
+GCC does not substitute macro arguments when they appear inside of
+string constants.  For example, the following macro in GCC
+
+@smallexample
+#define foo(a) "a"
+@end smallexample
+
+@noindent
+will produce output @code{"a"} regardless of what the argument @var{a} is.
+
+@cindex @code{setjmp} incompatibilities
+@cindex @code{longjmp} incompatibilities
+@item
+When you use @code{setjmp} and @code{longjmp}, the only automatic
+variables guaranteed to remain valid are those declared
+@code{volatile}.  This is a consequence of automatic register
+allocation.  Consider this function:
+
+@smallexample
+jmp_buf j;
+
+foo ()
+@{
+  int a, b;
+
+  a = fun1 ();
+  if (setjmp (j))
+    return a;
+
+  a = fun2 ();
+  /* @r{@code{longjmp (j)} may occur in @code{fun3}.} */
+  return a + fun3 ();
+@}
+@end smallexample
+
+Here @code{a} may or may not be restored to its first value when the
+@code{longjmp} occurs.  If @code{a} is allocated in a register, then
+its first value is restored; otherwise, it keeps the last value stored
+in it.
+
+@opindex W
+If you use the @option{-W} option with the @option{-O} option, you will
+get a warning when GCC thinks such a problem might be possible.
+
+@item
+Programs that use preprocessing directives in the middle of macro
+arguments do not work with GCC@.  For example, a program like this
+will not work:
+
+@smallexample
+@group
+foobar (
+#define luser
+        hack)
+@end group
+@end smallexample
+
+ISO C does not permit such a construct.
+
+@item
+K&R compilers allow comments to cross over an inclusion boundary
+(i.e.@: started in an include file and ended in the including file).
+
+@cindex external declaration scope
+@cindex scope of external declarations
+@cindex declaration scope
+@item
+Declarations of external variables and functions within a block apply
+only to the block containing the declaration.  In other words, they
+have the same scope as any other declaration in the same place.
+
+In some other C compilers, an @code{extern} declaration affects all the
+rest of the file even if it happens within a block.
+
+@item
+In traditional C, you can combine @code{long}, etc., with a typedef name,
+as shown here:
+
+@smallexample
+typedef int foo;
+typedef long foo bar;
+@end smallexample
+
+In ISO C, this is not allowed: @code{long} and other type modifiers
+require an explicit @code{int}.
+
+@cindex typedef names as function parameters
+@item
+PCC allows typedef names to be used as function parameters.
+
+@item
+Traditional C allows the following erroneous pair of declarations to
+appear together in a given scope:
+
+@smallexample
+typedef int foo;
+typedef foo foo;
+@end smallexample
+
+@item
+GCC treats all characters of identifiers as significant.  According to
+K&R-1 (2.2), ``No more than the first eight characters are significant,
+although more may be used.''.  Also according to K&R-1 (2.2), ``An
+identifier is a sequence of letters and digits; the first character must
+be a letter.  The underscore _ counts as a letter.'', but GCC also
+allows dollar signs in identifiers.
+
+@cindex whitespace
+@item
+PCC allows whitespace in the middle of compound assignment operators
+such as @samp{+=}.  GCC, following the ISO standard, does not
+allow this.
+
+@cindex apostrophes
+@cindex @code{'}
+@item
+GCC complains about unterminated character constants inside of
+preprocessing conditionals that fail.  Some programs have English
+comments enclosed in conditionals that are guaranteed to fail; if these
+comments contain apostrophes, GCC will probably report an error.  For
+example, this code would produce an error:
+
+@smallexample
+#if 0
+You can't expect this to work.
+#endif
+@end smallexample
+
+The best solution to such a problem is to put the text into an actual
+C comment delimited by @samp{/*@dots{}*/}.
+
+@item
+Many user programs contain the declaration @samp{long time ();}.  In the
+past, the system header files on many systems did not actually declare
+@code{time}, so it did not matter what type your program declared it to
+return.  But in systems with ISO C headers, @code{time} is declared to
+return @code{time_t}, and if that is not the same as @code{long}, then
+@samp{long time ();} is erroneous.
+
+The solution is to change your program to use appropriate system headers
+(@code{<time.h>} on systems with ISO C headers) and not to declare
+@code{time} if the system header files declare it, or failing that to
+use @code{time_t} as the return type of @code{time}.
+
+@cindex @code{float} as function value type
+@item
+When compiling functions that return @code{float}, PCC converts it to
+a double.  GCC actually returns a @code{float}.  If you are concerned
+with PCC compatibility, you should declare your functions to return
+@code{double}; you might as well say what you mean.
+
+@cindex structures
+@cindex unions
+@item
+When compiling functions that return structures or unions, GCC
+output code normally uses a method different from that used on most
+versions of Unix.  As a result, code compiled with GCC cannot call
+a structure-returning function compiled with PCC, and vice versa.
+
+The method used by GCC is as follows: a structure or union which is
+1, 2, 4 or 8 bytes long is returned like a scalar.  A structure or union
+with any other size is stored into an address supplied by the caller
+(usually in a special, fixed register, but on some machines it is passed
+on the stack).  The target hook @code{TARGET_STRUCT_VALUE_RTX}
+tells GCC where to pass this address.
+
+By contrast, PCC on most target machines returns structures and unions
+of any size by copying the data into an area of static storage, and then
+returning the address of that storage as if it were a pointer value.
+The caller must copy the data from that memory area to the place where
+the value is wanted.  GCC does not use this method because it is
+slower and nonreentrant.
+
+On some newer machines, PCC uses a reentrant convention for all
+structure and union returning.  GCC on most of these machines uses a
+compatible convention when returning structures and unions in memory,
+but still returns small structures and unions in registers.
+
+@opindex fpcc-struct-return
+You can tell GCC to use a compatible convention for all structure and
+union returning with the option @option{-fpcc-struct-return}.
+
+@cindex preprocessing tokens
+@cindex preprocessing numbers
+@item
+GCC complains about program fragments such as @samp{0x74ae-0x4000}
+which appear to be two hexadecimal constants separated by the minus
+operator.  Actually, this string is a single @dfn{preprocessing token}.
+Each such token must correspond to one token in C@.  Since this does not,
+GCC prints an error message.  Although it may appear obvious that what
+is meant is an operator and two values, the ISO C standard specifically
+requires that this be treated as erroneous.
+
+A @dfn{preprocessing token} is a @dfn{preprocessing number} if it
+begins with a digit and is followed by letters, underscores, digits,
+periods and @samp{e+}, @samp{e-}, @samp{E+}, @samp{E-}, @samp{p+},
+@samp{p-}, @samp{P+}, or @samp{P-} character sequences.  (In strict C90
+mode, the sequences @samp{p+}, @samp{p-}, @samp{P+} and @samp{P-} cannot
+appear in preprocessing numbers.)
+
+To make the above program fragment valid, place whitespace in front of
+the minus sign.  This whitespace will end the preprocessing number.
+@end itemize
+

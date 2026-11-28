@@ -1,0 +1,294 @@
+@c GCC 16.1.0 | BLOQUE 0266 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 13989-14278 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@smallexample
+bar (int *array, int offset, int size)
+@{
+  __label__ failure;
+  auto int access (int *, int);
+  /* @r{@dots{}} */
+  int access (int *array, int index)
+    @{
+      if (index > size)
+        goto failure;
+      return array[index + offset];
+    @}
+  /* @r{@dots{}} */
+@}
+@end smallexample
+
+@node Typeof
+@subsection Referring to a Type with @code{typeof}
+@findex typeof
+@findex sizeof
+@cindex macros, types of arguments
+
+Another way to refer to the type of an expression is with @code{typeof}.
+The syntax of using of this keyword looks like @code{sizeof}, but the
+construct acts semantically like a type name defined with @code{typedef}.
+
+There are two ways of writing the argument to @code{typeof}: with an
+expression or with a type.  Here is an example with an expression:
+
+@smallexample
+typeof (x[0](1))
+@end smallexample
+
+@noindent
+This assumes that @code{x} is an array of pointers to functions;
+the type described is that of the values of the functions.
+
+Here is an example with a typename as the argument:
+
+@smallexample
+typeof (int *)
+@end smallexample
+
+@noindent
+Here the type described is that of pointers to @code{int}.
+
+If you are writing a header file that must work when included in ISO C
+programs, write @code{__typeof__} instead of @code{typeof}.
+@xref{Alternate Keywords}.
+
+A @code{typeof} construct can be used anywhere a typedef name can be
+used.  For example, you can use it in a declaration, in a cast, or inside
+of @code{sizeof} or @code{typeof}.
+
+The operand of @code{typeof} is evaluated for its side effects if and
+only if it is an expression of variably modified type or the name of
+such a type.
+
+@code{typeof} is often useful in conjunction with
+statement expressions (@pxref{Statement Exprs}).
+Here is how the two together can
+be used to define a safe ``maximum'' macro which operates on any
+arithmetic type and evaluates each of its arguments exactly once:
+
+@smallexample
+#define max(a,b) \
+  (@{ typeof (a) _a = (a); \
+      typeof (b) _b = (b); \
+    _a > _b ? _a : _b; @})
+@end smallexample
+
+@cindex underscores in variables in macros
+@cindex @samp{_} in variables in macros
+@cindex local variables in macros
+@cindex variables, local, in macros
+@cindex macros, local variables in
+
+The reason for using names that start with underscores for the local
+variables is to avoid conflicts with variable names that occur within the
+expressions that are substituted for @code{a} and @code{b}.  Eventually we
+hope to design a new form of declaration syntax that allows you to declare
+variables whose scopes start only after their initializers; this will be a
+more reliable way to prevent such conflicts.
+
+@noindent
+Some more examples of the use of @code{typeof}:
+
+@itemize @bullet
+@item
+This declares @code{y} with the type of what @code{x} points to.
+
+@smallexample
+typeof (*x) y;
+@end smallexample
+
+@item
+This declares @code{y} as an array of such values.
+
+@smallexample
+typeof (*x) y[4];
+@end smallexample
+
+@item
+This declares @code{y} as an array of pointers to characters:
+
+@smallexample
+typeof (typeof (char *)[4]) y;
+@end smallexample
+
+@noindent
+It is equivalent to the following traditional C declaration:
+
+@smallexample
+char *y[4];
+@end smallexample
+
+To see the meaning of the declaration using @code{typeof}, and why it
+might be a useful way to write, rewrite it with these macros:
+
+@smallexample
+#define pointer(T)  typeof(T *)
+#define array(T, N) typeof(T [N])
+@end smallexample
+
+@noindent
+Now the declaration can be rewritten this way:
+
+@smallexample
+array (pointer (char), 4) y;
+@end smallexample
+
+@noindent
+Thus, @code{array (pointer (char), 4)} is the type of arrays of 4
+pointers to @code{char}.
+@end itemize
+
+The ISO C23 operator @code{typeof_unqual} is available in ISO C23 mode
+and its result is the non-atomic unqualified version of what @code{typeof}
+operator returns.  Alternate spelling @code{__typeof_unqual__} is
+available in all C modes and provides non-atomic unqualified version of
+what @code{__typeof__} operator returns.
+@xref{Alternate Keywords}.
+
+@cindex @code{__auto_type} in GNU C
+In GNU C, but not GNU C++, you may also declare the type of a variable
+as @code{__auto_type}.  In that case, the declaration must declare
+only one variable, whose declarator must just be an identifier, the
+declaration must be initialized, and the type of the variable is
+determined by the initializer; the name of the variable is not in
+scope until after the initializer.  (In C++, you should use C++11
+@code{auto} for this purpose.)  Using @code{__auto_type}, the
+``maximum'' macro above could be written as:
+
+@smallexample
+#define max(a,b) \
+  (@{ __auto_type _a = (a); \
+      __auto_type _b = (b); \
+    _a > _b ? _a : _b; @})
+@end smallexample
+
+Using @code{__auto_type} instead of @code{typeof} has two advantages:
+
+@itemize @bullet
+@item Each argument to the macro appears only once in the expansion of
+the macro.  This prevents the size of the macro expansion growing
+exponentially when calls to such macros are nested inside arguments of
+such macros.
+
+@item If the argument to the macro has variably modified type, it is
+evaluated only once when using @code{__auto_type}, but twice if
+@code{typeof} is used.
+@end itemize
+
+@node _Countof
+@subsection Determining the Number of Elements of Arrays
+@findex _Countof
+@findex number of elements
+
+The keyword @code{_Countof} determines
+the number of elements of an array operand.
+Its syntax is similar to @code{sizeof}.
+The operand must be
+a parenthesized complete array type name
+or an expression of such a type.
+For example:
+
+@smallexample
+int a[n];
+_Countof (a);  // returns n
+_Countof (int [7][3]);  // returns 7
+@end smallexample
+
+The result of this operator is an integer constant expression,
+unless the array has a variable number of elements.
+The operand is only evaluated
+if the array has a variable number of elements.
+For example:
+
+@smallexample
+_Countof (int [7][n++]);  // integer constant expression
+_Countof (int [n++][7]);  // run-time value; n++ is evaluated
+@end smallexample
+
+@node _Maxof and _Minof
+@subsection The maximum and minimum representable values of a type
+@findex _Maxof
+@findex _Minof
+
+The keywords @code{_Maxof} and @code{_Minof} determine
+the maximum and minimum representable values of an integer type.
+Their syntax is similar to @code{sizeof}.
+The operand must be
+a parenthesized integer type.
+The result of these operators is an integer constant expression
+of the same type as the operand.
+For example:
+
+@smallexample
+_Maxof (int);    // returns '(int) INT_MAX'
+_Minof (short);  // returns '(short) SHRT_MIN'
+@end smallexample
+
+@node Offsetof
+@subsection Support for @code{offsetof}
+@findex __builtin_offsetof
+
+GCC implements for both C and C++ a syntactic extension to implement
+the @code{offsetof} macro.
+
+@smallexample
+primary:
+        "__builtin_offsetof" "(" @code{typename} "," offsetof_member_designator ")"
+
+offsetof_member_designator:
+          @code{identifier}
+        | offsetof_member_designator "." @code{identifier}
+        | offsetof_member_designator "[" @code{expr} "]"
+@end smallexample
+
+This extension is sufficient such that
+
+@smallexample
+#define offsetof(@var{type}, @var{member})  __builtin_offsetof (@var{type}, @var{member})
+@end smallexample
+
+@noindent
+is a suitable definition of the @code{offsetof} macro.  In C++, @var{type}
+may be dependent.  In either case, @var{member} may consist of a single
+identifier, or a sequence of member accesses and array references.
+
+@node Alignment
+@subsection Determining the Alignment of Functions, Types or Variables
+@cindex alignment
+@cindex type alignment
+@cindex variable alignment
+
+The keyword @code{__alignof__} determines the alignment requirement of
+a function, object, or a type, or the minimum alignment usually required
+by a type.  Its syntax is just like @code{sizeof} and C11 @code{_Alignof}.
+
+For example, if the target machine requires a @code{double} value to be
+aligned on an 8-byte boundary, then @code{__alignof__ (double)} is 8.
+This is true on many RISC machines.  On more traditional machine
+designs, @code{__alignof__ (double)} is 4 or even 2.
+
+Some machines never actually require alignment; they allow references to any
+data type even at an odd address.  For these machines, @code{__alignof__}
+reports the smallest alignment that GCC gives the data type, usually as
+mandated by the target ABI.
+
+If the operand of @code{__alignof__} is an lvalue rather than a type,
+its value is the required alignment for its type, taking into account
+any minimum alignment specified by attribute @code{aligned}
+(@pxref{Common Attributes}).  For example, after this
+declaration:
+
+@smallexample
+struct foo @{ int x; char y; @} foo1;
+@end smallexample
+
+@noindent
+the value of @code{__alignof__ (foo1.y)} is 1, even though its actual
+alignment is probably 2 or 4, the same as @code{__alignof__ (int)}.
+It is an error to ask for the alignment of an incomplete type other
+than @code{void}.
+
+If the operand of the @code{__alignof__} expression is a function,
+the expression evaluates to the alignment of the function which may
+be specified by attribute @code{aligned} (@pxref{Common Attributes}).
+

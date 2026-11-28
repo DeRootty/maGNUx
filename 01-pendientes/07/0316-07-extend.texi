@@ -1,0 +1,195 @@
+@c GCC 16.1.0 | BLOQUE 0316 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 25461-25651 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@smallexample
+vector __int128 vec_vaddcuq (vector __int128, vector __int128);
+vector __uint128 vec_vaddcuq (vector __uint128, vector __uint128);
+
+vector __int128 vec_vadduqm (vector __int128, vector __int128);
+vector __uint128 vec_vadduqm (vector __uint128, vector __uint128);
+
+vector __int128 vec_vaddecuq (vector __int128, vector __int128,
+                                vector __int128);
+vector __uint128 vec_vaddecuq (vector __uint128, vector __uint128,
+                                 vector __uint128);
+
+vector __int128 vec_vaddeuqm (vector __int128, vector __int128,
+                                vector __int128);
+vector __uint128 vec_vaddeuqm (vector __uint128, vector __uint128,
+                                 vector __uint128);
+
+vector __int128 vec_vsubecuq (vector __int128, vector __int128,
+                                vector __int128);
+vector __uint128 vec_vsubecuq (vector __uint128, vector __uint128,
+                                 vector __uint128);
+
+vector __int128 vec_vsubeuqm (vector __int128, vector __int128,
+                                vector __int128);
+vector __uint128 vec_vsubeuqm (vector __uint128, vector __uint128,
+                                 vector __uint128);
+
+vector __int128 vec_vsubcuq (vector __int128, vector __int128);
+vector __uint128 vec_vsubcuq (vector __uint128, vector __uint128);
+
+__int128 vec_vsubuqm (__int128, __int128);
+__uint128 vec_vsubuqm (__uint128, __uint128);
+
+vector __int128 __builtin_bcdadd (vector __int128, vector __int128, const int);
+vector unsigned char __builtin_bcdadd (vector unsigned char, vector unsigned char,
+                                       const int);
+int __builtin_bcdadd_lt (vector __int128, vector __int128, const int);
+int __builtin_bcdadd_lt (vector unsigned char, vector unsigned char, const int);
+int __builtin_bcdadd_eq (vector __int128, vector __int128, const int);
+int __builtin_bcdadd_eq (vector unsigned char, vector unsigned char, const int);
+int __builtin_bcdadd_gt (vector __int128, vector __int128, const int);
+int __builtin_bcdadd_gt (vector unsigned char, vector unsigned char, const int);
+int __builtin_bcdadd_ov (vector __int128, vector __int128, const int);
+int __builtin_bcdadd_ov (vector unsigned char, vector unsigned char, const int);
+
+vector __int128 __builtin_bcdsub (vector __int128, vector __int128, const int);
+vector unsigned char __builtin_bcdsub (vector unsigned char, vector unsigned char,
+                                       const int);
+int __builtin_bcdsub_le (vector __int128, vector __int128, const int);
+int __builtin_bcdsub_le (vector unsigned char, vector unsigned char, const int);
+int __builtin_bcdsub_lt (vector __int128, vector __int128, const int);
+int __builtin_bcdsub_lt (vector unsigned char, vector unsigned char, const int);
+int __builtin_bcdsub_eq (vector __int128, vector __int128, const int);
+int __builtin_bcdsub_eq (vector unsigned char, vector unsigned char, const int);
+int __builtin_bcdsub_gt (vector __int128, vector __int128, const int);
+int __builtin_bcdsub_gt (vector unsigned char, vector unsigned char, const int);
+int __builtin_bcdsub_ge (vector __int128, vector __int128, const int);
+int __builtin_bcdsub_ge (vector unsigned char, vector unsigned char, const int);
+int __builtin_bcdsub_ov (vector __int128, vector __int128, const int);
+int __builtin_bcdsub_ov (vector unsigned char, vector unsigned char, const int);
+@end smallexample
+
+@node PowerPC AltiVec Built-in Functions Available on ISA 3.0
+@subsubsection PowerPC AltiVec Built-in Functions Available on ISA 3.0
+
+The following additional built-in functions are also available for the
+PowerPC family of processors, starting with ISA 3.0
+(@option{-mcpu=power9}) or later.
+
+Only instructions excluded from the PVIPR are listed here.
+
+@smallexample
+unsigned int scalar_extract_exp (double source);
+unsigned long long int scalar_extract_exp (__ieee128 source);
+
+unsigned long long int scalar_extract_sig (double source);
+unsigned __int128 scalar_extract_sig (__ieee128 source);
+
+double scalar_insert_exp (unsigned long long int significand,
+                          unsigned long long int exponent);
+double scalar_insert_exp (double significand, unsigned long long int exponent);
+
+ieee_128 scalar_insert_exp (unsigned __int128 significand,
+                            unsigned long long int exponent);
+ieee_128 scalar_insert_exp (ieee_128 significand, unsigned long long int exponent);
+vector ieee_128 scalar_insert_exp (vector unsigned __int128 significand,
+                                   vector unsigned long long exponent);
+vector unsigned long long scalar_extract_exp_to_vec (ieee_128);
+vector unsigned __int128  scalar_extract_sig_to_vec (ieee_128);
+
+int scalar_cmp_exp_gt (double arg1, double arg2);
+int scalar_cmp_exp_lt (double arg1, double arg2);
+int scalar_cmp_exp_eq (double arg1, double arg2);
+int scalar_cmp_exp_unordered (double arg1, double arg2);
+
+bool scalar_test_data_class (float source, const int condition);
+bool scalar_test_data_class (double source, const int condition);
+bool scalar_test_data_class (__ieee128 source, const int condition);
+
+bool scalar_test_neg (float source);
+bool scalar_test_neg (double source);
+bool scalar_test_neg (__ieee128 source);
+@end smallexample
+
+The @code{scalar_extract_exp} with a 64-bit source argument
+function requires an environment supporting ISA 3.0 or later.
+The @code{scalar_extract_exp} with a 128-bit source argument
+and @code{scalar_extract_sig}
+functions require a 64-bit environment supporting ISA 3.0 or later.
+The @code{scalar_extract_exp} and @code{scalar_extract_sig} built-in
+functions return the significand and the biased exponent value
+respectively of their @code{source} arguments.
+When supplied with a 64-bit @code{source} argument, the
+result returned by @code{scalar_extract_sig} has
+the @code{0x0010000000000000} bit set if the
+function's @code{source} argument is in normalized form.
+Otherwise, this bit is set to 0.
+When supplied with a 128-bit @code{source} argument, the
+@code{0x00010000000000000000000000000000} bit of the result is
+treated similarly.
+Note that the sign of the significand is not represented in the result
+returned from the @code{scalar_extract_sig} function.  Use the
+@code{scalar_test_neg} function to test the sign of its @code{double}
+argument.
+
+The @code{scalar_insert_exp}
+functions require a 64-bit environment supporting ISA 3.0 or later.
+When supplied with a 64-bit first argument, the
+@code{scalar_insert_exp} built-in function returns a double-precision
+floating point value that is constructed by assembling the values of its
+@code{significand} and @code{exponent} arguments.  The sign of the
+result is copied from the most significant bit of the
+@code{significand} argument.  The significand and exponent components
+of the result are composed of the least significant 11 bits of the
+@code{exponent} argument and the least significant 52 bits of the
+@code{significand} argument respectively.
+
+When supplied with a 128-bit first argument, the
+@code{scalar_insert_exp} built-in function returns a quad-precision
+IEEE floating point value if the two arguments were scalar.  If the two
+arguments are vectors, the return value is a vector IEEE floating point value.
+The sign bit of the result is copied from the most significant bit of the
+@code{significand} argument.  The significand and exponent components of the
+result are composed of the least significant 15 bits of the @code{exponent}
+argument (element 0 on big-endian and element 1 on little-endian) and the
+least significant 112 bits of the @code{significand} argument
+respectively.  Note, the @code{significand} is the scalar argument or in the
+case of vector arguments, @code{significand} is element 0 for big-endian and
+element 1 for little-endian.
+
+The @code{scalar_extract_exp_to_vec},
+and @code{scalar_extract_sig_to_vec} are similar to
+@code{scalar_extract_exp}, @code{scalar_extract_sig} except they return
+a vector result of type unsigned long long and unsigned __int128 respectively.
+
+The @code{scalar_cmp_exp_gt}, @code{scalar_cmp_exp_lt},
+@code{scalar_cmp_exp_eq}, and @code{scalar_cmp_exp_unordered} built-in
+functions return a non-zero value if @code{arg1} is greater than, less
+than, equal to, or not comparable to @code{arg2} respectively.  The
+arguments are not comparable if one or the other equals NaN (not a
+number). 
+
+The @code{scalar_test_data_class} built-in function returns 1
+if any of the condition tests enabled by the value of the
+@code{condition} variable are true, and 0 otherwise.  The
+@code{condition} argument must be a compile-time constant integer with
+value not exceeding 127.  The
+@code{condition} argument is encoded as a bitmask with each bit
+enabling the testing of a different condition, as characterized by the
+following:
+@smallexample
+0x40    Test for NaN
+0x20    Test for +Infinity
+0x10    Test for -Infinity
+0x08    Test for +Zero
+0x04    Test for -Zero
+0x02    Test for +Denormal
+0x01    Test for -Denormal
+@end smallexample
+
+The @code{scalar_test_neg} built-in function returns 1 if its
+@code{source} argument holds a negative value, 0 otherwise.
+
+The following built-in functions are also available for the PowerPC family
+of processors, starting with ISA 3.0 or later
+(@option{-mcpu=power9}).  These string functions are described
+separately in order to group the descriptions closer to the function
+prototypes.
+
+Only functions excluded from the PVIPR are listed here.
+

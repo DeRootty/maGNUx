@@ -1,0 +1,214 @@
+@c GCC 16.1.0 | BLOQUE 0014 | 03-06
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 5217-5426 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Objective-C and Objective-C++ Dialect Options
+@section Options Controlling Objective-C and Objective-C++ Dialects
+
+@cindex compiler options, Objective-C and Objective-C++
+@cindex Objective-C and Objective-C++ options, command-line
+@cindex options, Objective-C and Objective-C++
+(NOTE: This manual does not describe the Objective-C and Objective-C++
+languages themselves.  @xref{Standards,,Language Standards
+Supported by GCC}, for references.)
+
+This section describes the command-line options that are only meaningful
+for Objective-C and Objective-C++ programs.  You can also use most of
+the language-independent GNU compiler options.
+For example, you might compile a file @file{some_class.m} like this:
+
+@smallexample
+gcc -g -fgnu-runtime -O -c some_class.m
+@end smallexample
+
+@noindent
+In this example, @option{-fgnu-runtime} is an option meant only for
+Objective-C and Objective-C++ programs; you can use the other options with
+any language supported by GCC@.
+
+Note that since Objective-C is an extension of the C language, Objective-C
+compilations may also use options specific to the C front-end (e.g.,
+@option{-Wtraditional}).  Similarly, Objective-C++ compilations may use
+C++-specific options (e.g., @option{-Wabi}).
+
+Here is a list of options that are @emph{only} for compiling Objective-C
+and Objective-C++ programs:
+
+@table @gcctabopt
+@opindex fconstant-string-class
+@item -fconstant-string-class=@var{class-name}
+Use @var{class-name} as the name of the class to instantiate for each
+literal string specified with the syntax @code{@@"@dots{}"}.  The default
+class name is @code{NXConstantString} if the GNU runtime is being used, and
+@code{NSConstantString} if the NeXT runtime is being used (see below).  On
+Darwin / macOS platforms, the @option{-fconstant-cfstrings} option, if
+also present, overrides the @option{-fconstant-string-class} setting and cause
+@code{@@"@dots{}"} literals to be laid out as constant CoreFoundation strings.
+Note that @option{-fconstant-cfstrings} is an alias for the target-specific
+@option{-mconstant-cfstrings} equivalent.
+
+@opindex fgnu-runtime
+@item -fgnu-runtime
+Generate object code compatible with the standard GNU Objective-C
+runtime.  This is the default for most types of systems.
+
+@opindex fnext-runtime
+@item -fnext-runtime
+Generate output compatible with the NeXT runtime.  This is the default
+for NeXT-based systems, including Darwin / macOS.  The macro
+@code{__NEXT_RUNTIME__} is predefined if (and only if) this option is
+used.
+
+@opindex fno-nil-receivers
+@opindex fnil-receivers
+@item -fno-nil-receivers
+Assume that all Objective-C message dispatches (@code{[receiver
+message:arg]}) in this translation unit ensure that the receiver is
+not @code{nil}.  This allows for more efficient entry points in the
+runtime to be used.  This option is only available in conjunction with
+the NeXT runtime and ABI version 0 or 1.
+
+@opindex fobjc-abi-version
+@item -fobjc-abi-version=@var{n}
+Use version @var{n} of the Objective-C ABI for the selected runtime.
+This option is currently supported only for the NeXT runtime.  In that
+case, Version 0 is the traditional (32-bit) ABI without support for
+properties and other Objective-C 2.0 additions.  Version 1 is the
+traditional (32-bit) ABI with support for properties and other
+Objective-C 2.0 additions.  Version 2 is the modern (64-bit) ABI.  If
+nothing is specified, the default is Version 0 on 32-bit target
+machines, and Version 2 on 64-bit target machines.
+
+@opindex fobjc-call-cxx-cdtors
+@opindex fno-objc-call-cxx-cdtors
+@item -fobjc-call-cxx-cdtors
+For each Objective-C class, check if any of its instance variables is a
+C++ object with a non-trivial default constructor.  If so, synthesize a
+special @code{- (id) .cxx_construct} instance method which runs
+non-trivial default constructors on any such instance variables, in order,
+and then return @code{self}.  Similarly, check if any instance variable
+is a C++ object with a non-trivial destructor, and if so, synthesize a
+special @code{- (void) .cxx_destruct} method which runs
+all such default destructors, in reverse order.
+
+The @code{- (id) .cxx_construct} and @code{- (void) .cxx_destruct}
+methods thusly generated only operate on instance variables
+declared in the current Objective-C class, and not those inherited
+from superclasses.  It is the responsibility of the Objective-C
+runtime to invoke all such methods in an object's inheritance
+hierarchy.  The @code{- (id) .cxx_construct} methods are invoked
+by the runtime immediately after a new object instance is allocated;
+the @code{- (void) .cxx_destruct} methods are invoked immediately
+before the runtime deallocates an object instance.
+
+As of this writing, only the NeXT runtime on Mac OS X 10.4 and later has
+support for invoking the @code{- (id) .cxx_construct} and
+@code{- (void) .cxx_destruct} methods.
+
+@opindex fobjc-direct-dispatch
+@opindex fno-objc-direct-dispatch
+@item -fobjc-direct-dispatch
+Allow fast jumps to the message dispatcher.  On Darwin this is
+accomplished via the comm page.
+
+@opindex fobjc-exceptions
+@opindex fno-objc-exceptions
+@item -fobjc-exceptions
+Enable syntactic support for structured exception handling in
+Objective-C, similar to what is offered by C++.  This option
+is required to use the Objective-C keywords @code{@@try},
+@code{@@throw}, @code{@@catch}, @code{@@finally} and
+@code{@@synchronized}.  This option is available with both the GNU
+runtime and the NeXT runtime (but not available in conjunction with
+the NeXT runtime on Mac OS X 10.2 and earlier).
+
+@opindex fobjc-gc
+@opindex fno-objc-gc
+@item -fobjc-gc
+Enable garbage collection (GC) in Objective-C and Objective-C++
+programs.  This option is only available with the NeXT runtime; the
+GNU runtime has a different garbage collection implementation that
+does not require special compiler flags.
+
+@opindex fobjc-nilcheck
+@opindex fno-objc-nilcheck
+@item -fobjc-nilcheck
+For the NeXT runtime with version 2 of the ABI, check for a nil
+receiver in method invocations before doing the actual method call.
+This is the default and can be disabled using
+@option{-fno-objc-nilcheck}.  Class methods and super calls are never
+checked for nil in this way no matter what this flag is set to.
+Currently this flag does nothing when the GNU runtime, or an older
+version of the NeXT runtime ABI, is used.
+
+@opindex fobjc-std
+@item -fobjc-std=objc1
+Conform to the language syntax of Objective-C 1.0, the language
+recognized by GCC 4.0.  This only affects the Objective-C additions to
+the C/C++ language; it does not affect conformance to C/C++ standards,
+which is controlled by the separate C/C++ dialect option flags.  When
+this option is used with the Objective-C or Objective-C++ compiler,
+any Objective-C syntax that is not recognized by GCC 4.0 is rejected.
+This is useful if you need to make sure that your Objective-C code can
+be compiled with older versions of GCC@.
+
+@opindex freplace-objc-classes
+@opindex fno-replace-objc-classes
+@item -freplace-objc-classes
+Emit a special marker instructing @command{ld(1)} not to statically link in
+the resulting object file, and allow @command{dyld(1)} to load it in at
+run time instead.  This is used in conjunction with the Fix-and-Continue
+debugging mode, where the object file in question may be recompiled and
+dynamically reloaded in the course of program execution, without the need
+to restart the program itself.  Currently, Fix-and-Continue functionality
+is only available in conjunction with the NeXT runtime on Mac OS X 10.3
+and later.
+
+@opindex fzero-link
+@opindex fno-zero-link
+@item -fzero-link
+When compiling for the NeXT runtime, the compiler ordinarily replaces calls
+to @code{objc_getClass("@dots{}")} (when the name of the class is known at
+compile time) with static class references that get initialized at load time,
+which improves run-time performance.  Specifying the @option{-fzero-link} flag
+suppresses this behavior and causes calls to @code{objc_getClass("@dots{}")}
+to be retained.  This is useful in Zero-Link debugging mode, since it allows
+for individual class implementations to be modified during program execution.
+The GNU runtime currently always retains calls to @code{objc_get_class("@dots{}")}
+regardless of command-line options.
+
+@opindex fno-local-ivars
+@opindex flocal-ivars
+@item -fno-local-ivars
+By default instance variables in Objective-C can be accessed as if
+they were local variables from within the methods of the class they're
+declared in.  This can lead to shadowing between instance variables
+and other variables declared either locally inside a class method or
+globally with the same name.  Specifying the @option{-fno-local-ivars}
+flag disables this behavior thus avoiding variable shadowing issues.
+
+@opindex fivar-visibility
+@item -fivar-visibility=@r{[}public@r{|}protected@r{|}private@r{|}package@r{]}
+Set the default instance variable visibility to the specified option
+so that instance variables declared outside the scope of any access
+modifier directives default to the specified visibility.
+
+@opindex gen-decls
+@item -gen-decls
+Dump interface declarations for all classes seen in the source file to a
+file named @file{@var{sourcename}.decl}.
+
+@opindex Wassign-intercept
+@opindex Wno-assign-intercept
+@item -Wassign-intercept @r{(Objective-C and Objective-C++ only)}
+Warn whenever an Objective-C assignment is being intercepted by the
+garbage collector.
+
+@opindex Wproperty-assign-default
+@opindex Wno-property-assign-default
+@item -Wno-property-assign-default @r{(Objective-C and Objective-C++ only)}
+Do not warn if a property for an Objective-C object has no assign
+semantics specified.
+
+@opindex Wno-protocol
+@opindex Wprotocol

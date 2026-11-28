@@ -1,0 +1,44 @@
+@c GCC 16.1.0 | BLOQUE 0382 | 24-indices
+@c Fuente: gcc/doc/gcc.texi | blob: 495f09bc9d3ec73daec1ebd3f32a5412c5fde34a
+@c Lineas originales: 207-246 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Indices
+@appendix Indices
+
+@menu
+* Option Index::                Index to command line options.
+* Attribute Index::             Index of GNU extension attributes.
+* Concept and Symbol Index::    Index of concepts and symbol names.
+@end menu
+
+@node Option Index
+@appendixsec Option Index
+
+GCC's command-line options are indexed here without any initial
+@samp{-} or @samp{--}.  Where an option has both positive and negative
+forms (such as @option{-f@var{option}} and
+@option{-fno-@var{option}}), relevant entries in the manual are
+indexed under the most appropriate form; it may sometimes be useful to
+look up both forms.
+
+@printindex op
+
+@node Attribute Index
+@appendixsec Attribute Index
+
+This index lists GNU extension attributes only, e.g. those that should
+use the @samp{gnu::} namespace prefix in the standard C and C++
+attribute syntax.
+
+@printindex at
+
+@node Concept and Symbol Index
+@appendixsec Concept and Symbol Index
+
+@printindex cp
+
+@c ---------------------------------------------------------------------
+@c Epilogue
+@c ---------------------------------------------------------------------
+
+@bye

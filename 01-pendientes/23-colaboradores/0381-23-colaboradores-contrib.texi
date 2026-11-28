@@ -1,0 +1,209 @@
+@c GCC 16.1.0 | BLOQUE 0381 | 23-colaboradores
+@c Fuente: gcc/doc/contrib.texi | blob: 6594fe78d2cbfe7619e09c2ef65ad4faf1d77221
+@c Lineas originales: 1596-1800 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item
+Sidney Cadot
+
+@item
+Bradford Castalia
+
+@item
+Robert Clark
+
+@item
+Jonathan Corbet
+
+@item
+Ralph Doncaster
+
+@item
+Richard Emberson
+
+@item
+Levente Farkas
+
+@item
+Graham Fawcett
+
+@item
+Mark Fernyhough
+
+@item
+Robert A. French
+
+@item
+J@"orgen Freyh
+
+@item
+Mark K. Gardner
+
+@item
+Charles-Antoine Gauthier
+
+@item
+Yung Shing Gene
+
+@item
+David Gilbert
+
+@item
+Simon Gornall
+
+@item
+Fred Gray
+
+@item
+John Griffin
+
+@item
+Patrik Hagglund
+
+@item
+Phil Hargett
+
+@item
+Amancio Hasty
+
+@item
+Takafumi Hayashi
+
+@item
+Bryan W. Headley
+
+@item
+Kevin B. Hendricks
+
+@item
+Joep Jansen
+
+@item
+Christian Joensson
+
+@item
+Michel Kern
+
+@item
+David Kidd
+
+@item
+Tobias Kuipers
+
+@item
+Anand Krishnaswamy
+
+@item
+A. O. V. Le Blanc
+
+@item
+llewelly
+
+@item
+Damon Love
+
+@item
+Brad Lucier
+
+@item
+Matthias Klose
+
+@item
+Martin Knoblauch
+
+@item
+Rick Lutowski
+
+@item
+Jesse Macnish
+
+@item
+Stefan Morrell
+
+@item
+Anon A. Mous
+
+@item
+Matthias Mueller
+
+@item
+Pekka Nikander
+
+@item
+Rick Niles
+
+@item
+Jon Olson
+
+@item
+Magnus Persson
+
+@item
+Chris Pollard
+
+@item
+Richard Polton
+
+@item
+Derk Reefman
+
+@item
+David Rees
+
+@item
+Paul Reilly
+
+@item
+Tom Reilly
+
+@item
+Torsten Rueger
+
+@item
+Danny Sadinoff
+
+@item
+Marc Schifer
+
+@item
+Erik Schnetter
+
+@item
+Wayne K. Schroll
+
+@item
+David Schuler
+
+@item
+Vin Shelton
+
+@item
+Tim Souder
+
+@item
+Adam Sulmicki
+
+@item
+Bill Thorson
+
+@item
+George Talbot
+
+@item
+Pedro A. M. Vazquez
+
+@item
+Gregory Warnes
+
+@item
+Ian Watson
+
+@item
+David E. Young
+
+@item
+And many others
+@end itemize
+
+And finally we'd like to thank everyone who uses the compiler, provides
+feedback and generally reminds us why we're doing this work in the first
+place.

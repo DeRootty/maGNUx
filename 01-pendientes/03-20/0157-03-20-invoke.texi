@@ -1,0 +1,417 @@
+@c GCC 16.1.0 | BLOQUE 0157 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 35512-35924 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -msse4
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1 and SSE4.2 built-in functions
+and code generation.
+
+Note that @option{-msse4} enables both SSE4.1 and SSE4.2 support,
+while @option{-mno-sse4} turns off those features; neither form of the
+option affects SSE4A support, controlled separately by
+@option{-msse4a}.
+
+@opindex msse4a
+@opindex mno-sse4a
+@item -msse4a
+Support MMX, SSE, SSE2, SSE3 and SSE4A built-in functions and code generation.
+
+@opindex mavx
+@opindex mno-avx
+@item -mavx
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2 and AVX built-in
+functions and code generation.
+
+@opindex mavx2
+@opindex mno-avx2
+@item -mavx2
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX and AVX2
+built-in functions and code generation.
+
+@opindex mavx512f
+@opindex mno-avx512f
+@item -mavx512f
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2 and
+AVX512F built-in functions and code generation.
+
+@opindex mavx512cd
+@opindex mno-avx512cd
+@item -mavx512cd
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2,
+AVX512F and AVX512CD built-in functions and code generation.
+
+@opindex mavx512vl
+@opindex mno-avx512vl
+@item -mavx512vl
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2,
+AVX512F and AVX512VL built-in functions and code generation.
+
+@opindex mavx512bw
+@opindex mno-avx512bw
+@item -mavx512bw
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2,
+AVX512F and AVX512BW built-in functions and code generation.
+
+@opindex mavx512dq
+@opindex mno-avx512dq
+@item -mavx512dq
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2,
+AVX512F and AVX512DQ built-in functions and code generation.
+
+@opindex mavx512ifma
+@opindex mno-avx512ifma
+@item -mavx512ifma
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2,
+AVX512F and AVX512IFMA built-in functions and code generation.
+
+@opindex mavx512vbmi
+@opindex mno-avx512vbmi
+@item -mavx512vbmi
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2,
+AVX512F and AVX512VBMI built-in functions and code generation.
+
+@opindex mavx512vpopcntdq
+@opindex mno-avx512vpopcntdq
+@item -mavx512vpopcntdq
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2,
+AVX512F and AVX512VPOPCNTDQ built-in functions and code generation.
+
+@opindex mavx512vp2intersect
+@opindex mno-avx512vp2intersect
+@item -mavx512vp2intersect
+Support AVX512VP2INTERSECT built-in functions and code generation.
+
+@opindex mavx512vnni
+@opindex mno-avx512vnni
+@item -mavx512vnni
+Support AVX512VNNI built-in functions and code generation.
+
+@opindex mavx512vbmi2
+@opindex mno-avx512vbmi2
+@item -mavx512vbmi2
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2, AVX512F
+and AVX512VBMI2 built-in functions and code generation.
+
+@opindex mavx512bf16
+@opindex mno-avx512bf16
+@item -mavx512bf16
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2, AVX512F and
+AVX512BF16 built-in functions and code generation.
+
+@opindex mavx512fp16
+@opindex mno-avx512fp16
+@item -mavx512fp16
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2, AVX512F and
+AVX512-FP16 built-in functions and code generation.
+
+@opindex mavx512bitalg
+@opindex mno-avx512bitalg
+@item -mavx512bitalg
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2, AVX512F and
+AVX512BITALG built-in functions and code generation.
+
+@opindex mavx512bmm
+@opindex mno-avx512bmm
+@item -mavx512bmm
+Support AVX512BMM built-in functions and code generation.
+
+@opindex mavxvnni
+@opindex mno-avxvnni
+@item -mavxvnni
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2, and
+AVXVNNI built-in functions and code generation.
+
+@opindex mavxifma
+@opindex mno-avxifma
+@item -mavxifma
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2, and
+AVXIFMA built-in functions and code generation.
+
+@opindex mavxvnniint8
+@opindex mno-avxvnniint8
+@item -mavxvnniint8
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2 and
+AVXVNNIINT8 built-in functions and code generation.
+
+@opindex mavxneconvert
+@opindex mno-avxneconvert
+@item -mavxneconvert
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2, and
+AVXNECONVERT build-in functions and code generation.
+
+@opindex mavxvnniint16
+@opindex mno-avxvnniint16
+@item -mavxvnniint16
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2 and
+AVXVNNIINT16 built-in functions and code generation.
+
+@opindex mavx10.1
+@opindex mno-avx10.1
+@item -mavx10.1
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2,
+and AVX10.1 built-in functions and code generation.
+
+@opindex mavx10.2
+@opindex mno-avx10.2
+@item -mavx10.2
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX, AVX2,
+AVX10.1 and AVX10.2 built-in functions and code generation.
+
+@opindex msha
+@opindex mno-sha
+@item -msha
+Support SHA1 and SHA256 built-in functions and code generation.
+
+@opindex maes
+@opindex mno-aes
+@item -maes
+Support AES built-in functions and code generation.
+
+@opindex mpclmul
+@opindex mno-pclmul
+@item -mpclmul
+Support PCLMUL built-in functions and code generation.
+
+@opindex mclflushopt
+@opindex mno-clflushopt
+@item -mclflushopt
+Support CLFLUSHOPT instructions.
+
+@opindex mclwb
+@opindex mno-clwb
+@item -mclwb
+Support CLWB instruction.
+
+@opindex mfsgsbase
+@opindex mno-fsgsbase
+@item -mfsgsbase
+Support FSGSBASE built-in functions and code generation.
+
+@opindex mptwrite
+@opindex mno-ptwrite
+@item -mptwrite
+Support PTWRITE built-in functions and code generation.
+
+@opindex mrdrnd
+@opindex mno-rdrnd
+@item -mrdrnd
+Support RDRND built-in functions and code generation.
+
+@opindex mf16c
+@opindex mno-f16c
+@item -mf16c
+Support F16C built-in functions and code generation.
+
+@opindex mfma
+@opindex mno-fma
+@item -mfma
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AVX and FMA
+built-in functions and code generation.
+
+@opindex mfma4
+@opindex mno-fma4
+@item -mfma4
+Support FMA4 built-in functions and code generation.
+
+@opindex mpconfig
+@opindex mno-pconfig
+@item -mpconfig
+Support PCONFIG built-in functions and code generation.
+
+@opindex mwbnoinvd
+@opindex mno-wbnoinvd
+@item -mwbnoinvd
+Support WBNOINVD built-in functions and code generation.
+
+@opindex mprfchw
+@opindex mno-prfchw
+@item -mprfchw
+Support PREFETCHW instruction.
+
+@opindex mrdpid
+@opindex mno-rdpid
+@item -mrdpid
+Support RDPID built-in functions and code generation.
+
+@opindex mrdseed
+@opindex mno-rdseed
+@item -mrdseed
+Support RDSEED instruction.
+
+@opindex msgx
+@opindex mno-sgx
+@item -msgx
+Support SGX built-in functions and code generation.
+
+@opindex mxop
+@opindex mno-xop
+@item -mxop
+Support XOP built-in functions and code generation.
+
+@opindex mlwp
+@opindex mno-lwp
+@item -mlwp
+Support LWP built-in functions and code generation.
+
+@opindex m3dnow
+@opindex mno-3dnow
+@item -m3dnow
+Support 3DNow! built-in functions.
+
+@opindex m3dnowa
+@opindex mno-3dnowa
+@item -m3dnowa
+Support Athlon 3Dnow! built-in functions.
+
+@opindex mpopcnt
+@opindex mno-popcnt
+@item -mpopcnt
+Support code generation of popcnt instruction.
+
+@opindex mabm
+@opindex mno-abm
+@item -mabm
+Support code generation of Advanced Bit Manipulation (ABM) instructions.
+
+@opindex madx
+@opindex mno-adx
+@item -madx
+Support flag-preserving add-carry instructions.
+
+@opindex mbmi
+@opindex mno-bmi
+@item -mbmi
+Support BMI built-in functions and code generation.
+
+@opindex mbmi2
+@opindex mno-bmi2
+@item -mbmi2
+Support BMI2 built-in functions and code generation.
+
+@opindex mlzcnt
+@opindex mno-lzcnt
+@item -mlzcnt
+Support LZCNT built-in function and code generation.
+
+@opindex mfxsr
+@opindex mno-fxsr
+@item -mfxsr
+Support FXSAVE and FXRSTOR instructions.
+
+@opindex mxsave
+@opindex mno-xsave
+@item -mxsave
+Support XSAVE and XRSTOR instructions.
+
+@opindex mxsaveopt
+@opindex mno-xsaveopt
+@item -mxsaveopt
+Support XSAVEOPT instruction.
+
+@opindex mxsavec
+@opindex mno-xsavec
+@item -mxsavec
+Support XSAVEC instructions.
+
+@opindex mxsaves
+@opindex mno-xsaves
+@item -mxsaves
+Support XSAVES and XRSTORS instructions.
+
+@opindex mrtm
+@opindex mno-rtm
+@item -mrtm
+Support RTM built-in functions and code generation.
+
+@opindex mhle
+@opindex mno-hle
+@item -mhle
+Support Hardware Lock Elision prefixes.
+
+@opindex mtbm
+@opindex mno-tbm
+@item -mtbm
+Support TBM built-in functions and code generation.
+
+@opindex mmwaitx
+@opindex mno-mwaitx
+@item -mmwaitx
+Support MWAITX and MONITORX built-in functions and code generation.
+
+@opindex mclzero
+@opindex mno-clzero
+@item -mclzero
+Support CLZERO built-in functions and code generation.
+
+@opindex mpku
+@opindex mno-pku
+@item -mpku
+Support PKU built-in functions and code generation.
+
+@opindex mgfni
+@opindex mno-gfni
+@item -mgfni
+Support GFNI built-in functions and code generation.
+
+@opindex mvaes
+@opindex mno-vaes
+@item -mvaes
+Support VAES built-in functions and code generation.
+
+@opindex mwaitpkg
+@opindex mno-waitpkg
+@item -mwaitpkg
+Support WAITPKG built-in functions and code generation.
+
+@opindex mvpclmulqdq
+@opindex mno-vpclmulqdq
+@item -mvpclmulqdq
+Support VPCLMULQDQ built-in functions and code generation.
+
+@opindex mmovdiri
+@opindex mno-movdiri
+@item -mmovdiri
+Support MOVDIRI built-in functions and code generation.
+
+@opindex mmovdir64b
+@opindex mno-movdir64b
+@item -mmovdir64b
+Support MOVDIR64B built-in functions and code generation.
+
+@opindex menqcmd
+@opindex mno-enqcmd
+@item -menqcmd
+Support ENQCMD built-in functions and code generation.
+
+@opindex muintr
+@opindex mno-uintr
+@item -muintr
+Support UINTR built-in functions and code generation.
+
+@opindex mtsxldtrk
+@opindex mno-tsxldtrk
+@item -mtsxldtrk
+Support TSXLDTRK built-in functions and code generation.
+
+@opindex mcldemote
+@opindex mno-cldemote
+@item -mcldemote
+Support CLDEMOTE built-in functions and code generation.
+
+@opindex mserialize
+@opindex mno-serialize
+@item -mserialize
+Support SERIALIZE built-in functions and code generation.
+
+@opindex mamx-tile
+@opindex mno-amx-tile
+@item -mamx-tile
+Support AMX-TILE built-in functions and code generation.
+
+@opindex mamx-int8
+@opindex mno-amx-int8
+@item -mamx-int8
+Support AMX-INT8 built-in functions and code generation.
+
+@opindex mamx-bf16
+@opindex mno-amx-bf16

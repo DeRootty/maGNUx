@@ -1,0 +1,24 @@
+@c GCC 16.1.0 | BLOQUE 0369 | 20-gnu
+@c Fuente: gcc/doc/gnu.texi | blob: 8ff116aedf5e6c652b1a97d017d6352a0212ff2e
+@c Lineas originales: 1-20 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@c Copyright (C) 2001 Free Software Foundation, Inc.
+@c This is part of the GCC manual.
+@c For copying conditions, see the file gcc.texi.
+
+@node GNU Project
+@unnumbered The GNU Project and GNU/Linux
+
+The GNU Project was launched in 1984 to develop a complete Unix-like
+operating system which is free software: the GNU system.  (GNU is a
+recursive acronym for ``GNU's Not Unix''; it is pronounced
+``guh-NEW''@.)  Variants of the GNU operating system, which use the
+kernel Linux, are now widely used; though these systems are often
+referred to as ``Linux'', they are more accurately called GNU/Linux
+systems.
+
+For more information, see:
+@smallexample
+@uref{https://www.gnu.org/}
+@uref{https://www.gnu.org/gnu/linux-and-gnu.html}
+@end smallexample

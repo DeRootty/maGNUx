@@ -1,0 +1,231 @@
+@c GCC 16.1.0 | BLOQUE 0036 | 03-09
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 10003-10229 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+@opindex Wbad-function-cast
+@opindex Wno-bad-function-cast
+@item -Wbad-function-cast @r{(C and Objective-C only)}
+Warn when a function call is cast to a non-matching type.
+For example, warn if a call to a function returning an integer type
+is cast to a pointer type.
+
+@opindex Wc90-c99-compat
+@opindex Wno-c90-c99-compat
+@item -Wc90-c99-compat @r{(C and Objective-C only)}
+Warn about features not present in ISO C90, but present in ISO C99.
+For instance, warn about use of variable length arrays, @code{long long}
+type, @code{bool} type, compound literals, designated initializers, and so
+on.  This option is independent of the standards mode.  Warnings are disabled
+in the expression that follows @code{__extension__}.
+
+@opindex Wc99-c11-compat
+@opindex Wno-c99-c11-compat
+@item -Wc99-c11-compat @r{(C and Objective-C only)}
+Warn about features not present in ISO C99, but present in ISO C11.
+For instance, warn about use of anonymous structures and unions,
+@code{_Atomic} type qualifier, @code{_Thread_local} storage-class specifier,
+@code{_Alignas} specifier, @code{Alignof} operator, @code{_Generic} keyword,
+and so on.  This option is independent of the standards mode.  Warnings are
+disabled in the expression that follows @code{__extension__}.
+
+@opindex Wc11-c23-compat
+@opindex Wno-c11-c23-compat
+@opindex Wc11-c2x-compat
+@opindex Wno-c11-c2x-compat
+@item -Wc11-c23-compat @r{(C and Objective-C only)}
+@itemx -Wc11-c2x-compat @r{(C and Objective-C only)}
+Warn about features not present in ISO C11, but present in ISO C23.
+For instance, warn about omitting the string in @code{_Static_assert},
+use of @samp{[[]]} syntax for attributes, use of decimal
+floating-point types, and so on.  This option is independent of the
+standards mode.  Warnings are disabled in the expression that follows
+@code{__extension__}.  The name @option{-Wc11-c2x-compat} is
+deprecated.
+
+When not compiling in C23 mode, these warnings are upgraded to errors
+by @option{-pedantic-errors}.
+
+@opindex Wc23-c2y-compat
+@opindex Wno-c23-c2y-compat
+@item -Wc23-c2y-compat @r{(C and Objective-C only)}
+@itemx -Wc23-c2y-compat @r{(C and Objective-C only)}
+Warn about features not present in ISO C23, but present in ISO C2Y.
+For instance, warn about @code{_Generic} selecting with a type name
+instead of an expression.  This option is independent of the standards
+mode.  Warnings are disabled in the expression that follows
+@code{__extension__}.
+
+When not compiling in C2Y mode, these warnings are upgraded to errors
+by @option{-pedantic-errors}.
+
+@opindex Wc++-compat
+@opindex Wno-c++-compat
+@item -Wc++-compat @r{(C and Objective-C only)}
+Warn about ISO C constructs that are outside of the common subset of
+ISO C and ISO C++, e.g.@: request for implicit conversion from
+@code{void *} to a pointer to non-@code{void} type.
+
+@opindex Wc++11-compat
+@opindex Wno-c++11-compat
+@item -Wc++11-compat @r{(C++ and Objective-C++ only)}
+Warn about C++ constructs whose meaning differs between ISO C++ 1998
+and ISO C++ 2011, e.g., identifiers in ISO C++ 1998 that are keywords
+in ISO C++ 2011.  This warning turns on @option{-Wnarrowing} and is
+enabled by @option{-Wall}.
+
+@opindex Wc++14-compat
+@opindex Wno-c++14-compat
+@item -Wc++14-compat @r{(C++ and Objective-C++ only)}
+Warn about C++ constructs whose meaning differs between ISO C++ 2011
+and ISO C++ 2014.  This warning is enabled by @option{-Wall}.
+
+@opindex Wc++17-compat
+@opindex Wno-c++17-compat
+@item -Wc++17-compat @r{(C++ and Objective-C++ only)}
+Warn about C++ constructs whose meaning differs between ISO C++ 2014
+and ISO C++ 2017.  This warning is enabled by @option{-Wall}.
+
+@opindex Wc++20-compat
+@opindex Wno-c++20-compat
+@item -Wc++20-compat @r{(C++ and Objective-C++ only)}
+Warn about C++ constructs whose meaning differs between ISO C++ 2017
+and ISO C++ 2020.  This warning is enabled by @option{-Wall}.
+
+@opindex Wc++26-compat
+@opindex Wno-c++26-compat
+@item -Wc++26-compat @r{(C++ and Objective-C++ only)}
+Warn about C++ constructs whose meaning differs between ISO C++ 2023
+and upcoming ISO C++ 2026.  This warning is enabled by @option{-Wall}.
+
+@opindex Wc++11-extensions
+@opindex Wno-c++11-extensions
+@item -Wno-c++11-extensions @r{(C++ and Objective-C++ only)}
+Do not warn about C++11 constructs in code being compiled using
+an older C++ standard.  Even without this option, some C++11 constructs
+will only be diagnosed if @option{-Wpedantic} is used.
+
+@opindex Wc++14-extensions
+@opindex Wno-c++14-extensions
+@item -Wno-c++14-extensions @r{(C++ and Objective-C++ only)}
+Do not warn about C++14 constructs in code being compiled using
+an older C++ standard.  Even without this option, some C++14 constructs
+will only be diagnosed if @option{-Wpedantic} is used.
+
+@opindex Wc++17-extensions
+@opindex Wno-c++17-extensions
+@item -Wno-c++17-extensions @r{(C++ and Objective-C++ only)}
+Do not warn about C++17 constructs in code being compiled using
+an older C++ standard.  Even without this option, some C++17 constructs
+will only be diagnosed if @option{-Wpedantic} is used.
+
+@opindex Wc++20-extensions
+@opindex Wno-c++20-extensions
+@item -Wno-c++20-extensions @r{(C++ and Objective-C++ only)}
+Do not warn about C++20 constructs in code being compiled using
+an older C++ standard.  Even without this option, some C++20 constructs
+will only be diagnosed if @option{-Wpedantic} is used.
+
+@opindex Wc++23-extensions
+@opindex Wno-c++23-extensions
+@item -Wno-c++23-extensions @r{(C++ and Objective-C++ only)}
+Do not warn about C++23 constructs in code being compiled using
+an older C++ standard.  Even without this option, some C++23 constructs
+will only be diagnosed if @option{-Wpedantic} is used.
+
+@opindex Wc++26-extensions
+@opindex Wno-c++26-extensions
+@item -Wno-c++26-extensions @r{(C++ and Objective-C++ only)}
+Do not warn about C++26 constructs in code being compiled using
+an older C++ standard.  Even without this option, some C++26 constructs
+will only be diagnosed if @option{-Wpedantic} is used.
+
+@opindex Wcast-qual
+@opindex Wno-cast-qual
+@item -Wcast-qual
+Warn whenever a pointer is cast so as to remove a type qualifier from
+the target type.  For example, warn if a @code{const char *} is cast
+to an ordinary @code{char *}.
+
+Also warn when making a cast that introduces a type qualifier in an
+unsafe way.  For example, casting @code{char **} to @code{const char **}
+is unsafe, as in this example:
+
+@smallexample
+  /* p is char ** value.  */
+  const char **q = (const char **) p;
+  /* Assignment of readonly string to const char * is OK.  */
+  *q = "string";
+  /* Now char** pointer points to read-only memory.  */
+  **p = 'b';
+@end smallexample
+
+@opindex Wcast-align
+@opindex Wno-cast-align
+@item -Wcast-align
+Warn whenever a pointer is cast such that the required alignment of the
+target is increased.  For example, warn if a @code{char *} is cast to
+an @code{int *} on machines where integers can only be accessed at
+two- or four-byte boundaries.
+
+@opindex Wcast-align=strict
+@opindex Wno-cast-align=strict
+Warn whenever a pointer is cast such that the required alignment of the
+target is increased.  For example, warn if a @code{char *} is cast to
+an @code{int *} regardless of the target machine.
+
+@opindex Wcast-function-type
+@opindex Wno-cast-function-type
+@item -Wcast-function-type
+Warn when a function pointer is cast to an incompatible function pointer.
+In a cast involving function types with a variable argument list only
+the types of initial arguments that are provided are considered.
+Any parameter of pointer-type matches any other pointer-type.  Any benign
+differences in integral types are ignored, like @code{int} vs.@: @code{long}
+on ILP32 targets.  Likewise type qualifiers are ignored.  The function
+type @code{void (*) (void)} is special and matches everything, which can
+be used to suppress this warning.
+In a cast involving pointer to member types this warning warns whenever
+the type cast is changing the pointer to member type.
+This warning is enabled by @option{-Wextra}.
+
+@opindex Wcast-user-defined
+@opindex Wno-cast-user-defined
+@item -Wcast-user-defined
+Warn when a cast to reference type does not involve a user-defined
+conversion that the programmer might expect to be called.
+
+@smallexample
+struct A @{ operator const int&(); @} a;
+auto r = (int&)a; // warning
+@end smallexample
+
+This warning is enabled by default.
+
+@opindex Wwrite-strings
+@opindex Wno-write-strings
+@item -Wwrite-strings
+When compiling C, give string constants the type @code{const
+char[@var{length}]} so that copying the address of one into a
+non-@code{const} @code{char *} pointer produces a warning.  These
+warnings help you find at compile time code that can try to write
+into a string constant, but only if you have been very careful about
+using @code{const} in declarations and prototypes.  Otherwise, it is
+just a nuisance. This is why we did not make @option{-Wall} request
+these warnings.
+
+When compiling C++, warn about the deprecated conversion from string
+literals to @code{char *}.  This warning is enabled by default for C++
+programs.
+
+This warning is upgraded to an error by @option{-pedantic-errors} in
+C++11 mode or later.
+
+@opindex Wclobbered
+@opindex Wno-clobbered
+@item -Wclobbered
+Warn for variables that might be changed by @code{longjmp} or
+@code{vfork}.  This warning is also enabled by @option{-Wextra}.
+
+@opindex Wcomplain-wrong-lang
+@opindex Wno-complain-wrong-lang

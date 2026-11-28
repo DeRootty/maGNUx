@@ -1,0 +1,191 @@
+@c GCC 16.1.0 | BLOQUE 0177 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 213-399 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Floating Types
+@subsection Additional Floating Types
+@cindex additional floating types
+@cindex @code{_Float@var{n}} data types
+@cindex @code{_Float@var{n}x} data types
+@cindex @code{__float80} data type
+@cindex @code{__float128} data type
+@cindex @code{__ibm128} data type
+@cindex @code{w} floating point suffix
+@cindex @code{q} floating point suffix
+@cindex @code{W} floating point suffix
+@cindex @code{Q} floating point suffix
+
+ISO/IEC TS 18661-3:2015 defines C support for additional floating
+types @code{_Float@var{n}} and @code{_Float@var{n}x}, and GCC supports
+these type names; the set of types supported depends on the target
+architecture.
+Constants with these types use suffixes @code{f@var{n}} or
+@code{F@var{n}} and @code{f@var{n}x} or @code{F@var{n}x}.  These type
+names can be used together with @code{_Complex} to declare complex
+types.
+
+As an extension, GNU C and GNU C++ support additional floating
+types, which are not supported by all targets.
+@itemize @bullet
+@item @code{__float128} is available on i386, x86_64, IA-64, LoongArch
+and hppa HP-UX, as well as on PowerPC GNU/Linux targets that enable
+the vector scalar (VSX) instruction set.  @code{__float128} supports
+the 128-bit floating type.  On i386, x86_64, PowerPC, LoongArch and IA-64,
+other than HP-UX, @code{__float128} is an alias for @code{_Float128}.
+On hppa and IA-64 HP-UX, @code{__float128} is an alias for @code{long
+double}.
+
+@item @code{__float80} is available on the i386, x86_64, and IA-64
+targets, and supports the 80-bit (@code{XFmode}) floating type.  It is
+an alias for the type name @code{_Float64x} on these targets.
+
+@item @code{__ibm128} is available on PowerPC targets, and provides
+access to the IBM extended double format which is the current format
+used for @code{long double}.  When @code{long double} transitions to
+@code{__float128} on PowerPC in the future, @code{__ibm128} will remain
+for use in conversions between the two types.
+@end itemize
+
+Support for these additional types includes the arithmetic operators:
+add, subtract, multiply, divide; unary arithmetic operators;
+relational operators; equality operators; and conversions to and from
+integer and other floating types.  Use a suffix @samp{w} or @samp{W}
+in a literal constant of type @code{__float80} or type
+@code{__ibm128}.  Use a suffix @samp{q} or @samp{Q} for @code{__float128}.
+
+In order to use @code{_Float128}, @code{__float128}, and @code{__ibm128}
+on PowerPC Linux systems, you must use the @option{-mfloat128} option. It is
+expected in future versions of GCC that @code{_Float128} and @code{__float128}
+will be enabled automatically.
+
+The @code{_Float128} type is supported on all systems where
+@code{__float128} is supported or where @code{long double} has the
+IEEE binary128 format.  The @code{_Float64x} type is supported on all
+systems where @code{__float128} is supported.  The @code{_Float32}
+type is supported on all systems supporting IEEE binary32; the
+@code{_Float64} and @code{_Float32x} types are supported on all systems
+supporting IEEE binary64.  The @code{_Float16} type is supported on AArch64
+systems by default, on ARM systems when the IEEE format for 16-bit
+floating-point types is selected with @option{-mfp16-format=ieee} and,
+for both C and C++, on x86 systems with SSE2 enabled. GCC does not currently
+support @code{_Float128x} on any systems.
+
+On the i386, x86_64, IA-64, and HP-UX targets, you can declare complex
+types using the corresponding internal complex type, @code{XCmode} for
+@code{__float80} type and @code{TCmode} for @code{__float128} type:
+
+@smallexample
+typedef _Complex float __attribute__((mode(TC))) _Complex128;
+typedef _Complex float __attribute__((mode(XC))) _Complex80;
+@end smallexample
+
+On the PowerPC Linux VSX targets, you can declare complex types using
+the corresponding internal complex type, @code{KCmode} for
+@code{__float128} type and @code{ICmode} for @code{__ibm128} type:
+
+@smallexample
+typedef _Complex float __attribute__((mode(KC))) _Complex_float128;
+typedef _Complex float __attribute__((mode(IC))) _Complex_ibm128;
+@end smallexample
+
+@node Half-Precision
+@subsection Half-Precision Floating Point
+@cindex half-precision floating point
+@cindex @code{_Float16} data type
+
+GCC supports half-precision (16-bit) floating point on several targets.
+
+It is recommended that portable code use the @code{_Float16} type defined
+by ISO/IEC TS 18661-3:2015.  @xref{Floating Types}.
+
+Some targets have peculiarities as follows.
+
+@cindex @code{__fp16} data type
+On Arm and AArch64 targets, GCC supports half-precision (16-bit)
+floating point via the @code{__fp16} type defined in the Arm
+C-Language Extensions (ACLE).
+
+Language-level support for the @code{__fp16} data type is
+independent of whether GCC generates code using hardware floating-point
+instructions.  In cases where hardware support is not specified, GCC
+implements conversions between @code{__fp16} and other types as library
+calls.
+
+Arm targets support two mutually incompatible half-precision
+floating-point formats:
+
+@itemize @bullet
+@item
+A format that implements IEEE 754-2008 16-bit floating point types,
+enabled with the @option{-mfp16-format=ieee} command-line option; this
+format can represent normalized values in the range of @math{2^{-14}}
+to 65504.  There are 11 bits of significand precision, approximately 3
+decimal digits.
+
+@item
+An alternative format that sacrifices NaNs and infinity values, but
+has a larger range of values that can be represented: @math{2^{-14}}
+to 131008.  This is enabled with the
+@option{-mfp16-format=alternative} option.
+@end itemize
+
+You must choose one of the formats and use it consistently in your
+program.
+
+GCC only supports the @samp{alternative} format on implementations
+that support it in hardware; there is no support for conversions to
+and from this format using library functions.  Furthermore, you cannot
+link together code compiled with one format and code compiled for the
+other.  GCC also supports the @option{-mfp16-format=none} option,
+which disables all support for half-precision floating-point types.
+Code compiled with this option can be linked safely with code compiled
+for either format.
+
+The Arm architecture extension @code{FEAT_FP16} (enabled, for example,
+with @option{-march=armv8.2-a+fp16}, or
+@option{-march=armv8.1-m.main+mve.fp}) defines data processing
+instructions that only support the @samp{ieee} format.  The compiler
+rejects attempts to use the @samp{alternative} format when this
+architecture extension is enabled.
+
+Note that the ACLE has deprecated use of the @samp{alternative} format
+and recommends that only the @samp{ieee} format be used.
+
+The default is to compile with @option{-mfp16-format=ieee}.
+
+In C and C++ there are two related data types:
+@itemize @bullet
+@item
+
+@code{__fp16}, as defined by the Arm C-Language Extensions (ACLE).
+This can be used to hold either format;
+
+@item
+@code{_Float16}, which is defined by ISO/IEC TS 18661-3:2015.  This is
+only defined when the format selected is @samp{ieee}.
+@end itemize
+
+The GCC port for AArch64 only supports the IEEE 754-2008 format, and
+does not have the @option{-mfp16-format} command-line option.
+
+
+On x86 targets with SSE2 enabled, GCC supports half-precision (16-bit)
+floating point via the @code{_Float16} type.  For C++, x86 provides a
+builtin type named @code{_Float16} which contains same data format as C.
+
+
+On x86 targets with SSE2 enabled, without @option{-mavx512fp16},
+all operations are emulated by software emulation and the @code{float}
+instructions. The default behavior for @code{FLT_EVAL_METHOD} is to keep the
+intermediate result of the operation as 32-bit precision. This may lead to
+inconsistent behavior between software emulation and AVX512-FP16 instructions.
+Using @option{-fexcess-precision=16} forces round back after each operation.
+
+Using @option{-mavx512fp16} generates AVX512-FP16 instructions instead of
+software emulation. The default behavior of @code{FLT_EVAL_METHOD} is to round
+after each operation. The same is true with @option{-fexcess-precision=standard}
+and @option{-mfpmath=sse}. If there is no @option{-mfpmath=sse},
+@option{-fexcess-precision=standard} alone does the same thing as before,
+It is useful for code that does not have @code{_Float16} and runs on the x87
+FPU.
+

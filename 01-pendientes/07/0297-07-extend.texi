@@ -1,0 +1,257 @@
+@c GCC 16.1.0 | BLOQUE 0297 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 21046-21298 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Directly-mapped ASX Builtin Functions
+@subsubsection Directly-mapped ASX Builtin Functions
+
+For convenience, GCC defines functions @code{__lasx_xvrepli_@{b/h/w/d@}} and
+@code{__lasx_b[n]z_@{v/b/h/w/d@}}, which are implemented as follows:
+
+@smallexample
+a. @code{__lasx_xvrepli_@{b/h/w/d@}}: Implemented the case where the highest
+   bit of @code{xvldi} instruction @code{i13} is 1.
+
+   i13[12] == 1'b0
+   case i13[11:10] of :
+     2'b00: __lasx_xvrepli_b (imm_n512_511)
+     2'b01: __lasx_xvrepli_h (imm_n512_511)
+     2'b10: __lasx_xvrepli_w (imm_n512_511)
+     2'b11: __lasx_xvrepli_d (imm_n512_511)
+
+b. @code{__lasx_b[n]z_@{v/b/h/w/d@}}: Since the @code{xvseteqz} class directive
+   cannot be used on its own, this function is defined.
+
+   __lasx_xbz_v  => xvseteqz.v + bcnez
+   __lasx_xbnz_v => xvsetnez.v + bcnez
+   __lasx_xbz_b  => xvsetanyeqz.b + bcnez
+   __lasx_xbz_h  => xvsetanyeqz.h + bcnez
+   __lasx_xbz_w  => xvsetanyeqz.w + bcnez
+   __lasx_xbz_d  => xvsetanyeqz.d + bcnez
+   __lasx_xbnz_b => xvsetallnez.b + bcnez
+   __lasx_xbnz_h => xvsetallnez.h + bcnez
+   __lasx_xbnz_w => xvsetallnez.w + bcnez
+   __lasx_xbnz_d => xvsetallnez.d + bcnez
+@end smallexample
+
+@smallexample
+eg:
+  #include <lasxintrin.h>
+
+  extern __m256i @var{a};
+
+  void
+  test (void)
+  @{
+    if (__lasx_xbz_v (@var{a}))
+      printf ("1\n");
+    else
+      printf ("2\n");
+  @}
+@end smallexample
+
+@emph{Note:} For directives where the intent operand is also the source operand
+(modifying only part of the bitfield of the intent register), the first parameter
+in the builtin call function is used as the intent operand.
+
+@smallexample
+eg:
+  #include <lasxintrin.h>
+  extern __m256i @var{dst};
+  int @var{src};
+
+  void
+  test (void)
+  @{
+    @var{dst} = __lasx_xvinsgr2vr_w (@var{dst}, @var{src}, 3);
+  @}
+@end smallexample
+
+
+The intrinsics provided are listed below:
+
+@smallexample
+__m256i __lasx_vext2xv_d_b (__m256i);
+__m256i __lasx_vext2xv_d_h (__m256i);
+__m256i __lasx_vext2xv_du_bu (__m256i);
+__m256i __lasx_vext2xv_du_hu (__m256i);
+__m256i __lasx_vext2xv_du_wu (__m256i);
+__m256i __lasx_vext2xv_d_w (__m256i);
+__m256i __lasx_vext2xv_h_b (__m256i);
+__m256i __lasx_vext2xv_hu_bu (__m256i);
+__m256i __lasx_vext2xv_w_b (__m256i);
+__m256i __lasx_vext2xv_w_h (__m256i);
+__m256i __lasx_vext2xv_wu_bu (__m256i);
+__m256i __lasx_vext2xv_wu_hu (__m256i);
+int __lasx_xbnz_b (__m256i);
+int __lasx_xbnz_d (__m256i);
+int __lasx_xbnz_h (__m256i);
+int __lasx_xbnz_v (__m256i);
+int __lasx_xbnz_w (__m256i);
+int __lasx_xbz_b (__m256i);
+int __lasx_xbz_d (__m256i);
+int __lasx_xbz_h (__m256i);
+int __lasx_xbz_v (__m256i);
+int __lasx_xbz_w (__m256i);
+__m256i __lasx_xvabsd_b (__m256i, __m256i);
+__m256i __lasx_xvabsd_bu (__m256i, __m256i);
+__m256i __lasx_xvabsd_d (__m256i, __m256i);
+__m256i __lasx_xvabsd_du (__m256i, __m256i);
+__m256i __lasx_xvabsd_h (__m256i, __m256i);
+__m256i __lasx_xvabsd_hu (__m256i, __m256i);
+__m256i __lasx_xvabsd_w (__m256i, __m256i);
+__m256i __lasx_xvabsd_wu (__m256i, __m256i);
+__m256i __lasx_xvadda_b (__m256i, __m256i);
+__m256i __lasx_xvadda_d (__m256i, __m256i);
+__m256i __lasx_xvadda_h (__m256i, __m256i);
+__m256i __lasx_xvadda_w (__m256i, __m256i);
+__m256i __lasx_xvadd_b (__m256i, __m256i);
+__m256i __lasx_xvadd_d (__m256i, __m256i);
+__m256i __lasx_xvadd_h (__m256i, __m256i);
+__m256i __lasx_xvaddi_bu (__m256i, imm0_31);
+__m256i __lasx_xvaddi_du (__m256i, imm0_31);
+__m256i __lasx_xvaddi_hu (__m256i, imm0_31);
+__m256i __lasx_xvaddi_wu (__m256i, imm0_31);
+__m256i __lasx_xvadd_q (__m256i, __m256i);
+__m256i __lasx_xvadd_w (__m256i, __m256i);
+__m256i __lasx_xvaddwev_d_w (__m256i, __m256i);
+__m256i __lasx_xvaddwev_d_wu (__m256i, __m256i);
+__m256i __lasx_xvaddwev_d_wu_w (__m256i, __m256i);
+__m256i __lasx_xvaddwev_h_b (__m256i, __m256i);
+__m256i __lasx_xvaddwev_h_bu (__m256i, __m256i);
+__m256i __lasx_xvaddwev_h_bu_b (__m256i, __m256i);
+__m256i __lasx_xvaddwev_q_d (__m256i, __m256i);
+__m256i __lasx_xvaddwev_q_du (__m256i, __m256i);
+__m256i __lasx_xvaddwev_q_du_d (__m256i, __m256i);
+__m256i __lasx_xvaddwev_w_h (__m256i, __m256i);
+__m256i __lasx_xvaddwev_w_hu (__m256i, __m256i);
+__m256i __lasx_xvaddwev_w_hu_h (__m256i, __m256i);
+__m256i __lasx_xvaddwod_d_w (__m256i, __m256i);
+__m256i __lasx_xvaddwod_d_wu (__m256i, __m256i);
+__m256i __lasx_xvaddwod_d_wu_w (__m256i, __m256i);
+__m256i __lasx_xvaddwod_h_b (__m256i, __m256i);
+__m256i __lasx_xvaddwod_h_bu (__m256i, __m256i);
+__m256i __lasx_xvaddwod_h_bu_b (__m256i, __m256i);
+__m256i __lasx_xvaddwod_q_d (__m256i, __m256i);
+__m256i __lasx_xvaddwod_q_du (__m256i, __m256i);
+__m256i __lasx_xvaddwod_q_du_d (__m256i, __m256i);
+__m256i __lasx_xvaddwod_w_h (__m256i, __m256i);
+__m256i __lasx_xvaddwod_w_hu (__m256i, __m256i);
+__m256i __lasx_xvaddwod_w_hu_h (__m256i, __m256i);
+__m256i __lasx_xvandi_b (__m256i, imm0_255);
+__m256i __lasx_xvandn_v (__m256i, __m256i);
+__m256i __lasx_xvand_v (__m256i, __m256i);
+__m256i __lasx_xvavg_b (__m256i, __m256i);
+__m256i __lasx_xvavg_bu (__m256i, __m256i);
+__m256i __lasx_xvavg_d (__m256i, __m256i);
+__m256i __lasx_xvavg_du (__m256i, __m256i);
+__m256i __lasx_xvavg_h (__m256i, __m256i);
+__m256i __lasx_xvavg_hu (__m256i, __m256i);
+__m256i __lasx_xvavgr_b (__m256i, __m256i);
+__m256i __lasx_xvavgr_bu (__m256i, __m256i);
+__m256i __lasx_xvavgr_d (__m256i, __m256i);
+__m256i __lasx_xvavgr_du (__m256i, __m256i);
+__m256i __lasx_xvavgr_h (__m256i, __m256i);
+__m256i __lasx_xvavgr_hu (__m256i, __m256i);
+__m256i __lasx_xvavgr_w (__m256i, __m256i);
+__m256i __lasx_xvavgr_wu (__m256i, __m256i);
+__m256i __lasx_xvavg_w (__m256i, __m256i);
+__m256i __lasx_xvavg_wu (__m256i, __m256i);
+__m256i __lasx_xvbitclr_b (__m256i, __m256i);
+__m256i __lasx_xvbitclr_d (__m256i, __m256i);
+__m256i __lasx_xvbitclr_h (__m256i, __m256i);
+__m256i __lasx_xvbitclri_b (__m256i, imm0_7);
+__m256i __lasx_xvbitclri_d (__m256i, imm0_63);
+__m256i __lasx_xvbitclri_h (__m256i, imm0_15);
+__m256i __lasx_xvbitclri_w (__m256i, imm0_31);
+__m256i __lasx_xvbitclr_w (__m256i, __m256i);
+__m256i __lasx_xvbitrev_b (__m256i, __m256i);
+__m256i __lasx_xvbitrev_d (__m256i, __m256i);
+__m256i __lasx_xvbitrev_h (__m256i, __m256i);
+__m256i __lasx_xvbitrevi_b (__m256i, imm0_7);
+__m256i __lasx_xvbitrevi_d (__m256i, imm0_63);
+__m256i __lasx_xvbitrevi_h (__m256i, imm0_15);
+__m256i __lasx_xvbitrevi_w (__m256i, imm0_31);
+__m256i __lasx_xvbitrev_w (__m256i, __m256i);
+__m256i __lasx_xvbitseli_b (__m256i, __m256i, imm0_255);
+__m256i __lasx_xvbitsel_v (__m256i, __m256i, __m256i);
+__m256i __lasx_xvbitset_b (__m256i, __m256i);
+__m256i __lasx_xvbitset_d (__m256i, __m256i);
+__m256i __lasx_xvbitset_h (__m256i, __m256i);
+__m256i __lasx_xvbitseti_b (__m256i, imm0_7);
+__m256i __lasx_xvbitseti_d (__m256i, imm0_63);
+__m256i __lasx_xvbitseti_h (__m256i, imm0_15);
+__m256i __lasx_xvbitseti_w (__m256i, imm0_31);
+__m256i __lasx_xvbitset_w (__m256i, __m256i);
+__m256i __lasx_xvbsll_v (__m256i, imm0_31);
+__m256i __lasx_xvbsrl_v (__m256i, imm0_31);
+__m256i __lasx_xvclo_b (__m256i);
+__m256i __lasx_xvclo_d (__m256i);
+__m256i __lasx_xvclo_h (__m256i);
+__m256i __lasx_xvclo_w (__m256i);
+__m256i __lasx_xvclz_b (__m256i);
+__m256i __lasx_xvclz_d (__m256i);
+__m256i __lasx_xvclz_h (__m256i);
+__m256i __lasx_xvclz_w (__m256i);
+__m256i __lasx_xvdiv_b (__m256i, __m256i);
+__m256i __lasx_xvdiv_bu (__m256i, __m256i);
+__m256i __lasx_xvdiv_d (__m256i, __m256i);
+__m256i __lasx_xvdiv_du (__m256i, __m256i);
+__m256i __lasx_xvdiv_h (__m256i, __m256i);
+__m256i __lasx_xvdiv_hu (__m256i, __m256i);
+__m256i __lasx_xvdiv_w (__m256i, __m256i);
+__m256i __lasx_xvdiv_wu (__m256i, __m256i);
+__m256i __lasx_xvexth_du_wu (__m256i);
+__m256i __lasx_xvexth_d_w (__m256i);
+__m256i __lasx_xvexth_h_b (__m256i);
+__m256i __lasx_xvexth_hu_bu (__m256i);
+__m256i __lasx_xvexth_q_d (__m256i);
+__m256i __lasx_xvexth_qu_du (__m256i);
+__m256i __lasx_xvexth_w_h (__m256i);
+__m256i __lasx_xvexth_wu_hu (__m256i);
+__m256i __lasx_xvextl_q_d (__m256i);
+__m256i __lasx_xvextl_qu_du (__m256i);
+__m256i __lasx_xvextrins_b (__m256i, __m256i, imm0_255);
+__m256i __lasx_xvextrins_d (__m256i, __m256i, imm0_255);
+__m256i __lasx_xvextrins_h (__m256i, __m256i, imm0_255);
+__m256i __lasx_xvextrins_w (__m256i, __m256i, imm0_255);
+__m256d __lasx_xvfadd_d (__m256d, __m256d);
+__m256 __lasx_xvfadd_s (__m256, __m256);
+__m256i __lasx_xvfclass_d (__m256d);
+__m256i __lasx_xvfclass_s (__m256);
+__m256i __lasx_xvfcmp_caf_d (__m256d, __m256d);
+__m256i __lasx_xvfcmp_caf_s (__m256, __m256);
+__m256i __lasx_xvfcmp_ceq_d (__m256d, __m256d);
+__m256i __lasx_xvfcmp_ceq_s (__m256, __m256);
+__m256i __lasx_xvfcmp_cle_d (__m256d, __m256d);
+__m256i __lasx_xvfcmp_cle_s (__m256, __m256);
+__m256i __lasx_xvfcmp_clt_d (__m256d, __m256d);
+__m256i __lasx_xvfcmp_clt_s (__m256, __m256);
+__m256i __lasx_xvfcmp_cne_d (__m256d, __m256d);
+__m256i __lasx_xvfcmp_cne_s (__m256, __m256);
+__m256i __lasx_xvfcmp_cor_d (__m256d, __m256d);
+__m256i __lasx_xvfcmp_cor_s (__m256, __m256);
+__m256i __lasx_xvfcmp_cueq_d (__m256d, __m256d);
+__m256i __lasx_xvfcmp_cueq_s (__m256, __m256);
+__m256i __lasx_xvfcmp_cule_d (__m256d, __m256d);
+__m256i __lasx_xvfcmp_cule_s (__m256, __m256);
+__m256i __lasx_xvfcmp_cult_d (__m256d, __m256d);
+__m256i __lasx_xvfcmp_cult_s (__m256, __m256);
+__m256i __lasx_xvfcmp_cun_d (__m256d, __m256d);
+__m256i __lasx_xvfcmp_cune_d (__m256d, __m256d);
+__m256i __lasx_xvfcmp_cune_s (__m256, __m256);
+__m256i __lasx_xvfcmp_cun_s (__m256, __m256);
+__m256i __lasx_xvfcmp_saf_d (__m256d, __m256d);
+__m256i __lasx_xvfcmp_saf_s (__m256, __m256);
+__m256i __lasx_xvfcmp_seq_d (__m256d, __m256d);
+__m256i __lasx_xvfcmp_seq_s (__m256, __m256);
+__m256i __lasx_xvfcmp_sle_d (__m256d, __m256d);
+__m256i __lasx_xvfcmp_sle_s (__m256, __m256);
+__m256i __lasx_xvfcmp_slt_d (__m256d, __m256d);
+__m256i __lasx_xvfcmp_slt_s (__m256, __m256);
+__m256i __lasx_xvfcmp_sne_d (__m256d, __m256d);
+__m256i __lasx_xvfcmp_sne_s (__m256, __m256);
+__m256i __lasx_xvfcmp_sor_d (__m256d, __m256d);
+__m256i __lasx_xvfcmp_sor_s (__m256, __m256);
+__m256i __lasx_xvfcmp_sueq_d (__m256d, __m256d);
+__m256i __lasx_xvfcmp_sueq_s (__m256, __m256);

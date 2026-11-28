@@ -1,0 +1,311 @@
+@c GCC 16.1.0 | BLOQUE 0306 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 23171-23477 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+v2f64 __builtin_msa_fexupl_d (v4f32);
+
+v4f32 __builtin_msa_fexupr_w (v8i16);
+v2f64 __builtin_msa_fexupr_d (v4f32);
+
+v4f32 __builtin_msa_ffint_s_w (v4i32);
+v2f64 __builtin_msa_ffint_s_d (v2i64);
+
+v4f32 __builtin_msa_ffint_u_w (v4u32);
+v2f64 __builtin_msa_ffint_u_d (v2u64);
+
+v4f32 __builtin_msa_ffql_w (v8i16);
+v2f64 __builtin_msa_ffql_d (v4i32);
+
+v4f32 __builtin_msa_ffqr_w (v8i16);
+v2f64 __builtin_msa_ffqr_d (v4i32);
+
+v16i8 __builtin_msa_fill_b (i32);
+v8i16 __builtin_msa_fill_h (i32);
+v4i32 __builtin_msa_fill_w (i32);
+v2i64 __builtin_msa_fill_d (i64);
+
+v4f32 __builtin_msa_flog2_w (v4f32);
+v2f64 __builtin_msa_flog2_d (v2f64);
+
+v4f32 __builtin_msa_fmadd_w (v4f32, v4f32, v4f32);
+v2f64 __builtin_msa_fmadd_d (v2f64, v2f64, v2f64);
+
+v4f32 __builtin_msa_fmax_w (v4f32, v4f32);
+v2f64 __builtin_msa_fmax_d (v2f64, v2f64);
+
+v4f32 __builtin_msa_fmax_a_w (v4f32, v4f32);
+v2f64 __builtin_msa_fmax_a_d (v2f64, v2f64);
+
+v4f32 __builtin_msa_fmin_w (v4f32, v4f32);
+v2f64 __builtin_msa_fmin_d (v2f64, v2f64);
+
+v4f32 __builtin_msa_fmin_a_w (v4f32, v4f32);
+v2f64 __builtin_msa_fmin_a_d (v2f64, v2f64);
+
+v4f32 __builtin_msa_fmsub_w (v4f32, v4f32, v4f32);
+v2f64 __builtin_msa_fmsub_d (v2f64, v2f64, v2f64);
+
+v4f32 __builtin_msa_fmul_w (v4f32, v4f32);
+v2f64 __builtin_msa_fmul_d (v2f64, v2f64);
+
+v4f32 __builtin_msa_frint_w (v4f32);
+v2f64 __builtin_msa_frint_d (v2f64);
+
+v4f32 __builtin_msa_frcp_w (v4f32);
+v2f64 __builtin_msa_frcp_d (v2f64);
+
+v4f32 __builtin_msa_frsqrt_w (v4f32);
+v2f64 __builtin_msa_frsqrt_d (v2f64);
+
+v4i32 __builtin_msa_fsaf_w (v4f32, v4f32);
+v2i64 __builtin_msa_fsaf_d (v2f64, v2f64);
+
+v4i32 __builtin_msa_fseq_w (v4f32, v4f32);
+v2i64 __builtin_msa_fseq_d (v2f64, v2f64);
+
+v4i32 __builtin_msa_fsle_w (v4f32, v4f32);
+v2i64 __builtin_msa_fsle_d (v2f64, v2f64);
+
+v4i32 __builtin_msa_fslt_w (v4f32, v4f32);
+v2i64 __builtin_msa_fslt_d (v2f64, v2f64);
+
+v4i32 __builtin_msa_fsne_w (v4f32, v4f32);
+v2i64 __builtin_msa_fsne_d (v2f64, v2f64);
+
+v4i32 __builtin_msa_fsor_w (v4f32, v4f32);
+v2i64 __builtin_msa_fsor_d (v2f64, v2f64);
+
+v4f32 __builtin_msa_fsqrt_w (v4f32);
+v2f64 __builtin_msa_fsqrt_d (v2f64);
+
+v4f32 __builtin_msa_fsub_w (v4f32, v4f32);
+v2f64 __builtin_msa_fsub_d (v2f64, v2f64);
+
+v4i32 __builtin_msa_fsueq_w (v4f32, v4f32);
+v2i64 __builtin_msa_fsueq_d (v2f64, v2f64);
+
+v4i32 __builtin_msa_fsule_w (v4f32, v4f32);
+v2i64 __builtin_msa_fsule_d (v2f64, v2f64);
+
+v4i32 __builtin_msa_fsult_w (v4f32, v4f32);
+v2i64 __builtin_msa_fsult_d (v2f64, v2f64);
+
+v4i32 __builtin_msa_fsun_w (v4f32, v4f32);
+v2i64 __builtin_msa_fsun_d (v2f64, v2f64);
+
+v4i32 __builtin_msa_fsune_w (v4f32, v4f32);
+v2i64 __builtin_msa_fsune_d (v2f64, v2f64);
+
+v4i32 __builtin_msa_ftint_s_w (v4f32);
+v2i64 __builtin_msa_ftint_s_d (v2f64);
+
+v4u32 __builtin_msa_ftint_u_w (v4f32);
+v2u64 __builtin_msa_ftint_u_d (v2f64);
+
+v8i16 __builtin_msa_ftq_h (v4f32, v4f32);
+v4i32 __builtin_msa_ftq_w (v2f64, v2f64);
+
+v4i32 __builtin_msa_ftrunc_s_w (v4f32);
+v2i64 __builtin_msa_ftrunc_s_d (v2f64);
+
+v4u32 __builtin_msa_ftrunc_u_w (v4f32);
+v2u64 __builtin_msa_ftrunc_u_d (v2f64);
+
+v8i16 __builtin_msa_hadd_s_h (v16i8, v16i8);
+v4i32 __builtin_msa_hadd_s_w (v8i16, v8i16);
+v2i64 __builtin_msa_hadd_s_d (v4i32, v4i32);
+
+v8u16 __builtin_msa_hadd_u_h (v16u8, v16u8);
+v4u32 __builtin_msa_hadd_u_w (v8u16, v8u16);
+v2u64 __builtin_msa_hadd_u_d (v4u32, v4u32);
+
+v8i16 __builtin_msa_hsub_s_h (v16i8, v16i8);
+v4i32 __builtin_msa_hsub_s_w (v8i16, v8i16);
+v2i64 __builtin_msa_hsub_s_d (v4i32, v4i32);
+
+v8i16 __builtin_msa_hsub_u_h (v16u8, v16u8);
+v4i32 __builtin_msa_hsub_u_w (v8u16, v8u16);
+v2i64 __builtin_msa_hsub_u_d (v4u32, v4u32);
+
+v16i8 __builtin_msa_ilvev_b (v16i8, v16i8);
+v8i16 __builtin_msa_ilvev_h (v8i16, v8i16);
+v4i32 __builtin_msa_ilvev_w (v4i32, v4i32);
+v2i64 __builtin_msa_ilvev_d (v2i64, v2i64);
+
+v16i8 __builtin_msa_ilvl_b (v16i8, v16i8);
+v8i16 __builtin_msa_ilvl_h (v8i16, v8i16);
+v4i32 __builtin_msa_ilvl_w (v4i32, v4i32);
+v2i64 __builtin_msa_ilvl_d (v2i64, v2i64);
+
+v16i8 __builtin_msa_ilvod_b (v16i8, v16i8);
+v8i16 __builtin_msa_ilvod_h (v8i16, v8i16);
+v4i32 __builtin_msa_ilvod_w (v4i32, v4i32);
+v2i64 __builtin_msa_ilvod_d (v2i64, v2i64);
+
+v16i8 __builtin_msa_ilvr_b (v16i8, v16i8);
+v8i16 __builtin_msa_ilvr_h (v8i16, v8i16);
+v4i32 __builtin_msa_ilvr_w (v4i32, v4i32);
+v2i64 __builtin_msa_ilvr_d (v2i64, v2i64);
+
+v16i8 __builtin_msa_insert_b (v16i8, imm0_15, i32);
+v8i16 __builtin_msa_insert_h (v8i16, imm0_7, i32);
+v4i32 __builtin_msa_insert_w (v4i32, imm0_3, i32);
+v2i64 __builtin_msa_insert_d (v2i64, imm0_1, i64);
+
+v16i8 __builtin_msa_insve_b (v16i8, imm0_15, v16i8);
+v8i16 __builtin_msa_insve_h (v8i16, imm0_7, v8i16);
+v4i32 __builtin_msa_insve_w (v4i32, imm0_3, v4i32);
+v2i64 __builtin_msa_insve_d (v2i64, imm0_1, v2i64);
+
+v16i8 __builtin_msa_ld_b (const void *, imm_n512_511);
+v8i16 __builtin_msa_ld_h (const void *, imm_n1024_1022);
+v4i32 __builtin_msa_ld_w (const void *, imm_n2048_2044);
+v2i64 __builtin_msa_ld_d (const void *, imm_n4096_4088);
+
+v16i8 __builtin_msa_ldi_b (imm_n512_511);
+v8i16 __builtin_msa_ldi_h (imm_n512_511);
+v4i32 __builtin_msa_ldi_w (imm_n512_511);
+v2i64 __builtin_msa_ldi_d (imm_n512_511);
+
+v8i16 __builtin_msa_madd_q_h (v8i16, v8i16, v8i16);
+v4i32 __builtin_msa_madd_q_w (v4i32, v4i32, v4i32);
+
+v8i16 __builtin_msa_maddr_q_h (v8i16, v8i16, v8i16);
+v4i32 __builtin_msa_maddr_q_w (v4i32, v4i32, v4i32);
+
+v16i8 __builtin_msa_maddv_b (v16i8, v16i8, v16i8);
+v8i16 __builtin_msa_maddv_h (v8i16, v8i16, v8i16);
+v4i32 __builtin_msa_maddv_w (v4i32, v4i32, v4i32);
+v2i64 __builtin_msa_maddv_d (v2i64, v2i64, v2i64);
+
+v16i8 __builtin_msa_max_a_b (v16i8, v16i8);
+v8i16 __builtin_msa_max_a_h (v8i16, v8i16);
+v4i32 __builtin_msa_max_a_w (v4i32, v4i32);
+v2i64 __builtin_msa_max_a_d (v2i64, v2i64);
+
+v16i8 __builtin_msa_max_s_b (v16i8, v16i8);
+v8i16 __builtin_msa_max_s_h (v8i16, v8i16);
+v4i32 __builtin_msa_max_s_w (v4i32, v4i32);
+v2i64 __builtin_msa_max_s_d (v2i64, v2i64);
+
+v16u8 __builtin_msa_max_u_b (v16u8, v16u8);
+v8u16 __builtin_msa_max_u_h (v8u16, v8u16);
+v4u32 __builtin_msa_max_u_w (v4u32, v4u32);
+v2u64 __builtin_msa_max_u_d (v2u64, v2u64);
+
+v16i8 __builtin_msa_maxi_s_b (v16i8, imm_n16_15);
+v8i16 __builtin_msa_maxi_s_h (v8i16, imm_n16_15);
+v4i32 __builtin_msa_maxi_s_w (v4i32, imm_n16_15);
+v2i64 __builtin_msa_maxi_s_d (v2i64, imm_n16_15);
+
+v16u8 __builtin_msa_maxi_u_b (v16u8, imm0_31);
+v8u16 __builtin_msa_maxi_u_h (v8u16, imm0_31);
+v4u32 __builtin_msa_maxi_u_w (v4u32, imm0_31);
+v2u64 __builtin_msa_maxi_u_d (v2u64, imm0_31);
+
+v16i8 __builtin_msa_min_a_b (v16i8, v16i8);
+v8i16 __builtin_msa_min_a_h (v8i16, v8i16);
+v4i32 __builtin_msa_min_a_w (v4i32, v4i32);
+v2i64 __builtin_msa_min_a_d (v2i64, v2i64);
+
+v16i8 __builtin_msa_min_s_b (v16i8, v16i8);
+v8i16 __builtin_msa_min_s_h (v8i16, v8i16);
+v4i32 __builtin_msa_min_s_w (v4i32, v4i32);
+v2i64 __builtin_msa_min_s_d (v2i64, v2i64);
+
+v16u8 __builtin_msa_min_u_b (v16u8, v16u8);
+v8u16 __builtin_msa_min_u_h (v8u16, v8u16);
+v4u32 __builtin_msa_min_u_w (v4u32, v4u32);
+v2u64 __builtin_msa_min_u_d (v2u64, v2u64);
+
+v16i8 __builtin_msa_mini_s_b (v16i8, imm_n16_15);
+v8i16 __builtin_msa_mini_s_h (v8i16, imm_n16_15);
+v4i32 __builtin_msa_mini_s_w (v4i32, imm_n16_15);
+v2i64 __builtin_msa_mini_s_d (v2i64, imm_n16_15);
+
+v16u8 __builtin_msa_mini_u_b (v16u8, imm0_31);
+v8u16 __builtin_msa_mini_u_h (v8u16, imm0_31);
+v4u32 __builtin_msa_mini_u_w (v4u32, imm0_31);
+v2u64 __builtin_msa_mini_u_d (v2u64, imm0_31);
+
+v16i8 __builtin_msa_mod_s_b (v16i8, v16i8);
+v8i16 __builtin_msa_mod_s_h (v8i16, v8i16);
+v4i32 __builtin_msa_mod_s_w (v4i32, v4i32);
+v2i64 __builtin_msa_mod_s_d (v2i64, v2i64);
+
+v16u8 __builtin_msa_mod_u_b (v16u8, v16u8);
+v8u16 __builtin_msa_mod_u_h (v8u16, v8u16);
+v4u32 __builtin_msa_mod_u_w (v4u32, v4u32);
+v2u64 __builtin_msa_mod_u_d (v2u64, v2u64);
+
+v16i8 __builtin_msa_move_v (v16i8);
+
+v8i16 __builtin_msa_msub_q_h (v8i16, v8i16, v8i16);
+v4i32 __builtin_msa_msub_q_w (v4i32, v4i32, v4i32);
+
+v8i16 __builtin_msa_msubr_q_h (v8i16, v8i16, v8i16);
+v4i32 __builtin_msa_msubr_q_w (v4i32, v4i32, v4i32);
+
+v16i8 __builtin_msa_msubv_b (v16i8, v16i8, v16i8);
+v8i16 __builtin_msa_msubv_h (v8i16, v8i16, v8i16);
+v4i32 __builtin_msa_msubv_w (v4i32, v4i32, v4i32);
+v2i64 __builtin_msa_msubv_d (v2i64, v2i64, v2i64);
+
+v8i16 __builtin_msa_mul_q_h (v8i16, v8i16);
+v4i32 __builtin_msa_mul_q_w (v4i32, v4i32);
+
+v8i16 __builtin_msa_mulr_q_h (v8i16, v8i16);
+v4i32 __builtin_msa_mulr_q_w (v4i32, v4i32);
+
+v16i8 __builtin_msa_mulv_b (v16i8, v16i8);
+v8i16 __builtin_msa_mulv_h (v8i16, v8i16);
+v4i32 __builtin_msa_mulv_w (v4i32, v4i32);
+v2i64 __builtin_msa_mulv_d (v2i64, v2i64);
+
+v16i8 __builtin_msa_nloc_b (v16i8);
+v8i16 __builtin_msa_nloc_h (v8i16);
+v4i32 __builtin_msa_nloc_w (v4i32);
+v2i64 __builtin_msa_nloc_d (v2i64);
+
+v16i8 __builtin_msa_nlzc_b (v16i8);
+v8i16 __builtin_msa_nlzc_h (v8i16);
+v4i32 __builtin_msa_nlzc_w (v4i32);
+v2i64 __builtin_msa_nlzc_d (v2i64);
+
+v16u8 __builtin_msa_nor_v (v16u8, v16u8);
+
+v16u8 __builtin_msa_nori_b (v16u8, imm0_255);
+
+v16u8 __builtin_msa_or_v (v16u8, v16u8);
+
+v16u8 __builtin_msa_ori_b (v16u8, imm0_255);
+
+v16i8 __builtin_msa_pckev_b (v16i8, v16i8);
+v8i16 __builtin_msa_pckev_h (v8i16, v8i16);
+v4i32 __builtin_msa_pckev_w (v4i32, v4i32);
+v2i64 __builtin_msa_pckev_d (v2i64, v2i64);
+
+v16i8 __builtin_msa_pckod_b (v16i8, v16i8);
+v8i16 __builtin_msa_pckod_h (v8i16, v8i16);
+v4i32 __builtin_msa_pckod_w (v4i32, v4i32);
+v2i64 __builtin_msa_pckod_d (v2i64, v2i64);
+
+v16i8 __builtin_msa_pcnt_b (v16i8);
+v8i16 __builtin_msa_pcnt_h (v8i16);
+v4i32 __builtin_msa_pcnt_w (v4i32);
+v2i64 __builtin_msa_pcnt_d (v2i64);
+
+v16i8 __builtin_msa_sat_s_b (v16i8, imm0_7);
+v8i16 __builtin_msa_sat_s_h (v8i16, imm0_15);
+v4i32 __builtin_msa_sat_s_w (v4i32, imm0_31);
+v2i64 __builtin_msa_sat_s_d (v2i64, imm0_63);
+
+v16u8 __builtin_msa_sat_u_b (v16u8, imm0_7);
+v8u16 __builtin_msa_sat_u_h (v8u16, imm0_15);
+v4u32 __builtin_msa_sat_u_w (v4u32, imm0_31);
+v2u64 __builtin_msa_sat_u_d (v2u64, imm0_63);
+
+v16i8 __builtin_msa_shf_b (v16i8, imm0_255);
+v8i16 __builtin_msa_shf_h (v8i16, imm0_255);
+v4i32 __builtin_msa_shf_w (v4i32, imm0_255);
+

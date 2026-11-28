@@ -1,0 +1,227 @@
+@c GCC 16.1.0 | BLOQUE 0005 | 03-05
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 3220-3442 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@smallexample
+const char *cp = u8"xx";// error: invalid conversion from
+                        //        `const char8_t*' to `const char*'
+int f(const char*);
+auto v = f(u8"xx");     // error: invalid conversion from
+                        //        `const char8_t*' to `const char*'
+std::string s@{u8"xx"@};  // error: no matching function for call to
+                        //        `std::basic_string<char>::basic_string()'
+using namespace std::literals;
+s = u8"xx"s;            // error: conversion from
+                        //        `basic_string<char8_t>' to non-scalar
+                        //        type `basic_string<char>' requested
+@end smallexample
+
+@opindex fcheck-new
+@opindex fno-check-new
+@item -fcheck-new
+Check that the pointer returned by @code{operator new} is non-null
+before attempting to modify the storage allocated.  This check is
+normally unnecessary because the C++ standard specifies that
+@code{operator new} only returns @code{0} if it is declared
+@code{throw()}, in which case the compiler always checks the
+return value even without this option.  In all other cases, when
+@code{operator new} has a non-empty exception specification, memory
+exhaustion is signalled by throwing @code{std::bad_alloc}.  See also
+@samp{new (nothrow)}.
+
+@opindex fconcepts
+@opindex fno-concepts
+@item -fconcepts
+Enable support for the C++ Concepts feature for constraining template
+arguments.  With @option{-std=c++20} and above, Concepts are part of
+the language standard, so @option{-fconcepts} defaults to on.
+
+Some constructs that were allowed by the earlier C++ Extensions for
+Concepts Technical Specification, ISO 19217 (2015), but didn't make it
+into the standard, could additionally be enabled by
+@option{-fconcepts-ts}.  The option @option{-fconcepts-ts} was deprecated
+in GCC 14 and removed in GCC 15; users are expected to convert their code
+to C++20 concepts.
+
+@opindex fconcepts-diagnostics-depth
+@item -fconcepts-diagnostics-depth=@var{n}
+Specify maximum error replay depth during recursive diagnosis of a constraint
+satisfaction failure.  The default is 1.
+
+@opindex fconstexpr-depth
+@item -fconstexpr-depth=@var{n}
+Set the maximum nested evaluation depth for C++11 constexpr functions
+to @var{n}.  A limit is needed to detect endless recursion during
+constant expression evaluation.  The minimum specified by the standard
+is 512.
+
+@opindex fconstexpr-cache-depth
+@item -fconstexpr-cache-depth=@var{n}
+Set the maximum level of nested evaluation depth for C++11 constexpr
+functions that will be cached to @var{n}.  This is a heuristic that
+trades off compilation speed (when the cache avoids repeated
+calculations) against memory consumption (when the cache grows very
+large from highly recursive evaluations).  The default is 8.  Very few
+users are likely to want to adjust it, but if your code does heavy
+constexpr calculations you might want to experiment to find which
+value works best for you.
+
+@opindex fconstexpr-fp-except
+@opindex fno-constexpr-fp-except
+@item -fconstexpr-fp-except
+Annex F of the C standard specifies that IEC559 floating point
+exceptions encountered at compile time should not stop compilation.
+C++ compilers have historically not followed this guidance, instead
+treating floating point division by zero as non-constant even though
+it has a well defined value.  This flag tells the compiler to give
+Annex F priority over other rules saying that a particular operation
+is undefined.
+
+@smallexample
+constexpr float inf = 1./0.; // OK with -fconstexpr-fp-except
+@end smallexample
+
+@opindex fconstexpr-loop-limit
+@item -fconstexpr-loop-limit=@var{n}
+Set the maximum number of iterations for a loop in C++14 constexpr functions
+to @var{n}.  A limit is needed to detect infinite loops during
+constant expression evaluation.  The default is 262144 (1<<18).
+
+@opindex fconstexpr-ops-limit
+@item -fconstexpr-ops-limit=@var{n}
+Set the maximum number of operations during a single constexpr evaluation.
+Even when number of iterations of a single loop is limited with the above limit,
+if there are several nested loops and each of them has many iterations but still
+smaller than the above limit, or if in a body of some loop or even outside
+of a loop too many expressions need to be evaluated, the resulting constexpr
+evaluation might take too long.
+The default is 33554432 (1<<25).
+
+@opindex fcontracts
+@opindex fno-contracts
+@item -fcontracts
+Enable support for the C++ Contracts feature, as specified in the C++26
+working draft (N5003).
+
+On violation of an enforced or observed contract (see @option{-fcontract-evaluation-semantic}
+below), a violation handler is called; the standard library provides a default
+handler that emits information about the contract that failed.
+
+Users can replace the default violation handler by defining
+@smallexample
+void
+handle_contract_violation (const std::contracts::contract_violation&);
+@end smallexample
+
+@opindex fcontract-evaluation-semantic
+@item -fcontract-evaluation-semantic=@var{semantic}
+Set the semantic with which contracts will be evaluated to @var{semantic}.
+
+Available values for the evaluation mode are:
+
+'@code{ignored}' The contract checks will be elided, with no checking added at
+either compile or runtime.
+
+'@code{observed}' The contract checks are performed (at runtime) and, if one
+fails, a handler is called that allows actions such as logging or emitting
+run-time warnings. When the handler returns, the execution of the code will
+continue.  At compile-time the checks are performed for @code{constexpr}
+evaluations, in this case a diagnostic is emitted if the check fails.
+
+'@code{enforce}' The contract checks are performed and the handler is called if
+one fails.  When the handler returns the execution of the code is terminated
+preventing it from continuing past the failed case.  At compile-time the checks
+are applied to @code{constexpr} and, if one fails, the program is ill-formed;
+an error will be emitted.
+
+'@code{quick_enforce}' The contract checks are performed (at runtime) and, if one
+fails, the execution is terminated immediately (without calling any handler).
+At compile-time there is no difference in behaviour between this option and
+the @code{enforce} case, since no handler is invoked at compile time.
+
+@opindex fcontracts-conservative-ipa
+@opindex fno-contracts-conservative-ipa
+@item -fcontracts-conservative-ipa
+This prevents inter-procedural analysis from taking action when the body
+of an inline function is visible in a given TU.  This allows for the case
+that contract evaluation conditions are permitted to differ between TUs which
+means that such actions would be potentially incorrect.
+
+@opindex fcontract-checks-outlined
+@opindex fno-contract-checks-outlined
+@item -fcontract-checks-outlined
+By default, contract checks for @code{pre} and @code{post} condition checks are
+expanded in-line into function bodies.  This option causes a small function to
+be created instead (containing the checks) that is called in the relevant
+position.  This permits different criteria to be applied to the compilation of
+the checking and the remainder of the function body.
+
+@opindex fcontract-disable-optimized-checks
+@opindex fno-contract-disable-optimized-checks
+@item -fcontract-disable-optimized-checks
+When @code{pre} and @code{post} condition checks are outlined (using
+@option{-fcontract-checks-outlined}), this option disables the optimisation 
+steps for those functions which can avoid unwanted elision of checking steps.
+
+@opindex fcontracts-client-check
+@item -fcontracts-client-check=@var{mode}
+This option enables insertion of checks at call sites (caller-side checking).
+
+The value of @var{mode} determines which contract checks are made:
+'@code{none}' No caller/client side checking (default)
+
+'@code{pre}' Preconditions are checked at the caller/client side.
+
+'@code{all}' Both pre and post-conditions are checked at the caller/client side.
+
+@opindex fcontracts-definition-check
+@item -fcontracts-definition-check=@var{mode}
+This option introduces the ability to disable callee/definition-side checks,
+which are otherwise enabled by default when the contracts feature is active.
+
+The variable @var{mode} has the values '@code{on}' and '@code{off}'.
+
+@opindex fcoroutines
+@opindex fno-coroutines
+@item -fcoroutines
+Enable support for the C++ coroutines extension.  With @option{-std=c++20}
+and above, coroutines are part of the language standard, so
+@option{-fcoroutines} defaults to on.
+
+@opindex fdiagnostics-all-candidates
+@opindex fno-diagnostics-all-candidates
+@item -fdiagnostics-all-candidates
+Permit the C++ front end to note all candidates during overload resolution
+failure, including when a deleted function is selected.
+
+@item -fdump-lang-
+@itemx -fdump-lang-@var{switch}
+@itemx -fdump-lang-@var{switch}-@var{options}
+@itemx -fdump-lang-@var{switch}-@var{options}=@var{filename}
+Control the dumping of C++-specific information.  The @var{options}
+and @var{filename} portions behave as described in the
+@option{-fdump-tree} option.  The following @var{switch} values are
+accepted:
+
+@table @samp
+@item all
+Enable all of the below.
+
+@opindex fdump-lang-class
+@item class
+Dump class hierarchy information.  Virtual table information is emitted
+unless '@option{slim}' is specified.
+
+@opindex fdump-lang-module
+@item module
+Dump module information.  Options @option{lineno} (locations),
+@option{graph} (reachability), @option{blocks} (clusters),
+@option{uid} (serialization), @option{alias} (mergeable),
+@option{asmname} (Elrond), @option{eh} (mapper) & @option{vops}
+(macros) may provide additional information.
+
+@opindex fdump-lang-raw
+@item raw
+Dump the raw internal tree data.
+
+@opindex fdump-lang-tinst

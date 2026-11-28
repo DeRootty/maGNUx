@@ -1,0 +1,281 @@
+@c GCC 16.1.0 | BLOQUE 0286 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 18500-18776 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+If the target does not support data prefetch, the address expression
+is evaluated if it includes side effects but no other code is generated
+and GCC does not issue a warning.
+@enddefbuiltin
+
+@defbuiltin{int __builtin_classify_type (@var{arg})}
+@defbuiltinx{int __builtin_classify_type (@var{type})}
+The @code{__builtin_classify_type} returns a small integer with a category
+of @var{arg} argument's type, like void type, integer type, enumeral type,
+boolean type, pointer type, reference type, offset type, real type, complex
+type, function type, method type, record type, union type, array type,
+string type, bit-precise integer type, vector type, etc.  When the argument
+is an expression, for backwards compatibility reason the argument is promoted
+like arguments passed to @code{...} in varargs function, so some classes are
+never returned in certain languages.  Alternatively, the argument of the
+built-in function can be a typename, such as the @code{typeof} specifier.
+
+@smallexample
+int a[2];
+__builtin_classify_type (a) == __builtin_classify_type (int[5]);
+__builtin_classify_type (a) == __builtin_classify_type (void*);
+__builtin_classify_type (typeof (a)) == __builtin_classify_type (int[5]);
+@end smallexample
+
+The first comparison will never be true, as @var{a} is implicitly converted
+to pointer.  The last two comparisons will be true as they classify
+pointers in the second case and arrays in the last case.
+@enddefbuiltin
+
+
+@defbuiltin{Pmode __builtin_extend_pointer (void * @var{x})}
+On targets where the user visible pointer size is smaller than the size
+of an actual hardware address this function returns the extended user
+pointer.  Targets where this is true included ILP32 mode on x86_64 or
+Aarch64.  This function is mainly useful when writing inline assembly
+code.
+@enddefbuiltin
+
+@defbuiltin{int __builtin_goacc_parlevel_id (int @var{x})}
+Returns the openacc gang, worker or vector id depending on whether @var{x} is
+0, 1 or 2.
+@enddefbuiltin
+
+@defbuiltin{int __builtin_goacc_parlevel_size (int @var{x})}
+Returns the openacc gang, worker or vector size depending on whether @var{x} is
+0, 1 or 2.
+@enddefbuiltin
+
+
+@node Target Builtins
+@section Built-in Functions Specific to Particular Target Machines
+
+On some target machines, GCC supports many built-in functions specific
+to those machines.  Generally these generate calls to specific machine
+instructions, but allow the compiler to schedule those calls.
+
+@menu
+* AArch64 Built-in Functions::
+* Alpha Built-in Functions::
+* ARC Built-in Functions::
+* ARC SIMD Built-in Functions::
+* Arm C Language Extensions (ACLE)::
+* ARM Floating Point Status and Control Intrinsics::
+* ARM ARMv8-M Security Extensions::
+* AVR Built-in Functions::
+* Blackfin Built-in Functions::
+* BPF Built-in Functions::
+* FR-V Built-in Functions::
+* LoongArch Base Built-in Functions::
+* LoongArch SX Vector Intrinsics::
+* LoongArch ASX Vector Intrinsics::
+* MIPS DSP Built-in Functions::
+* MIPS Paired-Single Support::
+* MIPS Loongson Built-in Functions::
+* MIPS SIMD Architecture (MSA) Support::
+* Other MIPS Built-in Functions::
+* MSP430 Built-in Functions::
+* NDS32 Built-in Functions::
+* Nvidia PTX Built-in Functions::
+* Basic PowerPC Built-in Functions::
+* PowerPC AltiVec/VSX Built-in Functions::
+* PowerPC Hardware Transactional Memory Built-in Functions::
+* PowerPC Atomic Memory Operation Functions::
+* PowerPC Matrix-Multiply Assist Built-in Functions::
+* PRU Built-in Functions::
+* RISC-V Built-in Functions::
+* RISC-V Vector Intrinsics::
+* CORE-V Built-in Functions::
+* RX Built-in Functions::
+* S/390 System z Built-in Functions::
+* SH Built-in Functions::
+* SPARC VIS Built-in Functions::
+* TI C6X Built-in Functions::
+* x86 Built-in Functions::
+* x86 transactional memory intrinsics::
+* x86 control-flow protection intrinsics::
+@end menu
+
+@node AArch64 Built-in Functions
+@subsection AArch64 Built-in Functions
+
+These built-in functions are available for the AArch64 family of
+processors.
+@smallexample
+unsigned int __builtin_aarch64_get_fpcr ();
+void __builtin_aarch64_set_fpcr (unsigned int);
+unsigned int __builtin_aarch64_get_fpsr ();
+void __builtin_aarch64_set_fpsr (unsigned int);
+
+unsigned long long __builtin_aarch64_get_fpcr64 ();
+void __builtin_aarch64_set_fpcr64 (unsigned long long);
+unsigned long long __builtin_aarch64_get_fpsr64 ();
+void __builtin_aarch64_set_fpsr64 (unsigned long long);
+@end smallexample
+
+@node Alpha Built-in Functions
+@subsection Alpha Built-in Functions
+
+These built-in functions are available for the Alpha family of
+processors, depending on the command-line switches used.
+
+The following built-in functions are always available.  They
+all generate the machine instruction that is part of the name.
+
+@smallexample
+long __builtin_alpha_implver (void);
+long __builtin_alpha_rpcc (void);
+long __builtin_alpha_amask (long);
+long __builtin_alpha_cmpbge (long, long);
+long __builtin_alpha_extbl (long, long);
+long __builtin_alpha_extwl (long, long);
+long __builtin_alpha_extll (long, long);
+long __builtin_alpha_extql (long, long);
+long __builtin_alpha_extwh (long, long);
+long __builtin_alpha_extlh (long, long);
+long __builtin_alpha_extqh (long, long);
+long __builtin_alpha_insbl (long, long);
+long __builtin_alpha_inswl (long, long);
+long __builtin_alpha_insll (long, long);
+long __builtin_alpha_insql (long, long);
+long __builtin_alpha_inswh (long, long);
+long __builtin_alpha_inslh (long, long);
+long __builtin_alpha_insqh (long, long);
+long __builtin_alpha_mskbl (long, long);
+long __builtin_alpha_mskwl (long, long);
+long __builtin_alpha_mskll (long, long);
+long __builtin_alpha_mskql (long, long);
+long __builtin_alpha_mskwh (long, long);
+long __builtin_alpha_msklh (long, long);
+long __builtin_alpha_mskqh (long, long);
+long __builtin_alpha_umulh (long, long);
+long __builtin_alpha_zap (long, long);
+long __builtin_alpha_zapnot (long, long);
+@end smallexample
+
+The following built-in functions are always with @option{-mmax}
+or @option{-mcpu=@var{cpu}} where @var{cpu} is @code{pca56} or
+later.  They all generate the machine instruction that is part
+of the name.
+
+@smallexample
+long __builtin_alpha_pklb (long);
+long __builtin_alpha_pkwb (long);
+long __builtin_alpha_unpkbl (long);
+long __builtin_alpha_unpkbw (long);
+long __builtin_alpha_minub8 (long, long);
+long __builtin_alpha_minsb8 (long, long);
+long __builtin_alpha_minuw4 (long, long);
+long __builtin_alpha_minsw4 (long, long);
+long __builtin_alpha_maxub8 (long, long);
+long __builtin_alpha_maxsb8 (long, long);
+long __builtin_alpha_maxuw4 (long, long);
+long __builtin_alpha_maxsw4 (long, long);
+long __builtin_alpha_perr (long, long);
+@end smallexample
+
+The following built-in functions are always with @option{-mcix}
+or @option{-mcpu=@var{cpu}} where @var{cpu} is @code{ev67} or
+later.  They all generate the machine instruction that is part
+of the name.
+
+@smallexample
+long __builtin_alpha_cttz (long);
+long __builtin_alpha_ctlz (long);
+long __builtin_alpha_ctpop (long);
+@end smallexample
+
+The following built-in functions are available on systems that use the OSF/1
+PALcode.  Normally they invoke the @code{rduniq} and @code{wruniq}
+PAL calls, but when invoked with @option{-mtls-kernel}, they invoke
+@code{rdval} and @code{wrval}.
+
+@smallexample
+void *__builtin_thread_pointer (void);
+void __builtin_set_thread_pointer (void *);
+@end smallexample
+
+@node ARC Built-in Functions
+@subsection ARC Built-in Functions
+
+The following built-in functions are provided for ARC targets.  The
+built-ins generate the corresponding assembly instructions.  In the
+examples given below, the generated code often requires an operand or
+result to be in a register.  Where necessary further code will be
+generated to ensure this is true, but for brevity this is not
+described in each case.
+
+@emph{Note:} Using a built-in to generate an instruction not supported
+by a target may cause problems. At present the compiler is not
+guaranteed to detect such misuse, and as a result an internal compiler
+error may be generated.
+
+@defbuiltin{int __builtin_arc_aligned (void *@var{val}, int @var{alignval})}
+Return 1 if @var{val} is known to have the byte alignment given
+by @var{alignval}, otherwise return 0.
+Note that this is different from
+@smallexample
+__alignof__(*(char *)@var{val}) >= alignval
+@end smallexample
+because __alignof__ sees only the type of the dereference, whereas
+__builtin_arc_align uses alignment information from the pointer
+as well as from the pointed-to type.
+The information available will depend on optimization level.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_arc_brk (void)}
+Generates
+@example
+brk
+@end example
+@enddefbuiltin
+
+@defbuiltin{{unsigned int} __builtin_arc_core_read (unsigned int @var{regno})}
+The operand is the number of a register to be read.  Generates:
+@example
+mov  @var{dest}, r@var{regno}
+@end example
+where the value in @var{dest} will be the result returned from the
+built-in.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_arc_core_write (unsigned int @var{regno}, unsigned int @var{val})}
+The first operand is the number of a register to be written, the
+second operand is a compile time constant to write into that
+register.  Generates:
+@example
+mov  r@var{regno}, @var{val}
+@end example
+@enddefbuiltin
+
+@defbuiltin{int __builtin_arc_divaw (int @var{a}, int @var{b})}
+Only available if either @option{-mcpu=ARC700} or @option{-meA} is set.
+Generates:
+@example
+divaw  @var{dest}, @var{a}, @var{b}
+@end example
+where the value in @var{dest} will be the result returned from the
+built-in.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_arc_flag (unsigned int @var{a})}
+Generates
+@example
+flag  @var{a}
+@end example
+@enddefbuiltin
+
+@defbuiltin{{unsigned int} __builtin_arc_lr (unsigned int @var{auxr})}
+The operand, @var{auxv}, is the address of an auxiliary register and
+must be a compile time constant.  Generates:
+@example
+lr  @var{dest}, [@var{auxr}]
+@end example
+Where the value in @var{dest} will be the result returned from the
+built-in.
+@enddefbuiltin
+

@@ -1,0 +1,248 @@
+@c GCC 16.1.0 | BLOQUE 0043 | 03-10
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 11529-11772 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Static Analyzer Options
+@section Options That Control Static Analysis
+
+@table @gcctabopt
+@opindex analyzer
+@opindex fanalyzer
+@opindex fno-analyzer
+@item -fanalyzer
+This option enables an static analysis of program flow which looks
+for ``interesting'' interprocedural paths through the
+code, and issues warnings for problems found on them.
+
+This analysis is much more expensive than other GCC warnings.
+
+In technical terms, it performs coverage-guided symbolic execution of
+the code being compiled.  It is neither sound nor complete: it can
+have false positives and false negatives.  It is a bug-finding tool,
+rather than a tool for proving program correctness.
+
+The analyzer is only suitable for use on C code in this release.
+
+Enabling this option effectively enables the following warnings:
+
+@gccoptlist{
+-Wanalyzer-allocation-size
+-Wanalyzer-deref-before-check
+-Wanalyzer-double-fclose
+-Wanalyzer-double-free
+-Wanalyzer-exposure-through-output-file
+-Wanalyzer-exposure-through-uninit-copy
+-Wanalyzer-fd-access-mode-mismatch
+-Wanalyzer-fd-double-close
+-Wanalyzer-fd-leak
+-Wanalyzer-fd-phase-mismatch
+-Wanalyzer-fd-type-mismatch
+-Wanalyzer-fd-use-after-close
+-Wanalyzer-fd-use-without-check
+-Wanalyzer-file-leak
+-Wanalyzer-free-of-non-heap
+-Wanalyzer-imprecise-fp-arithmetic
+-Wanalyzer-infinite-loop
+-Wanalyzer-infinite-recursion
+-Wanalyzer-jump-through-null
+-Wanalyzer-malloc-leak
+-Wanalyzer-mismatching-deallocation
+-Wanalyzer-null-argument
+-Wanalyzer-null-dereference
+-Wanalyzer-out-of-bounds
+-Wanalyzer-overlapping-buffers
+-Wanalyzer-possible-null-argument
+-Wanalyzer-possible-null-dereference
+-Wanalyzer-putenv-of-auto-var
+-Wanalyzer-shift-count-negative
+-Wanalyzer-shift-count-overflow
+-Wanalyzer-stale-setjmp-buffer
+-Wanalyzer-tainted-allocation-size
+-Wanalyzer-tainted-array-index
+-Wanalyzer-tainted-assertion
+-Wanalyzer-tainted-divisor
+-Wanalyzer-tainted-offset
+-Wanalyzer-tainted-size
+-Wanalyzer-throw-of-unexpected-type
+-Wanalyzer-undefined-behavior-ptrdiff
+-Wanalyzer-undefined-behavior-strtok
+-Wanalyzer-unsafe-call-within-signal-handler
+-Wanalyzer-use-after-free
+-Wanalyzer-use-of-pointer-in-stale-stack-frame
+-Wanalyzer-use-of-uninitialized-value
+-Wanalyzer-va-arg-type-mismatch
+-Wanalyzer-va-list-exhausted
+-Wanalyzer-va-list-leak
+-Wanalyzer-va-list-use-after-va-end
+-Wanalyzer-write-to-const
+-Wanalyzer-write-to-string-literal
+}
+
+This option is only available if GCC was configured with analyzer
+support enabled.
+
+@opindex Wanalyzer-symbol-too-complex
+@opindex Wno-analyzer-symbol-too-complex
+@item -Wanalyzer-symbol-too-complex
+If @option{-fanalyzer} is enabled, the analyzer uses various heuristics
+to attempt to track the state of memory, but these can be defeated by
+sufficiently complicated code.
+
+By default, the analysis silently stops tracking values of expressions
+if they exceed an internal limit, and falls back
+to an imprecise representation for such expressions.
+The @option{-Wanalyzer-symbol-too-complex} option warns if this occurs.
+
+@opindex Wanalyzer-too-complex
+@opindex Wno-analyzer-too-complex
+@item -Wanalyzer-too-complex
+If @option{-fanalyzer} is enabled, the analyzer uses various heuristics
+to attempt to explore the control flow and data flow in the program,
+but these can be defeated by sufficiently complicated code.
+
+By default, the analysis silently stops if the code is too
+complicated for the analyzer to fully explore and it reaches an internal
+limit.  The @option{-Wanalyzer-too-complex} option warns if this occurs.
+
+@opindex Wanalyzer-allocation-size
+@opindex Wno-analyzer-allocation-size
+@item -Wno-analyzer-allocation-size
+This warning requires @option{-fanalyzer}, which enables it;
+to disable it, use @option{-Wno-analyzer-allocation-size}.
+
+This diagnostic warns for paths through the code in which a pointer to
+a buffer is assigned to point at a buffer with a size that is not a
+multiple of @code{sizeof (*pointer)}.
+
+See @uref{https://cwe.mitre.org/data/definitions/131.html, CWE-131: Incorrect Calculation of Buffer Size}.
+
+@opindex Wanalyzer-deref-before-check
+@opindex Wno-analyzer-deref-before-check
+@item -Wno-analyzer-deref-before-check
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-deref-before-check}
+to disable it.
+
+This diagnostic warns for paths through the code in which a pointer
+is checked for @code{NULL} *after* it has already been
+dereferenced, suggesting that the pointer could have been NULL.
+Such cases suggest that the check for NULL is either redundant,
+or that it needs to be moved to before the pointer is dereferenced.
+
+This diagnostic also considers values passed to a function argument
+marked with @code{__attribute__((nonnull))} as requiring a non-NULL
+value, and thus will complain if such values are checked for @code{NULL}
+after returning from such a function call.
+
+This diagnostic is unlikely to be reported when any level of optimization
+is enabled, as GCC's optimization logic will typically consider such
+checks for NULL as being redundant, and optimize them away before the
+analyzer "sees" them.  Hence optimization should be disabled when
+attempting to trigger this diagnostic.
+
+@opindex Wanalyzer-double-fclose
+@opindex Wno-analyzer-double-fclose
+@item -Wno-analyzer-double-fclose
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-double-fclose} to disable it.
+
+This diagnostic warns for paths through the code in which a @code{FILE *}
+can have @code{fclose} called on it more than once.
+
+See @uref{https://cwe.mitre.org/data/definitions/1341.html, CWE-1341: Multiple Releases of Same Resource or Handle}.
+
+@opindex Wanalyzer-double-free
+@opindex Wno-analyzer-double-free
+@item -Wno-analyzer-double-free
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-double-free} to disable it.
+
+This diagnostic warns for paths through the code in which a pointer
+can have a deallocator called on it more than once, either @code{free},
+or a deallocator referenced by attribute @code{malloc}.
+
+See @uref{https://cwe.mitre.org/data/definitions/415.html, CWE-415: Double Free}.
+
+@opindex Wanalyzer-exposure-through-output-file
+@opindex Wno-analyzer-exposure-through-output-file
+@item -Wno-analyzer-exposure-through-output-file
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-exposure-through-output-file}
+to disable it.
+
+This diagnostic warns for paths through the code in which a
+security-sensitive value is written to an output file
+(such as writing a password to a log file).
+
+See @uref{https://cwe.mitre.org/data/definitions/532.html, CWE-532: Information Exposure Through Log Files}.
+
+@opindex Wanalyzer-exposure-through-uninit-copy
+@opindex Wno-analyzer-exposure-through-uninit-copy
+@item -Wanalyzer-exposure-through-uninit-copy
+This warning requires both @option{-fanalyzer} and the use of a plugin
+to specify a function that copies across a ``trust boundary''.  Use
+@option{-Wno-analyzer-exposure-through-uninit-copy} to disable it.
+
+This diagnostic warns for ``infoleaks'' - paths through the code in which
+uninitialized values are copied across a security boundary
+(such as code within an OS kernel that copies a partially-initialized
+struct on the stack to user space).
+
+See @uref{https://cwe.mitre.org/data/definitions/200.html, CWE-200: Exposure of Sensitive Information to an Unauthorized Actor}.
+
+@opindex Wanalyzer-fd-access-mode-mismatch
+@opindex Wno-analyzer-fd-access-mode-mismatch
+@item -Wno-analyzer-fd-access-mode-mismatch
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-fd-access-mode-mismatch}
+to disable it.
+
+This diagnostic warns for paths through code in which a
+@code{read} on a write-only file descriptor is attempted, or vice versa.
+
+This diagnostic also warns for code paths in a which a function with attribute
+@code{fd_arg_read (N)} is called with a file descriptor opened with
+@code{O_WRONLY} at referenced argument @code{N} or a function with attribute
+@code{fd_arg_write (N)} is called with a file descriptor opened with
+@code{O_RDONLY} at referenced argument @var{N}.
+
+@opindex Wanalyzer-fd-double-close
+@opindex Wno-analyzer-fd-double-close
+@item -Wno-analyzer-fd-double-close
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-fd-double-close}
+to disable it.
+
+This diagnostic warns for paths through code in which a
+file descriptor can be closed more than once.
+
+See @uref{https://cwe.mitre.org/data/definitions/1341.html, CWE-1341: Multiple Releases of Same Resource or Handle}.
+
+@opindex Wanalyzer-fd-leak
+@opindex Wno-analyzer-fd-leak
+@item -Wno-analyzer-fd-leak
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-fd-leak}
+to disable it.
+
+This diagnostic warns for paths through code in which an
+open file descriptor is leaked.
+
+See @uref{https://cwe.mitre.org/data/definitions/775.html, CWE-775: Missing Release of File Descriptor or Handle after Effective Lifetime}.
+
+@opindex Wanalyzer-fd-phase-mismatch
+@opindex Wno-analyzer-fd-phase-mismatch
+@item -Wno-analyzer-fd-phase-mismatch
+This warning requires @option{-fanalyzer}, which enables it; use
+@option{-Wno-analyzer-fd-phase-mismatch}
+to disable it.
+
+This diagnostic warns for paths through code in which an operation is
+attempted in the wrong phase of a file descriptor's lifetime.
+For example, it will warn on attempts to call @code{accept} on a stream
+socket that has not yet had @code{listen} successfully called on it.
+
+See @uref{https://cwe.mitre.org/data/definitions/666.html, CWE-666: Operation on Resource in Wrong Phase of Lifetime}.
+
+@opindex Wanalyzer-fd-type-mismatch
+@opindex Wno-analyzer-fd-type-mismatch

@@ -1,0 +1,254 @@
+@c GCC 16.1.0 | BLOQUE 0018 | 03-08
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 5856-6105 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+At this time GCC tries to detect also a few terminals that are known to
+not implement the URL feature, and have bugs or at least had bugs in
+some versions that are still in use, where the URL escapes are likely
+to misbehave, i.e. print garbage on the screen.
+That list is currently xfce4-terminal, certain known to be buggy
+gnome-terminal versions, the linux console, and mingw.
+This check can be skipped with the @option{-fdiagnostics-urls=always}.
+
+@opindex fno-diagnostics-show-option
+@opindex fdiagnostics-show-option
+@item -fno-diagnostics-show-option
+By default, each diagnostic emitted includes text indicating the
+command-line option that directly controls the diagnostic (if such an
+option is known to the diagnostic machinery).  Specifying the
+@option{-fno-diagnostics-show-option} flag suppresses that behavior.
+
+@opindex fno-diagnostics-show-caret
+@opindex fdiagnostics-show-caret
+@item -fno-diagnostics-show-caret
+By default, each diagnostic emitted includes the original source line
+and a caret @samp{^} indicating the column.  This option suppresses this
+information.  The source line is truncated to @var{n} characters, if
+the @option{-fmessage-length=n} option is given.  When the output is done
+to the terminal, the width is limited to the width given by the
+@env{COLUMNS} environment variable or, if not set, to the terminal width.
+
+@opindex fno-diagnostics-show-labels
+@opindex fdiagnostics-show-labels
+@item -fno-diagnostics-show-labels
+By default, when printing source code (via @option{-fdiagnostics-show-caret}),
+diagnostics can label ranges of source code with pertinent information, such
+as the types of expressions:
+
+@smallexample
+    printf ("foo %s bar", long_i + long_j);
+                 ~^       ~~~~~~~~~~~~~~~
+                  |              |
+                  char *         long int
+@end smallexample
+
+This option suppresses the printing of these labels (in the example above,
+the vertical bars and the ``char *'' and ``long int'' text).
+
+@opindex fno-diagnostics-show-event-links
+@opindex fdiagnostics-show-event-links
+@item -fno-diagnostics-show-event-links
+By default, when printing execution paths (via
+@option{-fdiagnostics-path-format=inline-events}), GCC will print lines
+connecting related events, such as the line connecting events 1 and 2 in:
+
+@smallexample
+    3 |   if (p)
+      |       ^
+      |       |
+      |       (1) following `false' branch (when `p' is NULL)... ->-+
+      |                                                             |
+      |                                                             |
+      |+------------------------------------------------------------+
+    4 ||    return 0;
+    5 ||  return *p;
+      ||         ~
+      ||         |
+      |+-------->(2) ...to here
+      |          (3) dereference of NULL `p'
+@end smallexample
+
+This option suppresses the printing of such connector lines.
+
+@opindex fno-diagnostics-show-cwe
+@opindex fdiagnostics-show-cwe
+@item -fno-diagnostics-show-cwe
+Diagnostic messages can optionally have an associated
+@uref{https://cwe.mitre.org/index.html, CWE} identifier.
+GCC itself only provides such metadata for some of the @option{-fanalyzer}
+diagnostics.  GCC plugins may also provide diagnostics with such metadata.
+By default, if this information is present, it will be printed with
+the diagnostic.  This option suppresses the printing of this metadata.
+
+@opindex fno-diagnostics-show-rules
+@opindex fdiagnostics-show-rules
+@item -fno-diagnostics-show-rules
+Diagnostic messages can optionally have rules associated with them, such
+as from a coding standard, or a specification.
+GCC itself does not do this for any of its diagnostics, but plugins may do so.
+By default, if this information is present, it will be printed with
+the diagnostic.  This option suppresses the printing of this metadata.
+
+@opindex fno-diagnostics-show-highlight-colors
+@opindex fdiagnostics-show-highlight-colors
+@item -fno-diagnostics-show-highlight-colors
+
+GCC can use color for emphasis and contrast when printing diagnostic
+messages and quoting the user's source.
+
+For example, in
+
+@smallexample
+demo.c: In function `test_bad_format_string_args':
+../../src/demo.c:25:18: warning: format `%i' expects argument of type `int', but argument 2 has type `const char *' [-Wformat=]
+   25 |   printf("hello %i", msg);
+      |                 ~^   ~~~
+      |                  |   |
+      |                  int const char *
+      |                 %s
+@end smallexample
+
+@itemize @bullet
+@item
+the @code{%i} and @code{int} in the message and the @code{int} in the
+quoted source are colored using @code{highlight-a} (bold green by default),
+and
+@item
+the @code{const char *} in the message and in the quoted source are both
+colored using @code{highlight-b} (bold blue by default).
+@end itemize
+
+The intent is to draw the reader's eyes to the relationships between the
+various aspects of the diagnostic message and the source, using color
+to group related elements and distinguish between mismatching ones.
+
+This additional colorization is enabled by default if color printing
+is enabled (as per @option{-fdiagnostics-color=}), but it can be separately
+disabled via @option{-fno-diagnostics-show-highlight-colors}.
+
+@opindex fno-diagnostics-show-line-numbers
+@opindex fdiagnostics-show-line-numbers
+@item -fno-diagnostics-show-line-numbers
+By default, when printing source code (via @option{-fdiagnostics-show-caret}),
+a left margin is printed, showing line numbers.  This option suppresses this
+left margin.
+
+@opindex fdiagnostics-minimum-margin-width
+@item -fdiagnostics-minimum-margin-width=@var{width}
+This option controls the minimum width of the left margin printed by
+@option{-fdiagnostics-show-line-numbers}.  It defaults to 6.
+
+@opindex fdiagnostics-show-context
+@opindex fno-diagnostics-show-context
+@item -fdiagnostics-show-context[=@var{depth}]
+@itemx -fno-diagnostics-show-context
+With this option, the compiler might print the interesting control flow
+chain that guards the basic block of the statement which has the warning.
+@var{depth} is the maximum depth of the control flow chain.
+Currently, The list of the impacted warning options includes:
+@option{-Warray-bounds}, @option{-Wstringop-overflow},
+@option{-Wstringop-overread}, @option{-Wstringop-truncation}.
+and @option{-Wrestrict}.
+More warning options might be added to this list in future releases.
+The forms @option{-fdiagnostics-show-context} and
+@option{-fno-diagnostics-show-context} are aliases for
+@option{-fdiagnostics-show-context=1} and
+@option{-fdiagnostics-show-context=0}, respectively.
+
+@opindex fdiagnostics-parseable-fixits
+@opindex fno-diagnostics-parseable-fixits
+@item -fdiagnostics-parseable-fixits
+Emit fix-it hints in a machine-parseable format, suitable for consumption
+by IDEs.  For each fix-it, a line will be printed after the relevant
+diagnostic, starting with the string ``fix-it:''.  For example:
+
+@smallexample
+fix-it:"test.c":@{45:3-45:21@}:"gtk_widget_show_all"
+@end smallexample
+
+The location is expressed as a half-open range, expressed as a count of
+bytes, starting at byte 1 for the initial column.  In the above example,
+bytes 3 through 20 of line 45 of ``test.c'' are to be replaced with the
+given string:
+
+@smallexample
+00000000011111111112222222222
+12345678901234567890123456789
+  gtk_widget_showall (dlg);
+  ^^^^^^^^^^^^^^^^^^
+  gtk_widget_show_all
+@end smallexample
+
+The filename and replacement string escape backslash as ``\\", tab as ``\t'',
+newline as ``\n'', double quotes as ``\"'', non-printable characters as octal
+(e.g. vertical tab as ``\013'').
+
+An empty replacement string indicates that the given range is to be removed.
+An empty range (e.g. ``45:3-45:3'') indicates that the string is to
+be inserted at the given position.
+
+@opindex fdiagnostics-generate-patch
+@opindex fno-diagnostics-generate-patch
+@item -fdiagnostics-generate-patch
+Print fix-it hints to stderr in unified diff format, after any diagnostics
+are printed.  For example:
+
+@smallexample
+--- test.c
++++ test.c
+@@ -42,5 +42,5 @@
+
+ void show_cb(GtkDialog *dlg)
+ @{
+-  gtk_widget_showall(dlg);
++  gtk_widget_show_all(dlg);
+ @}
+
+@end smallexample
+
+The diff may or may not be colorized, following the same rules
+as for diagnostics (see @option{-fdiagnostics-color}).
+
+@opindex fdiagnostics-show-template-tree
+@opindex fno-diagnostics-show-template-tree
+@item -fdiagnostics-show-template-tree
+
+In the C++ frontend, when printing diagnostics showing mismatching
+template types, such as:
+
+@smallexample
+  could not convert 'std::map<int, std::vector<double> >()'
+    from 'map<[...],vector<double>>' to 'map<[...],vector<float>>
+@end smallexample
+
+the @option{-fdiagnostics-show-template-tree} flag enables printing a
+tree-like structure showing the common and differing parts of the types,
+such as:
+
+@smallexample
+  map<
+    [...],
+    vector<
+      [double != float]>>
+@end smallexample
+
+The parts that differ are highlighted with color (``double'' and
+``float'' in this case).
+
+@opindex fno-elide-type
+@opindex felide-type
+@item -fno-elide-type
+By default when the C++ frontend prints diagnostics showing mismatching
+template types, common parts of the types are printed as ``[...]'' to
+simplify the error message.  For example:
+
+@smallexample
+  could not convert 'std::map<int, std::vector<double> >()'
+    from 'map<[...],vector<double>>' to 'map<[...],vector<float>>
+@end smallexample
+
+Specifying the @option{-fno-elide-type} flag suppresses that behavior.
+This flag also affects the output of the
+@option{-fdiagnostics-show-template-tree} flag.
+
+@opindex fdiagnostics-path-format

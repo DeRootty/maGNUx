@@ -1,0 +1,279 @@
+@c GCC 16.1.0 | BLOQUE 0162 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 36803-37077 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item If a zero-length bit-field is inserted after a bit-field, @code{foo}, and the
+alignment of the zero-length bit-field is greater than the member that follows it,
+@code{bar}, @code{bar} is aligned as the type of the zero-length bit-field.
+
+For example:
+
+@smallexample
+struct
+ @{
+   char foo : 4;
+   short : 0;
+   char bar;
+ @} t2;
+
+struct
+ @{
+   char foo : 4;
+   short : 0;
+   double bar;
+ @} t3;
+@end smallexample
+
+@noindent
+For @code{t2}, @code{bar} is placed at offset 2, rather than offset 1.
+Accordingly, the size of @code{t2} is 4.  For @code{t3}, the zero-length
+bit-field does not affect the alignment of @code{bar} or, as a result, the size
+of the structure.
+
+Taking this into account, it is important to note the following:
+
+@enumerate
+@item If a zero-length bit-field follows a normal bit-field, the type of the
+zero-length bit-field may affect the alignment of the structure as whole. For
+example, @code{t2} has a size of 4 bytes, since the zero-length bit-field
+follows a normal bit-field, and is of type short.
+
+@item Even if a zero-length bit-field is not followed by a normal bit-field,
+it may still affect the alignment of the structure:
+
+@smallexample
+struct
+ @{
+   char foo : 6;
+   long : 0;
+ @} t4;
+@end smallexample
+
+@noindent
+Here, @code{t4} takes up 4 bytes.
+@end enumerate
+
+@item Zero-length bit-fields following non-bit-field members are ignored:
+
+@smallexample
+struct
+ @{
+   char foo;
+   long : 0;
+   char bar;
+ @} t5;
+@end smallexample
+
+@noindent
+Here, @code{t5} takes up 2 bytes.
+@end enumerate
+
+
+@opindex mno-align-stringops
+@opindex malign-stringops
+@item -mno-align-stringops
+Do not align the destination of inlined string operations.  This switch reduces
+code size and improves performance in case the destination is already aligned,
+but GCC doesn't know about it.
+
+@opindex minline-all-stringops
+@opindex mno-inline-all-stringops
+@item -minline-all-stringops
+By default GCC inlines string operations only when the destination is
+known to be aligned to least a 4-byte boundary.
+This enables more inlining and increases code
+size, but may improve performance of code that depends on fast
+@code{memcpy} and @code{memset} for short lengths.
+The option enables inline expansion of @code{strlen} for all
+pointer alignments.
+
+@opindex minline-stringops-dynamically
+@opindex mno-inline-stringops-dynamically
+@item -minline-stringops-dynamically
+For string operations of unknown size, use run-time checks with
+inline code for small blocks and a library call for large blocks.
+
+@opindex mstringop-strategy=@var{alg}
+@item -mstringop-strategy=@var{alg}
+Override the internal decision heuristic for the particular algorithm to use
+for inlining string operations.  The allowed values for @var{alg} are:
+
+@table @samp
+@item rep_byte
+@itemx rep_4byte
+@itemx rep_8byte
+Expand using i386 @code{rep} prefix of the specified size.
+
+@item byte_loop
+@itemx loop
+@itemx unrolled_loop
+Expand into an inline loop.
+
+@item libcall
+Always use a library call.
+@end table
+
+@opindex mmemcpy-strategy=@var{strategy}
+@item -mmemcpy-strategy=@var{strategy}
+Override the internal decision heuristic to decide if
+@code{__builtin_memcpy} should be inlined and what inline algorithm to
+use when the expected size of the copy operation is known.
+@var{strategy} is a comma-separated list of
+@var{alg}:@var{max_size}:@var{dest_align} triplets.  @var{alg} is
+specified in @option{-mstringop-strategy}, @var{max_size} specifies
+the max byte size with which inline algorithm @var{alg} is allowed.
+For the last triplet, the @var{max_size} must be @code{-1}.
+The @var{max_size} of the triplets in the list must be specified in
+increasing order.  The minimal byte size for @var{alg} is @code{0} for
+the first triplet and @code{@var{max_size} + 1} of the preceding range.
+
+@opindex mmemset-strategy=@var{strategy}
+@item -mmemset-strategy=@var{strategy}
+This option is similar to @option{-mmemcpy-strategy=} except that it
+controls the @code{__builtin_memset} expansion.
+
+@opindex momit-leaf-frame-pointer
+@opindex mno-omit-leaf-frame-pointer
+@item -momit-leaf-frame-pointer
+Don't keep the frame pointer in a register for leaf functions.  This
+avoids the instructions to save, set up, and restore frame pointers and
+makes an extra register available in leaf functions.  The option
+@option{-momit-leaf-frame-pointer} removes the frame pointer for leaf
+functions, which might make debugging harder.
+
+@opindex mtls-direct-seg-refs
+@opindex mno-tls-direct-seg-refs
+@item -mtls-direct-seg-refs
+@itemx -mno-tls-direct-seg-refs
+Controls whether TLS variables may be accessed with offsets from the
+TLS segment register (@code{%gs} for 32-bit, @code{%fs} for 64-bit),
+or whether the thread base pointer must be added.  Whether or not this
+is valid depends on the operating system, and whether it maps the
+segment to cover the entire TLS area.
+
+For systems that use the GNU C Library, the default is on.
+
+@opindex msse2avx
+@opindex mno-sse2avx
+@item -msse2avx
+@itemx -mno-sse2avx
+Specify that the assembler should encode SSE instructions with VEX
+prefix.  The option @option{-mavx} turns this on by default.
+
+@opindex mfentry
+@opindex mno-fentry
+@item -mfentry
+@itemx -mno-fentry
+If profiling is active (@option{-pg}), put the profiling
+counter call before the prologue.
+Note: On x86 architectures the attribute @code{ms_hook_prologue}
+isn't possible at the moment for @option{-mfentry} and @option{-pg}.
+
+@opindex mrecord-mcount
+@opindex mno-record-mcount
+@item -mrecord-mcount
+@itemx -mno-record-mcount
+If profiling is active (@option{-pg}), generate a section that contains
+pointers to each profiling call; this is useful for automatically patching
+the calls.  You can use the @option{mfentry-section=} option to set the
+name of the section; it defaults to @samp{__mcount_loc}.
+
+@opindex mnop-mcount
+@opindex mno-nop-mcount
+@item -mnop-mcount
+@itemx -mno-nop-mcount
+If profiling is active (@option{-pg}), generate the calls to
+the profiling functions as NOPs.  This is useful when they
+should be patched in later dynamically. This is likely only
+useful together with @option{-mrecord-mcount}.
+
+@opindex minstrument-return
+@item -minstrument-return=@var{type}
+With @option{-pg -mfentry}, instrument function exits according to
+@var{type}, which may be one of @samp{none} to not instrument,
+@samp{call} to generate a call to @code{__return__}, or @samp{nop5} to
+generate a 5-byte nop sequence.  This option only instruments true
+returns ending with a @code{ret}, not sibling calls via a jump.
+
+@opindex mrecord-return
+@opindex mno-record-return
+@item -mrecord-return
+@itemx -mno-record-return
+Generate a @code{__return_loc} section pointing to all return instrumentation
+code.
+
+@opindex mfentry-name
+@item -mfentry-name=@var{name}
+Set name of @code{__fentry__} symbol called at function entry for
+@option{-pg -mfentry} functions.
+
+@opindex mfentry-section
+@item -mfentry-section=@var{name}
+Set name of section to record @option{-mrecord-mcount} calls.  The
+default is @samp{__mcount_loc}.
+
+@opindex mskip-rax-setup
+@opindex mno-skip-rax-setup
+@item -mskip-rax-setup
+@itemx -mno-skip-rax-setup
+When generating code for the x86-64 architecture with SSE extensions
+disabled, @option{-mskip-rax-setup} can be used to skip setting up RAX
+register when there are no variable arguments passed in vector registers.
+
+@opindex m8bit-idiv
+@opindex mno-8bit-idiv
+@item -m8bit-idiv
+@itemx -mno-8bit-idiv
+On some processors, like Intel Atom, 8-bit unsigned integer divide is
+much faster than 32-bit/64-bit integer divide.  This option generates a
+run-time check.  If both dividend and divisor are within range of 0
+to 255, 8-bit unsigned integer divide is used instead of
+32-bit/64-bit integer divide.
+
+@opindex mavx256-split-unaligned-load
+@opindex mno-avx256-split-unaligned-load
+@opindex mavx256-split-unaligned-store
+@opindex mno-avx256-split-unaligned-store
+@item -mavx256-split-unaligned-load
+@itemx -mavx256-split-unaligned-store
+Split 32-byte AVX unaligned load and store.
+
+@opindex mstack-protector-guard
+@opindex mstack-protector-guard-reg
+@opindex mstack-protector-guard-offset
+@opindex mstack-protector-guard-symbol
+@item -mstack-protector-guard=@var{guard}
+@itemx -mstack-protector-guard-reg=@var{reg}
+@itemx -mstack-protector-guard-offset=@var{offset}
+@itemx -mstack-protector-guard-symbol=@var{symbol}
+Generate stack protection code using canary at @var{guard}.  Supported
+locations are @samp{global} for global canary or @samp{tls} for per-thread
+canary in the TLS block (the default).  This option has effect only when
+@option{-fstack-protector} or @option{-fstack-protector-all} is specified.
+
+With the latter choice the options
+@option{-mstack-protector-guard-reg=@var{reg}} and
+@option{-mstack-protector-guard-offset=@var{offset}} furthermore specify
+which segment register (@code{%fs} or @code{%gs}) to use as base register
+for reading the canary, and from what offset from that base register.
+The default for those is as specified in the relevant ABI.
+
+@option{-mstack-protector-guard-symbol=@var{symbol}} overrides
+the offset with a symbol reference to a canary in the TLS block.
+
+@opindex mgeneral-regs-only
+@item -mgeneral-regs-only
+Generate code that uses only the general-purpose registers.  This
+prevents the compiler from using floating-point, vector, mask and bound
+registers.
+
+@opindex mrelax-cmpxchg-loop
+@opindex mno-relax-cmpxchg-loop
+@item -mrelax-cmpxchg-loop
+When emitting a compare-and-swap loop for @ref{__sync Builtins}
+and @ref{__atomic Builtins} lacking a native instruction, optimize
+for the highly contended case by issuing an atomic load before the
+@code{CMPXCHG} instruction, and using the @code{PAUSE} instruction
+to save CPU power when restarting the loop.
+
+@opindex mindirect-branch

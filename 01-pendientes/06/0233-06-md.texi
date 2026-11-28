@@ -1,0 +1,42 @@
+@c GCC 16.1.0 | BLOQUE 0233 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 1498-1535 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+@cindex load address instruction
+@cindex push address instruction
+@cindex address constraints
+@cindex @samp{p} in constraint
+@item @samp{p}
+An operand that is a valid memory address is allowed.  This is
+for ``load address'' and ``push address'' instructions.
+
+@findex address_operand
+@samp{p} in the constraint must be accompanied by @code{address_operand}
+as the predicate in the @code{match_operand}.  This predicate interprets
+the mode specified in the @code{match_operand} as the mode of the memory
+reference for which the address would be valid.
+
+@cindex @samp{:} in constraint
+@item @samp{:}
+This constraint, allowed only in input operands, says the inline @code{asm}
+pattern defines specific function or variable symbol.  The constraint
+shouldn't be mixed with other constraints on the same operand and
+the operand should be address of a function or non-automatic variable.
+Best used with the @samp{cc} modifier when printing the operand, so that
+even in position independent code it prints as a label.
+
+@smallexample
+void foo (void);
+asm (".globl %cc0; %cc0: ret" : : ":" (foo));
+@end smallexample
+
+@cindex other register constraints
+@cindex extensible constraints
+@item @var{other-letters}
+Other letters can be defined in machine-dependent fashion to stand for
+particular classes of registers or other arbitrary operand types.
+@samp{d}, @samp{a} and @samp{f} are defined on the 68000/68020 to stand
+for data, address and floating point registers.
+@end table
+

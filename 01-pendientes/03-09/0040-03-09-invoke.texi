@@ -1,0 +1,254 @@
+@c GCC 16.1.0 | BLOQUE 0040 | 03-09
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 10997-11246 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -Wnormalized=@r{[}none@r{|}id@r{|}nfc@r{|}nfkc@r{]}
+In ISO C and ISO C++, two identifiers are different if they are
+different sequences of characters.  However, sometimes when characters
+outside the basic ASCII character set are used, you can have two
+different character sequences that look the same.  To avoid confusion,
+the ISO 10646 standard sets out some @dfn{normalization rules} which
+when applied ensure that two sequences that look the same are turned into
+the same sequence.  GCC can warn you if you are using identifiers that
+have not been normalized; this option controls that warning.
+
+There are four levels of warning supported by GCC@.  The default is
+@option{-Wnormalized=nfc}, which warns about any identifier that is
+not in the ISO 10646 ``C'' normalized form, @dfn{NFC}.  NFC is the
+recommended form for most uses.  It is equivalent to
+@option{-Wnormalized}.
+
+Unfortunately, there are some characters allowed in identifiers by
+ISO C and ISO C++ that, when turned into NFC, are not allowed in
+identifiers.  That is, there's no way to use these symbols in portable
+ISO C or C++ and have all your identifiers in NFC@.
+@option{-Wnormalized=id} suppresses the warning for these characters.
+It is hoped that future versions of the standards involved will correct
+this, which is why this option is not the default.
+
+You can switch the warning off for all characters by writing
+@option{-Wnormalized=none} or @option{-Wno-normalized}.  You should
+only do this if you are using some other normalization scheme (like
+``D''), because otherwise you can easily create bugs that are
+literally impossible to see.
+
+Some characters in ISO 10646 have distinct meanings but look identical
+in some fonts or display methodologies, especially once formatting has
+been applied.  For instance @code{\u207F}, ``SUPERSCRIPT LATIN SMALL
+LETTER N'', displays just like a regular @code{n} that has been
+placed in a superscript.  ISO 10646 defines the @dfn{NFKC}
+normalization scheme to convert all these into a standard form as
+well, and GCC warns if your code is not in NFKC if you use
+@option{-Wnormalized=nfkc}.  This warning is comparable to warning
+about every identifier that contains the letter O because it might be
+confused with the digit 0, and so is not the default, but may be
+useful as a local coding convention if the programming environment
+cannot be fixed to display these characters distinctly.
+
+@opindex Wno-attribute-warning
+@opindex Wattribute-warning
+@item -Wno-attribute-warning
+Do not warn about usage of functions
+declared with @code{warning} attribute (@pxref{Common Attributes}).
+By default, this warning is
+enabled.  @option{-Wno-attribute-warning} can be used to disable the
+warning or @option{-Wno-error=attribute-warning} can be used to
+disable the error when compiled with @option{-Werror} flag.
+
+@opindex Wno-deprecated
+@opindex Wdeprecated
+@item -Wno-deprecated
+Do not warn about usage of deprecated features.  @xref{Deprecated Features}.
+
+In C++, explicitly specifying @option{-Wdeprecated} also enables
+warnings about some features that are deprecated in later language
+standards, specifically @option{-Wcomma-subscript},
+@option{-Wvolatile}, @option{-Wdeprecated-enum-float-conversion},
+@option{-Wdeprecated-enum-enum-conversion},
+@option{-Wdeprecated-literal-operator}, and
+@option{-Wdeprecated-variadic-comma-omission}.
+
+@opindex Wno-deprecated-declarations
+@opindex Wdeprecated-declarations
+@item -Wno-deprecated-declarations
+Do not warn about uses of functions, variables, or types
+marked as deprecated by using the @code{deprecated}
+attribute.  @xref{Attributes}.
+
+@opindex Wno-deprecated-openmp
+@opindex Wdeprecated-openmp
+@item -Wno-deprecated-openmp
+Do not warn about deprecated OpenMP code.
+
+@opindex Wno-overflow
+@opindex Woverflow
+@item -Wno-overflow
+Do not warn about compile-time overflow in constant expressions.
+
+@opindex Wno-odr
+@opindex Wodr
+@item -Wno-odr
+Warn about One Definition Rule violations during link-time optimization.
+Enabled by default.
+
+@opindex Wopenacc-parallelism
+@opindex Wno-openacc-parallelism
+@cindex OpenACC accelerator programming
+@item -Wopenacc-parallelism
+Warn about potentially suboptimal choices related to OpenACC parallelism.
+
+@opindex Wopenmp
+@opindex Wno-openmp
+@item -Wno-openmp
+Warn about suspicious OpenMP code.
+
+@opindex Wopenmp-simd
+@opindex Wno-openmp-simd
+@item -Wopenmp-simd
+Warn if the vectorizer cost model overrides the OpenMP
+simd directive set by user.  The @option{-fsimd-cost-model=unlimited}
+option can be used to relax the cost model.
+
+@opindex Woverride-init
+@opindex Wno-override-init
+@opindex W
+@opindex Wextra
+@opindex Wno-extra
+@item -Woverride-init @r{(C and Objective-C only)}
+Warn if an initialized field without side effects is overridden when
+using designated initializers (@pxref{Designated Inits, , Designated
+Initializers}).
+
+This warning is included in @option{-Wextra}.  To get other
+@option{-Wextra} warnings without this one, use @option{-Wextra
+-Wno-override-init}.
+
+@opindex Woverride-init-side-effects
+@opindex Wno-override-init-side-effects
+@item -Wno-override-init-side-effects @r{(C and Objective-C only)}
+Do not warn if an initialized field with side effects is overridden when
+using designated initializers (@pxref{Designated Inits, , Designated
+Initializers}).  This warning is enabled by default.
+
+@opindex Wpacked
+@opindex Wno-packed
+@item -Wpacked
+Warn if a structure is given the packed attribute, but the packed
+attribute has no effect on the layout or size of the structure.
+Such structures may be mis-aligned for little benefit.  For
+instance, in this code, the variable @code{f.x} in @code{struct bar}
+is misaligned even though @code{struct bar} does not itself
+have the packed attribute:
+
+@smallexample
+@group
+struct foo @{
+  int x;
+  char a, b, c, d;
+@} __attribute__((packed));
+struct bar @{
+  char z;
+  struct foo f;
+@};
+@end group
+@end smallexample
+
+@opindex Wpacked-bitfield-compat
+@opindex Wno-packed-bitfield-compat
+@item -Wnopacked-bitfield-compat
+The 4.1, 4.2 and 4.3 series of GCC ignore the @code{packed} attribute
+on bit-fields of type @code{char}.  This was fixed in GCC 4.4 but
+the change can lead to differences in the structure layout.  GCC
+informs you when the offset of such a field has changed in GCC 4.4.
+For example there is no longer a 4-bit padding between field @code{a}
+and @code{b} in this structure:
+
+@smallexample
+struct foo
+@{
+  char a:4;
+  char b:8;
+@} __attribute__ ((packed));
+@end smallexample
+
+This warning is enabled by default.  Use
+@option{-Wno-packed-bitfield-compat} to disable this warning.
+
+@opindex Wpacked-not-aligned
+@opindex Wno-packed-not-aligned
+@item -Wpacked-not-aligned @r{(C, C++, Objective-C and Objective-C++ only)}
+Warn if a structure field with explicitly specified alignment in a
+packed struct or union is misaligned.  For example, a warning will
+be issued on @code{struct S}, like, @code{warning: alignment 1 of
+'struct S' is less than 8}, in this code:
+
+@smallexample
+@group
+struct __attribute__ ((aligned (8))) S8 @{ char a[8]; @};
+struct __attribute__ ((packed)) S @{
+  struct S8 s8;
+@};
+@end group
+@end smallexample
+
+This warning is enabled by @option{-Wall}.
+
+@opindex Wpadded
+@opindex Wno-padded
+@item -Wpadded
+Warn if padding is included in a structure, either to align an element
+of the structure or to align the whole structure.  Sometimes when this
+happens it is possible to rearrange the fields of the structure to
+reduce the padding and so make the structure smaller.
+
+@opindex Wredundant-decls
+@opindex Wno-redundant-decls
+@item -Wredundant-decls
+Warn if anything is declared more than once in the same scope, even in
+cases where multiple declaration is valid and changes nothing.
+
+@opindex Wrestrict
+@opindex Wno-restrict
+@item -Wrestrict
+Warn when an object referenced by a @code{restrict}-qualified parameter
+(or, in C++, a @code{__restrict}-qualified parameter) is aliased by another
+argument, or when copies between such objects overlap.  For example,
+the call to the @code{strcpy} function below attempts to truncate the string
+by replacing its initial characters with the last four.  However, because
+the call writes the terminating NUL into @code{a[4]}, the copies overlap and
+the call is diagnosed.
+
+@smallexample
+void foo (void)
+@{
+  char a[] = "abcd1234";
+  strcpy (a, a + 4);
+  @dots{}
+@}
+@end smallexample
+The @option{-Wrestrict} option detects some instances of simple overlap
+even without optimization but works best at @option{-O2} and above.  It
+is included in @option{-Wall}.
+
+@opindex Wnested-externs
+@opindex Wno-nested-externs
+@item -Wnested-externs @r{(C and Objective-C only)}
+Warn if an @code{extern} declaration is encountered within a function.
+
+@opindex Winline
+@opindex Wno-inline
+@item -Winline
+Warn if a function that is declared as inline cannot be inlined.
+Even with this option, the compiler does not warn about failures to
+inline functions declared in system headers.
+
+The compiler uses a variety of heuristics to determine whether or not
+to inline a function.  For example, the compiler takes into account
+the size of the function being inlined and the amount of inlining
+that has already been done in the current function.  Therefore,
+seemingly insignificant changes in the source program can cause the
+warnings produced by @option{-Winline} to appear or disappear.
+
+@opindex Winterference-size
+@opindex Wno-interference-size
+@item -Winterference-size

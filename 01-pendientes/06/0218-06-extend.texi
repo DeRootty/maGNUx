@@ -1,0 +1,295 @@
+@c GCC 16.1.0 | BLOQUE 0218 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 10905-11195 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node C++98 Thread-Local Edits
+@subsection ISO/IEC 14882:1998 Edits for Thread-Local Storage
+
+The following are a set of changes to ISO/IEC 14882:1998 (aka C++98)
+that document the exact semantics of the language extension.
+
+@itemize @bullet
+@item
+@b{[intro.execution]}
+
+New text after paragraph 4
+
+@quotation
+A @dfn{thread} is a flow of control within the abstract machine.
+It is implementation defined whether or not there may be more than
+one thread.
+@end quotation
+
+New text after paragraph 7
+
+@quotation
+It is unspecified whether additional action must be taken to
+ensure when and whether side effects are visible to other threads.
+@end quotation
+
+@item
+@b{[lex.key]}
+
+Add @code{__thread}.
+
+@item
+@b{[basic.start.main]}
+
+Add after paragraph 5
+
+@quotation
+The thread that begins execution at the @code{main} function is called
+the @dfn{main thread}.  It is implementation defined how functions
+beginning threads other than the main thread are designated or typed.
+A function so designated, as well as the @code{main} function, is called
+a @dfn{thread startup function}.  It is implementation defined what
+happens if a thread startup function returns.  It is implementation
+defined what happens to other threads when any thread calls @code{exit}.
+@end quotation
+
+@item
+@b{[basic.start.init]}
+
+Add after paragraph 4
+
+@quotation
+The storage for an object of thread storage duration shall be
+statically initialized before the first statement of the thread startup
+function.  An object of thread storage duration shall not require
+dynamic initialization.
+@end quotation
+
+@item
+@b{[basic.start.term]}
+
+Add after paragraph 3
+
+@quotation
+The type of an object with thread storage duration shall not have a
+non-trivial destructor, nor shall it be an array type whose elements
+(directly or indirectly) have non-trivial destructors.
+@end quotation
+
+@item
+@b{[basic.stc]}
+
+Add ``thread storage duration'' to the list in paragraph 1.
+
+Change paragraph 2
+
+@quotation
+Thread, static, and automatic storage durations are associated with
+objects introduced by declarations [@dots{}].
+@end quotation
+
+Add @code{__thread} to the list of specifiers in paragraph 3.
+
+@item
+@b{[basic.stc.thread]}
+
+New section before @b{[basic.stc.static]}
+
+@quotation
+The keyword @code{__thread} applied to a non-local object gives the
+object thread storage duration.
+
+A local variable or class data member declared both @code{static}
+and @code{__thread} gives the variable or member thread storage
+duration.
+@end quotation
+
+@item
+@b{[basic.stc.static]}
+
+Change paragraph 1
+
+@quotation
+All objects that have neither thread storage duration, dynamic
+storage duration nor are local [@dots{}].
+@end quotation
+
+@item
+@b{[dcl.stc]}
+
+Add @code{__thread} to the list in paragraph 1.
+
+Change paragraph 1
+
+@quotation
+With the exception of @code{__thread}, at most one
+@var{storage-class-specifier} shall appear in a given
+@var{decl-specifier-seq}.  The @code{__thread} specifier may
+be used alone, or immediately following the @code{extern} or
+@code{static} specifiers.  [@dots{}]
+@end quotation
+
+Add after paragraph 5
+
+@quotation
+The @code{__thread} specifier can be applied only to the names of objects
+and to anonymous unions.
+@end quotation
+
+@item
+@b{[class.mem]}
+
+Add after paragraph 6
+
+@quotation
+Non-@code{static} members shall not be @code{__thread}.
+@end quotation
+@end itemize
+
+@node OpenMP
+@section OpenMP
+@cindex OpenMP extension support
+
+OpenMP (Open Multi-Processing) is an application programming
+interface (API) that supports multi-platform shared memory
+multiprocessing programming in C/C++ and Fortran on many
+architectures, including Unix and Microsoft Windows platforms.
+It consists of a set of compiler directives, library routines,
+and environment variables that influence run-time behavior.
+
+GCC implements most of the @uref{https://www.openmp.org/specifications/,
+OpenMP Application Program Interface v5.2}, with some omissions and
+additional features from later versions.
+@xref{OpenMP Implementation Status,,,libgomp,
+GNU Offloading and Multi Processing Runtime Library},
+for more details about currently supported OpenMP features.
+
+To enable the processing of OpenMP directives @samp{#pragma omp},
+@samp{[[omp::decl(...)]]}, @samp{[[omp::directive(...)]]},
+and @samp{[[omp::sequence(...)]]} in C and C++,
+GCC needs to be invoked with the @option{-fopenmp} option.
+This option also arranges for automatic linking of the OpenMP
+runtime library.
+@xref{Top,,,libgomp,GNU Offloading and Multi Processing Runtime Library}.
+
+@xref{OpenMP and OpenACC Options}, for additional options useful with
+@option{-fopenmp}.
+
+@node OpenACC
+@section OpenACC
+@cindex OpenACC extension support
+
+OpenACC is an application programming interface (API) that supports
+offloading of code to accelerator devices.  It consists of a set of
+compiler directives, library routines, and environment variables that
+influence run-time behavior.
+
+GCC strives to be compatible with the
+@uref{https://www.openacc.org/, OpenACC Application Programming
+Interface v2.6}.
+
+To enable the processing of OpenACC directives @samp{#pragma acc}
+in C and C++, GCC needs to be invoked with the @option{-fopenacc} option.
+This option also arranges for automatic linking of the OpenACC runtime
+library.
+@xref{Top,,,libgomp,GNU Offloading and Multi Processing Runtime Library}.
+
+@xref{OpenMP and OpenACC Options}, for additional options useful with
+@option{-fopenacc}.
+
+@node Inline
+@section An Inline Function is As Fast As a Macro
+@cindex inline functions
+@cindex integrating function code
+@cindex open coding
+@cindex macros, inline alternative
+
+By declaring a function inline, you can direct GCC to make
+calls to that function faster.  One way GCC can achieve this is to
+integrate that function's code into the code for its callers.  This
+makes execution faster by eliminating the function-call overhead; in
+addition, if any of the actual argument values are constant, their
+known values may permit simplifications at compile time so that not
+all of the inline function's code needs to be included.  The effect on
+code size is less predictable; object code may be larger or smaller
+with function inlining, depending on the particular case.  You can
+also direct GCC to try to integrate all ``simple enough'' functions
+into their callers with the option @option{-finline-functions}.
+
+GCC implements three different semantics of declaring a function
+inline.  One is available with @option{-std=gnu89} or
+@option{-fgnu89-inline} or when @code{gnu_inline} attribute is present
+on all inline declarations, another when
+@option{-std=c99},
+@option{-std=gnu99} or an option for a later C version is used
+(without @option{-fgnu89-inline}), and the third
+is used when compiling C++.
+
+To declare a function inline, use the @code{inline} keyword in its
+declaration, like this:
+
+@smallexample
+static inline int
+inc (int *a)
+@{
+  return (*a)++;
+@}
+@end smallexample
+
+If you are writing a header file to be included in ISO C90 programs, write
+@code{__inline__} instead of @code{inline}.  @xref{Alternate Keywords}.
+
+The three types of inlining behave similarly in two important cases:
+when the @code{inline} keyword is used on a @code{static} function,
+like the example above, and when a function is first declared without
+using the @code{inline} keyword and then is defined with
+@code{inline}, like this:
+
+@smallexample
+extern int inc (int *a);
+inline int
+inc (int *a)
+@{
+  return (*a)++;
+@}
+@end smallexample
+
+In both of these common cases, the program behaves the same as if you
+had not used the @code{inline} keyword, except for its speed.
+
+@cindex inline functions, omission of
+@opindex fkeep-inline-functions
+When a function is both inline and @code{static}, if all calls to the
+function are integrated into the caller, and the function's address is
+never used, then the function's own assembler code is never referenced.
+In this case, GCC does not actually output assembler code for the
+function, unless you specify the option @option{-fkeep-inline-functions}.
+If there is a nonintegrated call, then the function is compiled to
+assembler code as usual.  The function must also be compiled as usual if
+the program refers to its address, because that cannot be inlined.
+
+@opindex Winline
+Note that certain usages in a function definition can make it unsuitable
+for inline substitution.  Among these usages are: variadic functions,
+use of @code{alloca}, use of computed goto (@pxref{Labels as Values}),
+use of nonlocal goto, use of nested functions, use of @code{setjmp}, use
+of @code{__builtin_longjmp} and use of @code{__builtin_return} or
+@code{__builtin_apply_args}.  Using @option{-Winline} warns when a
+function marked @code{inline} could not be substituted, and gives the
+reason for the failure.
+
+@cindex automatic @code{inline} for C++ member fns
+@cindex @code{inline} automatic for C++ member fns
+@cindex member fns, automatically @code{inline}
+@cindex C++ member fns, automatically @code{inline}
+@opindex fno-default-inline
+As required by ISO C++, GCC considers member functions defined within
+the body of a class to be marked inline even if they are
+not explicitly declared with the @code{inline} keyword.  You can
+override this with @option{-fno-default-inline}; @pxref{C++ Dialect
+Options,,Options Controlling C++ Dialect}.
+
+GCC does not inline any functions when not optimizing unless you specify
+the @samp{always_inline} attribute for the function, like this:
+
+@smallexample
+/* @r{Prototype.}  */
+inline void foo (const char) __attribute__((always_inline));
+@end smallexample
+
+The remainder of this section is specific to GNU C90 inlining.
+

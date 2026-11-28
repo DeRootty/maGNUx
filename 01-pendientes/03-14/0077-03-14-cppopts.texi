@@ -1,0 +1,167 @@
+@c GCC 16.1.0 | BLOQUE 0077 | 03-14
+@c Fuente: gcc/doc/cppopts.texi | blob: 94490775509f4b240551d5e4b0592a721f99ad21
+@c Lineas originales: 474-636 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -CC
+@itemx --comments-in-macros
+Do not discard comments, including during macro expansion.  This is
+like @option{-C}, except that comments contained within macros are
+also passed through to the output file where the macro is expanded.
+
+In addition to the side effects of the @option{-C} option, the
+@option{-CC} option causes all C++-style comments inside a macro
+to be converted to C-style comments.  This is to prevent later use
+of that macro from inadvertently commenting out the remainder of
+the source line.
+
+The @option{-CC} option is generally used to support lint comments.
+
+@opindex P
+@opindex no-line-commands
+@item -P
+@itemx --no-line-commands
+Inhibit generation of linemarkers in the output from the preprocessor.
+This might be useful when running the preprocessor on something that is
+not C code, and will be sent to a program which might be confused by the
+linemarkers.
+@ifset cppmanual
+@xref{Preprocessor Output}.
+@end ifset
+
+@cindex traditional C language
+@cindex C language, traditional
+@opindex traditional-cpp
+@opindex traditional
+@item -traditional
+@itemx --traditional
+@itemx -traditional-cpp
+@itemx --traditional-cpp
+
+Try to imitate the behavior of pre-standard C preprocessors, as
+opposed to ISO C preprocessors.
+@ifset cppmanual
+@xref{Traditional Mode}.
+@end ifset
+@ifclear cppmanual
+See the GNU CPP manual for details.
+@end ifclear
+
+Note that GCC does not otherwise attempt to emulate a pre-standard 
+C compiler, and these options are only supported with the @option{-E} 
+switch, or when invoking CPP explicitly.
+
+@opindex trigraphs
+@item -trigraphs
+@itemx --trigraphs
+Support ISO C trigraphs.
+These are three-character sequences, all starting with @samp{??}, that
+are defined by ISO C to stand for single characters.  For example,
+@samp{??/} stands for @samp{\}, so @samp{'??/n'} is a character
+constant for a newline.
+@ifset cppmanual
+@xref{Initial processing}.
+@end ifset
+
+@ifclear cppmanual
+The nine trigraphs and their replacements are
+
+@smallexample
+Trigraph:       ??(  ??)  ??<  ??>  ??=  ??/  ??'  ??!  ??-
+Replacement:      [    ]    @{    @}    #    \    ^    |    ~
+@end smallexample
+@end ifclear
+
+By default, GCC ignores trigraphs, but in
+standard-conforming modes it converts them.  See the @option{-std} and
+@option{-ansi} options.
+
+@opindex remap
+@item -remap
+Enable special code to work around file systems which only permit very
+short file names, such as MS-DOS@.
+
+@opindex H
+@opindex trace-includes
+@item -H
+@itemx --trace-includes
+Print the name of each header file used, in addition to other normal
+activities.  Each name is indented to show how deep in the
+@samp{#include} stack it is.  Precompiled header files are also
+printed, even if they are found to be invalid; an invalid precompiled
+header file is printed with @samp{...x} and a valid one with @samp{...!} .
+
+@opindex d
+@opindex dump
+@item -d@var{letters}
+@itemx --dump=@var{letters}
+@itemx --dump @var{letters}
+Says to make debugging dumps during compilation as specified by
+@var{letters}.  The flags documented here are those relevant to the
+preprocessor.  Other @var{letters} are interpreted
+by the compiler proper, or reserved for future versions of GCC, and so
+are silently ignored.  If you specify @var{letters} whose behavior
+conflicts, the result is undefined.
+@ifclear cppmanual
+@xref{Developer Options}, for more information.
+@end ifclear
+
+@table @gcctabopt
+@opindex dM
+@item -dM
+@itemx --dump=M
+Instead of the normal output, generate a list of @samp{#define}
+directives for all the macros defined during the execution of the
+preprocessor, including predefined macros.  This gives you a way of
+finding out what is predefined in your version of the preprocessor.
+Assuming you have no file @file{foo.h}, the command
+
+@smallexample
+touch foo.h; cpp -dM foo.h
+@end smallexample
+
+@noindent
+shows all the predefined macros.
+
+@ifclear cppmanual
+If you use @option{-dM} without the @option{-E} option, @option{-dM} is
+interpreted as a synonym for @option{-fdump-rtl-mach}.
+@xref{Developer Options, , ,gcc}.
+@end ifclear
+
+@opindex dD
+@item -dD
+@itemx --dump=D
+Like @option{-dM} except that it outputs @emph{both} the @samp{#define}
+directives and the result of preprocessing.  Both kinds of output go to
+the standard output file.
+
+@opindex dN
+@item -dN
+@itemx --dump=N
+Like @option{-dD}, but emit only the macro names, not their expansions.
+
+@opindex dI
+@item -dI
+@itemx --dump=I
+Output @samp{#include} directives in addition to the result of
+preprocessing.
+
+@opindex dU
+@item -dU
+@itemx --dump=U
+Like @option{-dD} except that only macros that are expanded, or whose
+definedness is tested in preprocessor directives, are output; the
+output is delayed until the use or test of the macro; and
+@samp{#undef} directives are also output for macros tested but
+undefined at the time.
+@end table
+
+@opindex fdebug-cpp
+@opindex fno-debug-cpp
+@item -fdebug-cpp
+This option is only useful for debugging GCC.  When used from CPP or with
+@option{-E}, it dumps debugging information about location maps.  Every
+token in the output is preceded by the dump of the map its location
+belongs to.
+
+When used from GCC without @option{-E}, this option has no effect.

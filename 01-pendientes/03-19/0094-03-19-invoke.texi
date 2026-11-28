@@ -1,0 +1,64 @@
+@c GCC 16.1.0 | BLOQUE 0094 | 03-19
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 21085-21144 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -print-sysroot-headers-suffix
+@itemx --print-sysroot-headers-suffix
+Print the suffix added to the target sysroot when searching for
+headers, or give an error if the compiler is not configured with such
+a suffix---and don't do anything else.
+
+@opindex dumpmachine
+@item -dumpmachine
+Print the compiler's target machine (for example,
+@samp{i686-pc-linux-gnu})---and don't do anything else.
+
+@opindex dumpversion
+@item -dumpversion
+Print the compiler version (for example, @code{3.0}, @code{6.3.0} or @code{7})---and don't do
+anything else.  This is the compiler version used in filesystem paths and
+specs. Depending on how the compiler has been configured it can be just
+a single number (major version), two numbers separated by a dot (major and
+minor version) or three numbers separated by dots (major, minor and patchlevel
+version).
+
+@opindex dumpfullversion
+@item -dumpfullversion
+Print the full compiler version---and don't do anything else. The output is
+always three numbers separated by dots, major, minor and patchlevel version.
+
+@opindex dumpspecs
+@item -dumpspecs
+Print the compiler's built-in specs---and don't do anything else.  (This
+is used when GCC itself is being built.)
+@xref{Spec Files,, Specifying Subprocesses and the Switches to Pass to Them,
+gccint, GNU Compiler Collection (GCC) Internals}.
+
+@opindex param
+@item --param @var{name}=@var{value}
+@itemx --param=@var{name}=@var{value}
+GCC by convention uses parameters that can be specified on the command
+line instead of hard-wired constants to represent arbitrary compiler
+limits or heuristics.  Many parameters are related to optimization;
+for example, GCC does not inline functions that contain more than a
+certain number of instructions.  The static analyzer similarly uses
+parameters to limit complexity, link-time optimization uses parameters
+to control partitioning, and so on.  Other parameters control aspects
+of GCC that are completely internal, such as its memory allocation and
+garbage collection strategy.  Still others control target-specific
+behavior.
+
+The @option{--param} option provides a uniform interface for
+specifying values for these compiler parameters.  However, the names
+of specific parameters, and the meaning of the values, are tied to the
+internals of the compiler, and are subject to change without notice in
+future releases.  You should not depend on parameter settings for
+correct compilation of your program.  They are exposed via the command
+line for the convenience of developers in debugging compilation
+problems or, in some cases, to provide workarounds for compiler bugs.
+
+@xref{Parameters,,Parameters,gccint,GNU Compiler Collection (GCC) Internals},
+for documentation of these internal parameters.
+@end table
+
+@anchor{Submodel Options}

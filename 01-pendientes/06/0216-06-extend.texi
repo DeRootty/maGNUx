@@ -1,0 +1,299 @@
+@c GCC 16.1.0 | BLOQUE 0216 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 10361-10655 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Structure-Layout Pragmas
+@subsection Structure-Layout Pragmas
+
+@cindex pragma, pack
+@cindex pack pragma
+For compatibility with Microsoft Windows compilers, GCC supports a set
+of @code{#pragma pack} directives that change the maximum alignment of
+members of structures (other than zero-width bit-fields), unions, and
+classes subsequently defined. The @var{n} value below specifies the
+new alignment in bytes and may have the value 1, 2, 4, 8, and 16.  A
+value of 0 is also permitted and indicates the default alignment (as if
+no @code{#pragma pack} were in effect) should be used.
+
+@table @code
+@item #pragma pack(@var{n})
+Sets the new alignment according to @var{n}.
+
+@item #pragma pack()
+Sets the alignment to the one that was in
+effect when compilation started (see also command-line option
+@option{-fpack-struct[=@var{n}]}.   @xref{Code Gen Options}).
+
+@item #pragma pack(push[,@var{n}])
+Pushes the current alignment
+setting on an internal stack and then optionally sets the new alignment.
+
+@item #pragma pack(pop)
+Restores the alignment setting to the one
+saved at the top of the internal stack (and removes that stack entry).
+Note that @code{#pragma pack([@var{n}])} does not influence this internal
+stack; thus it is possible to have @code{#pragma pack(push)} followed by
+multiple @code{#pragma pack(@var{n})} instances, with the original state
+restored by a single @code{#pragma pack(pop)}.
+
+@end table
+
+You can also use the @code{packed} type attribute (@pxref{Common Attributes})
+to pack a structure.  However, the @code{packed}
+attribute interferes with @code{#pragma pack}, and attempting to use
+them together may cause spurious warnings or unexpected behavior.
+@c FIXME: This is PR 60972.
+
+@cindex pragma, ms_struct
+@cindex ms_struct pragma
+@cindex Microsoft struct layout
+Some targets, e.g.@: x86 and PowerPC, support the @code{#pragma ms_struct}
+directive, which causes subsequent structure and union declarations to
+be laid out in the same way as
+@code{__attribute__ ((ms_struct))}; @pxref{x86 Attributes}.
+
+@table @code
+@item #pragma ms_struct on
+Turns on the Microsoft layout.
+@item #pragma ms_struct off
+Turns off the Microsoft layout.
+@item #pragma ms_struct reset
+Goes back to the default layout.
+@end table
+
+@cindex pragma, scalar_storage_order
+Most targets also support the @code{#pragma scalar_storage_order} directive
+which lays out subsequent structure and union declarations in
+in the same way as the documented
+@code{__attribute__ ((scalar_storage_order))}; @pxref{Common Attributes}.
+
+@table @code
+@item #pragma scalar_storage_order big-endian
+@itemx #pragma scalar_storage_order little-endian
+Set the storage order of scalar fields to big- or little-endian,
+respectively.
+
+@item #pragma scalar_storage_order default
+Goes back to the endianness
+that was in effect when compilation started (see also command-line option
+@option{-fsso-struct=@var{endianness}} @pxref{C Dialect Options}).
+@end table
+
+@node Weak Pragmas
+@subsection Weak Pragmas
+
+For compatibility with SVR4, GCC supports a set of @code{#pragma}
+directives for declaring symbols to be weak, and defining weak
+aliases.
+
+@table @code
+@cindex pragma, weak
+@item #pragma weak @var{symbol}
+This pragma declares @var{symbol} to be weak, as if the declaration
+had the attribute of the same name.  The pragma may appear before
+or after the declaration of @var{symbol}.  It is not an error for
+@var{symbol} to never be defined at all.
+
+@item #pragma weak @var{symbol1} = @var{symbol2}
+This pragma declares @var{symbol1} to be a weak alias of @var{symbol2}.
+It is an error if @var{symbol2} is not defined in the current
+translation unit.
+@end table
+
+@node Diagnostic Pragmas
+@subsection Diagnostic Pragmas
+
+GCC allows the user to selectively enable or disable certain types of
+diagnostics, and change the kind of the diagnostic.  For example, a
+project's policy might require that all sources compile with
+@option{-Werror} but certain files might have exceptions allowing
+specific types of warnings.  Or, a project might selectively enable
+diagnostics and treat them as errors depending on which preprocessor
+macros are defined.
+
+@table @code
+@cindex pragma, diagnostic
+@item #pragma GCC diagnostic @var{kind} @var{option}
+
+Modifies the disposition of a diagnostic.  Note that not all
+diagnostics are modifiable; at the moment only warnings (normally
+controlled by @samp{-W@dots{}}) can be controlled, and not all of them.
+Use @option{-fdiagnostics-show-option} to determine which diagnostics
+are controllable and which option controls them.
+
+@var{kind} is @samp{error} to treat this diagnostic as an error,
+@samp{warning} to treat it like a warning (even if @option{-Werror} is
+in effect), or @samp{ignored} if the diagnostic is to be ignored.
+@var{option} is a double quoted string that matches the command-line
+option.
+
+@smallexample
+#pragma GCC diagnostic warning "-Wformat"
+#pragma GCC diagnostic error "-Wformat"
+#pragma GCC diagnostic ignored "-Wformat"
+@end smallexample
+
+Note that these pragmas override any command-line options.  GCC keeps
+track of the location of each pragma, and issues diagnostics according
+to the state as of that point in the source file.  Thus, pragmas occurring
+after a line do not affect diagnostics caused by that line.
+
+@item #pragma GCC diagnostic push
+@itemx #pragma GCC diagnostic pop
+
+Causes GCC to remember the state of the diagnostics as of each
+@code{push}, and restore to that point at each @code{pop}.  If a
+@code{pop} has no matching @code{push}, the command-line options are
+restored.
+
+@smallexample
+#pragma GCC diagnostic error "-Wuninitialized"
+  foo(a);                       /* error is given for this one */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wuninitialized"
+  foo(b);                       /* no diagnostic for this one */
+#pragma GCC diagnostic pop
+  foo(c);                       /* error is given for this one */
+#pragma GCC diagnostic pop
+  foo(d);                       /* depends on command-line options */
+@end smallexample
+
+@item #pragma GCC diagnostic ignored_attributes
+
+Similarly to @option{-Wno-attributes=}, this pragma allows users to suppress
+warnings about unknown scoped attributes (in C++11 and C23).  For example,
+@code{#pragma GCC diagnostic ignored_attributes "vendor::attr"} disables
+warning about the following declaration:
+
+@smallexample
+[[vendor::attr]] void f();
+@end smallexample
+
+whereas @code{#pragma GCC diagnostic ignored_attributes "vendor::"} prevents
+warning about both of these declarations:
+
+@smallexample
+[[vendor::safe]] void f();
+[[vendor::unsafe]] void f2();
+@end smallexample
+
+@end table
+
+GCC also offers a simple mechanism for printing messages during
+compilation.
+
+@table @code
+@cindex pragma, diagnostic
+@item #pragma message @var{string}
+
+Prints @var{string} as a compiler message on compilation.  The message
+is informational only, and is neither a compilation warning nor an
+error.  Newlines can be included in the string by using the @samp{\n}
+escape sequence.
+
+@smallexample
+#pragma message "Compiling " __FILE__ "..."
+@end smallexample
+
+@var{string} may be parenthesized, and is printed with location
+information.  For example,
+
+@smallexample
+#define DO_PRAGMA(x) _Pragma (#x)
+#define TODO(x) DO_PRAGMA(message ("TODO - " #x))
+
+TODO(Remember to fix this)
+@end smallexample
+
+@noindent
+prints @samp{/tmp/file.c:4: note: #pragma message:
+TODO - Remember to fix this}.
+
+@cindex pragma, diagnostic
+@item #pragma GCC error @var{message}
+Generates an error message.  This pragma @emph{is} considered to
+indicate an error in the compilation, and it will be treated as such.
+
+Newlines can be included in the string by using the @samp{\n}
+escape sequence.  They will be displayed as newlines even if the
+@option{-fmessage-length} option is set to zero.
+
+The error is only generated if the pragma is present in the code after
+pre-processing has been completed.  It does not matter however if the
+code containing the pragma is unreachable:
+
+@smallexample
+#if 0
+#pragma GCC error "this error is not seen"
+#endif
+void foo (void)
+@{
+  return;
+#pragma GCC error "this error is seen"
+@}
+@end smallexample
+
+@cindex pragma, diagnostic
+@item #pragma GCC warning @var{message}
+This is just like @samp{pragma GCC error} except that a warning
+message is issued instead of an error message.  Unless
+@option{-Werror} is in effect, in which case this pragma will generate
+an error as well.
+
+@end table
+
+@node Visibility Pragmas
+@subsection Visibility Pragmas
+
+@table @code
+@cindex pragma, visibility
+@item #pragma GCC visibility push(@var{visibility})
+@itemx #pragma GCC visibility pop
+
+This pragma allows the user to set the visibility for multiple
+declarations without having to give each a visibility attribute
+(@pxref{Attributes}).
+
+In C++, @samp{#pragma GCC visibility} affects only namespace-scope
+declarations.  Class members and template specializations are not
+affected; if you want to override the visibility for a particular
+member or instantiation, you must use an attribute.
+
+@end table
+
+
+@node Push/Pop Macro Pragmas
+@subsection Push/Pop Macro Pragmas
+
+For compatibility with Microsoft Windows compilers, GCC supports
+@samp{#pragma push_macro(@var{"macro_name"})}
+and @samp{#pragma pop_macro(@var{"macro_name"})}.
+
+@table @code
+@cindex pragma, push_macro
+@item #pragma push_macro(@var{"macro_name"})
+This pragma saves the value of the macro named as @var{macro_name} to
+the top of the stack for this macro.
+
+@cindex pragma, pop_macro
+@item #pragma pop_macro(@var{"macro_name"})
+This pragma sets the value of the macro named as @var{macro_name} to
+the value on top of the stack for this macro. If the stack for
+@var{macro_name} is empty, the value of the macro remains unchanged.
+@end table
+
+For example:
+
+@smallexample
+#define X  1
+#pragma push_macro("X")
+#undef X
+#define X -1
+#pragma pop_macro("X")
+int x [X];
+@end smallexample
+
+@noindent
+In this example, the definition of X as 1 is saved by @code{#pragma
+push_macro} and restored by @code{#pragma pop_macro}.
+

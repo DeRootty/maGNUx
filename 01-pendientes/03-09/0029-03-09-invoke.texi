@@ -1,0 +1,243 @@
+@c GCC 16.1.0 | BLOQUE 0029 | 03-09
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 8557-8795 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -Wno-invalid-memory-model
+This option controls warnings
+for invocations of @ref{__atomic Builtins}, @ref{__sync Builtins},
+and the C11 atomic generic functions with a memory consistency argument
+that is either invalid for the operation or outside the range of values
+of the @code{memory_order} enumeration.  For example, since the
+@code{__atomic_store} and @code{__atomic_store_n} built-ins are only
+defined for the relaxed, release, and sequentially consistent memory
+orders the following code is diagnosed:
+
+@smallexample
+void store (int *i)
+@{
+  __atomic_store_n (i, 0, memory_order_consume);
+@}
+@end smallexample
+
+@option{-Winvalid-memory-model} is enabled by default.
+
+@opindex Wmaybe-uninitialized
+@opindex Wno-maybe-uninitialized
+@item -Wmaybe-uninitialized
+For an object with automatic or allocated storage duration, if there exists
+a path from the function entry to a use of the object that is initialized,
+but there exist some other paths for which the object is not initialized,
+the compiler emits a warning if it cannot prove the uninitialized paths
+are not executed at run time.
+
+In addition, passing a pointer (or in C++, a reference) to an uninitialized
+object to a @code{const}-qualified function argument is also diagnosed by
+this warning.  (@option{-Wuninitialized} is issued for built-in functions
+known to read the object.)  Annotating the function with attribute
+@code{access (none)} indicates that the argument isn't used to access
+the object and avoids the warning (@pxref{Common Attributes}).
+
+These warnings are only possible in optimizing compilation, because otherwise
+GCC does not keep track of the state of variables.  On the other hand,
+@option{-Wmaybe-uninitialized} is known not to warn in many situations
+(false negatives) due to optimizations taking advantage of undefinedness
+of uninitialized uses like constant propagation.
+
+These warnings are made optional because GCC may not be able to determine when
+the code is correct in spite of appearing to have an error.  Here is one
+example of how this can happen:
+
+@smallexample
+@group
+@{
+  int x;
+  switch (y)
+    @{
+    case 1: x = 1;
+      break;
+    case 2: x = 4;
+      break;
+    case 3: x = 5;
+    @}
+  foo (x);
+@}
+@end group
+@end smallexample
+
+@noindent
+If the value of @code{y} is always 1, 2 or 3, then @code{x} is
+always initialized, but GCC doesn't know this. To suppress the
+warning, you need to provide a default case with assert(0) or
+similar code.
+
+@cindex @code{longjmp} warnings
+This option also warns when a non-volatile automatic variable might be
+changed by a call to @code{longjmp}.
+The compiler sees only the calls to @code{setjmp}.  It cannot know
+where @code{longjmp} will be called; in fact, a signal handler could
+call it at any point in the code.  As a result, you may get a warning
+even when there is in fact no problem because @code{longjmp} cannot
+in fact be called at the place that would cause a problem.
+
+Some spurious warnings can be avoided if you declare all the functions
+you use that never return as @code{noreturn}.  @xref{Common Attributes}.
+
+This warning is enabled by @option{-Wall} or @option{-Wextra}.
+
+@opindex Wunknown-pragmas
+@opindex Wno-unknown-pragmas
+@cindex warning for unknown pragmas
+@cindex unknown pragmas, warning
+@cindex pragmas, warning of unknown
+@item -Wunknown-pragmas
+Warn when a @code{#pragma} directive is encountered that is not understood by
+GCC@.  If this command-line option is used, warnings are even issued
+for unknown pragmas in system header files.  This is not the case if
+the warnings are only enabled by the @option{-Wall} command-line option.
+
+@opindex Wno-pragmas
+@opindex Wpragmas
+@item -Wno-pragmas
+Do not warn about misuses of pragmas, such as incorrect parameters,
+invalid syntax, or conflicts between pragmas.  See also
+@option{-Wunknown-pragmas}.
+
+@opindex Wno-pragma-once-outside-header
+@opindex Wpragma-once-outside-header
+@item -Wno-pragma-once-outside-header
+Do not warn when @code{#pragma once} is used in a file that is not a header
+file, such as a main file.
+
+@opindex Wno-prio-ctor-dtor
+@opindex Wprio-ctor-dtor
+@item -Wno-prio-ctor-dtor
+Do not warn if a priority from 0 to 100 is used for constructor or destructor.
+The use of constructor and destructor attributes allow you to assign a
+priority to the constructor/destructor to control its order of execution
+before @code{main} is called or after it returns.  The priority values must be
+greater than 100 as the compiler reserves priority values between 0--100 for
+the implementation.
+
+@opindex Wstrict-aliasing
+@opindex Wno-strict-aliasing
+@item -Wstrict-aliasing
+This option is only active when @option{-fstrict-aliasing} is active.
+It warns about code that might break the strict aliasing rules that the
+compiler is using for optimization.  The warning does not catch all
+cases, but does attempt to catch the more common pitfalls.  It is
+included in @option{-Wall}.
+It is equivalent to @option{-Wstrict-aliasing=3}.
+
+@item -Wstrict-aliasing=@var{n}
+This option is only active when @option{-fstrict-aliasing} is active.
+It warns about code that might break the strict aliasing rules that the
+compiler is using for optimization.
+Higher levels correspond to higher accuracy (fewer false positives).
+Higher levels also correspond to more effort, similar to the way @option{-O}
+works.
+@option{-Wstrict-aliasing} is equivalent to @option{-Wstrict-aliasing=3}.
+
+Level 1: Most aggressive, quick, least accurate.
+Possibly useful when higher levels
+do not warn but @option{-fstrict-aliasing} still breaks the code, as it has very few
+false negatives.  However, it has many false positives.
+Warns for all pointer conversions between possibly incompatible types,
+even if never dereferenced.  Runs in the front end only.
+
+Level 2: Aggressive, quick, not too precise.
+May still have many false positives (not as many as level 1 though),
+and few false negatives (but possibly more than level 1).
+Unlike level 1, it only warns when an address is taken.  Warns about
+incomplete types.  Runs in the front end only.
+
+Level 3 (default for @option{-Wstrict-aliasing}):
+Should have very few false positives and few false
+negatives.  Slightly slower than levels 1 or 2 when optimization is enabled.
+Takes care of the common pun+dereference pattern in the front end:
+@code{*(int*)&some_float}.
+If optimization is enabled, it also runs in the back end, where it deals
+with multiple statement cases using flow-sensitive points-to information.
+Only warns when the converted pointer is dereferenced.
+Does not warn about incomplete types.
+
+@opindex Wstrict-overflow
+@opindex Wno-strict-overflow
+@item -Wstrict-overflow
+@itemx -Wstrict-overflow=@var{n}
+This option is only active when signed overflow is undefined.
+It warns about cases where the compiler optimizes based on the
+assumption that signed overflow does not occur.  Note that it does not
+warn about all cases where the code might overflow: it only warns
+about cases where the compiler implements some optimization.  Thus
+this warning depends on the optimization level.
+
+An optimization that assumes that signed overflow does not occur is
+perfectly safe if the values of the variables involved are such that
+overflow never does, in fact, occur.  Therefore this warning can
+easily give a false positive: a warning about code that is not
+actually a problem.  To help focus on important issues, several
+warning levels are defined.  No warnings are issued for the use of
+undefined signed overflow when estimating how many iterations a loop
+requires, in particular when determining whether a loop will be
+executed at all.
+
+@table @gcctabopt
+@item -Wstrict-overflow=1
+Warn about cases that are both questionable and easy to avoid.  For
+example the compiler simplifies
+@code{x + 1 > x} to @code{1}.  This level of
+@option{-Wstrict-overflow} is enabled by @option{-Wall}; higher levels
+are not, and must be explicitly requested.
+
+@item -Wstrict-overflow=2
+Also warn about other cases where a comparison is simplified to a
+constant.  For example: @code{abs (x) >= 0}.  This can only be
+simplified when signed integer overflow is undefined, because
+@code{abs (INT_MIN)} overflows to @code{INT_MIN}, which is less than
+zero.  @option{-Wstrict-overflow} (with no level) is the same as
+@option{-Wstrict-overflow=2}.
+
+@item -Wstrict-overflow=3
+Also warn about other cases where a comparison is simplified.  For
+example: @code{x + 1 > 1} is simplified to @code{x > 0}.
+
+@item -Wstrict-overflow=4
+Also warn about other simplifications not covered by the above cases.
+For example: @code{(x * 10) / 5} is simplified to @code{x * 2}.
+
+@item -Wstrict-overflow=5
+Also warn about cases where the compiler reduces the magnitude of a
+constant involved in a comparison.  For example: @code{x + 2 > y} is
+simplified to @code{x + 1 >= y}.  This is reported only at the
+highest warning level because this simplification applies to many
+comparisons, so this warning level gives a very large number of
+false positives.
+@end table
+
+@opindex Wstring-compare
+@opindex Wno-string-compare
+@item -Wstring-compare
+Warn for calls to @code{strcmp} and @code{strncmp} whose result is
+determined to be either zero or non-zero in tests for such equality
+owing to the length of one argument being greater than the size of
+the array the other argument is stored in (or the bound in the case
+of @code{strncmp}).  Such calls could be mistakes.  For example,
+the call to @code{strcmp} below is diagnosed because its result is
+necessarily non-zero irrespective of the contents of the array @code{a}.
+
+@smallexample
+extern char a[4];
+void f (char *d)
+@{
+  strcpy (d, "string");
+  @dots{}
+  if (0 == strcmp (a, d))   // cannot be true
+    puts ("a and d are the same");
+@}
+@end smallexample
+
+@option{-Wstring-compare} is enabled by @option{-Wextra}.
+
+@opindex Wstringop-overflow
+@opindex Wno-stringop-overflow
+@item -Wno-stringop-overflow

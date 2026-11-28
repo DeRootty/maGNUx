@@ -1,0 +1,241 @@
+@c GCC 16.1.0 | BLOQUE 0053 | 03-12
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 13599-13835 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -favoid-store-forwarding
+@itemx -fno-avoid-store-forwarding
+Many CPUs will stall for many cycles when a load partially depends on previous
+smaller stores.  This pass tries to detect such cases and avoid the penalty by
+changing the order of the load and store and then fixing up the loaded value.
+
+Disabled by default.
+
+@opindex ffp-contract
+@item -ffp-contract=@var{style}
+@option{-ffp-contract=off} disables floating-point expression contraction.
+@option{-ffp-contract=fast} enables floating-point expression contraction
+such as forming of fused multiply-add operations if the target has
+native support for them.
+@option{-ffp-contract=on} enables floating-point expression contraction
+if allowed by the language standard.  This is implemented for C and C++,
+where it enables contraction within one expression, but not across
+different statements.
+
+The default is @option{-ffp-contract=off} for C in a standards compliant mode
+(@option{-std=c11} or similar), @option{-ffp-contract=fast} otherwise.
+
+@opindex ffp-int-builtin-inexact
+@opindex fno-fp-int-builtin-inexact
+@item -ffp-int-builtin-inexact
+Allow the built-in functions @code{ceil}, @code{floor},
+@code{round} and @code{trunc}, and their @code{float} and @code{long
+double} variants, to generate code that raises the ``inexact''
+floating-point exception for noninteger arguments.  ISO C99 and C11
+allow these functions to raise the ``inexact'' exception, but ISO/IEC
+TS 18661-1:2014, the C bindings to IEEE 754-2008, as integrated into
+ISO C23, does not allow these functions to do so.
+
+The default is @option{-fno-fp-int-builtin-inexact}, disallowing the
+exception to be raised, unless C17 or an earlier C standard is selected.
+This option does nothing unless @option{-ftrapping-math} is in effect.
+
+Even if @option{-fno-fp-int-builtin-inexact} is used, if the functions
+generate a call to a library function then the ``inexact'' exception
+may be raised if the library implementation does not follow TS 18661.
+
+@opindex fomit-frame-pointer
+@opindex fno-omit-frame-pointer
+@item -fomit-frame-pointer
+Omit the frame pointer in functions that don't need one.  This avoids the
+instructions to save, set up and restore the frame pointer; on many targets
+it also makes an extra register available.
+
+On some targets this flag has no effect because the standard calling sequence
+always uses a frame pointer, so it cannot be omitted.
+
+Note that @option{-fno-omit-frame-pointer} doesn't guarantee the frame pointer
+is used in all functions.  Several targets always omit the frame pointer in
+leaf functions.
+
+Enabled by default at @option{-O1} and higher.
+
+@opindex foptimize-crc
+@opindex fno-optimize-crc
+@item -foptimize-crc
+Detect loops calculating CRC (performing polynomial long division) and
+replace them with a faster implementation.  Detect 8, 16, 32, and 64 bit CRC,
+with a constant polynomial without the leading 1 bit,
+for both bit-forward and bit-reversed cases.
+If the target supports a CRC instruction and the polynomial used in the source
+code matches the polynomial used in the CRC instruction, generate that CRC
+instruction.  Otherwise, if the target supports a carry-less-multiplication
+instruction, generate CRC using it; otherwise generate table-based CRC.
+
+Enabled by default at @option{-O2} and higher.
+
+@opindex foptimize-sibling-calls
+@opindex fno-optimize-sibling-calls
+@item -foptimize-sibling-calls
+Optimize sibling and tail recursive calls.
+
+Enabled at levels @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex foptimize-strlen
+@opindex fno-optimize-strlen
+@item -foptimize-strlen
+Optimize various standard C string functions (e.g.@: @code{strlen},
+@code{strchr} or @code{strcpy}) and
+their @code{_FORTIFY_SOURCE} counterparts into faster alternatives.
+
+Enabled at levels @option{-O2}, @option{-O3}.
+
+@opindex finline-atomics
+@opindex fno-inline-atomics
+@item -finline-atomics
+@itemx -fno-inline-atomics
+Inline @samp{__atomic} operations when a lock-free instruction sequence
+is available.  This optimization is enabled by default.
+
+@opindex finline-stringops
+@opindex fno-inline-stringops
+@item -finline-stringops@r{[}=@var{fn}@r{]}
+Expand memory and string operations (for now, only @code{memset})
+inline, even when the length is variable or big enough as to require
+looping.  This is most useful along with @option{-ffreestanding} and
+@option{-fno-builtin}.
+
+In some circumstances, it enables the compiler to generate code that
+takes advantage of known alignment and length multipliers, but even then
+it may be less efficient than optimized runtime implementations, and
+grow code size so much that even a less performant but shared
+implementation runs faster due to better use of code caches.  This
+option is disabled by default.
+
+@opindex fno-inline
+@opindex finline
+@item -fno-inline
+Do not expand any functions inline apart from those marked with
+the @code{always_inline} attribute.  This is the default when not
+optimizing.
+
+Single functions can be exempted from inlining by marking them
+with the @code{noinline} attribute.
+
+@opindex finline-small-functions
+@opindex fno-inline-small-functions
+@item -finline-small-functions
+Integrate functions into their callers when their body is smaller than expected
+function call code (so overall size of program gets smaller).  The compiler
+heuristically decides which functions are simple enough to be worth integrating
+in this way.  This inlining applies to all functions, even those not declared
+inline.
+
+Enabled at levels @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex findirect-inlining
+@opindex fno-indirect-inlining
+@item -findirect-inlining
+Inline also indirect calls that are discovered to be known at compile
+time thanks to previous inlining.  This option has any effect only
+when inlining itself is turned on by the @option{-finline-functions}
+or @option{-finline-small-functions} options.
+
+Enabled at levels @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex finline-functions
+@opindex fno-inline-functions
+@item -finline-functions
+Consider all functions for inlining, even if they are not declared inline.
+The compiler heuristically decides which functions are worth integrating
+in this way.
+
+If all calls to a given function are integrated, and the function is
+declared @code{static}, then the function is normally not output as
+assembler code in its own right.
+
+Enabled at levels @option{-O2}, @option{-O3}, @option{-Os}.  Also enabled
+by @option{-fprofile-use} and @option{-fauto-profile}.
+
+@opindex finline-functions-called-once
+@opindex fno-inline-functions-called-once
+@item -finline-functions-called-once
+Consider all @code{static} functions called once for inlining into their
+caller even if they are not marked @code{inline}.  If a call to a given
+function is integrated, then the function is not output as assembler code
+in its own right.
+
+Enabled at levels @option{-O1}, @option{-O2}, @option{-O3} and @option{-Os},
+but not @option{-Og}.
+
+@opindex fearly-inlining
+@opindex fno-early-inlining
+@item -fearly-inlining
+Inline functions marked by @code{always_inline} and functions whose body seems
+smaller than the function call overhead early before doing
+@option{-fprofile-generate} instrumentation and real inlining pass.  Doing so
+makes profiling significantly cheaper and usually inlining faster on programs
+having large chains of nested wrapper functions.
+
+Enabled by default.
+
+@opindex fipa-sra
+@opindex fno-ipa-sra
+@item -fipa-sra
+Perform interprocedural scalar replacement of aggregates, removal of
+unused parameters and replacement of parameters passed by reference
+by parameters passed by value.
+
+Enabled at levels @option{-O2}, @option{-O3} and @option{-Os}.
+
+@opindex finline-limit
+@item -finline-limit=@var{n}
+By default, GCC limits the size of functions that can be inlined.  This flag
+allows coarse control of this limit.  @var{n} is the size of functions that
+can be inlined in number of pseudo instructions.
+
+Inlining is actually controlled by a number of internal parameters, which
+are documented in the GCC Internals manual and should not normally be set
+directly.
+
+@emph{Note:} there may be no value to @option{-finline-limit} that results
+in default behavior.
+
+@emph{Note:} pseudo instruction represents, in this particular context, an
+abstract measurement of function's size.  In no way does it represent a count
+of assembly instructions and as such its exact meaning might change from one
+release to an another.
+
+@opindex fno-keep-inline-dllexport
+@opindex fkeep-inline-dllexport
+@item -fno-keep-inline-dllexport
+This is a more fine-grained version of @option{-fkeep-inline-functions},
+which applies only to functions that are declared using the @code{dllexport}
+attribute or declspec.  @xref{Common Attributes}.
+
+@opindex fkeep-inline-functions
+@opindex fno-keep-inline-functions
+@item -fkeep-inline-functions
+In C, emit @code{static} functions that are declared @code{inline}
+into the object file, even if the function has been inlined into all
+of its callers.  This switch does not affect functions using the
+@code{extern inline} extension in GNU C90@.  In C++, emit any and all
+inline functions into the object file.
+
+@opindex fkeep-static-functions
+@opindex fno-keep-static-functions
+@item -fkeep-static-functions
+Emit @code{static} functions into the object file, even if the function
+is never used.
+
+@opindex fkeep-static-consts
+@opindex fno-keep-static-consts
+@item -fkeep-static-consts
+Emit variables declared @code{static const} when optimization isn't turned
+on, even if the variables aren't referenced.
+
+GCC enables this option by default.  If you want to force the compiler to
+check if a variable is referenced, regardless of whether or not
+optimization is turned on, use the @option{-fno-keep-static-consts} option.
+
+@opindex fmerge-constants
+@opindex fno-merge-constants

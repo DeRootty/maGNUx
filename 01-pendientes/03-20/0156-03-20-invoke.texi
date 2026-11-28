@@ -1,0 +1,254 @@
+@c GCC 16.1.0 | BLOQUE 0156 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 35262-35511 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item znver4
+AMD Family 19h core based CPUs with x86-64 instruction set support. (This
+supersets BMI, BMI2, CLWB, F16C, FMA, FSGSBASE, AVX, AVX2, ADCX, RDSEED,
+MWAITX, SHA, CLZERO, AES, PCLMUL, CX16, MOVBE, MMX, SSE, SSE2, SSE3, SSE4A,
+SSSE3, SSE4.1, SSE4.2, ABM, XSAVEC, XSAVES, CLFLUSHOPT, POPCNT, RDPID,
+WBNOINVD, PKU, VPCLMULQDQ, VAES, AVX512F, AVX512DQ, AVX512IFMA, AVX512CD,
+AVX512BW, AVX512VL, AVX512BF16, AVX512VBMI, AVX512VBMI2, AVX512VNNI,
+AVX512BITALG, AVX512VPOPCNTDQ, GFNI and 64-bit instruction set extensions.)
+
+@item znver5
+AMD Family 1ah core based CPUs with x86-64 instruction set support. (This
+supersets BMI, BMI2, CLWB, F16C, FMA, FSGSBASE, AVX, AVX2, ADCX, RDSEED,
+MWAITX, SHA, CLZERO, AES, PCLMUL, CX16, MOVBE, MMX, SSE, SSE2, SSE3, SSE4A,
+SSSE3, SSE4.1, SSE4.2, ABM, XSAVEC, XSAVES, CLFLUSHOPT, POPCNT, RDPID,
+WBNOINVD, PKU, VPCLMULQDQ, VAES, AVX512F, AVX512DQ, AVX512IFMA, AVX512CD,
+AVX512BW, AVX512VL, AVX512BF16, AVX512VBMI, AVX512VBMI2, AVX512VNNI,
+AVX512BITALG, AVX512VPOPCNTDQ, GFNI, AVXVNNI, MOVDIRI, MOVDIR64B,
+AVX512VP2INTERSECT, PREFETCHI and 64-bit instruction set extensions.)
+
+@item znver6
+AMD Family 1ah core based CPUs with x86-64 instruction set support. (This
+supersets BMI, BMI2, CLWB, F16C, FMA, FSGSBASE, AVX, AVX2, ADCX, RDSEED,
+MWAITX, SHA, CLZERO, AES, PCLMUL, CX16, MOVBE, MMX, SSE, SSE2, SSE3, SSE4A,
+SSSE3, SSE4.1, SSE4.2, ABM, XSAVEC, XSAVES, CLFLUSHOPT, POPCNT, RDPID,
+WBNOINVD, PKU, VPCLMULQDQ, VAES, AVX512F, AVX512DQ, AVX512IFMA, AVX512CD,
+AVX512BW, AVX512VL, AVX512BF16, AVX512VBMI, AVX512VBMI2, AVX512VNNI,
+AVX512BITALG, AVX512VPOPCNTDQ, GFNI, AVXVNNI, MOVDIRI, MOVDIR64B,
+AVX512VP2INTERSECT, PREFETCHI, AVXVNNIINT8, AVXIFMA, AVX512FP16, AVXNECONVERT,
+AVX512BMM and 64-bit instruction set extensions.)
+
+@item btver1
+CPUs based on AMD Family 14h cores with x86-64 instruction set support.  (This
+supersets MMX, SSE, SSE2, SSE3, SSSE3, SSE4A, CX16, ABM and 64-bit
+instruction set extensions.)
+
+@item btver2
+CPUs based on AMD Family 16h cores with x86-64 instruction set support. This
+includes MOVBE, F16C, BMI, AVX, PCLMUL, AES, SSE4.2, SSE4.1, CX16, ABM,
+SSE4A, SSSE3, SSE3, SSE2, SSE, MMX and 64-bit instruction set extensions.
+
+@item winchip-c6
+IDT WinChip C6 CPU, dealt in same way as i486 with additional MMX instruction
+set support.
+
+@item winchip2
+IDT WinChip 2 CPU, dealt in same way as i486 with additional MMX and 3DNow!@:
+instruction set support.
+
+@item c3
+VIA C3 CPU with MMX and 3DNow!@: instruction set support.
+(No scheduling is implemented for this chip.)
+
+@item c3-2
+VIA C3-2 (Nehemiah/C5XL) CPU with MMX and SSE instruction set support.
+(No scheduling is implemented for this chip.)
+
+@item c7
+VIA C7 (Esther) CPU with MMX, SSE, SSE2 and SSE3 instruction set support.
+(No scheduling is implemented for this chip.)
+
+@item samuel-2
+VIA Eden Samuel 2 CPU with MMX and 3DNow!@: instruction set support.
+(No scheduling is implemented for this chip.)
+
+@item nehemiah
+VIA Eden Nehemiah CPU with MMX and SSE instruction set support.
+(No scheduling is implemented for this chip.)
+
+@item esther
+VIA Eden Esther CPU with MMX, SSE, SSE2 and SSE3 instruction set support.
+(No scheduling is implemented for this chip.)
+
+@item eden-x2
+VIA Eden X2 CPU with x86-64, MMX, SSE, SSE2 and SSE3 instruction set support.
+(No scheduling is implemented for this chip.)
+
+@item eden-x4
+VIA Eden X4 CPU with x86-64, MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2,
+AVX and AVX2 instruction set support.
+(No scheduling is implemented for this chip.)
+
+@item nano
+Generic VIA Nano CPU with x86-64, MMX, SSE, SSE2, SSE3 and SSSE3
+instruction set support.
+(No scheduling is implemented for this chip.)
+
+@item nano-1000
+VIA Nano 1xxx CPU with x86-64, MMX, SSE, SSE2, SSE3 and SSSE3
+instruction set support.
+(No scheduling is implemented for this chip.)
+
+@item nano-2000
+VIA Nano 2xxx CPU with x86-64, MMX, SSE, SSE2, SSE3 and SSSE3
+instruction set support.
+(No scheduling is implemented for this chip.)
+
+@item nano-3000
+VIA Nano 3xxx CPU with x86-64, MMX, SSE, SSE2, SSE3, SSSE3 and SSE4.1
+instruction set support.
+(No scheduling is implemented for this chip.)
+
+@item nano-x2
+VIA Nano Dual Core CPU with x86-64, MMX, SSE, SSE2, SSE3, SSSE3 and SSE4.1
+instruction set support.
+(No scheduling is implemented for this chip.)
+
+@item nano-x4
+VIA Nano Quad Core CPU with x86-64, MMX, SSE, SSE2, SSE3, SSSE3 and SSE4.1
+instruction set support.
+(No scheduling is implemented for this chip.)
+
+@item lujiazui
+ZHAOXIN lujiazui CPU with x86-64, MOVBE, MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1,
+SSE4.2, POPCNT, AES, PCLMUL, RDRND, XSAVE, XSAVEOPT, FSGSBASE, CX16,
+ABM, BMI, BMI2, FXSR, RDSEED instruction set support.  While the CPUs
+do support AVX and F16C, these aren't enabled by @code{-march=lujiazui}
+for performance reasons.
+
+@item yongfeng
+ZHAOXIN yongfeng CPU with x86-64, MOVBE, MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1,
+SSE4.2, AVX, POPCNT, AES, PCLMUL, RDRND, XSAVE, XSAVEOPT, FSGSBASE, CX16,
+ABM, BMI, BMI2, F16C, FXSR, RDSEED, AVX2, FMA, SHA, LZCNT
+instruction set support.
+
+@item shijidadao
+ZHAOXIN shijidadao CPU with x86-64, MOVBE, MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1,
+SSE4.2, AVX, POPCNT, AES, PCLMUL, RDRND, XSAVE, XSAVEOPT, FSGSBASE, CX16,
+ABM, BMI, BMI2, F16C, FXSR, RDSEED, AVX2, FMA, SHA, LZCNT
+instruction set support.
+
+@item geode
+AMD Geode embedded processor with MMX and 3DNow!@: instruction set support.
+@end table
+
+@opindex mtune
+@item -mtune=@var{cpu-type}
+Tune to @var{cpu-type} everything applicable about the generated code, except
+for the ABI and the set of available instructions.
+While picking a specific @var{cpu-type} schedules things appropriately
+for that particular chip, the compiler does not generate any code that
+cannot run on the default machine type unless you use a
+@option{-march=@var{cpu-type}} option.
+For example, if GCC is configured for i686-pc-linux-gnu
+then @option{-mtune=pentium4} generates code that is tuned for Pentium 4
+but still runs on i686 machines.
+
+The choices for @var{cpu-type} are the same as for @option{-march}.
+In addition, @option{-mtune} supports 2 extra choices for @var{cpu-type}:
+
+@table @samp
+@item generic
+Produce code optimized for the most common IA32/@/AMD64/@/EM64T processors.
+If you know the CPU on which your code will run, then you should use
+the corresponding @option{-mtune} or @option{-march} option instead of
+@option{-mtune=generic}.  But, if you do not know exactly what CPU users
+of your application will have, then you should use this option.
+
+As new processors are deployed in the marketplace, the behavior of this
+option will change.  Therefore, if you upgrade to a newer version of
+GCC, code generation controlled by this option will change to reflect
+the processors
+that are most common at the time that version of GCC is released.
+
+There is no @option{-march=generic} option because @option{-march}
+indicates the instruction set the compiler can use, and there is no
+generic instruction set applicable to all processors.  In contrast,
+@option{-mtune} indicates the processor (or, in this case, collection of
+processors) for which the code is optimized.
+
+@item intel
+Produce code optimized for the most current Intel processors, which are
+Haswell and Silvermont for this version of GCC.  If you know the CPU
+on which your code will run, then you should use the corresponding
+@option{-mtune} or @option{-march} option instead of @option{-mtune=intel}.
+But, if you want your application performs better on both Diamond Rapids
+and Clearwater Forest, then you should use this option.
+
+As new Intel processors are deployed in the marketplace, the behavior of
+this option will change.  Therefore, if you upgrade to a newer version of
+GCC, code generation controlled by this option will change to reflect
+the most current Intel processors at the time that version of GCC is
+released.
+
+There is no @option{-march=intel} option because @option{-march} indicates
+the instruction set the compiler can use, and there is no common
+instruction set applicable to all processors.  In contrast,
+@option{-mtune} indicates the processor (or, in this case, collection of
+processors) for which the code is optimized.
+@end table
+@end table
+
+The following options allow more detailed control over which instruction
+set extensions are targeted by GCC.
+Each has a corresponding @option{-mno-} option to disable use of these
+instructions.
+
+These extensions are also available as built-in functions: see
+@ref{x86 Built-in Functions}, for details of the functions enabled and
+disabled by these switches.
+
+These options enable GCC to use these extended instructions in
+generated code.  Applications that
+perform run-time CPU detection must compile separate files for each
+supported architecture, using the appropriate flags.  In particular,
+the file containing the CPU detection code should be compiled without
+these options.
+
+To control whether 387 or SSE/AVX instructions are generated
+automatically for floating-point arithmetic, see @option{-mfpmath=}, below.
+
+@table @gcctabopt
+@opindex mmmx
+@opindex mno-mmx
+@item -mmmx
+Support MMX built-in functions.
+
+@opindex msse
+@opindex mno-sse
+@item -msse
+Support MMX and SSE built-in functions and code generation.
+
+@opindex msse2
+@opindex mno-sse2
+@item -msse2
+Support MMX, SSE and SSE2 built-in functions and code generation.
+
+@opindex msse3
+@opindex mno-sse3
+@item -msse3
+Support MMX, SSE, SSE2 and SSE3 built-in functions and code generation.
+
+@opindex mssse3
+@opindex mno-ssse3
+@item -mssse3
+Support MMX, SSE, SSE2, SSE3 and SSSE3 built-in functions and code generation.
+
+@opindex msse4.1
+@opindex mno-sse4.1
+@item -msse4.1
+Support MMX, SSE, SSE2, SSE3, SSSE3 and SSE4.1 built-in functions and
+code generation.
+
+@opindex msse4.2
+@opindex mno-sse4.2
+@item -msse4.2
+Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1 and SSE4.2 built-in functions
+and code generation.
+
+@opindex msse4
+@opindex mno-sse4

@@ -1,0 +1,6 @@
+fuente	blob_git	archivo
+gcc/doc/include/funding.texi	d1583fabc0d8bec19f49bd13e78821cb0bc04527	funding.texi
+gcc/doc/include/gpl_v3.texi	4193d6fd55d4a590aa0a6cfcf6dbe88f65ddbeaa	gpl_v3.texi
+gcc/doc/include/fdl.texi	af1a9c1d1965b115dbdf325cce17743eb094db74	fdl.texi
+gcc/doc/gcc.texi	495f09bc9d3ec73daec1ebd3f32a5412c5fde34a	gcc.texi
+gcc/doc/include/gcc-common.texi	8ea074b5e13f1009aaf9ad50e57a6527086f8e4e	gcc-common.texi

@@ -1,0 +1,309 @@
+@c GCC 16.1.0 | BLOQUE 0201 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 6136-6440 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item uncached
+@atindex @code{uncached}, ARC
+This attribute applies to types.
+
+Declaring objects with the @code{uncached} type attribute
+allows you to exclude
+data-cache participation in load and store operations on those objects
+without involving the additional semantic implications of
+@code{volatile}.  The @code{.di} instruction suffix is used for all
+loads and stores of data declared @code{uncached}.
+@end table
+
+@anchor{ARM Function Attributes}
+@anchor{ARM Type Attributes}
+@node ARM Attributes
+@subsubsection ARM Attributes
+
+These attributes are supported for ARM targets:
+
+@table @code
+
+@atindex @code{general-regs-only}, ARM
+@item general-regs-only
+This attribute applies to functions.
+
+It indicates that no floating-point or Advanced SIMD registers should be
+used when generating code for this function.  If the function explicitly
+uses floating-point code, then the compiler gives an error.  This is
+the same behavior as that of the command-line option
+@option{-mgeneral-regs-only}.
+
+@atindex @code{interrupt}, ARM
+@item interrupt
+This attribute applies to functions.
+
+It indicates
+that the specified function is an interrupt handler.  The compiler generates
+function entry and exit sequences suitable for use in an interrupt handler
+when this attribute is present.
+
+You can specify the kind of interrupt to be handled by
+adding an optional parameter to the interrupt attribute like this:
+
+@smallexample
+void f () __attribute__ ((interrupt ("IRQ")));
+@end smallexample
+
+@noindent
+Permissible values for this parameter are: @code{IRQ}, @code{FIQ},
+@code{SWI}, @code{ABORT} and @code{UNDEF}.
+
+On ARMv7-M the interrupt type is ignored, and the attribute means the function
+may be called with a word-aligned stack pointer.
+
+@atindex @code{isr}, ARM
+@item isr
+This attribute applies to functions.
+
+Use this attribute on ARM to write Interrupt Service Routines. This is an
+alias to the @code{interrupt} attribute above.
+
+@atindex @code{long_call}, ARM
+@atindex @code{short_call}, ARM
+@cindex indirect calls, ARM
+@item long_call
+@itemx short_call
+These attributes apply to functions.
+
+@code{long_call} and @code{short_call} specify how a particular
+function is called.
+These attributes override the
+@option{-mlong-calls} (@pxref{ARM Options})
+command-line switch and @code{#pragma long_calls} settings.  For ARM, the
+@code{long_call} attribute indicates that the function might be far
+away from the call site and require a different (more expensive)
+calling sequence.   The @code{short_call} attribute always places
+the offset to the function from the call site into the @samp{BL}
+instruction directly.
+
+@atindex @code{pcs}, ARM
+@item pcs
+This attribute applies to functions.
+
+The @code{pcs} attribute can be used to control the calling convention
+used for a function on ARM.  The attribute takes an argument that specifies
+the calling convention to use.
+
+When compiling using the AAPCS ABI (or a variant of it) then valid
+values for the argument are @code{"aapcs"} and @code{"aapcs-vfp"}.  In
+order to use a variant other than @code{"aapcs"} then the compiler must
+be permitted to use the appropriate co-processor registers (i.e., the
+VFP registers must be available in order to use @code{"aapcs-vfp"}).
+For example,
+
+@smallexample
+/* Argument passed in r0, and result returned in r0+r1.  */
+double f2d (float) __attribute__((pcs("aapcs")));
+@end smallexample
+
+Variadic functions always use the @code{"aapcs"} calling convention and
+the compiler rejects attempts to specify an alternative.
+
+@atindex @code{target}, ARM
+@item target (@var{options})
+This attribute applies to functions.
+
+As discussed in @ref{Common Attributes}, this attribute
+allows specification of target-specific compilation options.
+
+On ARM, the following options are allowed:
+
+@table @samp
+@atindex @code{target("thumb")}, ARM
+@item thumb
+Force code generation in the Thumb (T16/T32) ISA, depending on the
+architecture level.
+
+@atindex @code{target("arm")}, ARM
+@item arm
+Force code generation in the ARM (A32) ISA.
+
+Functions from different modes can be inlined in the caller's mode.
+
+@atindex @code{target("fpu=")}, ARM
+@item fpu=
+Specifies the fpu for which to tune the performance of this function.
+The behavior and permissible arguments are the same as for the @option{-mfpu=}
+command-line option.
+
+@atindex @code{arch=}, ARM
+@item arch=
+Specifies the architecture version and architectural extensions to use
+for this function.  The behavior and permissible arguments are the same as
+for the @option{-march=} command-line option.
+
+The above target attributes can be specified as follows:
+
+@smallexample
+__attribute__((target("arch=armv8-a+crc")))
+int
+f (int a)
+@{
+  return a + 5;
+@}
+@end smallexample
+
+Additionally, the architectural extension string may be specified on its
+own.  This can be used to turn on and off particular architectural extensions
+without having to specify a particular architecture version or core.  Example:
+
+@smallexample
+__attribute__((target("+crc+nocrypto")))
+int
+foo (int a)
+@{
+  return a + 5;
+@}
+@end smallexample
+
+In this example @code{target("+crc+nocrypto")} enables the @code{crc}
+extension and disables the @code{crypto} extension for the function @code{foo}
+without modifying an existing @option{-march=} or @option{-mcpu} option.
+
+@end table
+
+@atindex @code{notshared}, ARM
+@item notshared
+This attributes applies to class types.
+
+On those ARM targets that support @code{dllimport} (such as Symbian
+OS), you can use the @code{notshared} type attribute to indicate that the
+virtual table and other similar data for a class should not be
+exported from a DLL@.  For example:
+
+@smallexample
+class __declspec(notshared) C @{
+public:
+  __declspec(dllimport) C();
+  virtual void f();
+@}
+
+__declspec(dllexport)
+C::C() @{@}
+@end smallexample
+
+@noindent
+In this code, @code{C::C} is exported from the current DLL, but the
+virtual table for @code{C} is not exported.  (You can use
+@code{__attribute__} instead of @code{__declspec} if you prefer, but
+most Symbian OS code uses @code{__declspec}.)
+
+@end table
+
+@anchor{AVR Function Attributes}
+@anchor{AVR Variable Attributes}
+@node AVR Attributes
+@subsubsection AVR Attributes
+
+These attributes are supported by the AVR back end:
+
+@table @code
+@atindex @code{signal}, AVR
+@atindex @code{interrupt}, AVR
+@item signal
+@itemx interrupt
+These attributes apply to functions.
+
+They specify that the function is an interrupt service routine (ISR).
+The compiler generates
+function entry and exit sequences suitable for use in an interrupt handler
+when one of the attributes is present.
+
+The AVR hardware globally disables interrupts when an interrupt is executed.
+
+@itemize @bullet
+@item ISRs with the @code{signal} attribute do not re-enable interrupts.
+It is save to enable interrupts in a @code{signal} handler.
+This ``save'' only applies to the code
+generated by the compiler and not to the IRQ layout of the
+application which is responsibility of the application.
+@c FIXME: what do those last two sentences mean?
+
+@item ISRs with the @code{interrupt} attribute re-enable interrupts.
+The first instruction of the routine is a @code{SEI} instruction to
+globally enable interrupts.
+@end itemize
+
+The recommended way to use these attributes is by means of the
+@code{ISR} macro provided by @code{avr/interrupt.h} from
+@w{@uref{https://avrdudes.github.io/avr-libc/avr-libc-user-manual/group__avr__interrupts.html,,AVR-LibC}}:
+@smallexample
+#include <avr/interrupt.h>
+
+ISR (INT0_vect) // Uses the "signal" attribute.
+@{
+    // Code
+@}
+
+ISR (ADC_vect, ISR_NOBLOCK) // Uses the "interrupt" attribute.
+@{
+    // Code
+@}
+@end smallexample
+
+When both @code{signal} and @code{interrupt} are specified for the same
+function, then @code{signal} is silently ignored.
+
+@atindex @code{signal(@var{num})}, AVR
+@atindex @code{interrupt(@var{num})}, AVR
+@item signal(@var{num})
+@itemx interrupt(@var{num})
+These attributes apply to functions.
+
+They are similar to the @code{signal} and @code{interrupt} attributes
+(respectively) without arguments,
+but the IRQ number is supplied as an argument @var{num} to
+the attribute, rather than providing the ISR name itself as the function name:
+
+@smallexample
+__attribute__((signal(1)))
+static void my_handler (void)
+@{
+   // Code for __vector_1
+@}
+@end smallexample
+
+Notice that the handler function needs not to be externally visible.
+The recommended way to use these attributes is by means of the
+@code{ISR_N} macro provided by @code{avr/interrupt.h} from
+@w{@uref{https://avrdudes.github.io/avr-libc/avr-libc-user-manual/group__avr__interrupts.html,,AVR-LibC}}:
+
+@smallexample
+#include <avr/interrupt.h>
+
+ISR_N (PCINT0_vect_num)
+static void my_pcint0_handler (void)
+@{
+   // Code
+@}
+
+ISR_N (ADC_vect_num, ISR_NOBLOCK)
+static void my_adc_handler (void)
+@{
+    // Code
+@}
+@end smallexample
+
+@code{ISR_N} can be specified more than once, in which case several
+interrupt vectors are pointing to the same handler function.  This
+is similar to the @code{ISR_ALIASOF} macro provided by AVR-LibC, but
+without the overhead introduced by @code{ISR_ALIASOF}.
+
+
+@atindex @code{noblock}, AVR
+@item noblock
+This attribute applies to functions.
+
+It can be used together with the @code{signal} attribute
+to indicate that an interrupt service routine should start with a @code{SEI}
+instruction to globally re-enable interrupts. Using attributes @code{signal}
+and @code{noblock} together has the same effect like using the @code{interrupt}
+attribute.  Using the @code{noblock} attribute without @code{signal} has no
+effect.
+
+@atindex @code{no_gccisr}, AVR

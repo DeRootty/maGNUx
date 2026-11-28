@@ -1,0 +1,17 @@
+@c GCC 16.1.0 | BLOQUE 0136 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 31174-31186 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+When @option{-march=} is not specified, GCC uses the setting from
+@option{-mcpu}.
+
+If both @option{-march} and @option{-mcpu=} are not specified, the default for
+this argument is system dependent; if you want a specific architecture
+extension, you should specify one explicitly.
+
+When the RISC-V specifications define an extension as depending on other
+extensions, GCC implicitly adds the dependent extensions to the enabled
+extension set if they weren't added explicitly.
+
+@include riscv-mcpu.texi

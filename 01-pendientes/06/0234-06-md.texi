@@ -1,0 +1,22 @@
+@c GCC 16.1.0 | BLOQUE 0234 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 1663-1680 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+@node Multi-Alternative
+@subsection Multiple Alternative Constraints
+@cindex multiple alternative constraints
+
+Sometimes a single instruction has multiple alternative sets of possible
+operands.  For example, on the 68000, a logical-or instruction can combine
+register or an immediate value into memory, or it can combine any kind of
+operand into a register; but it cannot combine one memory location into
+another.
+
+These constraints are represented as multiple alternatives.  An alternative
+can be described by a series of letters for each operand.  The overall
+constraint for an operand is made from the letters for this operand
+from the first alternative, a comma, the letters for this operand from
+the second alternative, a comma, and so on until the last alternative.
+All operands for a single instruction must have the same number of 
+alternatives.

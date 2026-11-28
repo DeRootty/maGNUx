@@ -1,0 +1,260 @@
+@c GCC 16.1.0 | BLOQUE 0058 | 03-12
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 14797-15052 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item inline-clone
+
+Only enable inlining and cloning optimizations, which includes inlining,
+cloning, interprocedural scalar replacement of aggregates and partial inlining.
+As a result, when patching a function, all its callers and its clones'
+callers are impacted, therefore need to be patched as well.
+
+@option{-flive-patching=inline-clone} disables the following optimization flags:
+@gccoptlist{-fwhole-program  -fipa-pta  -fipa-reference  -fipa-ra
+-fipa-icf  -fipa-icf-functions  -fipa-icf-variables
+-fipa-bit-cp  -fipa-vrp  -fipa-pure-const
+-fipa-reference-addressable
+-fipa-stack-alignment -fipa-modref}
+
+@item inline-only-static
+
+Only enable inlining of static functions.
+As a result, when patching a static function, all its callers are impacted
+and so need to be patched as well.
+
+In addition to all the flags that @option{-flive-patching=inline-clone}
+disables,
+@option{-flive-patching=inline-only-static} disables the following additional
+optimization flags:
+@gccoptlist{-fipa-cp-clone  -fipa-sra  -fpartial-inlining  -fipa-cp}
+
+@end table
+
+When @option{-flive-patching} is specified without any value, the default value
+is @var{inline-clone}.
+
+This flag is disabled by default.
+
+Note that @option{-flive-patching} is not supported with link-time optimization
+(@option{-flto}).
+
+@opindex fisolate-erroneous-paths-dereference
+@opindex fno-isolate-erroneous-paths-dereference
+@item -fisolate-erroneous-paths-dereference
+Detect paths that trigger erroneous or undefined behavior due to
+dereferencing a null pointer (with @option{-fdelete-null-pointer-checks}
+enabled) or a division by zero.  Isolate those paths from the main control
+flow and turn the statement with erroneous or undefined behavior into a
+trap.  This flag is enabled by default at @option{-O2} and higher.
+
+@opindex fisolate-erroneous-paths-attribute
+@opindex fno-isolate-erroneous-paths-attribute
+@item -fisolate-erroneous-paths-attribute
+Detect paths that trigger erroneous or undefined behavior due to a null value
+being used in a way forbidden by a @code{returns_nonnull} or @code{nonnull}
+attribute.  Isolate those paths from the main control flow and turn the
+statement with erroneous or undefined behavior into a trap.  This is not
+currently enabled, but may be enabled by @option{-O2} in the future.
+
+@opindex ftree-sink
+@opindex fno-tree-sink
+@item -ftree-sink
+Perform forward store motion on trees.  This flag is
+enabled by default at @option{-O1} and higher.
+
+@opindex ftree-bit-ccp
+@opindex fno-tree-bit-ccp
+@item -ftree-bit-ccp
+Perform sparse conditional bit constant propagation on trees and propagate
+pointer alignment information.
+This pass only operates on local scalar variables and is enabled by default
+at @option{-O1} and higher, except for @option{-Og}.
+It requires that @option{-ftree-ccp} is enabled.
+
+@opindex ftree-ccp
+@opindex fno-tree-ccp
+@item -ftree-ccp
+Perform sparse conditional constant propagation (CCP) on trees.  This
+pass only operates on local scalar variables and is enabled by default
+at @option{-O1} and higher.
+
+@opindex fssa-backprop
+@opindex fno-ssa-backprop
+@item -fssa-backprop
+Propagate information about uses of a value up the definition chain
+in order to simplify the definitions.  For example, this pass strips
+sign operations if the sign of a value never matters.  The flag is
+enabled by default at @option{-O1} and higher.
+
+@opindex fssa-phiopt
+@opindex fno-ssa-phiopt
+@item -fssa-phiopt
+Perform pattern matching on SSA PHI nodes to optimize conditional
+code.  This pass is enabled by default at @option{-O1} and higher,
+except for @option{-Og}.
+
+@opindex ftree-switch-conversion
+@opindex fno-tree-switch-conversion
+@item -ftree-switch-conversion
+Perform conversion of simple initializations in a switch to
+initializations from a scalar array.  This flag is enabled by default
+at @option{-O2} and higher.
+
+@opindex ftree-tail-merge
+@opindex fno-tree-tail-merge
+@item -ftree-tail-merge
+Look for identical code sequences.  When found, replace one with a jump to the
+other.  This optimization is known as tail merging or cross jumping.  This flag
+is enabled by default at @option{-O2} and higher.  The compilation time
+in this pass can
+be limited using @option{max-tail-merge-comparisons} parameter and
+@option{max-tail-merge-iterations} parameter.
+
+@opindex ftree-cselim
+@opindex fno-tree-cselim
+@item -ftree-cselim
+Perform conditional store elimination on trees.  This flag is enabled by
+default at @option{-O1} and higher on targets that have conditional
+move instructions.
+
+@opindex ftree-dce
+@opindex fno-tree-dce
+@item -ftree-dce
+Perform dead code elimination (DCE) on trees.  This flag is enabled by
+default at @option{-O1} and higher.
+
+@opindex ftree-builtin-call-dce
+@opindex fno-tree-builtin-call-dce
+@item -ftree-builtin-call-dce
+Perform conditional dead code elimination (DCE) for calls to built-in functions
+that may set @code{errno} but are otherwise free of side effects.  This flag is
+enabled by default at @option{-O2} and higher if @option{-Os} is not also
+specified.
+
+@opindex ffinite-loops
+@opindex fno-finite-loops
+@item -ffinite-loops
+Assume that a loop with an exit will eventually take the exit and not loop
+indefinitely.  This allows the compiler to remove loops that otherwise have
+no side-effects, not considering eventual endless looping as such.
+
+This option is enabled by default at @option{-O2} for C++ with -std=c++11
+or higher.
+
+@opindex ftree-dominator-opts
+@opindex fno-tree-dominator-opts
+@item -ftree-dominator-opts
+Perform a variety of simple scalar cleanups (constant/copy
+propagation, redundancy elimination, range propagation and expression
+simplification) based on a dominator tree traversal.  This also
+performs jump threading (to reduce jumps to jumps). This flag is
+enabled by default at @option{-O1} and higher.
+
+@opindex ftree-dse
+@opindex fno-tree-dse
+@item -ftree-dse
+Perform dead store elimination (DSE) on trees.  A dead store is a store into
+a memory location that is later overwritten by another store without
+any intervening loads.  In this case the earlier store can be deleted.  This
+flag is enabled by default at @option{-O1} and higher.
+
+@opindex ftree-ch
+@opindex fno-tree-ch
+@item -ftree-ch
+Perform loop header copying on trees.  This is beneficial since it increases
+effectiveness of code motion optimizations.  It also saves one jump.  This flag
+is enabled by default at @option{-O1} and higher.  It is not enabled
+for @option{-Os}, since it usually increases code size.
+
+@opindex ftree-loop-optimize
+@opindex fno-tree-loop-optimize
+@item -ftree-loop-optimize
+Perform loop optimizations on trees.  This flag is enabled by default
+at @option{-O1} and higher.
+
+@opindex ftree-loop-linear
+@opindex fno-tree-loop-linear
+@opindex floop-strip-mine
+@opindex fno-loop-strip-mine
+@opindex floop-block
+@opindex fno-loop-block
+@item -ftree-loop-linear
+@itemx -floop-strip-mine
+@itemx -floop-block
+Perform loop nest optimizations.  Same as
+@option{-floop-nest-optimize}.  To use this code transformation, GCC has
+to be configured with @option{--with-isl} to enable the Graphite loop
+transformation infrastructure.
+
+@opindex fgraphite-identity
+@opindex fno-graphite-identity
+@item -fgraphite-identity
+Enable the identity transformation for graphite.  For every SCoP we generate
+the polyhedral representation and transform it back to gimple.  Using
+@option{-fgraphite-identity} we can check the costs or benefits of the
+GIMPLE -> GRAPHITE -> GIMPLE transformation.  Some minimal optimizations
+are also performed by the code generator isl, like index splitting and
+dead code elimination in loops.
+
+@opindex floop-nest-optimize
+@opindex fno-loop-nest-optimize
+@item -floop-nest-optimize
+Enable the isl based loop nest optimizer.  This is a generic loop nest
+optimizer based on the Pluto optimization algorithms.  It calculates a loop
+structure optimized for data-locality and parallelism.  This option
+is experimental.
+
+@opindex floop-parallelize-all
+@opindex fno-loop-parallelize-all
+@item -floop-parallelize-all
+Use the Graphite data dependence analysis to identify loops that can
+be parallelized.  Parallelize all the loops that can be analyzed to
+not contain loop carried dependences without checking that it is
+profitable to parallelize the loops.
+
+@opindex ftree-coalesce-vars
+@opindex fno-tree-coalesce-vars
+@item -ftree-coalesce-vars
+While transforming the program out of the SSA representation, attempt to
+reduce copying by coalescing versions of different user-defined
+variables, instead of just compiler temporaries.  This may severely
+limit the ability to debug an optimized program compiled with
+@option{-fno-var-tracking-assignments}.  In the negated form, this flag
+prevents SSA coalescing of user variables.  This option is enabled by
+default if optimization is enabled, and it does very little otherwise.
+
+@opindex ftree-loop-if-convert
+@opindex fno-tree-loop-if-convert
+@item -ftree-loop-if-convert
+Attempt to transform conditional jumps in the innermost loops to
+branch-less equivalents.  The intent is to remove control-flow from
+the innermost loops in order to improve the ability of the
+vectorization pass to handle these loops.  This is enabled by default
+if vectorization is enabled.
+
+@opindex ftree-loop-distribution
+@opindex fno-tree-loop-distribution
+@item -ftree-loop-distribution
+Perform loop distribution.  This flag can improve cache performance on
+big loop bodies and allow further loop optimizations, like
+parallelization or vectorization, to take place.  For example, the loop
+@smallexample
+DO I = 1, N
+  A(I) = B(I) + C
+  D(I) = E(I) * F
+ENDDO
+@end smallexample
+is transformed to
+@smallexample
+DO I = 1, N
+   A(I) = B(I) + C
+ENDDO
+DO I = 1, N
+   D(I) = E(I) * F
+ENDDO
+@end smallexample
+This flag is enabled by default at @option{-O3}.
+It is also enabled by @option{-fprofile-use} and @option{-fauto-profile}.
+
+@opindex ftree-loop-distribute-patterns
+@opindex fno-tree-loop-distribute-patterns

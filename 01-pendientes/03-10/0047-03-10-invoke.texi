@@ -1,0 +1,257 @@
+@c GCC 16.1.0 | BLOQUE 0047 | 03-10
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 12500-12752 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -fanalyzer-assume-nothrow
+By default, if @option{-fexceptions} is enabled, the analyzer will assume
+that a call to any function without attribute @code{nothrow} could throw
+an exception.  This can help detect execution paths that leak due to
+exceptions bypassing clean-up code, but could lead to false positives when
+using headers where the author has not added the @code{nothrow} attribute.
+
+If @option{-fanalyzer-assume-nothrow} is enabled, then the analyzer will
+assume that external functions do not throw exceptions.  This may be useful
+for reducing ``noise'' from the analyzer when enabling
+@option{-fexceptions} on C code, but could hide true issues if an
+exception could be raised by something the C code calls.
+
+@opindex fanalyzer-call-summaries
+@opindex fno-analyzer-call-summaries
+@item -fanalyzer-call-summaries
+Simplify interprocedural analysis by computing the effect of certain calls,
+rather than exploring all paths through the function from callsite to each
+possible return.
+
+If enabled, call summaries are only used for functions with more than one
+call site, and that are sufficiently complicated.
+
+@opindex fanalyzer-checker
+@item -fanalyzer-checker=@var{name}
+Restrict the analyzer to run just the named checker, and enable it.
+
+@opindex fanalyzer-debug-text-art
+@opindex fno-analyzer-debug-text-art
+@item -fanalyzer-debug-text-art-headings
+This option is intended for analyzer developers.  If enabled,
+the analyzer will add extra annotations to any diagrams it generates.
+
+@opindex fanalyzer-feasibility
+@opindex fno-analyzer-feasibility
+@item -fno-analyzer-feasibility
+This option is intended for analyzer developers.
+
+By default the analyzer verifies that there is a feasible control flow path
+for each diagnostic it emits: that the conditions that hold are not mutually
+exclusive.  Diagnostics for which no feasible path can be found are rejected.
+This filtering can be suppressed with @option{-fno-analyzer-feasibility}, for
+debugging issues in this code.
+
+@opindex fanalyzer-fine-grained
+@opindex fno-analyzer-fine-grained
+@item -fanalyzer-fine-grained
+Does nothing.  Preserved for backward compatibility.
+
+@opindex fanalyzer-show-duplicate-count
+@opindex fno-analyzer-show-duplicate-count
+@item -fanalyzer-show-duplicate-count
+This option is intended for analyzer developers: if multiple diagnostics
+have been detected as being duplicates of each other, it emits a note when
+reporting the best diagnostic, giving the number of additional diagnostics
+that were suppressed by the deduplication logic.
+
+@opindex fanalyzer-show-events-in-system-headers
+@opindex fno-analyzer-show-events-in-system-headers
+@item -fanalyzer-show-events-in-system-headers
+By default the analyzer emits simplified diagnostics paths by hiding
+events fully located within a system header.
+With @option{-fanalyzer-show-events-in-system-headers} such
+events are no longer suppressed.
+
+@opindex fanalyzer-simplify-supergraph
+@opindex fno-analyzer-simplify-supergraph
+@item -fno-analyzer-simplify-supergraph
+This option is intended for analyzer developers.
+
+By default, the analyzer performs various simplifications to the
+program supergraph before analyzing it.  With
+@option{-fno-analyzer-simplify-supergraph} this simplification can be
+suppressed, for debugging issues with it.
+
+@opindex fanalyzer-state-merge
+@opindex fno-analyzer-state-merge
+@item -fno-analyzer-state-merge
+This option is intended for analyzer developers.
+
+By default the analyzer attempts to simplify analysis by merging
+sufficiently similar states at each program point as it builds its
+``exploded graph''.  With @option{-fno-analyzer-state-merge} this
+merging can be suppressed, for debugging state-handling issues.
+
+@opindex fanalyzer-state-purge
+@opindex fno-analyzer-state-purge
+@item -fno-analyzer-state-purge
+This option is intended for analyzer developers.
+
+By default the analyzer attempts to simplify analysis by purging
+aspects of state at a program point that appear to no longer be relevant
+e.g. the values of locals that aren't accessed later in the function
+and which aren't relevant to leak analysis.
+
+With @option{-fno-analyzer-state-purge} this purging of state can
+be suppressed, for debugging state-handling issues.
+
+@opindex fanalyzer-suppress-followups
+@opindex fno-analyzer-suppress-followups
+@item -fno-analyzer-suppress-followups
+This option is intended for analyzer developers.
+
+By default the analyzer will stop exploring an execution path after
+encountering certain diagnostics, in order to avoid potentially issuing a
+cascade of follow-up diagnostics.
+
+The diagnostics that terminate analysis along a path are:
+
+@itemize
+@item @option{-Wanalyzer-null-argument}
+@item @option{-Wanalyzer-null-dereference}
+@item @option{-Wanalyzer-use-after-free}
+@item @option{-Wanalyzer-use-of-pointer-in-stale-stack-frame}
+@item @option{-Wanalyzer-use-of-uninitialized-value}
+@end itemize
+
+With @option{-fno-analyzer-suppress-followups} the analyzer will
+continue to explore such paths even after such diagnostics, which may
+be helpful for debugging issues in the analyzer, or for microbenchmarks
+for detecting undefined behavior.
+
+@opindex fanalyzer-transitivity
+@opindex fno-analyzer-transitivity
+@item -fanalyzer-transitivity
+This option enables transitivity of constraints within the analyzer.
+
+@opindex fanalyzer-undo-inlining
+@opindex fno-analyzer-undo-inlining
+@item -fno-analyzer-undo-inlining
+This option is intended for analyzer developers.
+
+@option{-fanalyzer} runs relatively late compared to other code analysis
+tools, and some optimizations have already been applied to the code.  In
+particular function inlining may have occurred, leading to the
+interprocedural execution paths emitted by the analyzer containing
+function frames that don't correspond to those in the original source
+code.
+
+By default the analyzer attempts to reconstruct the original function
+frames, and to emit events showing the inlined calls.
+
+With @option{-fno-analyzer-undo-inlining} this attempt to reconstruct
+the original frame information can be disabled, which may be of help
+when debugging issues in the analyzer.
+
+@opindex fanalyzer-verbose-edges
+@opindex fno-analyzer-verbose-edges
+@item -fanalyzer-verbose-edges
+This option is intended for analyzer developers.  It enables more
+verbose, lower-level detail in the descriptions of control flow
+within diagnostic paths.
+
+@opindex fanalyzer-verbose-state-changes
+@opindex fno-analyzer-verbose-state-changes
+@item -fanalyzer-verbose-state-changes
+This option is intended for analyzer developers.  It enables more
+verbose, lower-level detail in the descriptions of events relating
+to state machines within diagnostic paths.
+
+@opindex fanalyzer-verbosity
+@item -fanalyzer-verbosity=@var{level}
+This option controls the complexity of the control flow paths that are
+emitted for analyzer diagnostics.
+
+The @var{level} can be one of:
+
+@table @samp
+@item 0
+At this level, interprocedural call and return events are displayed,
+along with the most pertinent state-change events relating to
+a diagnostic.  For example, for a double-@code{free} diagnostic,
+both calls to @code{free} will be shown.
+
+@item 1
+As per the previous level, but also show events for the entry
+to each function.
+
+@item 2
+As per the previous level, but also show events relating to
+control flow that are significant to triggering the issue
+(e.g. ``true path taken'' at a conditional).
+
+This level is the default.
+
+@item 3
+As per the previous level, but show all control flow events, not
+just significant ones.
+
+@item 4
+This level is intended for analyzer developers; it adds various
+other events intended for debugging the analyzer.
+
+@end table
+
+@opindex fdump-analyzer
+@item -fdump-analyzer
+Dump internal details about what the analyzer is doing to
+@file{@var{file}.analyzer.txt}.
+@option{-fdump-analyzer-stderr} overrides this option.
+
+@opindex fdump-analyzer-stderr
+@item -fdump-analyzer-stderr
+Dump internal details about what the analyzer is doing to stderr.
+This option overrides @option{-fdump-analyzer}.
+
+@opindex fdump-analyzer-callgraph
+@item -fdump-analyzer-callgraph
+Dump a representation of the call graph suitable for viewing with
+GraphViz to @file{@var{file}.callgraph.dot}.
+
+@opindex fdump-analyzer-exploded-graph
+@item -fdump-analyzer-exploded-graph
+Dump a representation of the ``exploded graph'' suitable for viewing with
+GraphViz to @file{@var{file}.eg.dot}.
+Nodes are color-coded based on state-machine states to emphasize
+state changes.
+
+@opindex fdump-analyzer-exploded-nodes
+@item -fdump-analyzer-exploded-nodes
+Emit diagnostics showing where nodes in the ``exploded graph'' are
+in relation to the program source.
+
+@opindex fdump-analyzer-exploded-nodes-2
+@item -fdump-analyzer-exploded-nodes-2
+Dump a textual representation of the ``exploded graph'' to
+@file{@var{file}.eg.txt}.
+
+@opindex fdump-analyzer-exploded-nodes-3
+@item -fdump-analyzer-exploded-nodes-3
+Dump a textual representation of the ``exploded graph'' to
+one dump file per node, to @file{@var{file}.eg-@var{id}.txt}.
+This is typically a large number of dump files.
+
+@opindex fdump-analyzer-exploded-paths
+@item -fdump-analyzer-exploded-paths
+Dump a textual representation of the ``exploded path'' for each
+diagnostic to @file{@var{file}.@var{idx}.@var{kind}.epath.txt}.
+
+@opindex fdump-analyzer-feasibility
+@item -fdump-analyzer-feasibility
+Dump internal details about the analyzer's search for feasible paths.
+The details are written in a form suitable for viewing with GraphViz
+to filenames of the form @file{@var{file}.*.fg.dot},
+@file{@var{file}.*.tg.dot}, and @file{@var{file}.*.fpath.txt}.
+
+@opindex fdump-analyzer-infinite-loop
+@item -fdump-analyzer-infinite-loop
+Dump internal details about the analyzer's search for infinite loops.
+The details are written in a form suitable for viewing with GraphViz
+to filenames of the form @file{@var{file}.*.infinite-loop.dot}.
+
+@opindex fdump-analyzer-json

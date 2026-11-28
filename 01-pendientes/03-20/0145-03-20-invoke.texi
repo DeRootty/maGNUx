@@ -1,0 +1,233 @@
+@c GCC 16.1.0 | BLOQUE 0145 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 32466-32694 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -mlongcall
+@itemx -mno-longcall
+By default assume that all calls are far away so that a longer and more
+expensive calling sequence is required.  This is required for calls
+farther than 32 megabytes (33,554,432 bytes) from the current location.
+A short call is generated if the compiler knows
+the call cannot be that far away.  This setting can be overridden by
+the @code{shortcall} function attribute, or by @code{#pragma
+longcall(0)}.
+
+Some linkers are capable of detecting out-of-range calls and generating
+glue code on the fly.  On these systems, long calls are unnecessary and
+generate slower code.  As of this writing, the AIX linker can do this,
+as can the GNU linker for PowerPC/64.  It is planned to add this feature
+to the GNU linker for 32-bit PowerPC systems as well.
+
+On PowerPC64 ELFv2 and 32-bit PowerPC systems with newer GNU linkers,
+GCC can generate long calls using an inline PLT call sequence (see
+@option{-mpltseq}).  PowerPC with @option{-mbss-plt} and PowerPC64
+ELFv1 (big-endian) do not support inline PLT calls.
+
+On Darwin/PPC systems, @code{#pragma longcall} generates @code{jbsr
+callee, L42}, plus a @dfn{branch island} (glue code).  The two target
+addresses represent the callee and the branch island.  The
+Darwin/PPC linker prefers the first address and generates a @code{bl
+callee} if the PPC @code{bl} instruction reaches the callee directly;
+otherwise, the linker generates @code{bl L42} to call the branch
+island.  The branch island is appended to the body of the
+calling function; it computes the full 32-bit address of the callee
+and jumps to it.
+
+On Mach-O (Darwin) systems, this option directs the compiler emit to
+the glue for every direct call, and the Darwin linker decides whether
+to use or discard it.
+
+In the future, GCC may ignore all longcall specifications
+when the linker is known to generate glue.
+
+@opindex mpltseq
+@opindex mno-pltseq
+@item -mpltseq
+@itemx -mno-pltseq
+Implement (do not implement) -fno-plt and long calls using an inline
+PLT call sequence that supports lazy linking and long calls to
+functions in dlopen'd shared libraries.  Inline PLT calls are only
+supported on PowerPC64 ELFv2 and 32-bit PowerPC systems with newer GNU
+linkers, and are enabled by default if the support is detected when
+configuring GCC, and, in the case of 32-bit PowerPC, if GCC is
+configured with @option{--enable-secureplt}.  @option{-mpltseq} code
+and @option{-mbss-plt} 32-bit PowerPC relocatable objects may not be
+linked together.
+
+@opindex mtls-markers
+@opindex mno-tls-markers
+@item -mtls-markers
+@itemx -mno-tls-markers
+Mark (do not mark) calls to @code{__tls_get_addr} with a relocation
+specifying the function argument.  The relocation allows the linker to
+reliably associate function call with argument setup instructions for
+TLS optimization, which in turn allows GCC to better schedule the
+sequence.
+
+@opindex mrecip
+@opindex mno-recip
+@item -mrecip
+@itemx -mno-recip
+This option enables use of the reciprocal estimate and
+reciprocal square root estimate instructions with additional
+Newton-Raphson steps to increase precision instead of doing a divide or
+square root and divide for floating-point arguments.  You should use
+the @option{-ffast-math} option when using @option{-mrecip} (or at
+least @option{-funsafe-math-optimizations},
+@option{-ffinite-math-only}, @option{-freciprocal-math} and
+@option{-fno-trapping-math}).  Note that while the throughput of the
+sequence is generally higher than the throughput of the non-reciprocal
+instruction, the precision of the sequence can be decreased by up to 2
+ulp (i.e.@: the inverse of 1.0 equals 0.99999994) for reciprocal square
+roots.
+
+@opindex mrecip=opt
+@item -mrecip=@var{opt}
+This option controls which reciprocal estimate instructions
+may be used.  @var{opt} is a comma-separated list of options, which may
+be preceded by a @code{!} to invert the option:
+
+@table @samp
+
+@item all
+Enable all estimate instructions.
+
+@item default
+Enable the default instructions, equivalent to @option{-mrecip}.
+
+@item none
+Disable all estimate instructions, equivalent to @option{-mno-recip}.
+
+@item div
+Enable the reciprocal approximation instructions for both
+single and double precision.
+
+@item divf
+Enable the single-precision reciprocal approximation instructions.
+
+@item divd
+Enable the double-precision reciprocal approximation instructions.
+
+@item rsqrt
+Enable the reciprocal square root approximation instructions for both
+single and double precision.
+
+@item rsqrtf
+Enable the single-precision reciprocal square root approximation instructions.
+
+@item rsqrtd
+Enable the double-precision reciprocal square root approximation instructions.
+
+@end table
+
+So, for example, @option{-mrecip=all,!rsqrtd} enables
+all of the reciprocal estimate instructions, except for the
+@code{FRSQRTE}, @code{XSRSQRTEDP}, and @code{XVRSQRTEDP} instructions
+which handle the double-precision reciprocal square root calculations.
+
+@opindex mrecip-precision
+@opindex mno-recip-precision
+@item -mrecip-precision
+@itemx -mno-recip-precision
+Assume (do not assume) that the reciprocal estimate instructions
+provide higher-precision estimates than is mandated by the PowerPC
+ABI.  Selecting @option{-mcpu=power6}, @option{-mcpu=power7} or
+@option{-mcpu=power8} automatically selects @option{-mrecip-precision}.
+The double-precision square root estimate instructions are not generated by
+default on low-precision machines, since they do not provide an
+estimate that converges after three steps.
+
+@opindex mveclibabi
+@item -mveclibabi=@var{type}
+Specifies the ABI type to use for vectorizing intrinsics using an
+external library.  The only type supported at present is @samp{mass},
+which specifies to use IBM's Mathematical Acceleration Subsystem
+(MASS) libraries for vectorizing intrinsics using external libraries.
+GCC currently emits calls to @code{acosd2}, @code{acosf4},
+@code{acoshd2}, @code{acoshf4}, @code{asind2}, @code{asinf4},
+@code{asinhd2}, @code{asinhf4}, @code{atan2d2}, @code{atan2f4},
+@code{atand2}, @code{atanf4}, @code{atanhd2}, @code{atanhf4},
+@code{cbrtd2}, @code{cbrtf4}, @code{cosd2}, @code{cosf4},
+@code{coshd2}, @code{coshf4}, @code{erfcd2}, @code{erfcf4},
+@code{erfd2}, @code{erff4}, @code{exp2d2}, @code{exp2f4},
+@code{expd2}, @code{expf4}, @code{expm1d2}, @code{expm1f4},
+@code{hypotd2}, @code{hypotf4}, @code{lgammad2}, @code{lgammaf4},
+@code{log10d2}, @code{log10f4}, @code{log1pd2}, @code{log1pf4},
+@code{log2d2}, @code{log2f4}, @code{logd2}, @code{logf4},
+@code{powd2}, @code{powf4}, @code{sind2}, @code{sinf4}, @code{sinhd2},
+@code{sinhf4}, @code{sqrtd2}, @code{sqrtf4}, @code{tand2},
+@code{tanf4}, @code{tanhd2}, and @code{tanhf4} when generating code
+for power7.  Both @option{-ftree-vectorize} and
+@option{-funsafe-math-optimizations} must also be enabled.  The MASS
+libraries must be specified at link time.
+
+@opindex mfriz
+@opindex mno-friz
+@item -mfriz
+@itemx -mno-friz
+Generate (do not generate) the @code{friz} instruction when the
+@option{-funsafe-math-optimizations} option is used to optimize
+rounding of floating-point values to 64-bit integer and back to floating
+point.  The @code{friz} instruction does not return the same value if
+the floating-point number is too large to fit in an integer.
+
+@opindex mpointers-to-nested-functions
+@opindex mno-pointers-to-nested-functions
+@item -mpointers-to-nested-functions
+@itemx -mno-pointers-to-nested-functions
+Generate (do not generate) code to load up the static chain register
+(@code{r11}) when calling through a pointer on AIX and 64-bit Linux
+systems where a function pointer points to a 3-word descriptor giving
+the function address, TOC value to be loaded in register @code{r2}, and
+static chain value to be loaded in register @code{r11}.  The
+@option{-mpointers-to-nested-functions} is on by default.  You cannot
+call through pointers to nested functions or pointers
+to functions compiled in other languages that use the static chain if
+you use @option{-mno-pointers-to-nested-functions}.
+
+@opindex msave-toc-indirect
+@opindex mno-save-toc-indirect
+@item -msave-toc-indirect
+@itemx -mno-save-toc-indirect
+Generate (do not generate) code to save the TOC value in the reserved
+stack location in the function prologue if the function calls through
+a pointer on AIX and 64-bit Linux systems.  If the TOC value is not
+saved in the prologue, it is saved just before the call through the
+pointer.  The @option{-mno-save-toc-indirect} option is the default.
+
+@opindex mcompat-align-parm
+@opindex mno-compat-align-parm
+@item -mcompat-align-parm
+@itemx -mno-compat-align-parm
+Generate (do not generate) code to pass structure parameters with a
+maximum alignment of 64 bits, for compatibility with older versions
+of GCC.
+
+Older versions of GCC (prior to 4.9.0) incorrectly did not align a
+structure parameter on a 128-bit boundary when that structure contained
+a member requiring 128-bit alignment.  This is corrected in more
+recent versions of GCC.  This option may be used to generate code
+that is compatible with functions compiled with older versions of
+GCC.
+
+The @option{-mno-compat-align-parm} option is the default.
+
+@opindex mstack-protector-guard
+@opindex mstack-protector-guard-reg
+@opindex mstack-protector-guard-offset
+@item -mstack-protector-guard=@var{guard}
+@itemx -mstack-protector-guard-reg=@var{reg}
+@itemx -mstack-protector-guard-offset=@var{offset}
+Generate stack protection code using canary at @var{guard}.  Supported
+locations are @samp{global} for global canary or @samp{tls} for per-thread
+canary in the TLS block (the default with GNU libc version 2.4 or later).
+
+With the latter choice the options
+@option{-mstack-protector-guard-reg=@var{reg}} and
+@option{-mstack-protector-guard-offset=@var{offset}} furthermore specify
+which register to use as base register for reading the canary, and from what
+offset from that base register. The default for those is as specified in the
+relevant ABI.
+
+@opindex mpcrel
+@opindex mno-pcrel

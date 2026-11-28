@@ -1,0 +1,8 @@
+@c GCC 16.1.0 | BLOQUE 0228 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 1235-1238 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+@c Most of this node appears by itself (in a different place) even
+@c when the INTERNALS flag is clear.  Passages that require the internals
+@c manual's context are conditionalized to appear only in the internals manual.

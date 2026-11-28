@@ -1,0 +1,308 @@
+@c GCC 16.1.0 | BLOQUE 0181 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 1225-1528 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Designated Inits
+@subsection Designated Initializers
+@cindex initializers with labeled elements
+@cindex labeled elements in initializers
+@cindex case labels in initializers
+@cindex designated initializers
+
+Standard C90 requires the elements of an initializer to appear in a fixed
+order, the same as the order of the elements in the array or structure
+being initialized.
+
+In ISO C99 you can give the elements in any order, specifying the array
+indices or structure field names they apply to, and GNU C allows this as
+an extension in C90 mode as well.  This extension is not
+implemented in GNU C++.
+
+To specify an array index, write
+@samp{[@var{index}] =} before the element value.  For example,
+
+@smallexample
+int a[6] = @{ [4] = 29, [2] = 15 @};
+@end smallexample
+
+@noindent
+is equivalent to
+
+@smallexample
+int a[6] = @{ 0, 0, 15, 0, 29, 0 @};
+@end smallexample
+
+@noindent
+The index values must be constant expressions, even if the array being
+initialized is automatic.
+
+An alternative syntax for this that has been obsolete since GCC 2.5 but
+GCC still accepts is to write @samp{[@var{index}]} before the element
+value, with no @samp{=}.
+
+To initialize a range of elements to the same value, write
+@samp{[@var{first} ... @var{last}] = @var{value}}.  This is a GNU
+extension.  For example,
+
+@smallexample
+int widths[] = @{ [0 ... 9] = 1, [10 ... 99] = 2, [100] = 3 @};
+@end smallexample
+
+@noindent
+If the value in it has side effects, the side effects happen only once,
+not for each initialized field by the range initializer.
+
+@noindent
+Note that the length of the array is the highest value specified
+plus one.
+
+In a structure initializer, specify the name of a field to initialize
+with @samp{.@var{fieldname} =} before the element value.  For example,
+given the following structure,
+
+@smallexample
+struct point @{ int x, y; @};
+@end smallexample
+
+@noindent
+the following initialization
+
+@smallexample
+struct point p = @{ .y = yvalue, .x = xvalue @};
+@end smallexample
+
+@noindent
+is equivalent to
+
+@smallexample
+struct point p = @{ xvalue, yvalue @};
+@end smallexample
+
+Another syntax that has the same meaning, obsolete since GCC 2.5, is
+@samp{@var{fieldname}:}, as shown here:
+
+@smallexample
+struct point p = @{ y: yvalue, x: xvalue @};
+@end smallexample
+
+Omitted fields are implicitly initialized the same as for objects
+that have static storage duration.
+
+@cindex designators
+The @samp{[@var{index}]} or @samp{.@var{fieldname}} is known as a
+@dfn{designator}.  You can also use a designator (or the obsolete colon
+syntax) when initializing a union, to specify which element of the union
+should be used.  For example,
+
+@smallexample
+union foo @{ int i; double d; @};
+
+union foo f = @{ .d = 4 @};
+@end smallexample
+
+@noindent
+converts 4 to a @code{double} to store it in the union using
+the second element.  By contrast, casting 4 to type @code{union foo}
+stores it into the union as the integer @code{i}, since it is
+an integer.  @xref{Cast to Union}.
+
+You can combine this technique of naming elements with ordinary C
+initialization of successive elements.  Each initializer element that
+does not have a designator applies to the next consecutive element of the
+array or structure.  For example,
+
+@smallexample
+int a[6] = @{ [1] = v1, v2, [4] = v4 @};
+@end smallexample
+
+@noindent
+is equivalent to
+
+@smallexample
+int a[6] = @{ 0, v1, v2, 0, v4, 0 @};
+@end smallexample
+
+Labeling the elements of an array initializer is especially useful
+when the indices are characters or belong to an @code{enum} type.
+For example:
+
+@smallexample
+int whitespace[256]
+  = @{ [' '] = 1, ['\t'] = 1, ['\h'] = 1,
+      ['\f'] = 1, ['\n'] = 1, ['\r'] = 1 @};
+@end smallexample
+
+@cindex designator lists
+You can also write a series of @samp{.@var{fieldname}} and
+@samp{[@var{index}]} designators before an @samp{=} to specify a
+nested subobject to initialize; the list is taken relative to the
+subobject corresponding to the closest surrounding brace pair.  For
+example, with the @samp{struct point} declaration above:
+
+@smallexample
+struct point ptarray[10] = @{ [2].y = yv2, [2].x = xv2, [0].x = xv0 @};
+@end smallexample
+
+If the same field is initialized multiple times, or overlapping
+fields of a union are initialized, the value from the last
+initialization is used.  When a field of a union is itself a structure,
+the entire structure from the last field initialized is used.  If any previous
+initializer has side effect, it is unspecified whether the side effect
+happens or not.  Currently, GCC discards the side-effecting
+initializer expressions and issues a warning.
+
+@node Named Address Spaces
+@section Named Address Spaces
+@cindex Named Address Spaces
+
+As an extension, GNU C supports named address spaces as
+defined in the N1275 draft of ISO/IEC DTR 18037.  Support for named
+address spaces in GCC will evolve as the draft technical report
+changes.  Calling conventions for any target might also change.  At
+present, only the AVR, M32C, PRU, RL78, and x86 targets support
+address spaces other than the generic address space.
+
+Address space identifiers may be used exactly like any other C type
+qualifier (e.g., @code{const} or @code{volatile}).  See the N1275
+document for more details.
+
+@anchor{AVR Named Address Spaces}
+@subsection AVR Named Address Spaces
+
+On the AVR target, there are several address spaces that can be used
+in order to put read-only data into the flash memory and access that
+data by means of the special instructions @code{LPM} or @code{ELPM}
+needed to read from flash.
+
+Devices belonging to @code{avrtiny} and @code{avrxmega3} can access
+flash memory by means of @code{LD*} instructions because the flash
+memory is mapped into the RAM address space.  There is @emph{no need}
+for language extensions like @code{__flash} or attribute @code{progmem}.
+The default linker description files for these devices cater for that
+feature and @code{.rodata} stays in flash: The compiler just generates
+@code{LD*} instructions, and the linker script adds core specific
+offsets to all @code{.rodata} symbols: @code{0x4000} in the case of
+@code{avrtiny} and @code{0x8000} in the case of @code{avrxmega3}.
+See @ref{AVR Options} for a list of respective devices.
+
+For devices not in @code{avrtiny} or @code{avrxmega3},
+any data including read-only data is located in RAM (the generic
+address space) because flash memory is not visible in the RAM address
+space.  In order to locate read-only data in flash memory @emph{and}
+to generate the right instructions to access this data without
+using (inline) assembler code, special address spaces are needed.
+
+@table @code
+@cindex @code{__flash} AVR Named Address Spaces
+@item __flash
+The @code{__flash} qualifier locates data in the
+@code{.progmem.data} section. Data is read using the @code{LPM}
+instruction. Pointers to this address space are 16 bits wide.
+
+@cindex @code{__flash1} AVR Named Address Spaces
+@cindex @code{__flash2} AVR Named Address Spaces
+@cindex @code{__flash3} AVR Named Address Spaces
+@cindex @code{__flash4} AVR Named Address Spaces
+@cindex @code{__flash5} AVR Named Address Spaces
+@item __flash1
+@itemx __flash2
+@itemx __flash3
+@itemx __flash4
+@itemx __flash5
+These are 16-bit address spaces locating data in section
+@code{.progmem@var{N}.data} where @var{N} refers to
+address space @code{__flash@var{N}}.
+The compiler sets the @code{RAMPZ} segment register appropriately 
+before reading data by means of the @code{ELPM} instruction.
+
+@cindex @code{__flashx} AVR Named Address Spaces
+@item __flashx
+
+This is a 24-bit flash address space locating data in section
+@code{.progmemx.data}.
+The compiler sets the @code{RAMPZ} segment register appropriately 
+before reading data by means of the @code{ELPM} instruction.
+
+@cindex @code{__memx} AVR Named Address Spaces
+@item __memx
+This is a 24-bit address space that linearizes flash and RAM:
+If the high bit of the address is set, data is read from
+RAM using the lower two bytes as RAM address.
+If the high bit of the address is clear, data is read from flash
+with @code{RAMPZ} set according to the high byte of the address.
+@xref{AVR Built-in Functions,,@code{__builtin_avr_flash_segment}}.
+
+Objects in this address space are located in @code{.progmemx.data}.
+@end table
+
+@b{Example}
+
+@smallexample
+char my_read (const __flash char ** p)
+@{
+    /* p is a pointer to RAM that points to a pointer to flash.
+       The first indirection of p reads that flash pointer
+       from RAM and the second indirection reads a char from this
+       flash address.  */
+
+    return **p;
+@}
+
+/* Locate array[] in flash memory */
+const __flash int array[] = @{ 3, 5, 7, 11, 13, 17, 19 @};
+
+int i = 1;
+
+int main (void)
+@{
+   /* Return 17 by reading from flash memory */
+   return array[array[i]];
+@}
+@end smallexample
+
+@noindent
+For each named address space supported by avr-gcc there is an equally
+named but uppercase built-in macro defined. 
+The purpose is to facilitate testing if respective address space
+support is available or not:
+
+@smallexample
+#ifdef __FLASH
+const __flash int var = 1;
+
+int read_var (void)
+@{
+    return var;
+@}
+#else
+#include <avr/pgmspace.h> /* From AVR-LibC */
+
+const int var PROGMEM = 1;
+
+int read_var (void)
+@{
+    return (int) pgm_read_word (&var);
+@}
+#endif /* __FLASH */
+@end smallexample
+
+@noindent
+Notice that attribute @code{progmem}
+locates data in flash but
+accesses to these data read from generic address space, i.e.@:
+from RAM,
+so that you need special accessors like @code{pgm_read_byte}
+from @w{@uref{https://avrdudes.github.io/avr-libc/avr-libc-user-manual/,AVR-LibC}}
+together with attribute @code{progmem}.
+
+@noindent
+@b{Limitations and Caveats}
+
+@itemize
+@item
+Reading across the 64@tie{}KiB section boundary of
+the @code{__flash} or @code{__flash@var{N}} address spaces
+is not supported. The only address spaces that
+support reading across the 64@tie{}KiB flash segment boundaries are
+@code{__memx} and @code{__flashx}.
+

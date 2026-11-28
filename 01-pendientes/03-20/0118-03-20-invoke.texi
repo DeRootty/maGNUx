@@ -1,0 +1,350 @@
+@c GCC 16.1.0 | BLOQUE 0118 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 26680-27025 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -mcond-move
+@itemx -mno-cond-move
+
+Enable or disable the use of conditional-move instructions; it is enabled
+by default.
+
+This switch is mainly for debugging the compiler and will likely be removed
+in a future version.
+
+@opindex mscc
+@opindex mno-scc
+@item -mscc
+@itemx -mno-scc
+
+Enable or disable the use of conditional set instructions; it is enabled
+by default.
+
+This switch is mainly for debugging the compiler and will likely be removed
+in a future version.
+
+@opindex mcond-exec
+@opindex mno-cond-exec
+@item -mcond-exec
+@itemx -mno-cond-exec
+
+Enable or disable the use of conditional execution; it is enabled by default.
+
+This switch is mainly for debugging the compiler and will likely be removed
+in a future version.
+
+@opindex mvliw-branch
+@opindex mno-vliw-branch
+@item -mvliw-branch
+@itemx -mno-vliw-branch
+
+Enable or disable an optimization pass to pack branches into VLIW instructions;
+it is enabled by default.
+
+This switch is mainly for debugging the compiler and will likely be removed
+in a future version.
+
+@opindex mmulti-cond-exec
+@opindex mno-multi-cond-exec
+@item -mmulti-cond-exec
+@itemx -mno-multi-cond-exec
+
+Enable or disable optimization of @code{&&} and @code{||} in conditional
+execution; it is enabled by default.
+
+This switch is mainly for debugging the compiler and will likely be removed
+in a future version.
+
+@opindex mnested-cond-exec
+@opindex mno-nested-cond-exec
+@item -mnested-cond-exec
+@itemx -mno-nested-cond-exec
+
+Enable or disable nested conditional execution optimizations; it is enabled
+by default.
+
+This switch is mainly for debugging the compiler and will likely be removed
+in a future version.
+
+@opindex moptimize-membar
+@opindex mno-optimize-membar
+@item -moptimize-membar
+@itemx -mno-optimize-membar
+
+This switch removes redundant @code{membar} instructions from the
+compiler-generated code.  It is enabled by default.
+
+@opindex mtomcat-stats
+@opindex mno-tomcat-stats
+@item -mtomcat-stats
+
+Cause gas to print out tomcat statistics.
+
+@opindex mcpu
+@item -mcpu=@var{cpu}
+
+Select the processor type for which to generate code.  Possible values are
+@samp{frv}, @samp{fr550}, @samp{tomcat}, @samp{fr500}, @samp{fr450},
+@samp{fr405}, @samp{fr400}, @samp{fr300} and @samp{simple}.
+
+@end table
+
+@node FT32 Options
+@subsection FT32 Options
+@cindex FT32 Options
+
+These options are defined specifically for the FT32 port.
+
+@table @gcctabopt
+
+@opindex msim
+@opindex mno-sim
+@item -msim
+Specifies that the program will be run on the simulator.  This causes
+an alternate runtime startup and library to be linked.
+You must not use this option when generating programs that will run on
+real hardware; you must provide your own runtime library for whatever
+I/O functions are needed.
+
+@opindex mnodiv
+@opindex mno-nodiv
+@item -mnodiv
+Do not use div and mod instructions.
+
+@opindex mft32b
+@opindex mno-ft32b
+@item -mft32b
+Enable use of the extended instructions of the FT32B processor.
+
+@opindex mcompress
+@opindex mno-compress
+@item -mcompress
+Compress all code using the Ft32B code compression scheme.
+
+@opindex mnopm
+@opindex mno-nopm
+@item -mnopm
+Do not generate code that reads program memory.
+
+@end table
+
+@node GNU/Linux Options
+@subsection GNU/Linux Options
+
+These @samp{-m} options are defined for GNU/Linux targets:
+
+@table @gcctabopt
+@opindex mglibc
+@item -mglibc
+Use the GNU C library.  This is the default except
+on @samp{*-*-linux-*uclibc*}, @samp{*-*-linux-*musl*} and
+@samp{*-*-linux-*android*} targets.
+
+@opindex muclibc
+@item -muclibc
+Use uClibc C library.  This is the default on
+@samp{*-*-linux-*uclibc*} targets.
+
+@opindex mmusl
+@item -mmusl
+Use the musl C library.  This is the default on
+@samp{*-*-linux-*musl*} targets.
+
+@opindex mbionic
+@item -mbionic
+Use Bionic C library.  This is the default on
+@samp{*-*-linux-*android*} targets.
+
+@opindex mandroid
+@opindex mno-android
+@item -mandroid
+@itemx -mno-android
+Compile code compatible with Android platform.  This is the default on
+@samp{*-*-linux-*android*} targets.
+
+When compiling, this option enables @option{-mbionic}, @option{-fPIC},
+@option{-fno-exceptions} and @option{-fno-rtti} by default.  When linking,
+this option makes the GCC driver pass Android-specific options to the linker.
+Finally, this option causes the preprocessor macro @code{__ANDROID__}
+to be defined.
+
+This option can be disabled completely with @option{-mno-android}.
+
+@opindex tno-android-cc
+@item -tno-android-cc
+Disable compilation effects of @option{-mandroid}, i.e., do not enable
+@option{-mbionic}, @option{-fPIC}, @option{-fno-exceptions} and
+@option{-fno-rtti} by default.
+
+@opindex tno-android-ld
+@item -tno-android-ld
+Disable linking effects of @option{-mandroid}, i.e., pass standard Linux
+linking options to the linker.
+
+@end table
+
+@node H8/300 Options
+@subsection H8/300 Options
+
+These @samp{-m} options are defined for the H8/300 implementations:
+
+@table @gcctabopt
+@opindex mrelax
+@item -mrelax
+Shorten some address references at link time, when possible; uses the
+linker option @option{-relax}.  @xref{H8/300,, @code{ld} and the H8/300,
+ld, Using ld}, for a fuller description.
+
+@opindex mh
+@opindex mno-h
+@item -mh
+Generate code for the H8/300H@.
+
+@opindex ms
+@opindex mno-s
+@item -ms
+Generate code for the H8S@.
+
+@opindex mn
+@opindex mno-n
+@item -mn
+Generate code for the H8S and H8/300H in the normal mode.  This switch
+must be used with either @option{-mh} or @option{-ms}.
+
+@opindex msx
+@opindex mno-sx
+@item -msx
+Generate H8SX code.
+
+@opindex ms2600
+@opindex mno-s2600
+@item -ms2600
+Generate code for the H8S/2600.  This switch must be used with @option{-ms}.
+
+@opindex mquickcall
+@opindex mno-quickcall
+@item -mquickcall
+Use registers for argument passing.
+
+@opindex mslowbyte
+@item -mslowbyte
+Consider access to byte-sized memory slow.
+
+@opindex mexr
+@opindex mno-exr
+@item -mexr
+@itemx -mno-exr
+Store extended registers on the stack before execution of functions
+with the @code{monitor} attribute (@pxref{H8/300 Attributes}).
+The default is @option{-mexr}.  This option is valid only for H8S targets.
+
+@opindex mint32
+@item -mint32
+Make @code{int} data 32 bits by default.
+
+@opindex malign-300
+@item -malign-300
+On the H8/300H and H8S, use the same alignment rules as for the H8/300.
+The default for the H8/300H and H8S is to align longs and floats on
+4-byte boundaries.
+@option{-malign-300} causes them to be aligned on 2-byte boundaries.
+This option has no effect on the H8/300.
+@end table
+
+@node HPPA Options
+@subsection HPPA Options
+@cindex HPPA Options
+
+These @samp{-m} options are defined for the HPPA family of computers:
+
+@table @gcctabopt
+@opindex march
+@item -march=@var{architecture-type}
+Generate code for the specified architecture.  The choices for
+@var{architecture-type} are @samp{1.0} for PA 1.0, @samp{1.1} for PA
+1.1, and @samp{2.0} for PA 2.0 processors.  Refer to
+@file{/usr/lib/sched.models} on an HP-UX system to determine the proper
+architecture option for your machine.  Code compiled for lower numbered
+architectures runs on higher numbered architectures, but not the
+other way around.
+
+@opindex mpa-risc-1-0
+@opindex mpa-risc-1-1
+@opindex mpa-risc-2-0
+@item -mpa-risc-1-0
+@itemx -mpa-risc-1-1
+@itemx -mpa-risc-2-0
+Synonyms for @option{-march=1.0}, @option{-march=1.1}, and @option{-march=2.0},
+respectively.
+
+@opindex matomic-libcalls
+@opindex mno-atomic-libcalls
+@item -matomic-libcalls
+@itemx -mno-atomic-libcalls
+Generate libcalls for atomic loads and stores when sync libcalls are disabled.
+This option is enabled by default.  It only affects the generation of
+atomic libcalls by the HPPA backend.
+
+Both the sync and @file{libatomic} libcall implementations use locking.
+As a result, processor stores are not atomic with respect to other
+atomic operations.  Processor loads up to DImode are atomic with
+respect to other atomic operations provided they are implemented as
+a single access.
+
+The PA-RISC architecture does not support any atomic operations in
+hardware except for the @code{ldcw} instruction.  Thus, all atomic
+support is implemented using sync and atomic libcalls.  Sync libcall
+support is in @file{libgcc.a}.  Atomic libcall support is in
+@file{libatomic}.
+
+This option generates @code{__atomic_exchange} calls for atomic stores.
+It also provides special handling for atomic DImode accesses on 32-bit
+targets.
+
+@opindex mcaller-copies
+@opindex mno-caller-copies
+@item -mcaller-copies
+The caller copies function arguments passed by hidden reference.  This
+option should be used with care as it is not compatible with the default
+32-bit runtime.  However, only aggregates larger than eight bytes are
+passed by hidden reference and the option provides better compatibility
+with OpenMP.
+
+@opindex mcoherent-ldcw
+@opindex mno-coherent-ldcw
+@item -mcoherent-ldcw
+Use ldcw/ldcd coherent cache-control hint.
+
+@opindex mdisable-fpregs
+@opindex mno-disable-fpregs
+@item -mdisable-fpregs
+Disable floating-point registers.  Equivalent to @option{-msoft-float}.
+
+@opindex mdisable-indexing
+@opindex mno-disable-indexing
+@item -mdisable-indexing
+Prevent the compiler from using indexing address modes.  This avoids some
+rather obscure problems when compiling MIG generated code under MACH@.
+
+@opindex mfast-indirect-calls
+@opindex mno-fast-indirect-calls
+@item -mfast-indirect-calls
+Generate code that assumes calls never cross space boundaries.  This
+allows GCC to emit code that performs faster indirect calls.
+
+This option does not work in the presence of shared libraries or nested
+functions.
+
+@opindex mfixed-range
+@item -mfixed-range=@var{register-range}
+Generate code treating the given register range as fixed registers.
+A fixed register is one that the register allocator cannot use.  This is
+useful when compiling kernel code.  A register range is specified as
+two registers separated by a dash.  Multiple register ranges can be
+specified separated by a comma.
+
+@opindex mgas
+@opindex mno-gas
+@item -mgas
+Enable the use of assembler directives only GAS understands.
+
+@opindex mgnu-ld

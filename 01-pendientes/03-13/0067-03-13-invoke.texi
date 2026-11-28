@@ -1,0 +1,236 @@
+@c GCC 16.1.0 | BLOQUE 0067 | 03-13
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 16819-17050 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Instrumentation Options
+@section Program Instrumentation Options
+@cindex instrumentation options
+@cindex program instrumentation options
+@cindex run-time error checking options
+@cindex profiling options
+@cindex options, program instrumentation
+@cindex options, run-time error checking
+@cindex options, profiling
+
+GCC supports a number of command-line options that control adding
+run-time instrumentation to the code it normally generates.
+For example, one purpose of instrumentation is collect profiling
+statistics for use in finding program hot spots, code coverage
+analysis, or profile-guided optimizations.
+Another class of program instrumentation is adding run-time checking
+to detect programming errors like invalid pointer
+dereferences or out-of-bounds array accesses, as well as deliberately
+hostile attacks such as stack smashing or C++ vtable hijacking.
+There is also a general hook which can be used to implement other
+forms of tracing or function-level instrumentation for debug or
+program analysis purposes.
+
+@table @gcctabopt
+@cindex @command{prof}
+@cindex @command{gprof}
+@opindex p
+@opindex profile
+@opindex fprofile
+@opindex fno-profile
+@opindex pg
+@item -p
+@itemx --profile
+@itemx -fprofile
+@itemx -pg
+Generate extra code to write profile information suitable for the
+analysis program @command{prof} (for @option{-p}, @option{--profile},
+and @option{-fprofile})
+or @command{gprof}
+(for @option{-pg}).  You must use this option when compiling
+the source files you want data about, and you must also use it when
+linking.
+
+You can use the function attribute @code{no_instrument_function} to
+suppress profiling of individual functions when compiling with these options.
+@xref{Common Attributes}.
+
+@opindex fprofile-arcs
+@opindex fno-profile-arcs
+@item -fprofile-arcs
+Add code so that program flow @dfn{arcs} are instrumented.  During
+execution the program records how many times each branch and call is
+executed and how many times it is taken or returns.  On targets that support
+constructors with priority support, profiling properly handles constructors,
+destructors and C++ constructors (and destructors) of classes which are used
+as a type of a global variable.
+
+When the compiled
+program exits it saves this data to a file called
+@file{@var{auxname}.gcda} for each source file.  The data may be used for
+profile-directed optimizations (@option{-fbranch-probabilities}), or for
+test coverage analysis (@option{-ftest-coverage}).  Each object file's
+@var{auxname} is generated from the name of the output file, if
+explicitly specified and it is not the final executable, otherwise it is
+the basename of the source file.  In both cases any suffix is removed
+(e.g.@: @file{foo.gcda} for input file @file{dir/foo.c}, or
+@file{dir/foo.gcda} for output file specified as @option{-o dir/foo.o}).
+
+Note that if a command line directly links source files, the corresponding
+@var{.gcda} files will be prefixed with the unsuffixed name of the output file.
+E.g. @code{gcc a.c b.c -o binary} would generate @file{binary-a.gcda} and
+@file{binary-b.gcda} files.
+
+@item -fcondition-coverage
+@opindex fcondition-coverage
+@opindex fno-condition-coverage
+Add code so that program conditions are instrumented.  During execution the
+program records what terms in a conditional contributes to a decision, which
+can be used to verify that all terms in a Boolean function are tested and have
+an independent effect on the outcome of a decision.  The result can be read
+with @code{gcov --conditions}.
+
+@item -fpath-coverage
+@opindex fpath-coverage
+@opindex fno-path-coverage
+Add code so that the paths taken are tracked.  During execution the
+program records the prime paths taken.  The number of paths grows very
+fast with complexity, and to avoid exploding compile times GCC will give
+up instrumentation if the approximate number of paths exceeds the limit
+controlled by @option{-fpath-coverage-limit}.  The result can be read
+with @code{gcov --prime-paths --prime-paths-lines --prime-paths-source},
+@xref{gcov prime paths example}.
+
+@item -fpath-coverage-limit=@var{limit}
+@opindex fpath-coverage-limit
+The threshold at which point @option{-fpath-coverage} gives up on
+instrumenting a function.  This limit is approximate and conservative,
+as GCC uses a pessimistic heuristic which slightly overcounts the
+running number of paths, and gives up if the threshold is reached before
+finding all the paths.  This option is not for fine grained control over
+which functions to instrument - rather it is intended to limit the
+effect of path explosion and keep compile times reasonable.  The default
+is @var{250000}.
+
+@xref{Cross-profiling}.
+
+@cindex @command{gcov}
+@opindex coverage
+@item --coverage
+@itemx -coverage
+
+This option is used to compile and link code instrumented for coverage
+analysis.  The options @option{-coverage} and @option{--coverage} are
+equivalent; both are a synonym for @option{-fprofile-arcs}
+@option{-ftest-coverage} (when compiling) and @option{-lgcov} (when
+linking).  See the documentation for those options for more details.
+
+@itemize
+
+@item
+Compile the source files with @option{-fprofile-arcs} plus optimization
+and code generation options.  For test coverage analysis, use the
+additional @option{-ftest-coverage} option.  You do not need to profile
+every source file in a program.
+
+@item
+Compile the source files additionally with @option{-fprofile-abs-path}
+to create absolute path names in the @file{.gcno} files.  This allows
+@command{gcov} to find the correct sources in projects where compilations
+occur with different working directories.
+
+@item
+Link your object files with @option{-lgcov} or @option{-fprofile-arcs}
+(the latter implies the former).
+
+@item
+Run the program on a representative workload to generate the arc profile
+information.  This may be repeated any number of times.  You can run
+concurrent instances of your program, and provided that the file system
+supports locking, the data files will be correctly updated.  Unless
+a strict ISO C dialect option is in effect, @code{fork} calls are
+detected and correctly handled without double counting.
+
+Moreover, an object file can be recompiled multiple times
+and the corresponding @file{.gcda} file merges as long as
+the source file and the compiler options are unchanged.
+
+@item
+For profile-directed optimizations, compile the source files again with
+the same optimization and code generation options plus
+@option{-fbranch-probabilities} (@pxref{Optimize Options,,Options that
+Control Optimization}).
+
+@item
+For test coverage analysis, use @command{gcov} to produce human readable
+information from the @file{.gcno} and @file{.gcda} files.  Refer to the
+@command{gcov} documentation for further information.
+
+@end itemize
+
+With @option{-fprofile-arcs}, for each function of your program GCC
+creates a program flow graph, then finds a spanning tree for the graph.
+Only arcs that are not on the spanning tree have to be instrumented: the
+compiler adds code to count the number of times that these arcs are
+executed.  When an arc is the only exit or only entrance to a block, the
+instrumentation code can be added to the block; otherwise, a new basic
+block must be created to hold the instrumentation code.
+
+With @option{-fcondition-coverage}, for each conditional in your program GCC
+creates a bitset and records the exercised boolean values that have an
+independent effect on the outcome of that expression.
+
+With @option{-fpath-coverage}, GCC finds and enumerates and records the
+taken prime paths of each function, unless the number of paths would
+exceed the limit controlled by @option{-fpath-coverage-limit}.  If the
+limit is exceeded the function is not instrumented as if
+@option{-fpath-coverage} was not used.  A prime path is the longest
+sequence of unique blocks, except possibly the first and last, which is
+not a subpath of any other path.
+
+@need 2000
+@opindex ftest-coverage
+@opindex fno-test-coverage
+@item -ftest-coverage
+Produce a notes file that the @command{gcov} code-coverage utility
+(@pxref{Gcov,, @command{gcov}---a Test Coverage Program}) can use to
+show program coverage.  Each source file's note file is called
+@file{@var{auxname}.gcno}.  Refer to the @option{-fprofile-arcs} option
+above for a description of @var{auxname} and instructions on how to
+generate test coverage data.  Coverage data matches the source files
+more closely if you do not optimize.
+
+@opindex fprofile-abs-path
+@opindex fno-profile-abs-path
+@item -fprofile-abs-path
+Automatically convert relative source file names to absolute path names
+in the @file{.gcno} files.  This allows @command{gcov} to find the correct
+sources in projects where compilations occur with different working
+directories.
+
+@opindex fprofile-dir
+@item -fprofile-dir=@var{path}
+
+Set the directory to search for the profile data files in to @var{path}.
+This option affects only the profile data generated by
+@option{-fprofile-generate}, @option{-ftest-coverage}, @option{-fprofile-arcs}
+and used by @option{-fprofile-use} and @option{-fbranch-probabilities}
+and its related options.  Both absolute and relative paths can be used.
+By default, GCC uses the current directory as @var{path}, thus the
+profile data file appears in the same directory as the object file.
+In order to prevent the file name clashing, if the object file name is
+not an absolute path, we mangle the absolute path of the
+@file{@var{sourcename}.gcda} file and use it as the file name of a
+@file{.gcda} file.  See details about the file naming in @option{-fprofile-arcs}.
+See similar option @option{-fprofile-note}.
+
+When an executable is run in a massive parallel environment, it is recommended
+to save profile to different folders.  That can be done with variables
+in @var{path} that are exported during run-time:
+
+@table @gcctabopt
+
+@item %p
+process ID.
+
+@item %q@{VAR@}
+value of environment variable @var{VAR}
+
+@end table
+
+@opindex fprofile-generate
+@opindex fno-profile-generate

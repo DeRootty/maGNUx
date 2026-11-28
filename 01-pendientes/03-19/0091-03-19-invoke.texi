@@ -1,0 +1,283 @@
+@c GCC 16.1.0 | BLOQUE 0091 | 03-19
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 20332-20610 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item graph
+For each of the other indicated dump files (@option{-fdump-rtl-@var{pass}}),
+dump a representation of the control flow graph suitable for viewing with
+GraphViz to @file{@var{file}.@var{passid}.@var{pass}.dot}.  Each function in
+the file is pretty-printed as a subgraph, so that GraphViz can render them
+all in a single plot.
+
+RTL is always dumped in slim form.
+@item vops
+Enable showing virtual operands for every statement.
+@item lineno
+Enable showing line numbers for statements.
+@item uid
+Enable showing the unique ID (@code{DECL_UID}) for each variable.
+@item verbose
+Enable showing the tree dump for each statement.
+@item eh
+Enable showing the EH region number holding each statement.
+@item scev
+Enable showing scalar evolution analysis details.
+@item optimized
+Enable showing optimization information (only available in certain
+passes).
+@item missed
+Enable showing missed optimization information (only available in certain
+passes).
+@item note
+Enable other detailed optimization information (only available in
+certain passes).
+@item folding
+Enable dumping information about match-and-simplify (match.pd) patterns,
+when they are applied.
+@item all
+Turn on all options, except @option{raw}, @option{slim}, @option{verbose}
+and @option{lineno}.
+@item optall
+Turn on all optimization options, i.e., @option{optimized},
+@option{missed}, and @option{note}.
+@end table
+
+To determine what tree dumps are available or find the dump for a pass
+of interest follow the steps below.
+
+@enumerate
+@item
+Invoke GCC with @option{-fdump-passes} and in the @file{stderr} output
+look for a code that corresponds to the pass you are interested in.
+For example, the codes @code{tree-evrp}, @code{tree-vrp1}, and
+@code{tree-vrp2} correspond to the three Value Range Propagation passes.
+The number at the end distinguishes distinct invocations of the same pass.
+@item
+To enable the creation of the dump file, append the pass code to
+the @option{-fdump-} option prefix and invoke GCC with it.  For example,
+to enable the dump from the Early Value Range Propagation pass, invoke
+GCC with the @option{-fdump-tree-evrp} option.  Optionally, you may
+specify the name of the dump file.  If you don't specify one, GCC
+creates as described below.
+@item
+Find the pass dump in a file whose name is composed of three components
+separated by a period: the name of the source file GCC was invoked to
+compile, a numeric suffix indicating the pass number followed by the
+letter @samp{t} for tree passes (and the letter @samp{r} for RTL passes),
+and finally the pass code.  For example, the Early VRP pass dump might
+be in a file named @file{myfile.c.038t.evrp} in the current working
+directory.  Note that the numeric codes are not stable and may change
+from one version of GCC to another.
+@end enumerate
+
+@opindex fopt-info
+@opindex fno-opt-info
+@item -fopt-info
+@itemx -fopt-info-@var{options}
+@itemx -fopt-info-@var{options}=@var{filename}
+Controls optimization dumps from various optimization passes. If the
+@samp{-@var{options}} form is used, @var{options} is a list of
+@samp{-} separated option keywords to select the dump details and
+optimizations.
+
+The @var{options} can be divided into three groups:
+@enumerate
+@item
+options describing what kinds of messages should be emitted,
+@item
+options describing the verbosity of the dump, and
+@item
+options describing which optimizations should be included.
+@end enumerate
+The options from each group can be freely mixed as they are
+non-overlapping. However, in case of any conflicts,
+the later options override the earlier options on the command
+line.
+
+The following options control which kinds of messages should be emitted:
+
+@table @samp
+@item optimized
+Print information when an optimization is successfully applied. It is
+up to a pass to decide which information is relevant. For example, the
+vectorizer passes print the source location of loops which are
+successfully vectorized.
+@item missed
+Print information about missed optimizations. Individual passes
+control which information to include in the output.
+@item note
+Print verbose information about optimizations, such as certain
+transformations, more detailed messages about decisions etc.
+@item all
+Print detailed optimization information. This includes
+@samp{optimized}, @samp{missed}, and @samp{note}.
+@end table
+
+The following option controls the dump verbosity:
+
+@table @samp
+@item internals
+By default, only ``high-level'' messages are emitted. This option enables
+additional, more detailed, messages, which are likely to only be of interest
+to GCC developers.
+@end table
+
+One or more of the following option keywords can be used to describe a
+group of optimizations:
+
+@table @samp
+@item ipa
+Enable dumps from all interprocedural optimizations.
+@item loop
+Enable dumps from all loop optimizations.
+@item inline
+Enable dumps from all inlining optimizations.
+@item omp
+Enable dumps from all OMP (Offloading and Multi Processing) optimizations.
+@item vec
+Enable dumps from all vectorization optimizations.
+@item optall
+Enable dumps from all optimizations. This is a superset of
+the optimization groups listed above.
+@end table
+
+If @var{options} is
+omitted, it defaults to @samp{optimized-optall}, which means to dump messages
+about successful optimizations from all the passes, omitting messages
+that are treated as ``internals''.
+
+If the @var{filename} is provided, then the dumps from all the
+applicable optimizations are concatenated into the @var{filename}.
+Otherwise the dump is output onto @file{stderr}. Though multiple
+@option{-fopt-info} options are accepted, only one of them can include
+a @var{filename}. If other filenames are provided then all but the
+first such option are ignored.
+
+Note that the output @var{filename} is overwritten
+in case of multiple translation units. If a combined output from
+multiple translation units is desired, @file{stderr} should be used
+instead.
+
+In the following example, the optimization info is output to
+@file{stderr}:
+
+@smallexample
+gcc -O3 -fopt-info
+@end smallexample
+
+This example:
+@smallexample
+gcc -O3 -fopt-info-missed=missed.all
+@end smallexample
+
+@noindent
+outputs missed optimization report from all the passes into
+@file{missed.all}, and this one:
+
+@smallexample
+gcc -O2 -ftree-vectorize -fopt-info-vec-missed
+@end smallexample
+
+@noindent
+prints information about missed optimization opportunities from
+vectorization passes on @file{stderr}.
+Note that @option{-fopt-info-vec-missed} is equivalent to
+@option{-fopt-info-missed-vec}.  The order of the optimization group
+names and message types listed after @option{-fopt-info} does not matter.
+
+As another example,
+@smallexample
+gcc -O3 -fopt-info-inline-optimized-missed=inline.txt
+@end smallexample
+
+@noindent
+outputs information about missed optimizations as well as
+optimized locations from all the inlining passes into
+@file{inline.txt}.
+
+Finally, consider:
+
+@smallexample
+gcc -fopt-info-vec-missed=vec.miss -fopt-info-loop-optimized=loop.opt
+@end smallexample
+
+@noindent
+Here the two output filenames @file{vec.miss} and @file{loop.opt} are
+in conflict since only one output file is allowed. In this case, only
+the first option takes effect and the subsequent options are
+ignored. Thus only @file{vec.miss} is produced which contains
+dumps from the vectorizer about missed opportunities.
+
+@opindex fsave-optimization-record
+@opindex fno-save-optimization-record
+@item -fsave-optimization-record
+Write a SRCFILE.opt-record.json.gz file detailing what optimizations
+were performed, for those optimizations that support @option{-fopt-info}.
+
+This option is experimental and the format of the data within the
+compressed JSON file is subject to change.
+
+It is roughly equivalent to a machine-readable version of
+@option{-fopt-info-all}, as a collection of messages with source file,
+line number and column number, with the following additional data for
+each message:
+
+@itemize @bullet
+
+@item
+the execution count of the code being optimized, along with metadata about
+whether this was from actual profile data, or just an estimate, allowing
+consumers to prioritize messages by code hotness,
+
+@item
+the function name of the code being optimized, where applicable,
+
+@item
+the ``inlining chain'' for the code being optimized, so that when
+a function is inlined into several different places (which might
+themselves be inlined), the reader can distinguish between the copies,
+
+@item
+objects identifying those parts of the message that refer to expressions,
+statements or symbol-table nodes, which of these categories they are, and,
+when available, their source code location,
+
+@item
+the GCC pass that emitted the message, and
+
+@item
+the location in GCC's own code from which the message was emitted
+
+@end itemize
+
+Additionally, some messages are logically nested within other
+messages, reflecting implementation details of the optimization
+passes.
+
+@opindex fsched-verbose
+@item -fsched-verbose=@var{n}
+On targets that use instruction scheduling, this option controls the
+amount of debugging output the scheduler prints to the dump files.
+
+For @var{n} greater than zero, @option{-fsched-verbose} outputs the
+same information as @option{-fdump-rtl-sched1} and @option{-fdump-rtl-sched2}.
+For @var{n} greater than one, it also output basic block probabilities,
+detailed ready list information and unit/insn info.  For @var{n} greater
+than two, it includes RTL at abort point, control-flow and regions info.
+And for @var{n} over four, @option{-fsched-verbose} also includes
+dependence info.
+
+
+
+@opindex fdisable-
+@opindex fenable-
+@item -fenable-@var{kind}-@var{pass}
+@itemx -fdisable-@var{kind}-@var{pass}=@var{range-list}
+
+This is a set of options that are used to explicitly disable/enable
+optimization passes.  These options are intended for use for debugging GCC.
+Compiler users should use regular options for enabling/disabling
+passes instead.
+
+@table @gcctabopt
+

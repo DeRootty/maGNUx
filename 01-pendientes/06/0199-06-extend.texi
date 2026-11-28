@@ -1,0 +1,298 @@
+@c GCC 16.1.0 | BLOQUE 0199 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 5582-5875 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item zero_call_used_regs ("@var{choice}")
+This attribute applies to functions.
+
+The @code{zero_call_used_regs} attribute causes the compiler to zero
+a subset of all call-used registers@footnote{A ``call-used'' register
+is a register whose contents can be changed by a function call;
+therefore, a caller cannot assume that the register has the same contents
+on return from the function as it had before calling the function.  Such
+registers are also called ``call-clobbered'', ``caller-saved'', or
+``volatile''.} at function return.
+This is used to increase program security by either mitigating
+Return-Oriented Programming (ROP) attacks or preventing information leakage
+through registers.
+
+In order to satisfy users with different security needs and control the
+run-time overhead at the same time, the @var{choice} parameter provides a
+flexible way to choose the subset of the call-used registers to be zeroed.
+The four basic values of @var{choice} are:
+
+@itemize @bullet
+@item
+@samp{skip} doesn't zero any call-used registers.
+
+@item
+@samp{used} only zeros call-used registers that are used in the function.
+A ``used'' register is one whose content has been set or referenced in
+the function.
+
+@item
+@samp{all} zeros all call-used registers.
+
+@item
+@samp{leafy} behaves like @samp{used} in a leaf function, and like
+@samp{all} in a nonleaf function.  This makes for leaner zeroing in leaf
+functions, where the set of used registers is known, and that may be
+enough for some purposes of register zeroing.
+@end itemize
+
+In addition to these three basic choices, it is possible to modify
+@samp{used}, @samp{all}, and @samp{leafy} as follows:
+
+@itemize @bullet
+@item
+Adding @samp{-gpr} restricts the zeroing to general-purpose registers.
+
+@item
+Adding @samp{-arg} restricts the zeroing to registers that can sometimes
+be used to pass function arguments.  This includes all argument registers
+defined by the platform's calling conversion, regardless of whether the
+function uses those registers for function arguments or not.
+@end itemize
+
+The modifiers can be used individually or together.  If they are used
+together, they must appear in the order above.
+
+The full list of @var{choice}s is therefore:
+
+@table @code
+@item skip
+doesn't zero any call-used register.
+
+@item used
+only zeros call-used registers that are used in the function.
+
+@item used-gpr
+only zeros call-used general purpose registers that are used in the function.
+
+@item used-arg
+only zeros call-used registers that are used in the function and pass arguments.
+
+@item used-gpr-arg
+only zeros call-used general purpose registers that are used in the function
+and pass arguments.
+
+@item all
+zeros all call-used registers.
+
+@item all-gpr
+zeros all call-used general purpose registers.
+
+@item all-arg
+zeros all call-used registers that pass arguments.
+
+@item all-gpr-arg
+zeros all call-used general purpose registers that pass
+arguments.
+
+@item leafy
+Same as @samp{used} in a leaf function, and same as @samp{all} in a
+nonleaf function.
+
+@item leafy-gpr
+Same as @samp{used-gpr} in a leaf function, and same as @samp{all-gpr}
+in a nonleaf function.
+
+@item leafy-arg
+Same as @samp{used-arg} in a leaf function, and same as @samp{all-arg}
+in a nonleaf function.
+
+@item leafy-gpr-arg
+Same as @samp{used-gpr-arg} in a leaf function, and same as
+@samp{all-gpr-arg} in a nonleaf function.
+
+@end table
+
+Of this list, @samp{used-arg}, @samp{used-gpr-arg}, @samp{all-arg},
+@samp{all-gpr-arg}, @samp{leafy-arg}, and @samp{leafy-gpr-arg} are
+mainly used for ROP mitigation.
+
+The default for the attribute is controlled by @option{-fzero-call-used-regs}.
+@end table
+
+@c This is the end of the target-independent attribute table
+
+@node Target-Specific Attributes
+@subsection Target-Specific Attributes
+
+@menu
+* AArch64 Attributes::
+* AMD GCN Attributes::
+* ARC Attributes::
+* ARM Attributes::
+* AVR Attributes::
+* Blackfin Attributes::
+* BPF Attributes::
+* C-SKY Attributes::
+* Epiphany Attributes::
+* H8/300 Attributes::
+* IA-64 Attributes::
+* LoongArch Attributes::
+* M32C Attributes::
+* M32R/D Attributes::
+* m68k Attributes::
+* MicroBlaze Attributes::
+* Microsoft Windows Attributes::
+* MIPS Attributes::
+* MSP430 Attributes::
+* NDS32 Attributes::
+* Nvidia PTX Attributes::
+* PowerPC Attributes::
+* RISC-V Attributes::
+* RL78 Attributes::
+* RX Attributes::
+* S/390 Attributes::
+* SH Attributes::
+* Symbian OS Attributes::
+* V850 Attributes::
+* Visium Attributes::
+* x86 Attributes::
+* Xstormy16 Attributes::
+@end menu
+
+@anchor{AArch64 Function Attributes}
+@node AArch64 Attributes
+@subsubsection AArch64 Attributes
+
+The following target-specific function attributes are available for the
+AArch64 target.
+
+@table @code
+
+@atindex @code{target}, AArch64
+@cindex AArch64 code generation attributes
+@item target (@var{options})
+This attribute applies to functions.
+
+As discussed in @ref{Common Attributes}, the @code{target} function attribute
+allows you to specify target-specific compilation options on a per-function
+basis.
+For the most part, these options mirror the behavior of
+similar command-line options (@pxref{AArch64 Options}).
+
+The target attributes can be specified as follows:
+
+@smallexample
+__attribute__((target("@var{attr-string}")))
+int
+f (int a)
+@{
+  return a + 5;
+@}
+@end smallexample
+
+@noindent
+where @code{@var{attr-string}} is one of the option name strings
+specified below.
+
+Additionally, the architectural extension string may be specified on its
+own.  This can be used to turn on and off particular architectural extensions
+without having to specify a particular architecture version or core.  Example:
+
+@smallexample
+__attribute__((target("+crc+nocrypto")))
+int
+foo (int a)
+@{
+  return a + 5;
+@}
+@end smallexample
+
+In this example @code{target("+crc+nocrypto")} enables the @code{crc}
+extension and disables the @code{crypto} extension for the function @code{foo}
+without modifying an existing @option{-march=} or @option{-mcpu} option.
+
+Multiple options can be specified in the same attribute by separating them with
+a comma.  For example:
+@smallexample
+__attribute__((target("arch=armv8-a+crc+crypto,tune=cortex-a53")))
+int
+foo (int a)
+@{
+  return a + 5;
+@}
+@end smallexample
+
+@noindent
+is valid; this compiles function @code{foo} for ARMv8-A with @code{crc}
+and @code{crypto} extensions, and tunes it for @code{cortex-a53}.
+
+These are the permitted options:
+
+@table @samp
+@atindex @code{target("general-regs-only")}, AArch64
+@item general-regs-only
+Indicates that no floating-point or Advanced SIMD registers should be
+used when generating code for this function.  If the function explicitly
+uses floating-point code, then the compiler gives an error.  This is
+the same behavior as that of the command-line option
+@option{-mgeneral-regs-only}.
+
+@atindex @code{target("fix-cortex-a53-835769")}, AArch64
+@item fix-cortex-a53-835769
+Indicates that the workaround for the Cortex-A53 erratum 835769 should be
+applied to this function.  To explicitly disable the workaround for this
+function specify the negated form: @code{no-fix-cortex-a53-835769}.
+This corresponds to the behavior of the command-line options
+@option{-mfix-cortex-a53-835769} and @option{-mno-fix-cortex-a53-835769}.
+
+@atindex @code{target("cmodel=")}, AArch64
+@item cmodel=
+Indicates that code should be generated for a particular code model for
+this function.  The behavior and permissible arguments are the same as
+for the command-line option @option{-mcmodel=}.
+
+@atindex @code{target("strict-align")}, AArch64
+@item strict-align
+@itemx no-strict-align
+@code{strict-align} indicates that the compiler should not assume that unaligned
+memory references are handled by the system.  To allow the compiler to assume
+that aligned memory references are handled by the system, the inverse attribute
+@code{no-strict-align} can be specified.  The behavior is same as for the
+command-line option @option{-mstrict-align} and @option{-mno-strict-align}.
+
+@atindex @code{target("omit-leaf-frame-pointer")}, AArch64
+@item omit-leaf-frame-pointer
+Indicates that the frame pointer should be omitted for a leaf function call.
+To keep the frame pointer, the inverse attribute
+@code{no-omit-leaf-frame-pointer} can be specified.  These attributes have
+the same behavior as the command-line options @option{-momit-leaf-frame-pointer}
+and @option{-mno-omit-leaf-frame-pointer}.
+
+@atindex @code{target("tls-dialect=")}, AArch64
+@item tls-dialect=
+Specifies the TLS dialect to use for this function.  The behavior and
+permissible arguments are the same as for the command-line option
+@option{-mtls-dialect=}.
+
+@atindex @code{target("arch=")}, AArch64
+@item arch=
+Specifies the architecture version and architectural extensions to use
+for this function.  The behavior and permissible arguments are the same as
+for the @option{-march=} command-line option.
+
+@atindex @code{target("tune=")}, AArch64
+@item tune=
+Specifies the core for which to tune the performance of this function.
+The behavior and permissible arguments are the same as for the @option{-mtune=}
+command-line option.
+
+@atindex @code{target("cpu=")}, AArch64
+@item cpu=
+Specifies the core for which to tune the performance of this function and also
+whose architectural features to use.  The behavior and valid arguments are the
+same as for the @option{-mcpu=} command-line option.
+
+@atindex @code{target("sign-return-address")}, AArch64
+@item sign-return-address
+Select the function scope on which return address signing will be applied.  The
+behavior and permissible arguments are the same as for the command-line option
+@option{-msign-return-address=}.  The default value is @code{none}.  This
+attribute is deprecated.  The @code{branch-protection} attribute should
+be used instead.
+
+@atindex @code{target("branch-protection")}, AArch64

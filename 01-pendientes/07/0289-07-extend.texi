@@ -1,0 +1,241 @@
+@c GCC 16.1.0 | BLOQUE 0289 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 19337-19573 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@b{All of the following built-in functions are only available for GNU-C}
+
+@defbuiltin{int8_t __builtin_avr_flash_segment (const __memx void*)}
+This built-in takes a byte address to the 24-bit
+@ref{AVR Named Address Spaces,named address space} @code{__memx} and returns
+the number of the flash segment (the 64 KiB chunk) where the address
+points to.  Counting starts at @code{0}.
+If the address does not point to flash memory, return @code{-1}.
+@enddefbuiltin
+
+@defbuiltin{size_t __builtin_avr_strlen_flash (const __flash char*)}
+@defbuiltinx{size_t __builtin_avr_strlen_flashx (const __flashx char*)}
+@defbuiltinx{size_t __builtin_avr_strlen_memx (const __memx char*)}
+These built-ins return the length of a string located in
+named address-space @code{__flash}, @code{__flashx} or @code{__memx},
+respectively.  They are used to support functions like @code{strlen_F} from
+@w{@uref{https://avrdudes.github.io/avr-libc/avr-libc-user-manual/,AVR-LibC}}'s
+header @code{avr/flash.h}.
+@enddefbuiltin
+
+@noindent
+There are many more AVR-specific built-in functions that are used to
+implement the ISO/IEC TR 18037 ``Embedded C'' fixed-point functions of
+section 7.18a.6.  You don't need to use these built-ins directly.
+Instead, use the declarations as supplied by the @code{stdfix.h} header
+with GNU-C99:
+
+@smallexample
+#include <stdfix.h>
+
+// Re-interpret the bit representation of unsigned 16-bit
+// integer @var{uval} as Q-format 0.16 value.
+unsigned fract get_bits (uint_ur_t uval)
+@{
+    return urbits (uval);
+@}
+@end smallexample
+
+@node Blackfin Built-in Functions
+@subsection Blackfin Built-in Functions
+
+Currently, there are two Blackfin-specific built-in functions.  These are
+used for generating @code{CSYNC} and @code{SSYNC} machine insns without
+using inline assembly; by using these built-in functions the compiler can
+automatically add workarounds for hardware errata involving these
+instructions.  These functions are named as follows:
+
+@smallexample
+void __builtin_bfin_csync (void);
+void __builtin_bfin_ssync (void);
+@end smallexample
+
+@node BPF Built-in Functions
+@subsection BPF Built-in Functions
+
+The following built-in functions are available for eBPF targets.
+
+@defbuiltin{{unsigned long long} __builtin_bpf_load_byte (unsigned long long @var{offset})}
+Load a byte from the @code{struct sk_buff} packet data pointed to by the
+register @code{%r6}, and return it.
+@enddefbuiltin
+
+@defbuiltin{{unsigned long long} __builtin_bpf_load_half (unsigned long long @var{offset})}
+Load 16 bits from the @code{struct sk_buff} packet data pointed to by the
+register @code{%r6}, and return it.
+@enddefbuiltin
+
+@defbuiltin{{unsigned long long} __builtin_bpf_load_word (unsigned long long @var{offset})}
+Load 32 bits from the @code{struct sk_buff} packet data pointed to by the
+register @code{%r6}, and return it.
+@enddefbuiltin
+
+@defbuiltin{@var{type} __builtin_preserve_access_index (@var{type} @var{expr})}
+BPF Compile Once-Run Everywhere (CO-RE) support.  Instruct GCC to
+generate CO-RE relocation records for any accesses to aggregate
+data structures (struct, union, array types) in @var{expr}.  This builtin
+is otherwise transparent; @var{expr} may have any type and its value is
+returned.  This builtin has no effect if @code{-mco-re} is not in effect
+(either specified or implied).
+@enddefbuiltin
+
+@defbuiltin{{unsigned int} __builtin_preserve_field_info (@var{expr}, unsigned int @var{kind})}
+BPF Compile Once-Run Everywhere (CO-RE) support. This builtin is used to
+extract information to aid in struct/union relocations.  @var{expr} is
+an access to a field of a struct or union. Depending on @var{kind}, different
+information is returned to the program. A CO-RE relocation for the access in
+@var{expr} with kind @var{kind} is recorded if @code{-mco-re} is in effect.
+
+The following values are supported for @var{kind}:
+@table @code
+@item FIELD_BYTE_OFFSET = 0
+The returned value is the offset, in bytes, of the field from the
+beginning of the containing structure. For bit-fields, this is the byte offset
+of the containing word.
+
+@item FIELD_BYTE_SIZE = 1
+The returned value is the size, in bytes, of the field. For bit-fields,
+this is the size in bytes of the containing word.
+
+@item FIELD_EXISTENCE = 2
+The returned value is 1 if the field exists, 0 otherwise. Always 1 at
+compile time.
+
+@item FIELD_SIGNEDNESS = 3
+The returned value is 1 if the field is signed, 0 otherwise.
+
+@item FIELD_LSHIFT_U64 = 4
+@itemx FIELD_RSHIFT_U64 = 5
+The returned value is the number of bits of left- or right-shifting
+(respectively) needed in order to recover the original value of the field,
+after it has been loaded by a read of @code{FIELD_BYTE_SIZE} bytes into an
+unsigned 64-bit value. Primarily useful for reading bit-field values
+from structures that may change between kernel versions.
+
+@end table
+
+Note that the return value is a constant which is known at
+compile time. If the field has a variable offset then
+@code{FIELD_BYTE_OFFSET}, @code{FIELD_LSHIFT_U64},
+and @code{FIELD_RSHIFT_U64} are not supported.
+Similarly, if the field has a variable size then
+@code{FIELD_BYTE_SIZE}, @code{FIELD_LSHIFT_U64},
+and @code{FIELD_RSHIFT_U64} are not supported.
+
+For example, @code{__builtin_preserve_field_info} can be used to reliably
+extract bit-field values from a structure that may change between
+kernel versions:
+
+@smallexample
+struct S
+@{
+  short a;
+  int x:7;
+  int y:5;
+@};
+
+int
+read_y (struct S *arg)
+@{
+  unsigned long long val;
+  unsigned int offset
+    = __builtin_preserve_field_info (arg->y, FIELD_BYTE_OFFSET);
+  unsigned int size
+    = __builtin_preserve_field_info (arg->y, FIELD_BYTE_SIZE);
+
+  /* Read size bytes from arg + offset into val.  */
+  bpf_probe_read (&val, size, arg + offset);
+
+  val <<= __builtin_preserve_field_info (arg->y, FIELD_LSHIFT_U64);
+
+  if (__builtin_preserve_field_info (arg->y, FIELD_SIGNEDNESS))
+    val = ((long long) val
+           >> __builtin_preserve_field_info (arg->y, FIELD_RSHIFT_U64));
+  else
+    val >>= __builtin_preserve_field_info (arg->y, FIELD_RSHIFT_U64);
+
+  return val;
+@}
+
+@end smallexample
+@enddefbuiltin
+
+@defbuiltin{{unsigned int} __builtin_preserve_enum_value (@var{type}, @var{enum}, unsigned int @var{kind})}
+BPF Compile Once-Run Everywhere (CO-RE) support. This builtin collects enum
+information and creates a CO-RE relocation relative to @var{enum} that should
+be of @var{type}.  The @var{kind} specifies the action performed.
+
+The following values are supported for @var{kind}:
+@table @code
+@item ENUM_VALUE_EXISTS = 0
+The return value is either 0 or 1 depending if the enum value exists in the
+target.
+
+@item ENUM_VALUE = 1
+The return value is the enum value in the target kernel.
+@end table
+@enddefbuiltin
+
+@defbuiltin{{unsigned int} __builtin_btf_type_id (@var{type}, unsigned int @var{kind})}
+BPF Compile Once-Run Everywhere (CO-RE) support. This builtin is used to get
+the BTF type ID of a specified @var{type}.
+Depending on the @var{kind} argument, it
+either returns the ID of the local BTF information, or the BTF type ID in
+the target kernel.
+
+The following values are supported for @var{kind}:
+@table @code
+@item BTF_TYPE_ID_LOCAL = 0
+Return the local BTF type ID.  Always succeeds.
+
+@item BTF_TYPE_ID_TARGET = 1
+Return the target BTF type ID.  If @var{type} does not exist in the target,
+returns 0.
+@end table
+@enddefbuiltin
+
+@defbuiltin{{unsigned int} __builtin_preserve_type_info (@var{type}, unsigned int @var{kind})}
+BPF Compile Once-Run Everywhere (CO-RE) support. This builtin performs named
+type (struct/union/enum/typedef) verifications. The type of verification
+depends on the @var{kind} argument provided.  This builtin always
+returns 0 if @var{type} does not exist in the target kernel.
+
+The following values are supported for @var{kind}:
+@table @code
+@item BTF_TYPE_EXISTS = 0
+Checks if @var{type} exists in the target.
+
+@item BTF_TYPE_MATCHES = 1
+Checks if @var{type} matches the local definition in the target kernel.
+
+@item BTF_TYPE_SIZE = 2
+Returns the size of the @var{type} within the target.
+@end table
+@enddefbuiltin
+
+@node FR-V Built-in Functions
+@subsection FR-V Built-in Functions
+
+GCC provides many FR-V-specific built-in functions.  In general,
+these functions are intended to be compatible with those described
+by @cite{FR-V Family, Softune C/C++ Compiler Manual (V6), Fujitsu
+Semiconductor}.  The two exceptions are @code{__MDUNPACKH} and
+@code{__MBTOHE}, the GCC forms of which pass 128-bit values by
+pointer rather than by value.
+
+Most of the functions are named after specific FR-V instructions.
+Such functions are said to be ``directly mapped'' and are summarized
+here in tabular form.
+
+@menu
+* Argument Types::
+* Directly-mapped Integer Functions::
+* Directly-mapped Media Functions::
+* Raw read/write Functions::
+* Other Built-in Functions::
+@end menu
+

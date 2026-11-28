@@ -1,0 +1,241 @@
+@c GCC 16.1.0 | BLOQUE 0154 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 34816-35052 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node x86 Options
+@subsection x86 Options
+@cindex x86 Options
+
+This section documents @option{-m} options available for the x86 family
+of computers.
+
+The following group of options allows compilation to target a specific
+processor.
+
+@table @gcctabopt
+
+@opindex march
+@item -march=@var{cpu-type}
+Generate instructions for the machine type @var{cpu-type}.  In contrast to
+@option{-mtune=@var{cpu-type}}, which merely tunes the generated code
+for the specified @var{cpu-type}, @option{-march=@var{cpu-type}} allows GCC
+to generate code that may not run at all on processors other than the one
+indicated.  Specifying @option{-march=@var{cpu-type}} implies
+@option{-mtune=@var{cpu-type}}, except where noted otherwise.
+
+The choices for @var{cpu-type} are:
+
+@table @samp
+@item native
+This selects the CPU to generate code for at compilation time by determining
+the processor type of the compiling machine.  Using @option{-march=native}
+enables all instruction subsets supported by the local machine (hence
+the result might not run on different machines).  Using @option{-mtune=native}
+produces code optimized for the local machine under the constraints
+of the selected instruction set.
+
+@item x86-64
+A generic CPU with 64-bit extensions, MMX, SSE, SSE2, and FXSR instruction set
+support.
+
+@item x86-64-v2
+@itemx x86-64-v3
+@itemx x86-64-v4
+These choices for @var{cpu-type} select the corresponding
+micro-architecture level from the x86-64 psABI.  On ABIs other than
+the x86-64 psABI they select the same CPU features as the x86-64 psABI
+documents for the particular micro-architecture level.
+
+Since these @var{cpu-type} values do not have a corresponding
+@option{-mtune} setting, using @option{-march} with these values enables
+generic tuning.  Specific tuning can be enabled using the
+@option{-mtune=@var{other-cpu-type}} option with an appropriate
+@var{other-cpu-type} value.
+
+@item i386
+Original Intel i386 CPU@.
+
+@item i486
+Intel i486 CPU@.  (No scheduling is implemented for this chip.)
+
+@item i586
+@itemx pentium
+Intel Pentium CPU with no MMX support.
+
+@item lakemont
+Intel Lakemont MCU, based on Intel Pentium CPU.
+
+@item pentium-mmx
+Intel Pentium MMX CPU, based on Pentium core with MMX instruction set support.
+
+@item pentiumpro
+Intel Pentium Pro CPU with no MMX support.
+
+@item i686
+When used with @option{-march}, the Pentium Pro
+instruction set is used, so the code runs on all i686 family chips.
+When used with @option{-mtune}, it has the same meaning as @samp{generic}.
+
+@item pentium2
+Intel Pentium II CPU, based on Pentium Pro core with MMX and FXSR instruction
+set support.
+
+@item pentium3
+@itemx pentium3m
+Intel Pentium III CPU, based on Pentium Pro core with MMX, FXSR and SSE
+instruction set support.
+
+@item pentium-m
+Intel Pentium M; low-power version of Intel Pentium III CPU
+with MMX, SSE, SSE2 and FXSR instruction set support.  Used by Centrino
+notebooks.
+
+@item pentium4
+@itemx pentium4m
+Intel Pentium 4 CPU with MMX, SSE, SSE2 and FXSR instruction set support.
+
+@item prescott
+Improved version of Intel Pentium 4 CPU with MMX, SSE, SSE2, SSE3 and FXSR
+instruction set support.
+
+@item nocona
+Improved version of Intel Pentium 4 CPU with 64-bit extensions, MMX, SSE,
+SSE2, SSE3, CX16 and FXSR instruction set support.
+
+@item core2
+Intel Core 2 CPU with 64-bit extensions, MMX, SSE, SSE2, SSE3, SSSE3, CX16,
+SAHF and FXSR instruction set support.
+
+@item nehalem
+@itemx corei7
+Intel Nehalem CPU with 64-bit extensions, MMX, SSE, SSE2, SSE3, SSSE3,
+SSE4.1, SSE4.2, POPCNT, CX16, SAHF and FXSR instruction set support.
+
+@item westmere
+Intel Westmere CPU with 64-bit extensions, MMX, SSE, SSE2, SSE3, SSSE3,
+SSE4.1, SSE4.2, POPCNT, CX16, SAHF, FXSR and PCLMUL instruction set support.
+
+@item sandybridge
+@itemx corei7-avx
+Intel Sandy Bridge CPU with 64-bit extensions, MMX, SSE, SSE2, SSE3, SSSE3,
+SSE4.1, SSE4.2, POPCNT, CX16, SAHF, FXSR, AVX, XSAVE and PCLMUL instruction set
+support.
+
+@item ivybridge
+@itemx core-avx-i
+Intel Ivy Bridge CPU with 64-bit extensions, MMX, SSE, SSE2, SSE3, SSSE3,
+SSE4.1, SSE4.2, POPCNT, CX16, SAHF, FXSR, AVX, XSAVE, PCLMUL, FSGSBASE, RDRND
+and F16C instruction set support.
+
+@item haswell
+@itemx core-avx2
+Intel Haswell CPU with 64-bit extensions, MMX, SSE, SSE2, SSE3, SSSE3,
+SSE4.1, SSE4.2, POPCNT, CX16, SAHF, FXSR, AVX, XSAVE, PCLMUL, FSGSBASE, RDRND,
+F16C, AVX2, BMI, BMI2, LZCNT, FMA, MOVBE and HLE instruction set support.
+
+@item broadwell
+Intel Broadwell CPU with 64-bit extensions, MMX, SSE, SSE2, SSE3, SSSE3,
+SSE4.1, SSE4.2, POPCNT, CX16, SAHF, FXSR, AVX, XSAVE, PCLMUL, FSGSBASE, RDRND,
+F16C, AVX2, BMI, BMI2, LZCNT, FMA, MOVBE, HLE, RDSEED, ADCX and PREFETCHW
+instruction set support.
+
+@item skylake
+Intel Skylake CPU with 64-bit extensions, MMX, SSE, SSE2, SSE3, SSSE3,
+SSE4.1, SSE4.2, POPCNT, CX16, SAHF, FXSR, AVX, XSAVE, PCLMUL, FSGSBASE, RDRND,
+F16C, AVX2, BMI, BMI2, LZCNT, FMA, MOVBE, HLE, RDSEED, ADCX, PREFETCHW, AES,
+CLFLUSHOPT, XSAVEC, XSAVES and SGX instruction set support.
+
+@item skylake-avx512
+Intel Skylake Server CPU with 64-bit extensions, MMX, SSE, SSE2, SSE3,
+SSSE3, SSE4.1, SSE4.2, POPCNT, CX16, SAHF, FXSR, AVX, XSAVE, PCLMUL, FSGSBASE,
+RDRND, F16C, AVX2, BMI, BMI2, LZCNT, FMA, MOVBE, HLE, RDSEED, ADCX, PREFETCHW,
+AES, CLFLUSHOPT, XSAVEC, XSAVES, SGX, AVX512F, CLWB, AVX512VL, AVX512BW,
+AVX512DQ and AVX512CD instruction set support.
+
+@item cascadelake
+Intel Cascade Lake CPU with 64-bit extensions, MMX, SSE, SSE2, SSE3, SSSE3,
+SSE4.1, SSE4.2, POPCNT, CX16, SAHF, FXSR, AVX, XSAVE, PCLMUL, FSGSBASE, RDRND,
+F16C, AVX2, BMI, BMI2, LZCNT, FMA, MOVBE, HLE, RDSEED, ADCX, PREFETCHW, AES,
+CLFLUSHOPT, XSAVEC, XSAVES, SGX, AVX512F, CLWB, AVX512VL, AVX512BW, AVX512DQ,
+AVX512CD and AVX512VNNI instruction set support.
+
+@item cannonlake
+Intel Cannon Lake Server CPU with 64-bit extensions, MMX, SSE, SSE2,
+SSE3, SSSE3, SSE4.1, SSE4.2, POPCNT, CX16, SAHF, FXSR, AVX, XSAVE, PCLMUL,
+FSGSBASE, RDRND, F16C, AVX2, BMI, BMI2, LZCNT, FMA, MOVBE, HLE, RDSEED, ADCX,
+PREFETCHW, AES, CLFLUSHOPT, XSAVEC, XSAVES, SGX, AVX512F, AVX512VL, AVX512BW,
+AVX512DQ, AVX512CD, PKU, AVX512VBMI, AVX512IFMA and SHA instruction set
+support.
+
+@item cooperlake
+Intel Cooper Lake CPU with 64-bit extensions, MMX, SSE, SSE2, SSE3, SSSE3,
+SSE4.1, SSE4.2, POPCNT, CX16, SAHF, FXSR, AVX, XSAVE, PCLMUL, FSGSBASE, RDRND,
+F16C, AVX2, BMI, BMI2, LZCNT, FMA, MOVBE, HLE, RDSEED, ADCX, PREFETCHW, AES,
+CLFLUSHOPT, XSAVEC, XSAVES, SGX, AVX512F, CLWB, AVX512VL, AVX512BW, AVX512DQ,
+AVX512CD, AVX512VNNI and AVX512BF16 instruction set support.
+
+@item icelake-client
+Intel Ice Lake Client CPU with 64-bit extensions, MMX, SSE, SSE2, SSE3,
+SSSE3, SSE4.1, SSE4.2, POPCNT, CX16, SAHF, FXSR, AVX, XSAVE, PCLMUL, FSGSBASE,
+RDRND, F16C, AVX2, BMI, BMI2, LZCNT, FMA, MOVBE, HLE, RDSEED, ADCX, PREFETCHW,
+AES, CLFLUSHOPT, XSAVEC, XSAVES, SGX, AVX512F, AVX512VL, AVX512BW, AVX512DQ,
+AVX512CD, PKU, AVX512VBMI, AVX512IFMA, SHA, AVX512VNNI, GFNI, VAES, AVX512VBMI2
+, VPCLMULQDQ, AVX512BITALG, RDPID and AVX512VPOPCNTDQ instruction set support.
+
+@item icelake-server
+Intel Ice Lake Server CPU with 64-bit extensions, MMX, SSE, SSE2, SSE3,
+SSSE3, SSE4.1, SSE4.2, POPCNT, CX16, SAHF, FXSR, AVX, XSAVE, PCLMUL, FSGSBASE,
+RDRND, F16C, AVX2, BMI, BMI2, LZCNT, FMA, MOVBE, HLE, RDSEED, ADCX, PREFETCHW,
+AES, CLFLUSHOPT, XSAVEC, XSAVES, SGX, AVX512F, AVX512VL, AVX512BW, AVX512DQ,
+AVX512CD, PKU, AVX512VBMI, AVX512IFMA, SHA, AVX512VNNI, GFNI, VAES, AVX512VBMI2
+, VPCLMULQDQ, AVX512BITALG, RDPID, AVX512VPOPCNTDQ, PCONFIG, WBNOINVD and CLWB
+instruction set support.
+
+@item tigerlake
+Intel Tiger Lake CPU with 64-bit extensions, MMX, SSE, SSE2, SSE3, SSSE3,
+SSE4.1, SSE4.2, POPCNT, CX16, SAHF, FXSR, AVX, XSAVE, PCLMUL, FSGSBASE, RDRND,
+F16C, AVX2, BMI, BMI2, LZCNT, FMA, MOVBE, HLE, RDSEED, ADCX, PREFETCHW, AES,
+CLFLUSHOPT, XSAVEC, XSAVES, SGX, AVX512F, AVX512VL, AVX512BW, AVX512DQ, AVX512CD
+PKU, AVX512VBMI, AVX512IFMA, SHA, AVX512VNNI, GFNI, VAES, AVX512VBMI2,
+VPCLMULQDQ, AVX512BITALG, RDPID, AVX512VPOPCNTDQ, MOVDIRI, MOVDIR64B, CLWB,
+AVX512VP2INTERSECT and KEYLOCKER instruction set support.
+
+@item rocketlake
+Intel Rocket Lake CPU with 64-bit extensions, MMX, SSE, SSE2, SSE3, SSSE3,
+SSE4.1, SSE4.2, POPCNT, CX16, SAHF, FXSR, AVX, XSAVE, PCLMUL, FSGSBASE, RDRND,
+F16C, AVX2, BMI, BMI2, LZCNT, FMA, MOVBE, HLE, RDSEED, ADCX, PREFETCHW, AES,
+CLFLUSHOPT, XSAVEC, XSAVES, AVX512F, AVX512VL, AVX512BW, AVX512DQ, AVX512CD
+PKU, AVX512VBMI, AVX512IFMA, SHA, AVX512VNNI, GFNI, VAES, AVX512VBMI2,
+VPCLMULQDQ, AVX512BITALG, RDPID and AVX512VPOPCNTDQ instruction set support.
+
+@item alderlake
+@itemx raptorlake
+@itemx meteorlake
+@itemx gracemont
+Intel Alder Lake/Raptor Lake/Meteor Lake/Gracemont CPU with 64-bit extensions,
+MOVBE, MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, POPCNT, CX16,
+AES, PREFETCHW,
+PCLMUL, RDRND, XSAVE, XSAVEC, XSAVES, XSAVEOPT, FSGSBASE, PTWRITE, RDPID, SGX,
+GFNI-SSE, CLWB, MOVDIRI, MOVDIR64B, WAITPKG, ADCX, AVX, AVX2, BMI, BMI2, F16C,
+FMA, LZCNT, PCONFIG, PKU, VAES, VPCLMULQDQ, SERIALIZE, HRESET, KL, WIDEKL and
+AVX-VNNI instruction set support.
+
+@item arrowlake
+Intel Arrow Lake CPU with 64-bit extensions, MOVBE, MMX, SSE, SSE2, SSE3,
+SSSE3, SSE4.1, SSE4.2, POPCNT, CX16,
+AES, PREFETCHW, PCLMUL, RDRND, XSAVE, XSAVEC,
+XSAVES, XSAVEOPT, FSGSBASE, PTWRITE, RDPID, SGX, GFNI-SSE, CLWB, MOVDIRI,
+MOVDIR64B, WAITPKG, ADCX, AVX, AVX2, BMI, BMI2, F16C, FMA, LZCNT, PCONFIG, PKU,
+VAES, VPCLMULQDQ, SERIALIZE, HRESET, KL, WIDEKL, AVX-VNNI, UINTR, AVXIFMA,
+AVXVNNIINT8, AVXNECONVERT and CMPCCXADD instruction set support.
+
+@item arrowlake-s
+@itemx lunarlake
+Intel Arrow Lake S/Lunar Lake CPU with 64-bit extensions, MOVBE, MMX, SSE,
+SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, POPCNT, CX16, AES, PREFETCHW, PCLMUL, RDRND,
+XSAVE, XSAVEC, XSAVES, XSAVEOPT, FSGSBASE, PTWRITE, RDPID, SGX, GFNI-SSE, CLWB,
+MOVDIRI, MOVDIR64B, WAITPKG, ADCX, AVX, AVX2, BMI, BMI2, F16C, FMA, LZCNT,
+PCONFIG, PKU, VAES, VPCLMULQDQ, SERIALIZE, HRESET, KL, WIDEKL, AVX-VNNI, UINTR,
+AVXIFMA, AVXVNNIINT8, AVXNECONVERT, CMPCCXADD, AVXVNNIINT16, SHA512, SM3 and
+SM4 instruction set support.
+

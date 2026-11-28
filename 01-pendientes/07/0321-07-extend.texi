@@ -1,0 +1,171 @@
+@c GCC 16.1.0 | BLOQUE 0321 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 26488-26654 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+For each integer value @code{i} from 0 to 1, do the following. The integer in
+doubleword element @code{i} of a is shifted left by 64 bits, then divided by
+the integer in doubleword element @code{i} of b. The unique integer quotient is
+placed into the doubleword element @code{i} of the vector returned. If the
+quotient cannot be represented in 64 bits, or if an attempt is made to perform
+<anything> ÷ 0 then the quotient is undefined.
+
+@smallexample
+@exdent vector signed int
+@exdent vec_mod (vector signed int @var{a}, vector signed int @var{b});
+@exdent vector unsigned int
+@exdent vec_mod (vector unsigned int @var{a}, vector unsigned int @var{b});
+@end smallexample
+
+For each integer value @code{i} from 0 to 3, do the following. The integer in
+word element @code{i} of a is divided by the integer in word element @code{i}
+of b. The unique integer remainder is placed into the word element @code{i} of
+the vector returned.  If an attempt is made to perform any of the divisions
+0x8000_0000 ÷ -1 or <anything> ÷ 0 then the remainder is undefined.
+
+@smallexample
+@exdent vector signed long long
+@exdent vec_mod (vector signed long long @var{a}, vector signed long long @var{b});
+@exdent vector unsigned long long
+@exdent vec_mod (vector unsigned long long @var{a}, vector unsigned long long @var{b});
+@end smallexample
+
+For each integer value @code{i} from 0 to 1, do the following. The integer in
+doubleword element @code{i} of a is divided by the integer in doubleword
+element @code{i} of b. The unique integer remainder is placed into the
+doubleword element @code{i} of the vector returned. If an attempt is made to
+perform <anything> ÷ 0 then the remainder is undefined.
+
+Generate PCV from specified Mask size, as if implemented by the
+@code{xxgenpcvbm}, @code{xxgenpcvhm}, @code{xxgenpcvwm} instructions, where
+immediate value is either 0, 1, 2 or 3.
+@findex vec_genpcvm
+
+@smallexample
+@exdent vector unsigned __int128 vec_rl (vector unsigned __int128 @var{A},
+                                         vector unsigned __int128 @var{B});
+@exdent vector signed __int128 vec_rl (vector signed __int128 @var{A},
+                                       vector unsigned __int128 @var{B});
+@end smallexample
+
+Result value: Each element of @var{R} is obtained by rotating the corresponding element
+of @var{A} left by the number of bits specified by the corresponding element of @var{B}.
+
+
+@smallexample
+@exdent vector unsigned __int128 vec_rlmi (vector unsigned __int128,
+                                           vector unsigned __int128,
+                                           vector unsigned __int128);
+@exdent vector signed __int128 vec_rlmi (vector signed __int128,
+                                         vector signed __int128,
+                                         vector unsigned __int128);
+@end smallexample
+
+Returns the result of rotating the first input and inserting it under mask
+into the second input.  The first bit in the mask, the last bit in the mask are
+obtained from the two 7-bit fields bits [108:115] and bits [117:123]
+respectively of the second input.  The shift is obtained from the third input
+in the 7-bit field [125:131] where all bits counted from zero at the left.
+
+@smallexample
+@exdent vector unsigned __int128 vec_rlnm (vector unsigned __int128,
+                                           vector unsigned __int128,
+                                           vector unsigned __int128);
+@exdent vector signed __int128 vec_rlnm (vector signed __int128,
+                                         vector unsigned __int128,
+                                         vector unsigned __int128);
+@end smallexample
+
+Returns the result of rotating the first input and ANDing it with a mask.  The
+first bit in the mask and the last bit in the mask are obtained from the two
+7-bit fields bits [117:123] and bits [125:131] respectively of the second
+input.  The shift is obtained from the third input in the 7-bit field bits
+[125:131] where all bits counted from zero at the left.
+
+@smallexample
+@exdent vector unsigned __int128 vec_sl(vector unsigned __int128 @var{A}, vector unsigned __int128 @var{B});
+@exdent vector signed __int128 vec_sl(vector signed __int128 @var{A}, vector unsigned __int128 @var{B});
+@end smallexample
+
+Result value: Each element of @var{R} is obtained by shifting the corresponding element of
+@var{A} left by the number of bits specified by the corresponding element of @var{B}.
+
+@smallexample
+@exdent vector unsigned __int128 vec_sr(vector unsigned __int128 @var{A}, vector unsigned __int128 @var{B});
+@exdent vector signed __int128 vec_sr(vector signed __int128 @var{A}, vector unsigned __int128 @var{B});
+@end smallexample
+
+Result value: Each element of @var{R} is obtained by shifting the corresponding element of
+@var{A} right by the number of bits specified by the corresponding element of @var{B}.
+
+@smallexample
+@exdent vector unsigned __int128 vec_sra(vector unsigned __int128 @var{A}, vector unsigned __int128 @var{B});
+@exdent vector signed __int128 vec_sra(vector signed __int128 @var{A}, vector unsigned __int128 @var{B});
+@end smallexample
+
+Result value: Each element of @var{R} is obtained by arithmetic shifting the corresponding
+element of @var{A} right by the number of bits specified by the corresponding element of @var{B}.
+
+@smallexample
+@exdent vector unsigned __int128 vec_mule (vector unsigned long long,
+                                           vector unsigned long long);
+@exdent vector signed __int128 vec_mule (vector signed long long,
+                                         vector signed long long);
+@end smallexample
+
+Returns a vector containing a 128-bit integer result of multiplying the even
+doubleword elements of the two inputs.
+
+@smallexample
+@exdent vector unsigned __int128 vec_mulo (vector unsigned long long,
+                                           vector unsigned long long);
+@exdent vector signed __int128 vec_mulo (vector signed long long,
+                                         vector signed long long);
+@end smallexample
+
+Returns a vector containing a 128-bit integer result of multiplying the odd
+doubleword elements of the two inputs.
+
+@smallexample
+@exdent vector unsigned __int128 vec_div (vector unsigned __int128,
+                                          vector unsigned __int128);
+@exdent vector signed __int128 vec_div (vector signed __int128,
+                                        vector signed __int128);
+@end smallexample
+
+Returns the result of dividing the first operand by the second operand. An
+attempt to divide any value by zero or to divide the most negative signed
+128-bit integer by negative one results in an undefined value.
+
+@smallexample
+@exdent vector unsigned __int128 vec_dive (vector unsigned __int128,
+                                           vector unsigned __int128);
+@exdent vector signed __int128 vec_dive (vector signed __int128,
+                                         vector signed __int128);
+@end smallexample
+
+The result is produced by shifting the first input left by 128 bits and
+dividing by the second.  If an attempt is made to divide by zero or the result
+is larger than 128 bits, the result is undefined.
+
+@smallexample
+@exdent vector unsigned __int128 vec_mod (vector unsigned __int128,
+                                          vector unsigned __int128);
+@exdent vector signed __int128 vec_mod (vector signed __int128,
+                                        vector signed __int128);
+@end smallexample
+
+The result is the modulo result of dividing the first input  by the second
+input.
+
+The following builtins perform 128-bit vector comparisons.  The
+@code{vec_all_xx}, @code{vec_any_xx}, and @code{vec_cmpxx}, where @code{xx} is
+one of the operations @code{eq, ne, gt, lt, ge, le} perform pairwise
+comparisons between the elements at the same positions within their two vector
+arguments.  The @code{vec_all_xx}function returns a non-zero value if and only
+if all pairwise comparisons are true.  The @code{vec_any_xx} function returns
+a non-zero value if and only if at least one pairwise comparison is true.  The
+@code{vec_cmpxx}function returns a vector of the same type as its two
+arguments, within which each element consists of all ones to denote that
+specified logical comparison of the corresponding elements was true.
+Otherwise, the element of the returned vector contains all zeros.
+

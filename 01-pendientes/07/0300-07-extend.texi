@@ -1,0 +1,133 @@
+@c GCC 16.1.0 | BLOQUE 0300 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 21736-21864 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+__m256i __lasx_xvsrlni_w_d (__m256i, __m256i, imm0_63);
+__m256i __lasx_xvsrln_w_d (__m256i, __m256i);
+__m256i __lasx_xvsrlr_b (__m256i, __m256i);
+__m256i __lasx_xvsrlr_d (__m256i, __m256i);
+__m256i __lasx_xvsrlr_h (__m256i, __m256i);
+__m256i __lasx_xvsrlri_b (__m256i, imm0_7);
+__m256i __lasx_xvsrlri_d (__m256i, imm0_63);
+__m256i __lasx_xvsrlri_h (__m256i, imm0_15);
+__m256i __lasx_xvsrlri_w (__m256i, imm0_31);
+__m256i __lasx_xvsrlrn_b_h (__m256i, __m256i);
+__m256i __lasx_xvsrlrn_h_w (__m256i, __m256i);
+__m256i __lasx_xvsrlrni_b_h (__m256i, __m256i, imm0_15);
+__m256i __lasx_xvsrlrni_d_q (__m256i, __m256i, imm0_127);
+__m256i __lasx_xvsrlrni_h_w (__m256i, __m256i, imm0_31);
+__m256i __lasx_xvsrlrni_w_d (__m256i, __m256i, imm0_63);
+__m256i __lasx_xvsrlrn_w_d (__m256i, __m256i);
+__m256i __lasx_xvsrlr_w (__m256i, __m256i);
+__m256i __lasx_xvsrl_w (__m256i, __m256i);
+__m256i __lasx_xvssran_b_h (__m256i, __m256i);
+__m256i __lasx_xvssran_bu_h (__m256i, __m256i);
+__m256i __lasx_xvssran_hu_w (__m256i, __m256i);
+__m256i __lasx_xvssran_h_w (__m256i, __m256i);
+__m256i __lasx_xvssrani_b_h (__m256i, __m256i, imm0_15);
+__m256i __lasx_xvssrani_bu_h (__m256i, __m256i, imm0_15);
+__m256i __lasx_xvssrani_d_q (__m256i, __m256i, imm0_127);
+__m256i __lasx_xvssrani_du_q (__m256i, __m256i, imm0_127);
+__m256i __lasx_xvssrani_hu_w (__m256i, __m256i, imm0_31);
+__m256i __lasx_xvssrani_h_w (__m256i, __m256i, imm0_31);
+__m256i __lasx_xvssrani_w_d (__m256i, __m256i, imm0_63);
+__m256i __lasx_xvssrani_wu_d (__m256i, __m256i, imm0_63);
+__m256i __lasx_xvssran_w_d (__m256i, __m256i);
+__m256i __lasx_xvssran_wu_d (__m256i, __m256i);
+__m256i __lasx_xvssrarn_b_h (__m256i, __m256i);
+__m256i __lasx_xvssrarn_bu_h (__m256i, __m256i);
+__m256i __lasx_xvssrarn_hu_w (__m256i, __m256i);
+__m256i __lasx_xvssrarn_h_w (__m256i, __m256i);
+__m256i __lasx_xvssrarni_b_h (__m256i, __m256i, imm0_15);
+__m256i __lasx_xvssrarni_bu_h (__m256i, __m256i, imm0_15);
+__m256i __lasx_xvssrarni_d_q (__m256i, __m256i, imm0_127);
+__m256i __lasx_xvssrarni_du_q (__m256i, __m256i, imm0_127);
+__m256i __lasx_xvssrarni_hu_w (__m256i, __m256i, imm0_31);
+__m256i __lasx_xvssrarni_h_w (__m256i, __m256i, imm0_31);
+__m256i __lasx_xvssrarni_w_d (__m256i, __m256i, imm0_63);
+__m256i __lasx_xvssrarni_wu_d (__m256i, __m256i, imm0_63);
+__m256i __lasx_xvssrarn_w_d (__m256i, __m256i);
+__m256i __lasx_xvssrarn_wu_d (__m256i, __m256i);
+__m256i __lasx_xvssrln_b_h (__m256i, __m256i);
+__m256i __lasx_xvssrln_bu_h (__m256i, __m256i);
+__m256i __lasx_xvssrln_hu_w (__m256i, __m256i);
+__m256i __lasx_xvssrln_h_w (__m256i, __m256i);
+__m256i __lasx_xvssrlni_b_h (__m256i, __m256i, imm0_15);
+__m256i __lasx_xvssrlni_bu_h (__m256i, __m256i, imm0_15);
+__m256i __lasx_xvssrlni_d_q (__m256i, __m256i, imm0_127);
+__m256i __lasx_xvssrlni_du_q (__m256i, __m256i, imm0_127);
+__m256i __lasx_xvssrlni_hu_w (__m256i, __m256i, imm0_31);
+__m256i __lasx_xvssrlni_h_w (__m256i, __m256i, imm0_31);
+__m256i __lasx_xvssrlni_w_d (__m256i, __m256i, imm0_63);
+__m256i __lasx_xvssrlni_wu_d (__m256i, __m256i, imm0_63);
+__m256i __lasx_xvssrln_w_d (__m256i, __m256i);
+__m256i __lasx_xvssrln_wu_d (__m256i, __m256i);
+__m256i __lasx_xvssrlrn_b_h (__m256i, __m256i);
+__m256i __lasx_xvssrlrn_bu_h (__m256i, __m256i);
+__m256i __lasx_xvssrlrn_hu_w (__m256i, __m256i);
+__m256i __lasx_xvssrlrn_h_w (__m256i, __m256i);
+__m256i __lasx_xvssrlrni_b_h (__m256i, __m256i, imm0_15);
+__m256i __lasx_xvssrlrni_bu_h (__m256i, __m256i, imm0_15);
+__m256i __lasx_xvssrlrni_d_q (__m256i, __m256i, imm0_127);
+__m256i __lasx_xvssrlrni_du_q (__m256i, __m256i, imm0_127);
+__m256i __lasx_xvssrlrni_hu_w (__m256i, __m256i, imm0_31);
+__m256i __lasx_xvssrlrni_h_w (__m256i, __m256i, imm0_31);
+__m256i __lasx_xvssrlrni_w_d (__m256i, __m256i, imm0_63);
+__m256i __lasx_xvssrlrni_wu_d (__m256i, __m256i, imm0_63);
+__m256i __lasx_xvssrlrn_w_d (__m256i, __m256i);
+__m256i __lasx_xvssrlrn_wu_d (__m256i, __m256i);
+__m256i __lasx_xvssub_b (__m256i, __m256i);
+__m256i __lasx_xvssub_bu (__m256i, __m256i);
+__m256i __lasx_xvssub_d (__m256i, __m256i);
+__m256i __lasx_xvssub_du (__m256i, __m256i);
+__m256i __lasx_xvssub_h (__m256i, __m256i);
+__m256i __lasx_xvssub_hu (__m256i, __m256i);
+__m256i __lasx_xvssub_w (__m256i, __m256i);
+__m256i __lasx_xvssub_wu (__m256i, __m256i);
+void __lasx_xvst (__m256i, void *, imm_n2048_2047);
+void __lasx_xvstelm_b (__m256i, void *, imm_n128_127, imm0_31);
+void __lasx_xvstelm_d (__m256i, void *, imm_n128_127, imm0_3);
+void __lasx_xvstelm_h (__m256i, void *, imm_n128_127, imm0_15);
+void __lasx_xvstelm_w (__m256i, void *, imm_n128_127, imm0_7);
+void __lasx_xvstx (__m256i, void *, long int);
+__m256i __lasx_xvsub_b (__m256i, __m256i);
+__m256i __lasx_xvsub_d (__m256i, __m256i);
+__m256i __lasx_xvsub_h (__m256i, __m256i);
+__m256i __lasx_xvsubi_bu (__m256i, imm0_31);
+__m256i __lasx_xvsubi_du (__m256i, imm0_31);
+__m256i __lasx_xvsubi_hu (__m256i, imm0_31);
+__m256i __lasx_xvsubi_wu (__m256i, imm0_31);
+__m256i __lasx_xvsub_q (__m256i, __m256i);
+__m256i __lasx_xvsub_w (__m256i, __m256i);
+__m256i __lasx_xvsubwev_d_w (__m256i, __m256i);
+__m256i __lasx_xvsubwev_d_wu (__m256i, __m256i);
+__m256i __lasx_xvsubwev_h_b (__m256i, __m256i);
+__m256i __lasx_xvsubwev_h_bu (__m256i, __m256i);
+__m256i __lasx_xvsubwev_q_d (__m256i, __m256i);
+__m256i __lasx_xvsubwev_q_du (__m256i, __m256i);
+__m256i __lasx_xvsubwev_w_h (__m256i, __m256i);
+__m256i __lasx_xvsubwev_w_hu (__m256i, __m256i);
+__m256i __lasx_xvsubwod_d_w (__m256i, __m256i);
+__m256i __lasx_xvsubwod_d_wu (__m256i, __m256i);
+__m256i __lasx_xvsubwod_h_b (__m256i, __m256i);
+__m256i __lasx_xvsubwod_h_bu (__m256i, __m256i);
+__m256i __lasx_xvsubwod_q_d (__m256i, __m256i);
+__m256i __lasx_xvsubwod_q_du (__m256i, __m256i);
+__m256i __lasx_xvsubwod_w_h (__m256i, __m256i);
+__m256i __lasx_xvsubwod_w_hu (__m256i, __m256i);
+__m256i __lasx_xvxori_b (__m256i, imm0_255);
+__m256i __lasx_xvxor_v (__m256i, __m256i);
+@end smallexample
+
+@node Directly-mapped ASX Division Builtin Functions
+@subsubsection Directly-mapped ASX Division Builtin Functions
+
+These intrinsic functions are available by including @code{lasxintrin.h} and
+using @option{-mfrecipe} and @option{-mlasx}.
+@smallexample
+__m256d __lasx_xvfrecipe_d (__m256d);
+__m256 __lasx_xvfrecipe_s (__m256);
+__m256d __lasx_xvfrsqrte_d (__m256d);
+__m256 __lasx_xvfrsqrte_s (__m256);
+@end smallexample
+

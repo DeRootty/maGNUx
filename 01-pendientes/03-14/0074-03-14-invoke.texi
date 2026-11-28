@@ -1,0 +1,25 @@
+@c GCC 16.1.0 | BLOQUE 0074 | 03-14
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 18276-18296 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Preprocessor Options
+@section Options Controlling the Preprocessor
+@cindex preprocessor options
+@cindex options, preprocessor
+
+These options control the C preprocessor, which is run on each C source
+file before actual compilation.
+
+If you use the @option{-E} option, nothing is done except preprocessing.
+Some of these options make sense only together with @option{-E} because
+they cause the preprocessor output to be unsuitable for actual
+compilation.
+
+In addition to the options listed here, there are a number of options
+to control search paths for include files documented in
+@ref{Directory Options}.
+Options to control preprocessor diagnostics are listed in
+@ref{Warning Options}.
+
+@table @gcctabopt
+@include cppopts.texi

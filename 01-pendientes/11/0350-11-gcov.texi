@@ -1,0 +1,362 @@
+@c GCC 16.1.0 | BLOQUE 0350 | 11
+@c Fuente: gcc/doc/gcov.texi | blob: 7080f7c4a2a425fd68d595c0634da86252a3b364
+@c Lineas originales: 233-590 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item --prime-paths-source [=@var{type}]
+Write path coverage to the output file, and write path summary info to
+the standard output.  This option allows you to see how many prime paths
+were taken at least once, and detailed report on the uncovered paths an
+how to cover them.  This mode is useful for understanding paths and
+interactions between sections of your program. @var{type} may be
+omitted, or one of:
+@itemize @bullet
+@item
+@var{uncovered}
+- Include the uncovered (not taken) paths.  This is the default.
+@item
+@var{covered}
+- Include the covered (taken) paths.
+@item
+@var{both}
+- Include all paths.  This is equivalent to using both @var{covered} and
+@var{uncovered}.
+@end itemize
+
+This is an example of @option{--prime-paths-source} output:
+
+@smallexample
+path 10 not covered:
+BB  3:           8:  for (i = 0; i < 10; i++)
+BB  3:           9:    total += i;
+BB  4: (false)   8:  for (i = 0; i < 10; i++)
+BB  5: (true)   11:  int v = total > 100 ? 1 : 2;
+BB  6:          11:  int v = total > 100 ? 1 : 2;
+BB  8: (false)  13:  if (total != 45 && v == 1)
+BB 11:          16:    printf ("Success\n");
+BB 12:          17:  return 0;
+@end smallexample
+
+The first (BB) column is the sequence of basic blocks (see @option{-w}).
+The middle column (true/false) is the decision for that line.  The third
+column is the line number.  The fourth column is the line itself.  These
+lines must be run in this order to cover path 10.
+
+@item -d
+@itemx --display-progress
+Display the progress on the standard output.
+
+@item -f
+@itemx --function-summaries
+Output summaries for each function in addition to the file level summary.
+
+@item --include @var{regex}
+Include functions matching @var{regex}.  This option makes
+@command{gcov} only report on functions that match the extended
+regular expression @var{regex}.  This flag can be combined with
+@option{--exclude}.  If a function matches both includes and excludes,
+the last include/exclude applies.  By default @command{gcov} reports
+on all functions, but if a @command{--include} is used then only
+functions matching the include will be reported.
+
+@item --exclude @var{regex}
+Exclude functions matching @var{regex}.  This option makes
+@command{gcov} not report on functions that match the extended regular
+expression @var{regex}.  This flag can be combined with
+@option{--include}.  If a function matches both includes and excludes,
+the last include/exclude applies.  By default @command{gcov} reports
+on all functions, and if @option{--exclude} is used then functions
+matching it will be omitted.
+
+@item -h
+@itemx --help
+Display help about using @command{gcov} (on the standard output), and
+exit without doing any further processing.
+
+@item -j
+@itemx --json-format
+Output gcov file in an easy-to-parse JSON intermediate format
+which does not require source code for generation.  The JSON
+file is compressed with gzip compression algorithm
+and the files have @file{.gcov.json.gz} extension.
+
+Structure of the JSON is following:
+
+@smallexample
+@{
+  "current_working_directory": "foo/bar",
+  "data_file": "a.out",
+  "format_version": "2",
+  "gcc_version": "11.1.1 20210510"
+  "files": ["$file"]
+@}
+@end smallexample
+
+Fields of the root element have following semantics:
+
+@itemize @bullet
+@item
+@var{current_working_directory}: working directory where
+a compilation unit was compiled
+
+@item
+@var{data_file}: name of the data file (GCDA)
+
+@item
+@var{format_version}: semantic version of the format
+
+Changes in version @emph{2}:
+@itemize @bullet
+@item
+@var{calls}: information about function calls is added
+@end itemize
+
+@item
+@var{gcc_version}: version of the GCC compiler
+@end itemize
+
+Each @var{file} has the following form:
+
+@smallexample
+@{
+  "file": "a.c",
+  "functions": ["$function"],
+  "lines": ["$line"]
+@}
+@end smallexample
+
+Fields of the @var{file} element have following semantics:
+
+@itemize @bullet
+@item
+@var{file_name}: name of the source file
+@end itemize
+
+Each @var{function} has the following form:
+
+@smallexample
+@{
+  "blocks": 2,
+  "blocks_executed": 2,
+  "demangled_name": "foo",
+  "end_column": 1,
+  "end_line": 4,
+  "execution_count": 1,
+  "name": "foo",
+  "start_column": 5,
+  "start_line": 1
+@}
+@end smallexample
+
+Fields of the @var{function} element have following semantics:
+
+@itemize @bullet
+@item
+@var{blocks}: number of blocks that are in the function
+
+@item
+@var{blocks_executed}: number of executed blocks of the function
+
+@item
+@var{demangled_name}: demangled name of the function
+
+@item
+@var{end_column}: column in the source file where the function ends
+
+@item
+@var{end_line}: line in the source file where the function ends
+
+@item
+@var{execution_count}: number of executions of the function
+
+@item
+@var{name}: name of the function
+
+@item
+@var{start_column}: column in the source file where the function begins
+
+@item
+@var{start_line}: line in the source file where the function begins
+@end itemize
+
+Note that line numbers and column numbers number from 1.  In the current
+implementation, @var{start_line} and @var{start_column} do not include
+any template parameters and the leading return type but that
+this is likely to be fixed in the future.
+
+Each @var{line} has the following form:
+
+@smallexample
+@{
+  "block_ids": ["$block_id"],
+  "branches": ["$branch"],
+  "calls": ["$call"],
+  "count": 2,
+  "conditions": ["$condition"],
+  "line_number": 15,
+  "unexecuted_block": false,
+  "function_name": "foo",
+@}
+@end smallexample
+
+Branches and calls are present only with @var{-b} option.
+Fields of the @var{line} element have following semantics:
+
+@itemize @bullet
+@item
+@var{block_ids}: IDs of basic blocks that belong to the line
+
+@item
+@var{count}: number of executions of the line
+
+@item
+@var{line_number}: line number
+
+@item
+@var{unexecuted_block}: flag whether the line contains an unexecuted block
+(not all statements on the line are executed)
+
+@item
+@var{function_name}: a name of a function this @var{line} belongs to
+(for a line with an inlined statements can be not set)
+@end itemize
+
+Each @var{branch} has the following form:
+
+@smallexample
+@{
+  "count": 11,
+  "destination_block_id": 17,
+  "fallthrough": true,
+  "source_block_id": 13,
+  "throw": false
+@}
+@end smallexample
+
+Fields of the @var{branch} element have following semantics:
+
+@itemize @bullet
+@item
+@var{count}: number of executions of the branch
+
+@item
+@var{fallthrough}: true when the branch is a fall through branch
+
+@item
+@var{throw}: true when the branch is an exceptional branch
+
+@item
+@var{isource_block_id}: ID of the basic block where this branch happens
+
+@item
+@var{destination_block_id}: ID of the basic block this branch jumps to
+@end itemize
+
+Each @var{call} has the following form:
+
+@smallexample
+@{
+  "destination_block_id": 1,
+  "returned": 11,
+  "source_block_id": 13
+@}
+@end smallexample
+
+Fields of the @var{call} element have following semantics:
+
+@itemize @bullet
+@item
+@var{returned}: number of times a function call returned (call count is equal
+to @var{line::count})
+
+@item
+@var{isource_block_id}: ID of the basic block where this call happens
+
+@item
+@var{destination_block_id}: ID of the basic block this calls continues after return
+@end itemize
+
+Each @var{condition} has the following form:
+
+@smallexample
+@{
+  "count": 4,
+  "covered": 2,
+  "not_covered_false": [],
+  "not_covered_true": [0, 1],
+@}
+
+@end smallexample
+
+Fields of the @var{condition} element have following semantics:
+
+@itemize @bullet
+@item
+@var{count}: number of condition outcomes in this expression
+
+@item
+@var{covered}: number of covered condition outcomes in this expression
+
+@item
+@var{not_covered_true}: terms, by index, not seen as true in this expression
+
+@item
+@var{not_covered_false}: terms, by index, not seen as false in this expression
+@end itemize
+
+@item -H
+@itemx --human-readable
+Write counts in human readable format (like 24.6k).
+
+@item -k
+@itemx --use-colors
+
+Use colors for lines of code that have zero coverage.  We use red color for
+non-exceptional lines and cyan for exceptional.  Same colors are used for
+basic blocks with @option{-a} option.
+
+@item -l
+@itemx --long-file-names
+Create long file names for included source files.  For example, if the
+header file @file{x.h} contains code, and was included in the file
+@file{a.c}, then running @command{gcov} on the file @file{a.c} will
+produce an output file called @file{a.c##x.h.gcov} instead of
+@file{x.h.gcov}.  This can be useful if @file{x.h} is included in
+multiple source files and you want to see the individual
+contributions.  If you use the @samp{-p} option, both the including
+and included file names will be complete path names.
+
+@item -m
+@itemx --demangled-names
+Display demangled function names in output. The default is to show
+mangled function names.
+
+@item -M
+@itemx --filter-on-demangled
+Make @option{--include} and @option{--exclude} match demangled names.
+This does only affects the matching and does not imply
+@option{--demangled-names}, but it can safely be combined with it.
+
+@item -n
+@itemx --no-output
+Do not create the @command{gcov} output file.
+
+@item -o @var{directory|file}
+@itemx --object-directory @var{directory}
+@itemx --object-file @var{file}
+Specify either the directory containing the gcov data files, or the
+object path name.  The @file{.gcno}, and
+@file{.gcda} data files are searched for using this option.  If a directory
+is specified, the data files are in that directory and named after the
+input file name, without its extension.  If a file is specified here,
+the data files are named after that file, without its extension.
+
+@item -p
+@itemx --preserve-paths
+Preserve complete path information in the names of generated
+@file{.gcov} files.  Without this option, just the filename component is
+used.  With this option, all directories are used, with @samp{/} characters
+translated to @samp{#} characters, @file{.} directory components
+removed and unremoveable @file{..}
+components renamed to @samp{^}.  This is useful if sourcefiles are in several
+different directories.
+

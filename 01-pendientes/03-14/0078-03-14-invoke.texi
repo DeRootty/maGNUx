@@ -1,0 +1,44 @@
+@c GCC 16.1.0 | BLOQUE 0078 | 03-14
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 18297-18336 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+@opindex Wp
+@item -Wp,@var{option}
+You can use @option{-Wp,@var{option}} to bypass the compiler driver
+and pass @var{option} directly through to the preprocessor.  If
+@var{option} contains commas, it is split into multiple options at the
+commas.  However, many options are modified, translated or interpreted
+by the compiler driver before being passed to the preprocessor, and
+@option{-Wp} forcibly bypasses this phase.  The preprocessor's direct
+interface is undocumented and subject to change, so whenever possible
+you should avoid using @option{-Wp} and let the driver handle the
+options instead.
+
+@opindex Xpreprocessor
+@item -Xpreprocessor @var{option}
+Pass @var{option} as an option to the preprocessor.  You can use this to
+supply system-specific preprocessor options that GCC does not
+recognize.
+
+If you want to pass an option that takes an argument, you must use
+@option{-Xpreprocessor} twice, once for the option and once for the argument.
+
+@opindex no-integrated-cpp
+@item -no-integrated-cpp
+@itemx --no-integrated-cpp
+Perform preprocessing as a separate pass before compilation.
+By default, GCC performs preprocessing as an integrated part of
+input tokenization and parsing.
+If this option is provided, the appropriate language front end
+(@command{cc1}, @command{cc1plus}, or @command{cc1obj} for C, C++,
+and Objective-C, respectively) is instead invoked twice,
+once for preprocessing only and once for actual compilation
+of the preprocessed input.
+This option may be useful in conjunction with the @option{-B} or
+@option{-wrapper} options to specify an alternate preprocessor or
+perform additional processing of the program source between
+normal preprocessing and compilation.
+
+@end table
+

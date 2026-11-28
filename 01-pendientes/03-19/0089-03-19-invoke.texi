@@ -1,0 +1,319 @@
+@c GCC 16.1.0 | BLOQUE 0089 | 03-19
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 19714-20028 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node Developer Options
+@section GCC Developer Options
+@cindex developer options
+@cindex debugging GCC
+@cindex debug dump options
+@cindex dump options
+@cindex compilation statistics
+
+This section describes command-line options that are primarily of
+interest to GCC developers, including options to support compiler
+testing and investigation of compiler bugs and compile-time
+performance problems.  This includes options that produce debug dumps
+at various points in the compilation; that print statistics such as
+memory use and execution time; and that print information about GCC's
+configuration, such as where it searches for libraries.  You should
+rarely need to use any of these options for ordinary compilation and
+linking tasks.
+
+Many developer options that cause GCC to dump output to a file take an
+optional @samp{=@var{filename}} suffix. You can specify @samp{stdout}
+or @samp{-} to dump to standard output, and @samp{stderr} for standard
+error.
+
+If @samp{=@var{filename}} is omitted, a default dump file name is
+constructed by concatenating the base dump file name, a pass number,
+phase letter, and pass name.  The base dump file name is the name of
+output file produced by the compiler if explicitly specified and not
+an executable; otherwise it is the source file name.
+The pass number is determined by the order passes are registered with
+the compiler's pass manager.
+This is generally the same as the order of execution, but passes
+registered by plugins, target-specific passes, or passes that are
+otherwise registered late are numbered higher than the pass named
+@samp{final}, even if they are executed earlier.  The phase letter is
+one of @samp{i} (inter-procedural analysis), @samp{l}
+(language-specific), @samp{r} (RTL), or @samp{t} (tree).
+The files are created in the directory of the output file.
+
+@table @gcctabopt
+
+@opindex fcallgraph-info
+@item -fcallgraph-info
+@itemx -fcallgraph-info=@var{MARKERS}
+Makes the compiler output callgraph information for the program, on a
+per-object-file basis.  The information is generated in the common VCG
+format.  It can be decorated with additional, per-node and/or per-edge
+information, if a list of comma-separated markers is additionally
+specified.  When the @code{su} marker is specified, the callgraph is
+decorated with stack usage information; it is equivalent to
+@option{-fstack-usage}.  When the @code{da} marker is specified, the
+callgraph is decorated with information about dynamically allocated
+objects.
+
+When compiling with @option{-flto}, no callgraph information is output
+along with the object file.  At LTO link time, @option{-fcallgraph-info}
+may generate multiple callgraph information files next to intermediate
+LTO output files.
+
+@opindex d
+@opindex dump
+@opindex fdump-rtl-@var{pass}
+@item -d@var{letters}
+@itemx --dump=@var{letters}
+@itemx --dump @var{letters}
+@itemx -fdump-rtl-@var{pass}
+@itemx -fdump-rtl-@var{pass}-@var{options}
+@itemx -fdump-rtl-@var{pass}-@var{options}=@var{filename}
+Says to make debugging dumps during compilation at times specified by
+@var{letters} when using @option{-d} or by @var{pass} when using
+@option{-fdump-rtl}.  This is used for debugging the RTL-based passes of the
+compiler.
+
+Some @option{-d@var{letters}} switches have different meaning when
+@option{-E} is used for preprocessing.  @xref{Preprocessor Options},
+for information about preprocessor-specific dump options.
+
+The @samp{-@var{options}} form allows greater control over the details of the
+dump. See @option{-fdump-tree}.
+
+Here are actual instances of command-line options following these patterns and
+their meanings:
+
+@table @gcctabopt
+
+@opindex fdump-rtl-alignments
+@item -fdump-rtl-alignments
+Dump after branch alignments have been computed.
+
+@opindex fdump-rtl-asmcons
+@item -fdump-rtl-asmcons
+Dump after fixing rtl statements that have unsatisfied in/out constraints.
+
+@opindex fdump-rtl-auto_inc_dec
+@item -fdump-rtl-auto_inc_dec
+Dump after auto-inc-dec discovery.  This pass is only run on
+architectures that have auto inc or auto dec instructions.
+
+@opindex fdump-rtl-barriers
+@item -fdump-rtl-barriers
+Dump after cleaning up the barrier instructions.
+
+@opindex fdump-rtl-bbpart
+@item -fdump-rtl-bbpart
+Dump after partitioning hot and cold basic blocks.
+
+@opindex fdump-rtl-bbro
+@item -fdump-rtl-bbro
+Dump after block reordering.
+
+@opindex fdump-rtl-btl2
+@opindex fdump-rtl-btl2
+@item -fdump-rtl-btl1
+@itemx -fdump-rtl-btl2
+@option{-fdump-rtl-btl1} and @option{-fdump-rtl-btl2} enable dumping
+after the two branch
+target load optimization passes.
+
+@opindex fdump-rtl-bypass
+@item -fdump-rtl-bypass
+Dump after jump bypassing and control flow optimizations.
+
+@opindex fdump-rtl-combine
+@item -fdump-rtl-combine
+Dump after the RTL instruction combination pass.
+
+@opindex fdump-rtl-compgotos
+@item -fdump-rtl-compgotos
+Dump after duplicating the computed gotos.
+
+@opindex fdump-rtl-ce1
+@opindex fdump-rtl-ce2
+@opindex fdump-rtl-ce3
+@item -fdump-rtl-ce1
+@itemx -fdump-rtl-ce2
+@itemx -fdump-rtl-ce3
+@option{-fdump-rtl-ce1}, @option{-fdump-rtl-ce2}, and
+@option{-fdump-rtl-ce3} enable dumping after the three
+if conversion passes.
+
+@opindex fdump-rtl-cprop_hardreg
+@item -fdump-rtl-cprop_hardreg
+Dump after hard register copy propagation.
+
+@opindex fdump-rtl-csa
+@item -fdump-rtl-csa
+Dump after combining stack adjustments.
+
+@opindex fdump-rtl-cse1
+@opindex fdump-rtl-cse2
+@item -fdump-rtl-cse1
+@itemx -fdump-rtl-cse2
+@option{-fdump-rtl-cse1} and @option{-fdump-rtl-cse2} enable dumping after
+the two common subexpression elimination passes.
+
+@opindex fdump-rtl-dce
+@item -fdump-rtl-dce
+Dump after the standalone dead code elimination passes.
+
+@opindex fdump-rtl-dbr
+@item -fdump-rtl-dbr
+Dump after delayed branch scheduling.
+
+@opindex fdump-rtl-dce1
+@opindex fdump-rtl-dce2
+@item -fdump-rtl-dce1
+@itemx -fdump-rtl-dce2
+@option{-fdump-rtl-dce1} and @option{-fdump-rtl-dce2} enable dumping after
+the two dead store elimination passes.
+
+@opindex fdump-rtl-eh
+@item -fdump-rtl-eh
+Dump after finalization of EH handling code.
+
+@opindex fdump-rtl-eh_ranges
+@item -fdump-rtl-eh_ranges
+Dump after conversion of EH handling range regions.
+
+@opindex fdump-rtl-expand
+@item -fdump-rtl-expand
+Dump after RTL generation.
+
+@opindex fdump-rtl-fwprop1
+@opindex fdump-rtl-fwprop2
+@item -fdump-rtl-fwprop1
+@itemx -fdump-rtl-fwprop2
+@option{-fdump-rtl-fwprop1} and @option{-fdump-rtl-fwprop2} enable
+dumping after the two forward propagation passes.
+
+@opindex fdump-rtl-gcse1
+@opindex fdump-rtl-gcse2
+@item -fdump-rtl-gcse1
+@itemx -fdump-rtl-gcse2
+@option{-fdump-rtl-gcse1} and @option{-fdump-rtl-gcse2} enable dumping
+after global common subexpression elimination.
+
+@opindex fdump-rtl-init-regs
+@item -fdump-rtl-init-regs
+Dump after the initialization of the registers.
+
+@opindex fdump-rtl-initvals
+@item -fdump-rtl-initvals
+Dump after the computation of the initial value sets.
+
+@opindex fdump-rtl-into_cfglayout
+@item -fdump-rtl-into_cfglayout
+Dump after converting to cfglayout mode.
+
+@opindex fdump-rtl-ira
+@item -fdump-rtl-ira
+Dump after iterated register allocation.
+
+@opindex fdump-rtl-jump
+@item -fdump-rtl-jump
+Dump after the second jump optimization.
+
+@opindex fdump-rtl-loop2
+@item -fdump-rtl-loop2
+@option{-fdump-rtl-loop2} enables dumping after the rtl
+loop optimization passes.
+
+@opindex fdump-rtl-mach
+@item -fdump-rtl-mach
+Dump after performing the machine dependent reorganization pass, if that
+pass exists.
+
+@opindex fdump-rtl-mode_sw
+@item -fdump-rtl-mode_sw
+Dump after removing redundant mode switches.
+
+@opindex fdump-rtl-rnreg
+@item -fdump-rtl-rnreg
+Dump after register renumbering.
+
+@opindex fdump-rtl-outof_cfglayout
+@item -fdump-rtl-outof_cfglayout
+Dump after converting from cfglayout mode.
+
+@opindex fdump-rtl-peephole2
+@item -fdump-rtl-peephole2
+Dump after the peephole pass.
+
+@opindex fdump-rtl-postreload
+@item -fdump-rtl-postreload
+Dump after post-reload optimizations.
+
+@opindex fdump-rtl-pro_and_epilogue
+@item -fdump-rtl-pro_and_epilogue
+Dump after generating the function prologues and epilogues.
+
+@opindex fdump-rtl-sched1
+@opindex fdump-rtl-sched2
+@item -fdump-rtl-sched1
+@itemx -fdump-rtl-sched2
+@option{-fdump-rtl-sched1} and @option{-fdump-rtl-sched2} enable dumping
+after the basic block scheduling passes.
+
+@opindex fdump-rtl-ree
+@item -fdump-rtl-ree
+Dump after sign/zero extension elimination.
+
+@opindex fdump-rtl-seqabstr
+@item -fdump-rtl-seqabstr
+Dump after common sequence discovery.
+
+@opindex fdump-rtl-shorten
+@item -fdump-rtl-shorten
+Dump after shortening branches.
+
+@opindex fdump-rtl-split1
+@opindex fdump-rtl-split2
+@opindex fdump-rtl-split3
+@opindex fdump-rtl-split4
+@opindex fdump-rtl-split5
+@item -fdump-rtl-split1
+@itemx -fdump-rtl-split2
+@itemx -fdump-rtl-split3
+@itemx -fdump-rtl-split4
+@itemx -fdump-rtl-split5
+These options enable dumping after five rounds of
+instruction splitting.
+
+@opindex fdump-rtl-sms
+@item -fdump-rtl-sms
+Dump after modulo scheduling.  This pass is only run on some
+architectures.
+
+@opindex fdump-rtl-stack
+@item -fdump-rtl-stack
+Dump after conversion from GCC's ``flat register file'' registers to the
+x87's stack-like registers.  This pass is only run on x86 variants.
+
+@opindex fdump-rtl-subreg1
+@opindex fdump-rtl-subreg2
+@item -fdump-rtl-subreg1
+@itemx -fdump-rtl-subreg2
+@option{-fdump-rtl-subreg1} and @option{-fdump-rtl-subreg2} enable dumping after
+the two subreg expansion passes.
+
+@opindex fdump-rtl-vartrack
+@item -fdump-rtl-vartrack
+Dump after variable tracking.
+
+@opindex fdump-rtl-vregs
+@item -fdump-rtl-vregs
+Dump after converting virtual registers to hard registers.
+
+@opindex fdump-rtl-web
+@item -fdump-rtl-web
+Dump after live range splitting.
+
+@opindex fdump-rtl-regclass
+@opindex fdump-rtl-subregs_of_mode_init
+@opindex fdump-rtl-subregs_of_mode_finish
+@opindex fdump-rtl-dfinit
+@opindex fdump-rtl-dfinish

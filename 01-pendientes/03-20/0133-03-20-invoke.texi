@@ -1,0 +1,234 @@
+@c GCC 16.1.0 | BLOQUE 0133 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 30944-31173 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node PRU Options
+@subsection PRU Options
+@cindex PRU Options
+
+These command-line options are defined for PRU target:
+
+@table @gcctabopt
+@opindex minrt
+@item -minrt
+Link with a minimum runtime environment.  This can significantly reduce
+the size of the final ELF binary, but some standard C runtime features
+are removed.
+
+This option disables support for static initializers and constructors.
+Beware that the compiler could still generate code with static initializers
+and constructors.  It is up to the programmer to ensure that the source
+program does not use those features.
+
+The minimal startup code does not pass @code{argc} and @code{argv} arguments
+to @code{main}, so the latter must be declared as @code{int main (void)}.
+This is already the norm for most firmware projects.
+
+@opindex mmcu
+@item -mmcu=@var{mcu}
+Specify the PRU hardware variant to use.  A correspondingly-named
+spec file is loaded, passing the memory region sizes to
+the linker and defining hardware-specific C macros.
+
+Newlib provides only the @code{sim} spec, intended for running
+regression tests using a simulator.  Specs for real hardware can be
+obtained by installing the
+@w{@uref{https://github.com/dinuxbg/gnuprumcu/,GnuPruMcu}} package.
+
+@opindex mno-relax
+@item -mno-relax
+Make GCC pass the @option{--no-relax} command-line option to the linker
+instead of the @option{--relax} option.
+
+@opindex mloop
+@opindex mno-loop
+@item -mloop
+@itemx -mno-loop
+Allow (or do not allow) GCC to use the LOOP instruction.
+
+@opindex mmul
+@opindex mno-mul
+@item -mmul
+@itemx -mno-mul
+Allow (or do not allow) GCC to use the PRU multiplier unit.
+
+@opindex mfillzero
+@opindex mno-fillzero
+@item -mfillzero
+@itemx -mno-fillzero
+Allow (or do not allow) GCC to use the FILL and ZERO instructions.
+
+@opindex mabi
+@item -mabi=@var{variant}
+Specify the ABI variant to output code for.  @option{-mabi=ti} selects the
+unmodified TI ABI, while @option{-mabi=gnu} selects a GNU variant that copes
+more naturally with certain GCC assumptions.  These are the differences:
+
+@table @samp
+@item Function Pointer Size
+TI ABI specifies that function (code) pointers are 16-bit, whereas GNU
+supports only 32-bit data and code pointers.
+
+@item Optional Return Value Pointer
+Function return values larger than 64 bits are passed by using a hidden
+pointer as the first argument of the function.  TI ABI, though, mandates that
+the pointer can be NULL in case the caller is not using the returned value.
+GNU always passes and expects a valid return value pointer.
+
+@item Size Of Struct Containing Bit-fields
+TI ABI mandates that struct size is determined by the bit-field type, if it
+contains any.  On the other hand,
+GNU allocates the smallest amount of bytes which would
+fit the bit-field.
+
+For example, TI ABI reserves 4 bytes for this struct, whereas GNU reserves
+a single byte:
+
+@smallexample
+struct S @{ int i:1; @};
+@end smallexample
+
+@item Access Size For Volatile Bit-fields
+TI ABI mandates that volatile bit-fields are accessed using their type.
+In contrast, GNU ABI uses the smallest integer type fitting the bit-field.
+
+For example, TI ABI requires a single load of 4 bytes for the
+following bit-field.  GNU generates a load of 1 byte:
+
+@smallexample
+struct S @{ volatile int i:1; @};
+@end smallexample
+
+@end table
+
+The current @option{-mabi=ti} implementation simply raises a compile error
+when any of the above code constructs is detected.  As a consequence
+the standard C library cannot be built and it is omitted when linking with
+@option{-mabi=ti}.
+
+Relaxation is a GNU feature and for safety reasons is disabled when using
+@option{-mabi=ti}.  The TI toolchain does not emit relocations for QBBx
+instructions, so the GNU linker cannot adjust them when shortening adjacent
+LDI32 pseudo instructions.
+
+@end table
+
+@node RISC-V Options
+@subsection RISC-V Options
+@cindex RISC-V Options
+
+These command-line options are defined for RISC-V targets:
+
+@table @gcctabopt
+@opindex mbranch-cost
+@item -mbranch-cost=@var{n}
+Set the cost of branches to roughly @var{n} instructions.
+
+@opindex mabi
+@item -mabi=@var{ABI-string}
+Specify integer and floating-point calling convention.  @var{ABI-string}
+contains two parts: the size of integer types and the registers used for
+floating-point types.  For example @samp{-march=rv64ifd -mabi=lp64d} means that
+@samp{long} and pointers are 64-bit (implicitly defining @samp{int} to be
+32-bit), and that floating-point values up to 64 bits wide are passed in F
+registers.  Contrast this with @samp{-march=rv64ifd -mabi=lp64f}, which still
+allows the compiler to generate code that uses the F and D extensions but only
+allows floating-point values up to 32 bits long to be passed in registers; or
+@samp{-march=rv64ifd -mabi=lp64}, in which no floating-point arguments are
+passed in registers.
+
+The default for this argument is system dependent; if you want a specific
+calling convention you should specify one explicitly.  The valid calling
+conventions are: @samp{ilp32}, @samp{ilp32f}, @samp{ilp32d}, @samp{lp64},
+@samp{lp64f}, and @samp{lp64d}.  Some calling conventions are impossible to
+implement on some ISAs: for example, @samp{-march=rv32if -mabi=ilp32d} is
+invalid because the ABI requires 64-bit values be passed in F registers, but F
+registers are only 32 bits wide.  There are also the @samp{ilp32e} ABI that can
+only be used with the @samp{rv32e} architecture and the @samp{lp64e} ABI that
+can only be used with the @samp{rv64e}.  Those ABIs are not well-specified at
+present, and are subject to change.
+
+@opindex mfdiv
+@opindex mno-fdiv
+@item -mfdiv
+@itemx -mno-fdiv
+Do or don't use hardware floating-point divide and square root instructions.
+This requires the F or D extensions for floating-point registers.  The default
+is to use them if the specified architecture has these instructions.
+
+@opindex mfence-tso
+@opindex mno-fence-tso
+@item -mfence-tso
+@itemx -mno-fence-tso
+Do or don't use the @samp{fence.tso} instruction, which is unimplemented on
+some processors (including those from T-Head).  If the @samp{fence.tso}
+instruction is not available then a stronger fence is used instead.
+
+@opindex mdiv
+@opindex mno-div
+@item -mdiv
+@itemx -mno-div
+Do or don't use hardware instructions for integer division.  This requires the
+M extension.  The default is to use them if the specified architecture has
+these instructions.
+
+@opindex misa-spec
+@item -misa-spec=@var{ISA-spec-string}
+Specify the version of the RISC-V Unprivileged (formerly User-Level)
+ISA specification generated code should conform to.  The possibilities
+for @var{ISA-spec-string} are:
+@table @code
+@item 2.2
+Produce code conforming to version 2.2.
+@item 20190608
+Produce code conforming to version 20190608.
+@item 20191213
+Produce code conforming to version 20191213.
+@end table
+The default is @option{-misa-spec=20191213} unless GCC has been configured
+with @option{--with-isa-spec=} specifying a different default version.
+
+@opindex march
+@item -march=@r{[}@var{ISA}@r{|}@var{Profile}@r{|}@var{Profile_ISA}@r{|}@var{processor-string}@r{]}
+Generate code for given RISC-V ISA or profile or a combination of them
+(e.g.@: @samp{rv64im} @samp{rvi20u64} @samp{rvi20u64_zbb}).  The names of
+ISAs and profiles must be lower case.
+Examples include @samp{rv64i}, @samp{rv32g},
+@samp{rv32e}, @samp{rv32imaf}, @samp{rva22u64} and @samp{rva23u64}.
+To combine a named profile with optional RISC-V ISA extensions,
+give the profile first and then append the extension name(s) using
+an underscore as a delimiter (e.g.@:
+@samp{rvi20u64_zca_zcb} @samp{rva23u64_zacas}).  Additionally, a special value
+@samp{help} (@option{-march=help}) is accepted to list all supported
+extensions.
+
+@option{-march=unset} causes the compiler to ignore any
+@option{-march=@dots{}} options
+that appear earlier on the command line, behaving as if the option was never
+passed.  This is useful for ensuring that the architecture is taken from the
+@option{-mcpu} option, and an error results if no @option{-mcpu} option
+is given when @option{-march=unset} is used.
+
+The syntax of the ISA string is defined as follows:
+
+@itemize @bullet{}
+@item
+The string must start with @samp{rv32} or @samp{rv64}, followed by
+@samp{i}, @samp{e}, or @samp{g}, referred to as the base ISA.
+@item
+The subsequent part of the string is a list of extension names.  Extension
+names can be categorized as multi-letter (e.g.@: @samp{zba}) and single-letter
+(e.g.@: @samp{v}).  Single-letter extensions can appear consecutively,
+but multi-letter extensions must be separated by underscores.
+@item
+An underscore can appear anywhere after the base ISA.  It has no specific
+effect but is used to improve readability and can act as a separator.
+@item
+Extension names may include an optional version number, following the
+syntax @samp{<major>p<minor>} or @samp{<major>}, (e.g.@: @samp{m2p1} or
+@samp{m2}).
+@end itemize
+
+Supported extensions are listed below:
+
+@include riscv-ext.texi

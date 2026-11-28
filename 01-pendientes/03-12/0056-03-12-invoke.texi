@@ -1,0 +1,230 @@
+@c GCC 16.1.0 | BLOQUE 0056 | 03-12
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 14327-14552 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -fno-sched-interblock
+Disable instruction scheduling across basic blocks, which
+is normally enabled when scheduling before register allocation, i.e.@:
+with @option{-fschedule-insns} or at @option{-O2} or higher.
+
+@opindex fno-sched-spec
+@opindex fsched-spec
+@item -fno-sched-spec
+Disable speculative motion of non-load instructions, which
+is normally enabled when scheduling before register allocation, i.e.@:
+with @option{-fschedule-insns} or at @option{-O2} or higher.
+
+@opindex fsched-pressure
+@opindex fno-sched-pressure
+@item -fsched-pressure
+Enable register pressure sensitive insn scheduling before register
+allocation.  This only makes sense when scheduling before register
+allocation is enabled, i.e.@: with @option{-fschedule-insns} or at
+@option{-O2} or higher.  Usage of this option can improve the
+generated code and decrease its size by preventing register pressure
+increase above the number of available hard registers and subsequent
+spills in register allocation.
+
+@opindex fsched-spec-load
+@opindex fno-sched-spec-load
+@item -fsched-spec-load
+Allow speculative motion of some load instructions.  This only makes
+sense when scheduling before register allocation, i.e.@: with
+@option{-fschedule-insns} or at @option{-O2} or higher.
+
+@opindex fsched-spec-load-dangerous
+@opindex fno-sched-spec-load-dangerous
+@item -fsched-spec-load-dangerous
+Allow speculative motion of more load instructions.  This only makes
+sense when scheduling before register allocation, i.e.@: with
+@option{-fschedule-insns} or at @option{-O2} or higher.
+
+@opindex fsched-stalled-insns
+@opindex fno-sched-stalled-insns
+@item -fsched-stalled-insns
+@itemx -fsched-stalled-insns=@var{n}
+Define how many insns (if any) can be moved prematurely from the queue
+of stalled insns into the ready list during the second scheduling pass.
+@option{-fno-sched-stalled-insns} means that no insns are moved
+prematurely, @option{-fsched-stalled-insns=0} means there is no limit
+on how many queued insns can be moved prematurely.
+@option{-fsched-stalled-insns} without a value is equivalent to
+@option{-fsched-stalled-insns=1}.
+
+@opindex fsched-stalled-insns-dep
+@opindex fno-sched-stalled-insns-dep
+@item -fsched-stalled-insns-dep
+@itemx -fsched-stalled-insns-dep=@var{n}
+Define how many insn groups (cycles) are examined for a dependency
+on a stalled insn that is a candidate for premature removal from the queue
+of stalled insns.  This has an effect only during the second scheduling pass,
+and only if @option{-fsched-stalled-insns} is used.
+@option{-fno-sched-stalled-insns-dep} is equivalent to
+@option{-fsched-stalled-insns-dep=0}.
+@option{-fsched-stalled-insns-dep} without a value is equivalent to
+@option{-fsched-stalled-insns-dep=1}.
+
+@opindex fsched2-use-superblocks
+@opindex fno-sched2-use-superblocks
+@item -fsched2-use-superblocks
+When scheduling after register allocation, use superblock scheduling.
+This allows motion across basic block boundaries,
+resulting in faster schedules.  This option is experimental, as not all machine
+descriptions used by GCC model the CPU closely enough to avoid unreliable
+results from the algorithm.
+
+This only makes sense when scheduling after register allocation, i.e.@: with
+@option{-fschedule-insns2} or at @option{-O2} or higher.
+
+@opindex fsched-group-heuristic
+@opindex fno-sched-group-heuristic
+@item -fsched-group-heuristic
+Enable the group heuristic in the scheduler.  This heuristic favors
+the instruction that belongs to a schedule group.  This is enabled
+by default when scheduling is enabled, i.e.@: with @option{-fschedule-insns}
+or @option{-fschedule-insns2} or at @option{-O2} or higher.
+
+@opindex fsched-critical-path-heuristic
+@opindex fno-sched-critical-path-heuristic
+@item -fsched-critical-path-heuristic
+Enable the critical-path heuristic in the scheduler.  This heuristic favors
+instructions on the critical path.  This is enabled by default when
+scheduling is enabled, i.e.@: with @option{-fschedule-insns}
+or @option{-fschedule-insns2} or at @option{-O2} or higher.
+
+@opindex fsched-spec-insn-heuristic
+@opindex fno-sched-spec-insn-heuristic
+@item -fsched-spec-insn-heuristic
+Enable the speculative instruction heuristic in the scheduler.  This
+heuristic favors speculative instructions with greater dependency weakness.
+This is enabled by default when scheduling is enabled, i.e.@:
+with @option{-fschedule-insns} or @option{-fschedule-insns2}
+or at @option{-O2} or higher.
+
+@opindex fsched-rank-heuristic
+@opindex fno-sched-rank-heuristic
+@item -fsched-rank-heuristic
+Enable the rank heuristic in the scheduler.  This heuristic favors
+the instruction belonging to a basic block with greater size or frequency.
+This is enabled by default when scheduling is enabled, i.e.@:
+with @option{-fschedule-insns} or @option{-fschedule-insns2} or
+at @option{-O2} or higher.
+
+@opindex fsched-last-insn-heuristic
+@opindex fno-sched-last-insn-heuristic
+@item -fsched-last-insn-heuristic
+Enable the last-instruction heuristic in the scheduler.  This heuristic
+favors the instruction that is less dependent on the last instruction
+scheduled.  This is enabled by default when scheduling is enabled,
+i.e.@: with @option{-fschedule-insns} or @option{-fschedule-insns2} or
+at @option{-O2} or higher.
+
+@opindex fsched-dep-count-heuristic
+@opindex fno-sched-dep-count-heuristic
+@item -fsched-dep-count-heuristic
+Enable the dependent-count heuristic in the scheduler.  This heuristic
+favors the instruction that has more instructions depending on it.
+This is enabled by default when scheduling is enabled, i.e.@:
+with @option{-fschedule-insns} or @option{-fschedule-insns2} or
+at @option{-O2} or higher.
+
+@opindex fspeculatively-call-stored-functions
+@opindex fno-speculatively-call-stored-functions
+@item -fspeculatively-call-stored-functions
+Attempt to convert indirect calls of function pointers to pointers
+loaded from a structure field if all visible stores to that field store
+just a single candidate.  When doing so, turn the call into a
+conditional deciding between the direct call and the original indirect
+one.  These speculative calls often enable more optimizations, such as
+inlining.  When they seem useless after further optimization, they are
+converted back into original form.
+
+@opindex freschedule-modulo-scheduled-loops
+@opindex fno-reschedule-modulo-scheduled-loops
+@item -freschedule-modulo-scheduled-loops
+Modulo scheduling is performed before traditional scheduling.  If a loop
+is modulo scheduled, later scheduling passes may change its schedule.
+Use this option to control that behavior.
+
+@opindex fselective-scheduling
+@opindex fno-selective-scheduling
+@item -fselective-scheduling
+Schedule instructions using selective scheduling algorithm.  Selective
+scheduling runs instead of the first scheduler pass.
+
+@opindex fselective-scheduling2
+@opindex fno-selective-scheduling2
+@item -fselective-scheduling2
+Schedule instructions using selective scheduling algorithm.  Selective
+scheduling runs instead of the second scheduler pass.
+
+@opindex fsel-sched-pipelining
+@opindex fno-sel-sched-pipelining
+@item -fsel-sched-pipelining
+Enable software pipelining of innermost loops during selective scheduling.
+This option has no effect unless one of @option{-fselective-scheduling} or
+@option{-fselective-scheduling2} is turned on.
+
+@opindex fsel-sched-pipelining-outer-loops
+@opindex fno-sel-sched-pipelining-outer-loops
+@item -fsel-sched-pipelining-outer-loops
+When pipelining loops during selective scheduling, also pipeline outer loops.
+This option has no effect unless @option{-fsel-sched-pipelining} is turned on.
+
+@opindex fsemantic-interposition
+@opindex fno-semantic-interposition
+@item -fsemantic-interposition
+Some object formats, like ELF, allow interposing of symbols by the
+dynamic linker.
+This means that for symbols exported from the DSO, the compiler cannot perform
+interprocedural propagation, inlining and other optimizations in anticipation
+that the function or variable in question may change. While this feature is
+useful, for example, to rewrite memory allocation functions by a debugging
+implementation, it is expensive in the terms of code quality.
+With @option{-fno-semantic-interposition} the compiler assumes that
+if interposition happens for functions the overwriting function will have
+precisely the same semantics (and side effects).
+Similarly if interposition happens
+for variables, the constructor of the variable will be the same. The flag
+has no effect for functions explicitly declared inline
+(where it is never allowed for interposition to change semantics)
+and for symbols explicitly declared weak.
+
+@opindex fshrink-wrap
+@opindex fno-shrink-wrap
+@item -fshrink-wrap
+Emit function prologues only before parts of the function that need it,
+rather than at the top of the function.  This flag is enabled by default at
+@option{-O} and higher.
+
+@opindex fshrink-wrap-separate
+@opindex fno-shrink-wrap-separate
+@item -fshrink-wrap-separate
+Shrink-wrap separate parts of the prologue and epilogue separately, so that
+those parts are only executed when needed.
+This option is on by default, but has no effect unless @option{-fshrink-wrap}
+is also turned on and the target supports this.
+
+@opindex fcaller-saves
+@opindex fno-caller-saves
+@item -fcaller-saves
+Enable allocation of values to registers that are clobbered by
+function calls, by emitting extra instructions to save and restore the
+registers around such calls.  Such allocation is done only when it
+seems to result in better code.
+
+This option is always enabled by default on certain machines, usually
+those which have no call-preserved registers to use instead.
+
+Enabled at levels @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex fcombine-stack-adjustments
+@opindex fno-combine-stack-adjustments
+@item -fcombine-stack-adjustments
+Tracks stack adjustments (pushes and pops) and stack memory references
+and then tries to find ways to combine them.
+
+Enabled by default at @option{-O1} and higher.
+
+@opindex fipa-ra
+@opindex fno-ipa-ra

@@ -1,0 +1,244 @@
+@c GCC 16.1.0 | BLOQUE 0041 | 03-09
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 11247-11486 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -Wno-interference-size
+Warn about questionable uses of the C++17 @code{constexpr} variables
+@code{std::hardware_destructive_interference_size} and
+@code{std::hardware_constructive_interference_size}.
+
+These variables are intended to be used for controlling class layout, to
+avoid false sharing in concurrent code:
+
+@smallexample
+struct independent_fields @{
+  alignas(std::hardware_destructive_interference_size)
+    std::atomic<int> one;
+  alignas(std::hardware_destructive_interference_size)
+    std::atomic<int> two;
+@};
+@end smallexample
+
+Here @samp{one} and @samp{two} are intended to be far enough apart
+that stores to one won't require accesses to the other to reload the
+cache line.
+
+By default, these variables are given values based on the
+current @option{-mtune} option, typically to the L1 cache line size
+for the particular target CPU, sometimes to a range if tuning for a
+generic target.  So all translation units that depend on ABI
+compatibility for the use of these variables must be compiled with
+the same @option{-mtune} (or @option{-mcpu}).
+
+If ABI stability is important, such as if the use is in a header for a
+library, you should probably not use the hardware interference size
+variables at all.
+
+These warnings are enabled by default.
+If you are confident that your use of these variables does not affect ABI
+outside a single build of your project, you can turn off the warning
+with @option{-Wno-interference-size}.
+
+@opindex Wint-in-bool-context
+@opindex Wno-int-in-bool-context
+@item -Wint-in-bool-context
+Warn for suspicious use of integer values where boolean values are expected,
+such as conditional expressions (?:) using non-boolean integer constants in
+boolean context, like @code{if (a <= b ? 2 : 3)}.  Or left shifting of signed
+integers in boolean context, like @code{for (a = 0; 1 << a; a++);}.  Likewise
+for all kinds of multiplications regardless of the data type.
+This warning is enabled by @option{-Wall}.
+
+@opindex Wno-int-to-pointer-cast
+@opindex Wint-to-pointer-cast
+@item -Wno-int-to-pointer-cast
+Suppress warnings from casts to pointer type of an integer of a
+different size. In C++, casting to a pointer type of smaller size is
+an error. @option{Wint-to-pointer-cast} is enabled by default.
+
+
+@opindex Wno-pointer-to-int-cast
+@opindex Wpointer-to-int-cast
+@item -Wno-pointer-to-int-cast @r{(C and Objective-C only)}
+Suppress warnings from casts from a pointer to an integer type of a
+different size.
+
+@opindex Winvalid-pch
+@opindex Wno-invalid-pch
+@item -Winvalid-pch
+Warn if a precompiled header (@pxref{Precompiled Headers}) is found in
+the search path but cannot be used.
+
+@opindex Winvalid-utf8
+@opindex Wno-invalid-utf8
+@item -Winvalid-utf8
+Warn if an invalid UTF-8 character is found.
+This warning is on by default for C++23 if @option{-finput-charset=UTF-8}
+is used and turned into error with @option{-pedantic-errors}.
+
+@opindex Wunicode
+@opindex Wno-unicode
+@item -Wno-unicode
+Don't diagnose invalid forms of delimited or named escape sequences which are
+treated as separate tokens.  @option{Wunicode} is enabled by default.
+
+@opindex Wlong-long
+@opindex Wno-long-long
+@item -Wlong-long
+Warn if @code{long long} type is used.  This is enabled by either
+@option{-Wpedantic} or @option{-Wtraditional} in ISO C90 and C++98
+modes.  To inhibit the warning messages, use @option{-Wno-long-long}.
+
+This warning is upgraded to an error by @option{-pedantic-errors}.
+
+@opindex Wvariadic-macros
+@opindex Wno-variadic-macros
+@item -Wvariadic-macros
+Warn if variadic macros are used in ISO C90 mode, or if the GNU
+alternate syntax is used in ISO C99 mode.  This is enabled by either
+@option{-Wpedantic} or @option{-Wtraditional}.  To inhibit the warning
+messages, use @option{-Wno-variadic-macros}.
+
+@opindex Wvarargs
+@opindex Wno-varargs
+@item -Wno-varargs
+Do not warn upon questionable usage of the macros used to handle variable
+arguments like @code{va_start}.  These warnings are enabled by default.
+
+@opindex Wvector-operation-performance
+@opindex Wno-vector-operation-performance
+@item -Wvector-operation-performance
+Warn if vector operation is not implemented via SIMD capabilities of the
+architecture.  Mainly useful for the performance tuning.
+Vector operation can be implemented @code{piecewise}, which means that the
+scalar operation is performed on every vector element;
+@code{in parallel}, which means that the vector operation is implemented
+using scalars of wider type, which normally is more performance efficient;
+and @code{as a single scalar}, which means that vector fits into a
+scalar type.
+
+@opindex Wvla
+@opindex Wno-vla
+@item -Wvla
+Warn if a variable-length array is used in the code.
+@option{-Wno-vla} prevents the @option{-Wpedantic} warning of
+the variable-length array.
+
+This warning is upgraded to an error by @option{-pedantic-errors}.
+
+@opindex Wvla-larger-than=
+@opindex Wno-vla-larger-than
+@item -Wvla-larger-than=@var{byte-size}
+If this option is used, the compiler warns for declarations of
+variable-length arrays whose size is either unbounded, or bounded
+by an argument that allows the array size to exceed @var{byte-size}
+bytes.  This is similar to how @option{-Walloca-larger-than=}@var{byte-size}
+works, but with variable-length arrays.
+
+Note that GCC may optimize small variable-length arrays of a known
+value into plain arrays, so this warning may not get triggered for
+such arrays.
+
+@option{-Wvla-larger-than=}@samp{PTRDIFF_MAX} is enabled by default but
+is typically only effective when @option{-ftree-vrp} is active (default
+for @option{-O2} and above).
+
+See also @option{-Walloca-larger-than=@var{byte-size}}.
+
+@opindex Wno-vla-larger-than
+@item -Wno-vla-larger-than
+Disable @option{-Wvla-larger-than=} warnings.  The option is equivalent
+to @option{-Wvla-larger-than=}@samp{SIZE_MAX} or larger.
+
+@opindex Wvla-parameter
+@opindex Wno-vla-parameter
+@item -Wvla-parameter
+Warn about redeclarations of functions involving arguments of Variable
+Length Array types of inconsistent kinds or forms, and enable the detection
+of out-of-bounds accesses to such parameters by warnings such as
+@option{-Warray-bounds}.
+
+If the first function declaration uses the VLA form the bound specified
+in the array is assumed to be the minimum number of elements expected to
+be provided in calls to the function and the maximum number of elements
+accessed by it.  Failing to provide arguments of sufficient size or
+accessing more than the maximum number of elements may be diagnosed.
+
+For example, the warning triggers for the following redeclarations because
+the first one allows an array of any size to be passed to @code{f} while
+the second one specifies that the array argument must have at least @code{n}
+elements.  In addition, calling @code{f} with the associated VLA bound
+parameter in excess of the actual VLA bound triggers a warning as well.
+
+@smallexample
+void f (int n, int[n]);
+// warning: argument 2 previously declared as a VLA
+void f (int, int[]);
+
+void g (int n)
+@{
+    if (n > 4)
+      return;
+    int a[n];
+    // warning: access to a by f may be out of bounds
+    f (sizeof a, a);
+  @dots{}
+@}
+
+@end smallexample
+
+@option{-Wvla-parameter} is included in @option{-Wall}.  The
+@option{-Warray-parameter} option triggers warnings for similar problems
+involving ordinary array arguments.
+
+@opindex Wvolatile-register-var
+@opindex Wno-volatile-register-var
+@item -Wvolatile-register-var
+Warn if a register variable is declared volatile.  The volatile
+modifier does not inhibit all optimizations that may eliminate reads
+and/or writes to register variables.  This warning is enabled by
+@option{-Wall}.
+
+@opindex Wxor-used-as-pow
+@opindex Wno-xor-used-as-pow
+@item -Wno-xor-used-as-pow @r{(C, C++, Objective-C and Objective-C++ only)}
+Disable warnings about uses of @code{^}, the exclusive or operator,
+where it appears the code meant exponentiation.
+Specifically, the warning occurs when the
+left-hand side is the decimal constant 2 or 10 and the right-hand side
+is also a decimal constant.
+
+In C and C++, @code{^} means exclusive or, whereas in some other languages
+(e.g. TeX and some versions of BASIC) it means exponentiation.
+
+This warning can be silenced by converting one of the operands to
+hexadecimal as well as by compiling with @option{-Wno-xor-used-as-pow}.
+
+@opindex Wdisabled-optimization
+@opindex Wno-disabled-optimization
+@item -Wdisabled-optimization
+Warn if a requested optimization pass is disabled.  This warning does
+not generally indicate that there is anything wrong with your code; it
+merely indicates that GCC's optimizers are unable to handle the code
+effectively.  Often, the problem is that your code is too big or too
+complex; GCC refuses to optimize programs when the optimization
+itself is likely to take inordinate amounts of time.
+
+@opindex Wpointer-sign
+@opindex Wno-pointer-sign
+@item -Wpointer-sign @r{(C and Objective-C only)}
+Warn for pointer argument passing or assignment with different signedness.
+This option is only supported for C and Objective-C@.  It is implied by
+@option{-Wall} and by @option{-Wpedantic}, which can be disabled with
+@option{-Wno-pointer-sign}.
+
+This warning is upgraded to an error by @option{-pedantic-errors}.
+
+@opindex Wstack-protector
+@opindex Wno-stack-protector
+@item -Wstack-protector
+This option is only active when @option{-fstack-protector} is active.  It
+warns about functions that are not protected against stack smashing.
+
+@opindex Woverlength-strings
+@opindex Wno-overlength-strings

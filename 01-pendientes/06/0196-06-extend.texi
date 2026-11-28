@@ -1,0 +1,238 @@
+@c GCC 16.1.0 | BLOQUE 0196 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 4827-5060 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+A function is ineligible for @code{internal} @code{strub} mode if a
+different @code{strub} mode is explicitly requested, or if attribute
+@code{noipa} is present.  For an @code{always_inline} function, meeting
+these requirements is enough to make it eligible.  Any function that has
+attribute @code{noclone}, that uses such extensions as non-local labels,
+computed gotos, alternate variable argument passing interfaces,
+@code{__builtin_next_arg}, or @code{__builtin_return_address}, or that
+takes too many (about 64Ki) arguments is ineligible, unless it is
+@code{always_inline}.  For @code{internal} @code{strub} mode, all
+eligible functions are viable.
+
+@smallexample
+/* flop is not eligible, thus not viable, for at-calls strub mode.
+   Likewise for internal strub mode.  */
+__attribute__ ((noipa)) void flop (void) @{@}
+
+/* flip is eligible and viable for at-calls strub mode.
+   It would be ineligible for internal strub mode, because of noclone,
+   if it weren't for always_inline.  With always_inline, noclone is not
+   an obstacle, so it is also eligible and viable for internal strub
+   mode.  */
+inline __attribute__ ((noclone, always_inline)) void flip (void) @{@}
+@end smallexample
+
+@atindex @code{symver}
+@cindex symbol versioning
+@item symver ("@var{name2}@@@var{nodename}")
+This attribute applies to functions.
+
+On ELF targets this attribute creates a symbol version.
+The @var{name2} part
+of the parameter is the actual name of the symbol by which it will be
+externally referenced.  The @code{nodename} portion should be the name of a
+node specified in the version script supplied to the linker when building a
+shared library.  The versioned symbol must be defined and must be exported with
+default visibility.
+
+This example produces a @code{.symver foo_v1, foo@@VERS_1}
+directive in the assembler output.:
+
+@smallexample
+[[gnu::__symver__ ("foo@@VERS_1")]] int
+foo_v1 (void)
+@{
+@}
+@end smallexample
+
+You can also define multiple versions for a given symbol
+(starting from binutils 2.35):
+
+@smallexample
+[[gnu::__symver__ ("foo@@VERS_2"), gnu::__symver__ ("foo@@VERS_3")]]
+int symver_foo_v1 (void)
+@{
+@}
+@end smallexample
+
+@noindent
+This example creates a symbol name @code{symver_foo_v1}
+which will be version @code{VERS_2} and @code{VERS_3} of @code{foo}.
+
+If you have an older release of binutils, then you need to use a symbol alias:
+
+@smallexample
+__attribute__ ((__symver__ ("foo@@VERS_2")))
+int foo_v1 (void)
+@{
+  return 0;
+@}
+
+__attribute__ ((__symver__ ("foo@@VERS_3")))
+__attribute__ ((alias ("foo_v1")))
+int symver_foo_v1 (void);
+@end smallexample
+
+Finally, if the parameter is @code{"@var{name2}@@@@@var{nodename}"}, then in
+addition to creating a symbol version (as if
+@code{"@var{name2}@@@var{nodename}"} was used) the version is also used
+to resolve @var{name2} by the linker.
+
+@atindex @code{tainted_args}
+@cindex tainted arguments
+@cindex functions that have tainted arguments
+@item tainted_args
+This attribute applies to functions.
+
+The @code{tainted_args} attribute is used to specify that a function is called
+in a way that requires sanitization of its arguments, such as a system
+call in an operating system kernel.  Such a function can be considered part
+of the ``attack surface'' of the program.  The attribute can be used both
+on function declarations, and on field declarations containing function
+pointers.  In the latter case, any function used as an initializer of
+such a callback field is treated as being called with tainted
+arguments.
+
+The analyzer pays particular attention to such functions when
+@option{-fanalyzer} is supplied, potentially issuing warnings guarded by
+@option{-Wanalyzer-tainted-allocation-size},
+@option{-Wanalyzer-tainted-array-index},
+@option{-Wanalyzer-tainted-divisor},
+@option{-Wanalyzer-tainted-offset},
+and @option{-Wanalyzer-tainted-size}.
+
+@atindex @code{target}
+@cindex target-specific code generation attributes
+@item target (@var{string}, @dots{})
+This attribute applies to functions.
+
+Multiple target back ends implement the @code{target} attribute
+to specify that a function is to
+be compiled with different target options than specified on the
+command line.  The original target command-line options are ignored.
+One or more strings can be provided as arguments.
+Each string consists of one or more comma-separated suffixes to
+the @code{-m} prefix jointly forming the name of a machine-dependent
+option.  @xref{Target-Specific Options}.
+
+The @code{target} attribute can be used for instance to have a function
+compiled with a different ISA (instruction set architecture) than the
+default.  @samp{#pragma GCC target} can be used to specify target-specific
+options for more than one function.  @xref{Function Specific Option Pragmas},
+for details about the pragma.
+
+For instance, on an x86, you could declare one function with the
+@code{target("sse4.1,arch=core2")} attribute and another with
+@code{target("sse4a,arch=amdfam10")}.  This is equivalent to
+compiling the first function with @option{-msse4.1} and
+@option{-march=core2} options, and the second function with
+@option{-msse4a} and @option{-march=amdfam10} options.  It is up to you
+to make sure that a function is only invoked on a machine that
+supports the particular ISA it is compiled for (for example by using
+@code{cpuid} on x86 to determine what feature bits and architecture
+family are used).
+
+@smallexample
+int core2_func (void) __attribute__ ((__target__ ("arch=core2")));
+int sse3_func (void) __attribute__ ((__target__ ("sse3")));
+@end smallexample
+
+Providing multiple strings as arguments separated by commas to specify
+multiple options is equivalent to separating the option suffixes with
+a comma (@samp{,}) within a single string.  Spaces are not permitted
+within the strings.
+
+The options supported are specific to each target; refer to @ref{x86
+Attributes}, @ref{PowerPC Attributes},
+@ref{ARM Attributes}, @ref{AArch64 Attributes}, @ref{LoongArch Attributes},
+and @ref{S/390 Attributes} for details.
+
+On targets supporting @code{target} function multiversioning (x86), when using
+C++, you can declare multiple functions with the same signatures but different
+@code{target} attribute values, and the correct version is chosen by the
+dynamic linker. In the example below, two function versions are produced
+with differing mangling. Additionally an ifunc resolver is created to
+select the correct version to populate the @code{func} symbol.
+
+@smallexample
+int func (void) __attribute__ ((target ("arch=core2"))) @{ return 1; @}
+int func (void) __attribute__ ((target ("sse3"))) @{ return 2; @}
+@end smallexample
+
+Declarations annotated with @code{target} cannot be used in combination with
+declarations annotated with @code{target_clones} in a single multiversioned
+function definition.
+
+@xref{Function Multiversioning} for more details.
+
+@atindex @code{target_version}
+@cindex function multiversioning
+@item target_version (@var{option})
+This attribute applies to functions.
+
+On targets with @code{target_version} function multiversioning
+(AArch64, LoongArch, and RISC-V) in C or C++,
+you can declare multiple functions with
+@code{target_version} or @code{target_clones} attributes to define a function
+version set.
+
+@xref{Function Multiversioning} for more details.
+
+@atindex @code{target_clones}
+@cindex function multiversioning
+@item target_clones (@var{options})
+This attribute applies to functions.
+
+The @code{target_clones} attribute is used to specify that a function
+be cloned into multiple versions compiled with different target options
+than specified on the command line.
+
+For the x86 and PowerPC targets, the supported options and restrictions
+are the same as for the @code{target} attribute.
+For LoongArch, @xref{LoongArch Attributes}, for details of the syntax.
+
+For instance, on an x86, you could compile a function with
+@code{target_clones("sse4.1,avx")}.  GCC creates two function clones,
+one compiled with @option{-msse4.1} and another with @option{-mavx}.
+
+On a PowerPC, you can compile a function with
+@code{target_clones("cpu=power9,default")}.  GCC will create two
+function clones, one compiled with @option{-mcpu=power9} and another
+with the default options.  GCC must be configured to use GLIBC 2.23 or
+newer in order to use the @code{target_clones} attribute.
+
+@code{target_clones} works similarly for targets that support the
+@code{target_version} attribute (AArch64, LoongArch, and RISC-V).
+The attribute takes
+multiple arguments, and generates a versioned clone for each.  A function
+annotated with @code{target_clones} is equivalent to the same function
+duplicated for each valid version string in the argument, where each
+version is instead annotated with @code{target_version}.  This means that a
+@code{target_clones} annotated function definition can be used in combination
+with @code{target_version} annotated functions definitions and other
+@code{target_clones} annotated function definitions.
+
+For these targets the supported options and restrictions are the same as for
+the @code{target_version} attribute.
+
+@xref{Function Multiversioning} for more details.
+
+@atindex @code{tls_model}
+@item tls_model ("@var{tls_model}")
+This attribute applies to variables.
+
+The @code{tls_model} variable attribute sets thread-local storage model
+(@pxref{Thread-Local}) of a particular @code{__thread} variable,
+overriding @option{-ftls-model=} command-line switch on a per-variable
+basis.
+The @var{tls_model} argument should be one of @code{global-dynamic},
+@code{local-dynamic}, @code{initial-exec} or @code{local-exec}.
+
+Not all targets support this attribute.
+
+@atindex @code{transparent_union}
+@cindex transparent unions

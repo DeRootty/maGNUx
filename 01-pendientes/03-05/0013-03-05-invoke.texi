@@ -1,0 +1,41 @@
+@c GCC 16.1.0 | BLOQUE 0013 | 03-05
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 5180-5216 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -Wsuggest-final-types
+Warn about types with virtual methods where code quality would be improved
+if the type were declared with the C++11 @code{final} specifier,
+or, if possible,
+declared in an anonymous namespace. This allows GCC to more aggressively
+devirtualize the polymorphic calls. This warning is more effective with
+link-time optimization,
+where the information about the class hierarchy graph is
+more complete.
+
+@opindex Wno-suggest-final-methods
+@opindex Wsuggest-final-methods
+@item -Wsuggest-final-methods
+Warn about virtual methods where code quality would be improved if the method
+were declared with the C++11 @code{final} specifier,
+or, if possible, its type were
+declared in an anonymous namespace or with the @code{final} specifier.
+This warning is
+more effective with link-time optimization, where the information about the
+class hierarchy graph is more complete. It is recommended to first consider
+suggestions of @option{-Wsuggest-final-types} and then rebuild with new
+annotations.
+
+@opindex Wsuggest-override
+@opindex Wno-suggest-override
+@item -Wsuggest-override
+Warn about overriding virtual functions that are not marked with the
+@code{override} keyword.
+
+@opindex Wconversion-null
+@opindex Wno-conversion-null
+@item -Wno-conversion-null @r{(C++ and Objective-C++ only)}
+Do not warn for conversions between @code{NULL} and non-pointer
+types. @option{-Wconversion-null} is enabled by default.
+
+@end table
+

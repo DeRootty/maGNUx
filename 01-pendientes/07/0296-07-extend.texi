@@ -1,0 +1,136 @@
+@c GCC 16.1.0 | BLOQUE 0296 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 20914-21045 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+__m128i __lsx_vssrarni_w_d (__m128i, __m128i, imm0_63);
+__m128i __lsx_vssrarni_wu_d (__m128i, __m128i, imm0_63);
+__m128i __lsx_vssrarn_w_d (__m128i, __m128i);
+__m128i __lsx_vssrarn_wu_d (__m128i, __m128i);
+__m128i __lsx_vssrln_b_h (__m128i, __m128i);
+__m128i __lsx_vssrln_bu_h (__m128i, __m128i);
+__m128i __lsx_vssrln_hu_w (__m128i, __m128i);
+__m128i __lsx_vssrln_h_w (__m128i, __m128i);
+__m128i __lsx_vssrlni_b_h (__m128i, __m128i, imm0_15);
+__m128i __lsx_vssrlni_bu_h (__m128i, __m128i, imm0_15);
+__m128i __lsx_vssrlni_d_q (__m128i, __m128i, imm0_127);
+__m128i __lsx_vssrlni_du_q (__m128i, __m128i, imm0_127);
+__m128i __lsx_vssrlni_hu_w (__m128i, __m128i, imm0_31);
+__m128i __lsx_vssrlni_h_w (__m128i, __m128i, imm0_31);
+__m128i __lsx_vssrlni_w_d (__m128i, __m128i, imm0_63);
+__m128i __lsx_vssrlni_wu_d (__m128i, __m128i, imm0_63);
+__m128i __lsx_vssrln_w_d (__m128i, __m128i);
+__m128i __lsx_vssrln_wu_d (__m128i, __m128i);
+__m128i __lsx_vssrlrn_b_h (__m128i, __m128i);
+__m128i __lsx_vssrlrn_bu_h (__m128i, __m128i);
+__m128i __lsx_vssrlrn_hu_w (__m128i, __m128i);
+__m128i __lsx_vssrlrn_h_w (__m128i, __m128i);
+__m128i __lsx_vssrlrni_b_h (__m128i, __m128i, imm0_15);
+__m128i __lsx_vssrlrni_bu_h (__m128i, __m128i, imm0_15);
+__m128i __lsx_vssrlrni_d_q (__m128i, __m128i, imm0_127);
+__m128i __lsx_vssrlrni_du_q (__m128i, __m128i, imm0_127);
+__m128i __lsx_vssrlrni_hu_w (__m128i, __m128i, imm0_31);
+__m128i __lsx_vssrlrni_h_w (__m128i, __m128i, imm0_31);
+__m128i __lsx_vssrlrni_w_d (__m128i, __m128i, imm0_63);
+__m128i __lsx_vssrlrni_wu_d (__m128i, __m128i, imm0_63);
+__m128i __lsx_vssrlrn_w_d (__m128i, __m128i);
+__m128i __lsx_vssrlrn_wu_d (__m128i, __m128i);
+__m128i __lsx_vssub_b (__m128i, __m128i);
+__m128i __lsx_vssub_bu (__m128i, __m128i);
+__m128i __lsx_vssub_d (__m128i, __m128i);
+__m128i __lsx_vssub_du (__m128i, __m128i);
+__m128i __lsx_vssub_h (__m128i, __m128i);
+__m128i __lsx_vssub_hu (__m128i, __m128i);
+__m128i __lsx_vssub_w (__m128i, __m128i);
+__m128i __lsx_vssub_wu (__m128i, __m128i);
+void __lsx_vst (__m128i, void *, imm_n2048_2047);
+void __lsx_vstelm_b (__m128i, void *, imm_n128_127, imm0_15);
+void __lsx_vstelm_d (__m128i, void *, imm_n128_127, imm0_1);
+void __lsx_vstelm_h (__m128i, void *, imm_n128_127, imm0_7);
+void __lsx_vstelm_w (__m128i, void *, imm_n128_127, imm0_3);
+void __lsx_vstx (__m128i, void *, long int);
+__m128i __lsx_vsub_b (__m128i, __m128i);
+__m128i __lsx_vsub_d (__m128i, __m128i);
+__m128i __lsx_vsub_h (__m128i, __m128i);
+__m128i __lsx_vsubi_bu (__m128i, imm0_31);
+__m128i __lsx_vsubi_du (__m128i, imm0_31);
+__m128i __lsx_vsubi_hu (__m128i, imm0_31);
+__m128i __lsx_vsubi_wu (__m128i, imm0_31);
+__m128i __lsx_vsub_q (__m128i, __m128i);
+__m128i __lsx_vsub_w (__m128i, __m128i);
+__m128i __lsx_vsubwev_d_w (__m128i, __m128i);
+__m128i __lsx_vsubwev_d_wu (__m128i, __m128i);
+__m128i __lsx_vsubwev_h_b (__m128i, __m128i);
+__m128i __lsx_vsubwev_h_bu (__m128i, __m128i);
+__m128i __lsx_vsubwev_q_d (__m128i, __m128i);
+__m128i __lsx_vsubwev_q_du (__m128i, __m128i);
+__m128i __lsx_vsubwev_w_h (__m128i, __m128i);
+__m128i __lsx_vsubwev_w_hu (__m128i, __m128i);
+__m128i __lsx_vsubwod_d_w (__m128i, __m128i);
+__m128i __lsx_vsubwod_d_wu (__m128i, __m128i);
+__m128i __lsx_vsubwod_h_b (__m128i, __m128i);
+__m128i __lsx_vsubwod_h_bu (__m128i, __m128i);
+__m128i __lsx_vsubwod_q_d (__m128i, __m128i);
+__m128i __lsx_vsubwod_q_du (__m128i, __m128i);
+__m128i __lsx_vsubwod_w_h (__m128i, __m128i);
+__m128i __lsx_vsubwod_w_hu (__m128i, __m128i);
+__m128i __lsx_vxori_b (__m128i, imm0_255);
+__m128i __lsx_vxor_v (__m128i, __m128i);
+@end smallexample
+
+@node Directly-mapped SX Division Builtin Functions
+@subsubsection Directly-mapped SX Division Builtin Functions
+
+These intrinsic functions are available by including @code{lsxintrin.h} and
+using @option{-mfrecipe} and @option{-mlsx}.
+@smallexample
+__m128d __lsx_vfrecipe_d (__m128d);
+__m128 __lsx_vfrecipe_s (__m128);
+__m128d __lsx_vfrsqrte_d (__m128d);
+__m128 __lsx_vfrsqrte_s (__m128);
+@end smallexample
+
+@node LoongArch ASX Vector Intrinsics
+@subsection LoongArch ASX Vector Intrinsics
+
+GCC provides intrinsics to access the LASX (Loongson Advanced SIMD Extension)
+instructions. The interface is made available by including @code{<lasxintrin.h>}
+and using @option{-mlasx}.
+
+@menu
+* ASX Data Types::
+* Directly-mapped ASX Builtin Functions::
+* Directly-mapped ASX Division Builtin Functions::
+* Directly-mapped SX and ASX Conversion Builtin Functions::
+@end menu
+
+@node ASX Data Types
+@subsubsection ASX Data Types
+
+The following vectors typedefs are included in @code{lasxintrin.h}:
+
+@itemize
+@item @code{__m256i}, a 256-bit vector of fixed point;
+@item @code{__m256}, a 256-bit vector of single precision floating point;
+@item @code{__m256d}, a 256-bit vector of double precision floating point.
+@end itemize
+
+Instructions and corresponding built-ins may have additional restrictions and/or
+input/output values manipulated:
+
+@itemize
+@item @code{imm0_1}, an integer literal in range 0 to 1.
+@item @code{imm0_3}, an integer literal in range 0 to 3.
+@item @code{imm0_7}, an integer literal in range 0 to 7.
+@item @code{imm0_15}, an integer literal in range 0 to 15.
+@item @code{imm0_31}, an integer literal in range 0 to 31.
+@item @code{imm0_63}, an integer literal in range 0 to 63.
+@item @code{imm0_127}, an integer literal in range 0 to 127.
+@item @code{imm0_255}, an integer literal in range 0 to 255.
+@item @code{imm_n16_15}, an integer literal in range -16 to 15.
+@item @code{imm_n128_127}, an integer literal in range -128 to 127.
+@item @code{imm_n256_255}, an integer literal in range -256 to 255.
+@item @code{imm_n512_511}, an integer literal in range -512 to 511.
+@item @code{imm_n1024_1023}, an integer literal in range -1024 to 1023.
+@item @code{imm_n2048_2047}, an integer literal in range -2048 to 2047.
+@end itemize
+

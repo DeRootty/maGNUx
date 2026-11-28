@@ -1,0 +1,351 @@
+@c GCC 16.1.0 | BLOQUE 0211 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 8914-9260 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item no_callee_saved_registers
+This attribute applies to functions.
+
+It indicates that the specified function has no
+callee-saved registers. That is, all registers, except for stack and
+frame pointers, can be used as scratch registers. For example, this
+attribute can be used for a function called from the interrupt handler
+assembly stub which will preserve all registers and return from
+interrupt.
+
+@atindex @code{preserve_none}, x86
+@item preserve_none
+This attribute applies to functions.
+
+It is similar to @code{no_callee_saved_registers}, except
+on x86-64, r12, r13, r14, r15, rdi and rsi registers are used for
+integer parameter passing and this calling convention is subject to
+change.
+
+@atindex @code{no_caller_saved_registers}, x86
+@item no_caller_saved_registers
+This attribute applies to functions.
+
+It indicates that the specified function has no
+caller-saved registers. That is, all registers are callee-saved. For
+example, this attribute can be used for a function called from an
+interrupt handler. The compiler generates proper function entry and
+exit sequences to save and restore any modified registers, except for
+the EFLAGS register.  Since GCC doesn't preserve YMM nor ZMM registers,
+@code{no_caller_saved_registers} attribute can't be used on functions
+with AVX enabled.  Note that MMX and x87 registers aren't preserved by
+@code{no_caller_saved_registers} attribute.
+
+@atindex @code{interrupt}, x86
+@item interrupt
+This attribute applies to functions.
+
+It indicates that the specified function is an
+interrupt handler or an exception handler (depending on parameters passed
+to the function, explained further).  The compiler generates function
+entry and exit sequences suitable for use in an interrupt handler when
+this attribute is present.  The @code{IRET} instruction, instead of the
+@code{RET} instruction, is used to return from interrupt handlers.  All
+registers, except for the EFLAGS register which is restored by the
+@code{IRET} instruction, are preserved by the compiler.  Since GCC
+doesn't preserve SSE, MMX nor x87 states, the GCC option
+@option{-mgeneral-regs-only} should be used to compile interrupt and
+exception handlers.
+
+Any interruptible-without-stack-switch code must be compiled with
+@option{-mno-red-zone} since interrupt handlers can and will, because
+of the hardware design, touch the red zone.
+
+An interrupt handler must be declared with a mandatory pointer
+argument:
+
+@smallexample
+struct interrupt_frame;
+
+__attribute__ ((interrupt))
+void
+f (struct interrupt_frame *frame)
+@{
+@}
+@end smallexample
+
+@noindent
+and you must define @code{struct interrupt_frame} as described in the
+processor's manual.
+
+Exception handlers differ from interrupt handlers because the system
+pushes an error code on the stack.  An exception handler declaration is
+similar to that for an interrupt handler, but with a different mandatory
+function signature.  The compiler arranges to pop the error code off the
+stack before the @code{IRET} instruction.
+
+@smallexample
+#ifdef __x86_64__
+typedef unsigned long long int uword_t;
+#else
+typedef unsigned int uword_t;
+#endif
+
+struct interrupt_frame;
+
+__attribute__ ((interrupt))
+void
+f (struct interrupt_frame *frame, uword_t error_code)
+@{
+  ...
+@}
+@end smallexample
+
+Exception handlers should only be used for exceptions that push an error
+code; you should use an interrupt handler in other cases.  The system
+will crash if the wrong kind of handler is used.
+
+@atindex @code{target}, x86
+@item target (@var{options})
+This attribute applies to functions.
+
+As discussed in @ref{Common Attributes}, this attribute
+allows specification of target-specific compilation options.
+
+On the x86, the following options are allowed:
+@table @samp
+@atindex @code{target("3dnow")}, x86
+@item 3dnow
+@itemx no-3dnow
+Enable/disable the generation of the 3DNow!@: instructions.
+
+@atindex @code{target("3dnowa")}, x86
+@item 3dnowa
+@itemx no-3dnowa
+Enable/disable the generation of the enhanced 3DNow!@: instructions.
+
+@atindex @code{target("abm")}, x86
+@item abm
+@itemx no-abm
+Enable/disable the generation of the advanced bit instructions.
+
+@atindex @code{target("adx")}, x86
+@item adx
+@itemx no-adx
+Enable/disable the generation of the ADX instructions.
+
+@atindex @code{target("aes")}, x86
+@item aes
+@itemx no-aes
+Enable/disable the generation of the AES instructions.
+
+@atindex @code{target("avx")}, x86
+@item avx
+@itemx no-avx
+Enable/disable the generation of the AVX instructions.
+
+@atindex @code{target("avx2")}, x86
+@item avx2
+@itemx no-avx2
+Enable/disable the generation of the AVX2 instructions.
+
+@atindex @code{target("avx512bitalg")}, x86
+@item avx512bitalg
+@itemx no-avx512bitalg
+Enable/disable the generation of the AVX512BITALG instructions.
+
+@atindex @code{target("avx512bw")}, x86
+@item avx512bw
+@itemx no-avx512bw
+Enable/disable the generation of the AVX512BW instructions.
+
+@atindex @code{target("avx512cd")}, x86
+@item avx512cd
+@itemx no-avx512cd
+Enable/disable the generation of the AVX512CD instructions.
+
+@atindex @code{target("avx512dq")}, x86
+@item avx512dq
+@itemx no-avx512dq
+Enable/disable the generation of the AVX512DQ instructions.
+
+@atindex @code{target("avx512er")}, x86
+@item avx512er
+@itemx no-avx512er
+Enable/disable the generation of the AVX512ER instructions.
+
+@atindex @code{target("avx512f")}, x86
+@item avx512f
+@itemx no-avx512f
+Enable/disable the generation of the AVX512F instructions.
+
+@atindex @code{target("avx512ifma")}, x86
+@item avx512ifma
+@itemx no-avx512ifma
+Enable/disable the generation of the AVX512IFMA instructions.
+
+@atindex @code{target("avx512vbmi")}, x86
+@item avx512vbmi
+@itemx no-avx512vbmi
+Enable/disable the generation of the AVX512VBMI instructions.
+
+@atindex @code{target("avx512vbmi2")}, x86
+@item avx512vbmi2
+@itemx no-avx512vbmi2
+Enable/disable the generation of the AVX512VBMI2 instructions.
+
+@atindex @code{target("avx512vl")}, x86
+@item avx512vl
+@itemx no-avx512vl
+Enable/disable the generation of the AVX512VL instructions.
+
+@atindex @code{target("avx512vnni")}, x86
+@item avx512vnni
+@itemx no-avx512vnni
+Enable/disable the generation of the AVX512VNNI instructions.
+
+@atindex @code{target("avx512vpopcntdq")}, x86
+@item avx512vpopcntdq
+@itemx no-avx512vpopcntdq
+Enable/disable the generation of the AVX512VPOPCNTDQ instructions.
+
+@atindex @code{target("bmi")}, x86
+@item bmi
+@itemx no-bmi
+Enable/disable the generation of the BMI instructions.
+
+@atindex @code{target("bmi2")}, x86
+@item bmi2
+@itemx no-bmi2
+Enable/disable the generation of the BMI2 instructions.
+
+@atindex @code{target("cldemote")}, x86
+@item cldemote
+@itemx no-cldemote
+Enable/disable the generation of the CLDEMOTE instructions.
+
+@atindex @code{target("clflushopt")}, x86
+@item clflushopt
+@itemx no-clflushopt
+Enable/disable the generation of the CLFLUSHOPT instructions.
+
+@atindex @code{target("clwb")}, x86
+@item clwb
+@itemx no-clwb
+Enable/disable the generation of the CLWB instructions.
+
+@atindex @code{target("clzero")}, x86
+@item clzero
+@itemx no-clzero
+Enable/disable the generation of the CLZERO instructions.
+
+@atindex @code{target("crc32")}, x86
+@item crc32
+@itemx no-crc32
+Enable/disable the generation of the CRC32 instructions.
+
+@atindex @code{target("cx16")}, x86
+@item cx16
+@itemx no-cx16
+Enable/disable the generation of the CMPXCHG16B instructions.
+
+@atindex @code{target("default")}, x86
+@item default
+@xref{Function Multiversioning}, where it is used to specify the
+default function version.
+
+@atindex @code{target("f16c")}, x86
+@item f16c
+@itemx no-f16c
+Enable/disable the generation of the F16C instructions.
+
+@atindex @code{target("fma")}, x86
+@item fma
+@itemx no-fma
+Enable/disable the generation of the FMA instructions.
+
+@atindex @code{target("fma4")}, x86
+@item fma4
+@itemx no-fma4
+Enable/disable the generation of the FMA4 instructions.
+
+@atindex @code{target("fsgsbase")}, x86
+@item fsgsbase
+@itemx no-fsgsbase
+Enable/disable the generation of the FSGSBASE instructions.
+
+@atindex @code{target("fxsr")}, x86
+@item fxsr
+@itemx no-fxsr
+Enable/disable the generation of the FXSR instructions.
+
+@atindex @code{target("gfni")}, x86
+@item gfni
+@itemx no-gfni
+Enable/disable the generation of the GFNI instructions.
+
+@atindex @code{target("hle")}, x86
+@item hle
+@itemx no-hle
+Enable/disable the generation of the HLE instruction prefixes.
+
+@atindex @code{target("lwp")}, x86
+@item lwp
+@itemx no-lwp
+Enable/disable the generation of the LWP instructions.
+
+@atindex @code{target("lzcnt")}, x86
+@item lzcnt
+@itemx no-lzcnt
+Enable/disable the generation of the LZCNT instructions.
+
+@atindex @code{target("mmx")}, x86
+@item mmx
+@itemx no-mmx
+Enable/disable the generation of the MMX instructions.
+
+@atindex @code{target("movbe")}, x86
+@item movbe
+@itemx no-movbe
+Enable/disable the generation of the MOVBE instructions.
+
+@atindex @code{target("movdir64b")}, x86
+@item movdir64b
+@itemx no-movdir64b
+Enable/disable the generation of the MOVDIR64B instructions.
+
+@atindex @code{target("movdiri")}, x86
+@item movdiri
+@itemx no-movdiri
+Enable/disable the generation of the MOVDIRI instructions.
+
+@atindex @code{target("mwait")}, x86
+@item mwait
+@itemx no-mwait
+Enable/disable the generation of the MWAIT and MONITOR instructions.
+
+@atindex @code{target("mwaitx")}, x86
+@item mwaitx
+@itemx no-mwaitx
+Enable/disable the generation of the MWAITX instructions.
+
+@atindex @code{target("pclmul")}, x86
+@item pclmul
+@itemx no-pclmul
+Enable/disable the generation of the PCLMUL instructions.
+
+@atindex @code{target("pconfig")}, x86
+@item pconfig
+@itemx no-pconfig
+Enable/disable the generation of the PCONFIG instructions.
+
+@atindex @code{target("pku")}, x86
+@item pku
+@itemx no-pku
+Enable/disable the generation of the PKU instructions.
+
+@atindex @code{target("popcnt")}, x86
+@item popcnt
+@itemx no-popcnt
+Enable/disable the generation of the POPCNT instruction.
+
+@atindex @code{target("prfchw")}, x86
+@item prfchw
+@itemx no-prfchw
+Enable/disable the generation of the PREFETCHW instruction.
+
+@atindex @code{target("ptwrite")}, x86

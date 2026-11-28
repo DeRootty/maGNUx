@@ -1,0 +1,196 @@
+@c GCC 16.1.0 | BLOQUE 0169 | 03-23
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 37760-37951 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node C++ Modules
+@section C++ Modules
+@cindex speed of compilation
+
+Modules are a C++20 language feature.  As the name suggests, they
+provide a modular compilation system, intending to provide both
+faster builds and better library isolation.  The ``Merging Modules''
+paper @uref{https://wg21.link/p1103}, provides the easiest to read set
+of changes to the standard, although it does not capture later
+changes.
+
+@emph{G++'s modules support is not complete.}  Other than bugs, the
+known missing pieces are:
+
+@table @emph
+
+@item Private Module Fragment
+The Private Module Fragment is recognized, but an error is emitted.
+
+@item Partition definition visibility rules
+Entities may be defined in implementation partitions, and those
+definitions are not available outside of the module.  This is not
+implemented, and the definitions are available to extra-module use.
+
+@item Textual merging of reachable GM entities
+Entities may be multiply defined across different header-units.
+These must be de-duplicated, and this is implemented across imports,
+or when an import redefines a textually-defined entity.  However the
+reverse is not implemented---textually redefining an entity that has
+been defined in an imported header-unit.  A redefinition error is
+emitted.
+
+@end table
+
+Modular compilation is @emph{not} enabled with just the
+@option{-std=c++20} option.  You must explicitly enable it with the
+@option{-fmodules} option.  It is independent of the language
+version selected, although in pre-C++20 versions, it is of course an
+extension.
+
+No new source file suffixes are required.  A few suffixes preferred
+for module interface units by other compilers (e.g. @samp{.ixx},
+@samp{.cppm}) are supported, but files with these suffixes are treated
+the same as any other C++ source file.
+
+Compiling a module interface unit produces an additional output (to
+the assembly or object file), called a Compiled Module Interface
+(CMI).  This encodes the exported declarations of the module.
+Importing a module reads in the CMI.  The import graph is a Directed
+Acyclic Graph (DAG).  You must build imports before the importer.
+
+Header files may themselves be compiled to header units, which are a
+transitional ability aiming at faster compilation.  The
+@option{-fmodule-header} option is used to enable this, and implies
+the @option{-fmodules} option.  These CMIs are named by the fully
+resolved underlying header file, and thus may be a complete pathname
+containing subdirectories.  If the header file is found at an absolute
+pathname, the CMI location is still relative to a CMI root directory.
+
+As header files often have no suffix, you commonly have to specify a
+@option{-x} option to tell the compiler the source is a header file.
+You may use @option{-x c++-header}, @option{-x c++-user-header} or
+@option{-x c++-system-header}.  When used in conjunction with
+@option{-fmodules}, these all imply an appropriate
+@option{-fmodule-header} option.  The latter two variants use the
+user or system include path to search for the file specified.  This
+allows you to, for instance, compile standard library header files as
+header units, without needing to know exactly where they are
+installed.  Specifying the language as one of these variants also
+inhibits output of the object file, as header files have no associated
+object file.
+
+Alternately, or for a module interface unit in an installed location,
+you can use @option{-fsearch-include-path} to specify that the main
+source file should be found on the include path rather than the
+current directory.
+
+Header units can be used in much the same way as precompiled headers
+(@pxref{Precompiled Headers}), but with fewer restrictions: an
+#include that is translated to a header unit import can appear at any
+point in the source file, and multiple header units can be used
+together.  In particular, the @option{-include} strategy works: with
+the bits/stdc++.h header used for libstdc++ precompiled headers you
+can
+
+@smallexample
+g++ -fmodules -x c++-system-header -c bits/stdc++.h
+g++ -fmodules -include bits/stdc++.h mycode.C
+@end smallexample
+
+and any standard library #includes in mycode.C will be skipped,
+because the import brought in the whole library.  This can be a simple
+way to use modules to speed up compilation without any code changes.
+
+But for the standard library in particular this is unnecessary: if a
+header unit has been built for the libstdc++ @samp{bits/stdc++.h}
+header, the compiler will translate an @samp{#include} of any
+importable standard library header into an import of that header unit,
+speeding up compilation without needing to specify @samp{-include}.
+Note that the @samp{bits/stdc++.h} header unit is also built by the
+@option{--compile-std-module} option.
+
+The @option{-fmodule-only} option disables generation of the
+associated object file for compiling a module interface.  Only the CMI
+is generated.  This option is implied when using the
+@option{-fmodule-header} option.
+
+The @option{-flang-info-include-translate} and
+@option{-flang-info-include-translate-not} options notes whether
+include translation occurs or not.  With no argument, the first will
+note all include translation.  The second will note all
+non-translations of include files not known to intentionally be
+textual.  With an argument, queries about include translation of a
+header files with that particular trailing pathname are noted.  You
+may repeat this form to cover several different header files.  This
+option may be helpful in determining whether include translation is
+happening---if it is working correctly, it behaves as if it isn't
+there at all.
+
+The @option{-flang-info-module-cmi} option can be used to determine
+where the compiler is reading a CMI from.  Without the option, the
+compiler is silent when such a read is successful.  This option has an
+optional argument, which will restrict the notification to just the
+set of named modules or header units specified.
+
+The @option{-Winvalid-imported-macros} option causes all imported macros
+to be resolved at the end of compilation.  Without this, imported
+macros are only resolved when expanded or (re)defined.  This option
+detects conflicting import definitions for all macros.
+
+For details of the @option{-fmodule-mapper} family of options,
+@pxref{C++ Module Mapper}.
+
+@menu
+* C++ Module Mapper::       Module Mapper
+* C++ Module Preprocessing::  Module Preprocessing
+* C++ Compiled Module Interface:: Compiled Module Interface
+@end menu
+
+@node C++ Module Mapper
+@subsection Module Mapper
+@cindex C++ Module Mapper
+
+A module mapper provides a server or file that the compiler queries to
+determine the mapping between module names and CMI files.  It is also
+used to build CMIs on demand.  @emph{Mapper functionality is in its
+infancy and is intended for experimentation with build system
+interactions.}
+
+You can specify a mapper with the @option{-fmodule-mapper=@var{val}}
+option or @env{CXX_MODULE_MAPPER} environment variable.  The value may
+have one of the following forms:
+
+@table @gcctabopt
+
+@item @r{[}@var{hostname}@r{]}:@var{port}@r{[}?@var{ident}@r{]}
+An optional hostname and a numeric port number to connect to.  If the
+hostname is omitted, the loopback address is used.  If the hostname
+corresponds to multiple IPV6 addresses, these are tried in turn, until
+one is successful.  If your host lacks IPv6, this form is
+non-functional.  If you must use IPv4 use
+@option{-fmodule-mapper='|ncat @var{ipv4host} @var{port}'}.
+
+@item =@var{socket}@r{[}?@var{ident}@r{]}
+A local domain socket.  If your host lacks local domain sockets, this
+form is non-functional.
+
+@item |@var{program}@r{[}?@var{ident}@r{]} @r{[}@var{args...}@r{]}
+A program to spawn, and communicate with on its stdin/stdout streams.
+Your @var{PATH} environment variable is searched for the program.
+Arguments are separated by space characters, (it is not possible for
+one of the arguments delivered to the program to contain a space).  An
+exception is if @var{program} begins with @@.  In that case
+@var{program} (sans @@) is looked for in the compiler's internal
+binary directory.  Thus the sample mapper-server can be specified
+with @code{@@g++-mapper-server}.
+
+@item <>@r{[}?@var{ident}@r{]}
+@item <>@var{inout}@r{[}?@var{ident}@r{]}
+@item <@var{in}>@var{out}@r{[}?@var{ident}@r{]}
+Named pipes or file descriptors to communicate over.  The first form,
+@option{<>}, communicates over stdin and stdout.  The other forms
+allow you to specify a file descriptor or name a pipe.  A numeric value
+is interpreted as a file descriptor, otherwise named pipe is opened.
+The second form specifies a bidirectional pipe and the last form
+allows specifying two independent pipes.  Using file descriptors
+directly in this manner is fragile in general, as it can require the
+cooperation of intermediate processes.  In particular using stdin &
+stdout is fraught with danger as other compiler options might also
+cause the compiler to read stdin or write stdout, and it can have
+unfortunate interactions with signal delivery from the terminal.
+

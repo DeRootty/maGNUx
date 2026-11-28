@@ -1,0 +1,239 @@
+@c GCC 16.1.0 | BLOQUE 0066 | 03-12
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 16584-16818 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -fvpt
+If combined with @option{-fprofile-arcs}, this option instructs the compiler
+to add code to gather information about values of expressions.
+
+With @option{-fbranch-probabilities}, it reads back the data gathered
+and actually performs the optimizations based on them.
+Currently the optimizations include specialization of division operations
+using the knowledge about the value of the denominator.
+
+Enabled with @option{-fprofile-use} and @option{-fauto-profile}.
+
+@opindex frename-registers
+@opindex fno-rename-registers
+@item -frename-registers
+Attempt to avoid false dependencies in scheduled code by making use
+of registers left over after register allocation.  This optimization
+most benefits processors with lots of registers.  Depending on the
+debug information format adopted by the target, however, it can
+make debugging impossible, since variables no longer stay in
+a ``home register''.
+
+Enabled by default with @option{-funroll-loops}.
+
+@opindex fschedule-fusion
+@opindex fno-schedule-fusion
+@item -fschedule-fusion
+Performs a target dependent pass over the instruction stream to schedule
+instructions of same type together because target machine can execute them
+more efficiently if they are adjacent to each other in the instruction flow.
+
+Enabled at levels @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex fdep-fusion
+@opindex fno-dep-fusion
+@item -fdep-fusion
+Detect macro-op fusible pairs consisting of single-use instructions and their
+uses, and place such pairs together in the instruction stream to increase
+fusion opportunities in hardware.  This pass is executed once before register
+allocation, and another time before register renaming.
+
+Enabled at levels @option{-O2}, @option{-O3}, @option{-Os}.
+
+@opindex ftracer
+@opindex fno-tracer
+@item -ftracer
+Perform tail duplication to enlarge superblock size.  This transformation
+simplifies the control flow of the function allowing other optimizations to do
+a better job.
+
+Enabled by @option{-fprofile-use} and @option{-fauto-profile}.
+
+@opindex funroll-loops
+@opindex fno-unroll-loops
+@item -funroll-loops
+Unroll loops whose number of iterations can be determined at compile time or
+upon entry to the loop.  @option{-funroll-loops} implies
+@option{-frerun-cse-after-loop}, @option{-fweb} and @option{-frename-registers}.
+It also turns on complete loop peeling (i.e.@: complete removal of loops with
+a small constant number of iterations).  This option makes code larger, and may
+or may not make it run faster.
+
+Enabled by @option{-fprofile-use} and @option{-fauto-profile}.
+
+@opindex funroll-all-loops
+@opindex fno-unroll-all-loops
+@item -funroll-all-loops
+Unroll all loops, even if their number of iterations is uncertain when
+the loop is entered.  This usually makes programs run more slowly.
+@option{-funroll-all-loops} implies the same options as
+@option{-funroll-loops}.
+
+@opindex fpeel-loops
+@opindex fno-peel-loops
+@item -fpeel-loops
+Peels loops for which there is enough information that they do not
+roll much (from profile feedback or static analysis).  It also turns on
+complete loop peeling (i.e.@: complete removal of loops with small constant
+number of iterations).
+
+Enabled by @option{-O3}, @option{-fprofile-use}, and @option{-fauto-profile}.
+
+@opindex fno-malloc-dce
+@opindex fmalloc-dce
+@item -fmalloc-dce
+Control whether @code{malloc} (and its variants such as @code{calloc} or
+@code{strdup}),  can be optimized away provided its return value is only used
+as a parameter of @code{free} call or compared with @code{NULL}.  If
+@option{-fmalloc-dce=1} is used, only calls to @code{free} are allowed while
+with @option{-fmalloc-dce=2} also comparisons with @code{NULL} pointer are
+considered safe to remove.
+
+The default is @option{-fmalloc-dce=2}.  See also @option{-fallocation-dce}.
+
+@opindex fmove-loop-invariants
+@opindex fno-move-loop-invariants
+@item -fmove-loop-invariants
+Enables the loop invariant motion pass in the RTL loop optimizer.  Enabled
+at level @option{-O1} and higher, except for @option{-Og}.
+
+@opindex fmove-loop-stores
+@opindex fno-move-loop-stores
+@item -fmove-loop-stores
+Enables the loop store motion pass in the GIMPLE loop optimizer.  This
+moves invariant stores to after the end of the loop in exchange for
+carrying the stored value in a register across the iteration.
+Note for this option to have an effect @option{-ftree-loop-im} has to
+be enabled as well.  Enabled at level @option{-O1} and higher, except
+for @option{-Og}.
+
+@opindex fsplit-loops
+@opindex fno-split-loops
+@item -fsplit-loops
+Split a loop into two if it contains a condition that's always true
+for one side of the iteration space and false for the other.
+
+Enabled by @option{-fprofile-use} and @option{-fauto-profile}.
+
+@opindex funswitch-loops
+@opindex fno-unswitch-loops
+@item -funswitch-loops
+Move branches with loop invariant conditions out of the loop, with duplicates
+of the loop on both branches (modified according to result of the condition).
+
+Enabled by @option{-fprofile-use} and @option{-fauto-profile}.
+
+@opindex fversion-loops-for-strides
+@opindex fno-version-loops-for-strides
+@item -fversion-loops-for-strides
+If a loop iterates over an array with a variable stride, create another
+version of the loop that assumes the stride is always one.  For example:
+
+@smallexample
+for (int i = 0; i < n; ++i)
+  x[i * stride] = @dots{};
+@end smallexample
+
+becomes:
+
+@smallexample
+if (stride == 1)
+  for (int i = 0; i < n; ++i)
+    x[i] = @dots{};
+else
+  for (int i = 0; i < n; ++i)
+    x[i * stride] = @dots{};
+@end smallexample
+
+This is particularly useful for assumed-shape arrays in Fortran where
+(for example) it allows better vectorization assuming contiguous accesses.
+This flag is enabled by default at @option{-O3}.
+It is also enabled by @option{-fprofile-use} and @option{-fauto-profile}.
+
+@opindex ffunction-sections
+@opindex fno-function-sections
+@opindex fdata-sections
+@opindex fno-data-sections
+@item -ffunction-sections
+@itemx -fdata-sections
+Place each function or data item into its own section in the output
+file if the target supports arbitrary sections.  The name of the
+function or the name of the data item determines the section's name
+in the output file.
+
+Use these options on systems where the linker can perform optimizations to
+improve locality of reference in the instruction space.  Most systems using the
+ELF object format have linkers with such optimizations.  On AIX, the linker
+rearranges sections (CSECTs) based on the call graph.  The performance impact
+varies.
+
+Together with a linker garbage collection (linker @option{--gc-sections}
+option) these options may lead to smaller statically-linked executables (after
+stripping).
+
+On ELF/DWARF systems these options do not degenerate the quality of the debug
+information.  There could be issues with other object files/debug info formats.
+
+Only use these options when there are significant benefits from doing so.  When
+you specify these options, the assembler and linker create larger object and
+executable files and are also slower.  These options affect code generation.
+They prevent optimizations by the compiler and assembler using relative
+locations inside a translation unit since the locations are unknown until
+link time.  An example of such an optimization is relaxing calls to short call
+instructions.
+
+@opindex fstdarg-opt
+@opindex fno-stdarg-opt
+@item -fstdarg-opt
+Optimize the prologue of variadic argument functions with respect to usage of
+those arguments.
+
+@opindex fsection-anchors
+@opindex fno-section-anchors
+@item -fsection-anchors
+Try to reduce the number of symbolic address calculations by using
+shared ``anchor'' symbols to address nearby objects.  This transformation
+can help to reduce the number of GOT entries and GOT accesses on some
+targets.
+
+For example, the implementation of the following function @code{foo}:
+
+@smallexample
+static int a, b, c;
+int foo (void) @{ return a + b + c; @}
+@end smallexample
+
+@noindent
+usually calculates the addresses of all three variables, but if you
+compile it with @option{-fsection-anchors}, it accesses the variables
+from a common anchor point instead.  The effect is similar to the
+following pseudocode (which isn't valid C):
+
+@smallexample
+int foo (void)
+@{
+  register int *xr = &x;
+  return xr[&a - &x] + xr[&b - &x] + xr[&c - &x];
+@}
+@end smallexample
+
+Not all targets support this option.
+
+@opindex fzero-call-used-regs
+@item -fzero-call-used-regs=@var{choice}
+Zero call-used registers at function return to increase program
+security by either mitigating Return-Oriented Programming (ROP)
+attacks or preventing information leakage through registers.
+
+The possible values of @var{choice} are the same as for the
+@code{zero_call_used_regs} attribute (@pxref{Common Attributes}).
+The default is @samp{skip}.
+
+You can control this behavior for a specific function by using the function
+attribute @code{zero_call_used_regs} (@pxref{Common Attributes}).
+@end table
+

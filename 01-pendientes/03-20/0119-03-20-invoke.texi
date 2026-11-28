@@ -1,0 +1,258 @@
+@c GCC 16.1.0 | BLOQUE 0119 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 27026-27279 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -mgnu-ld
+Use options specific to GNU @command{ld}.
+This passes @option{-shared} to @command{ld} when
+building a shared library.  It is the default when GCC is configured,
+explicitly or implicitly, with the GNU linker.  This option does not
+affect which @command{ld} is called; it only changes what parameters
+are passed to that @command{ld}.
+The @command{ld} that is called is determined by the
+@option{--with-ld} configure option, GCC's program search path, and
+finally by the user's @env{PATH}.  The linker used by GCC can be printed
+using @samp{which `gcc -print-prog-name=ld`}.  This option is only available
+on the 64-bit HP-UX GCC, i.e.@: configured with @samp{hppa*64*-*-hpux*}.
+
+@opindex mhp-ld
+@item -mhp-ld
+Use options specific to HP @command{ld}.
+This passes @option{-b} to @command{ld} when building
+a shared library and passes @option{+Accept TypeMismatch} to @command{ld} on all
+links.  It is the default when GCC is configured, explicitly or
+implicitly, with the HP linker.  This option does not affect
+which @command{ld} is called; it only changes what parameters are passed to that
+@command{ld}.
+The @command{ld} that is called is determined by the @option{--with-ld}
+configure option, GCC's program search path, and finally by the user's
+@env{PATH}.  The linker used by GCC can be printed using @samp{which
+`gcc -print-prog-name=ld`}.  This option is only available on the 64-bit
+HP-UX GCC, i.e.@: configured with @samp{hppa*64*-*-hpux*}.
+
+@opindex mlinker-opt
+@item -mlinker-opt
+Enable the optimization pass in the HP-UX linker.  Note this makes symbolic
+debugging impossible.
+
+@opindex mno-long-calls
+@opindex mlong-calls
+@item -mlong-calls
+Generate code that uses long call sequences.  This ensures that a call
+is always able to reach linker generated stubs.  The default is to generate
+long calls only when the distance from the call site to the beginning
+of the function or translation unit, as the case may be, exceeds a
+predefined limit set by the branch type being used.  The limits for
+normal calls are 7,600,000 and 240,000 bytes, respectively for the
+PA 2.0 and PA 1.X architectures.  Sibling calls are always limited at
+240,000 bytes.
+
+Distances are measured from the beginning of functions when using the
+@option{-ffunction-sections} option, or when using the @option{-mgas}
+and @option{-mno-portable-runtime} options together under HP-UX with
+the SOM linker.
+
+It is normally not desirable to use this option as it degrades
+performance.  However, it may be useful in large applications,
+particularly when partial linking is used to build the application.
+
+The types of long calls used depends on the capabilities of the
+assembler and linker, and the type of code being generated.  The
+impact on systems that support long absolute calls, and long PIC
+symbol-difference or PC-relative calls should be relatively small.
+However, an indirect call is used on 32-bit ELF systems in PIC code
+and it is quite long.
+
+@opindex mlong-load-store
+@opindex mno-long-load-store
+@item -mlong-load-store
+Generate 3-instruction load and store sequences as sometimes required by
+the HP-UX 10 linker.  This is equivalent to the @samp{+k} option to
+the HP compilers.
+
+@opindex mno-space-regs
+@opindex mspace-regs
+@item -mno-space-regs
+Generate code that assumes the target has no space registers.  This allows
+GCC to generate faster indirect calls and use unscaled index address modes.
+
+Such code is suitable for level 0 PA systems and kernels.
+
+@opindex mordered
+@opindex mno-ordered
+@item -mordered
+Assume memory references are ordered and barriers are not needed.
+
+@opindex mportable-runtime
+@opindex mno-portable-runtime
+@item -mportable-runtime
+Use the portable calling conventions proposed by HP for ELF systems.
+
+@opindex mschedule
+@item -mschedule=@var{cpu-type}
+Schedule code according to the constraints for the machine type
+@var{cpu-type}.  The choices for @var{cpu-type} are @samp{700}
+@samp{7100}, @samp{7100LC}, @samp{7200}, @samp{7300} and @samp{8000}.  Refer
+to @file{/usr/lib/sched.models} on an HP-UX system to determine the
+proper scheduling option for your machine.  The default scheduling is
+@samp{8000}.
+
+@opindex msio
+@opindex mwsio
+@item -msio
+@itemx -mwsio
+The @option{-msio} generates the predefine, @code{_SIO}, for server IO@.
+The default is
+@option{-mwsio}.  This generates the predefines, @code{__hp9000s700},
+@code{__hp9000s700__} and @code{_WSIO}, for workstation IO@.  These
+options are available under HP-UX and HI-UX@.
+
+@opindex msoft-float
+@opindex mno-soft-float
+@item -msoft-float
+Generate output containing library calls for floating point.
+@strong{Warning:} the requisite libraries are not available for all HPPA
+targets.  Normally the facilities of the machine's usual C compiler are
+used, but this cannot be done directly in cross-compilation.  You must make
+your own arrangements to provide suitable library functions for
+cross-compilation.
+
+@option{-msoft-float} changes the calling convention in the output file;
+therefore, it is only useful if you compile @emph{all} of a program with
+this option.  In particular, you need to compile @file{libgcc.a}, the
+library that comes with GCC, with @option{-msoft-float} in order for
+this to work.
+
+@opindex msoft-mult
+@opindex mno-soft-mult
+@item -msoft-mult
+Use software integer multiplication.
+
+This disables the use of the @code{xmpyu} instruction.
+
+@opindex march
+@item -munix=@var{unix-std}
+Generate compiler predefines and select a startfile for the specified
+UNIX standard.  The choices for @var{unix-std} are @samp{93}, @samp{95}
+and @samp{98}.  @samp{93} is supported on all HP-UX versions.  @samp{95}
+is available on HP-UX 10.10 and later.  @samp{98} is available on HP-UX
+11.11 and later.  The default values are @samp{93} for HP-UX 10.00,
+@samp{95} for HP-UX 10.10 though to 11.00, and @samp{98} for HP-UX 11.11
+and later.
+
+@option{-munix=93} provides the same predefines as GCC 3.3 and 3.4.
+@option{-munix=95} provides additional predefines for @code{XOPEN_UNIX}
+and @code{_XOPEN_SOURCE_EXTENDED}, and the startfile @file{unix95.o}.
+@option{-munix=98} provides additional predefines for @code{_XOPEN_UNIX},
+@code{_XOPEN_SOURCE_EXTENDED}, @code{_INCLUDE__STDC_A1_SOURCE} and
+@code{_INCLUDE_XOPEN_SOURCE_500}, and the startfile @file{unix98.o}.
+
+It is @emph{important} to note that this option changes the interfaces
+for various library routines.  It also affects the operational behavior
+of the C library.  Thus, @emph{extreme} care is needed in using this
+option.
+
+Library code that is intended to operate with more than one UNIX
+standard must test, set and restore the variable @code{__xpg4_extended_mask}
+as appropriate.  Most GNU software doesn't provide this capability.
+
+@opindex nolibdld
+@item -nolibdld
+Suppress the generation of link options to search @file{libdld.sl} when the
+@option{-static} option is specified on HP-UX 10 and later.
+
+@opindex static
+@item -static
+The HP-UX C library implementation of @code{setlocale} has a dependency on
+@file{libdld.sl}.  There isn't an archive version of @file{libdld.sl}.  Thus,
+when the @option{-static} option is specified, special link options
+are needed to resolve this dependency.
+
+On HP-UX 10 and later, the GCC driver adds the necessary options to
+link with @file{libdld.sl} when the @option{-static} option is specified.
+This causes the resulting binary to be dynamic.  On the 64-bit port,
+the linkers generate dynamic binaries by default in any case.  The
+@option{-nolibdld} option can be used to prevent the GCC driver from
+adding these link options.
+
+@opindex threads
+@item -threads
+Add support for multithreading with the @dfn{dce thread} library
+under HP-UX@.  This option sets flags for both the preprocessor and
+linker.
+@end table
+
+@node IA-64 Options
+@subsection IA-64 Options
+@cindex IA-64 Options
+
+These are the @samp{-m} options defined for the Intel IA-64 architecture.
+
+@table @gcctabopt
+@opindex mbig-endian
+@item -mbig-endian
+Generate code for a big-endian target.  This is the default for HP-UX@.
+
+@opindex mlittle-endian
+@item -mlittle-endian
+Generate code for a little-endian target.  This is the default for AIX5
+and GNU/Linux.
+
+@opindex mgnu-as
+@opindex mno-gnu-as
+@item -mgnu-as
+@itemx -mno-gnu-as
+Generate (or don't) code for the GNU assembler.  This is the default.
+@c Also, this is the default if the configure option @option{--with-gnu-as}
+@c is used.
+
+@opindex mgnu-ld
+@opindex mno-gnu-ld
+@item -mgnu-ld
+@itemx -mno-gnu-ld
+Generate (or don't) code for the GNU linker.  This is the default.
+@c Also, this is the default if the configure option @option{--with-gnu-ld}
+@c is used.
+
+@opindex mno-pic
+@item -mno-pic
+Generate code that does not use a global pointer register.  The result
+is not position independent code, and violates the IA-64 ABI@.
+
+@opindex mvolatile-asm-stop
+@opindex mno-volatile-asm-stop
+@item -mvolatile-asm-stop
+@itemx -mno-volatile-asm-stop
+Generate (or don't) a stop bit immediately before and after volatile asm
+statements.
+
+@opindex mregister-names
+@opindex mno-register-names
+@item -mregister-names
+@itemx -mno-register-names
+Generate (or don't) @samp{in}, @samp{loc}, and @samp{out} register names for
+the stacked registers.  This may make assembler output more readable.
+
+@opindex mno-sdata
+@opindex msdata
+@item -mno-sdata
+@itemx -msdata
+Disable (or enable) optimizations that use the small data section.  This may
+be useful for working around optimizer bugs.
+
+@opindex mconstant-gp
+@item -mconstant-gp
+Generate code that uses a single constant global pointer value.  This is
+useful when compiling kernel code.
+
+@opindex mauto-pic
+@item -mauto-pic
+Generate code that is self-relocatable.  This implies @option{-mconstant-gp}.
+This is useful when compiling firmware code.
+
+@opindex minline-float-divide-min-latency
+@item -minline-float-divide-min-latency
+Generate code for inline divides of floating-point values
+using the minimum latency algorithm.
+
+@opindex minline-float-divide-max-throughput

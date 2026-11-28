@@ -1,0 +1,253 @@
+@c GCC 16.1.0 | BLOQUE 0207 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 7811-8059 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item long_call
+@itemx short_call
+@itemx near
+@itemx far
+These attributes apply to functions.
+
+They specify how a particular function is called on MIPS@.
+The attributes override the @option{-mlong-calls} (@pxref{MIPS Options})
+command-line switch.  The @code{long_call} and @code{far} attributes are
+synonyms, and cause the compiler to always call
+the function by first loading its address into a register, and then using
+the contents of that register.  The @code{short_call} and @code{near}
+attributes are synonyms, and have the opposite
+effect; they specify that non-PIC calls should be made using the more
+efficient @code{jal} instruction.
+
+@atindex @code{mips16}, MIPS
+@atindex @code{nomips16}, MIPS
+@item mips16
+@itemx nomips16
+
+This attribute applies to functions.
+
+On MIPS targets, you can use the @code{mips16} and @code{nomips16}
+function attributes to locally select or turn off MIPS16 code generation.
+A function with the @code{mips16} attribute is emitted as MIPS16 code,
+while MIPS16 code generation is disabled for functions with the
+@code{nomips16} attribute.  These attributes override the
+@option{-mips16} and @option{-mno-mips16} options on the command line
+(@pxref{MIPS Options}).
+
+When compiling files containing mixed MIPS16 and non-MIPS16 code, the
+preprocessor symbol @code{__mips16} reflects the setting on the command line,
+not that within individual functions.  Mixed MIPS16 and non-MIPS16 code
+may interact badly with some GCC extensions such as @code{__builtin_apply}
+(@pxref{Constructing Calls}).
+
+@atindex @code{micromips}, MIPS
+@atindex @code{nomicromips}, MIPS
+@item micromips, MIPS
+@itemx nomicromips, MIPS
+This attribute applies to functions.
+
+On MIPS targets, you can use the @code{micromips} and @code{nomicromips}
+function attributes to locally select or turn off microMIPS code generation.
+A function with the @code{micromips} attribute is emitted as microMIPS code,
+while microMIPS code generation is disabled for functions with the
+@code{nomicromips} attribute.  These attributes override the
+@option{-mmicromips} and @option{-mno-micromips} options on the command line
+(@pxref{MIPS Options}).
+
+When compiling files containing mixed microMIPS and non-microMIPS code, the
+preprocessor symbol @code{__mips_micromips} reflects the setting on the
+command line,
+not that within individual functions.  Mixed microMIPS and non-microMIPS code
+may interact badly with some GCC extensions such as @code{__builtin_apply}
+(@pxref{Constructing Calls}).
+
+@atindex @code{nocompression}, MIPS
+@item nocompression
+This attribute applies to functions.
+
+On MIPS targets, you can use the @code{nocompression} function attribute
+to locally turn off MIPS16 and microMIPS code generation.  This attribute
+overrides the @option{-mips16} and @option{-mmicromips} options on the
+command line (@pxref{MIPS Options}).
+
+@atindex @code{use_hazard_barrier_return}, MIPS
+@item use_hazard_barrier_return
+This attribute applies to functions.
+
+It instructs the compiler to generate a hazard barrier
+return that clears all execution and instruction hazards while returning,
+instead of generating a normal return instruction.
+
+@item code_readable
+@atindex @code{code_readable}, MIPS
+This attribute applies to functions.
+
+For MIPS targets that support PC-relative addressing modes, this attribute
+can be used to control how an object is addressed.  The attribute takes
+a single optional argument:
+
+@table @samp
+@item no
+The function should not read the instruction stream as data.
+@item yes
+The function can read the instruction stream as data.
+@item pcrel
+The function can read the instruction stream in a pc-relative mode.
+@end table
+
+If there is no argument supplied, the default of @code{"yes"} applies.
+@end table
+
+@anchor{MSP430 Function Attributes}
+@anchor{MSP430 Variable Attributes}
+@node MSP430 Attributes
+@subsubsection MSP430 Attributes
+
+These attributes are supported by the MSP430 back end:
+
+@table @code
+@atindex @code{critical}, MSP430
+@item critical
+This attribute applies to functions.
+
+Critical functions disable interrupts upon entry and restore the
+previous interrupt state upon exit.  Critical functions cannot also
+have the @code{naked}, @code{reentrant} or @code{interrupt} attributes.
+
+The MSP430 hardware ensures that interrupts are disabled on entry to
+@code{interrupt} functions, and restores the previous interrupt state
+on exit. The @code{critical} attribute is therefore redundant on
+@code{interrupt} functions.
+
+@atindex @code{interrupt}, MSP430
+@item interrupt
+This attribute applies to functions.
+
+It indicates
+that the specified function is an interrupt handler.  The compiler generates
+function entry and exit sequences suitable for use in an interrupt handler
+when this attribute is present.
+
+You can provide an argument to the interrupt
+attribute which specifies a name or number.  If the argument is a
+number it indicates the slot in the interrupt vector table (0 - 31) to
+which this handler should be assigned.  If the argument is a name it
+is treated as a symbolic name for the vector slot.  These names should
+match up with appropriate entries in the linker script.  By default
+the names @code{watchdog} for vector 26, @code{nmi} for vector 30 and
+@code{reset} for vector 31 are recognized.
+
+@atindex @code{reentrant}, MSP430
+@item reentrant
+This attribute applies to functions.
+
+Reentrant functions disable interrupts upon entry and enable them
+upon exit.  Reentrant functions cannot also have the @code{naked}
+or @code{critical} attributes.  They can have the @code{interrupt}
+attribute.
+
+@atindex @code{wakeup}, MSP430
+@item wakeup
+This attribute only applies to interrupt functions.  It is silently
+ignored if applied to a non-interrupt function.
+
+A wakeup interrupt
+function rouses the processor from any low-power state that it
+might be in when the function exits.
+
+@atindex @code{lower}, MSP430
+@atindex @code{upper}, MSP430
+@atindex @code{either}, MSP430
+@item lower
+@itemx upper
+@itemx either
+These attributes apply to functions and variables.
+
+On the MSP430 target these attributes can be used to specify whether
+the function or variable should be placed into low memory, high
+memory, or the placement should be left to the linker to decide.  The
+attributes are only significant if compiling for the MSP430X
+architecture in the large memory model.
+
+The attributes work in conjunction with a linker script that has been
+augmented to specify where to place sections with a @code{.lower} and
+a @code{.upper} prefix.  So, for example, as well as placing the
+@code{.data} section, the script also specifies the placement of a
+@code{.lower.data} and a @code{.upper.data} section.  The intention
+is that @code{lower} sections are placed into a small but easier to
+access memory region and the upper sections are placed into a larger, but
+slower to access, region.
+
+The @code{either} attribute is special.  It tells the linker to place
+the object into the corresponding @code{lower} section if there is
+room for it.  If there is insufficient room then the object is placed
+into the corresponding @code{upper} section instead.  Note that the
+placement algorithm is not very sophisticated.  It does not attempt to
+find an optimal packing of the @code{lower} sections.  It just makes
+one pass over the objects and does the best that it can.  Using the
+@option{-ffunction-sections} and @option{-fdata-sections} command-line
+options can help the packing, however, since they produce smaller,
+easier to pack regions.
+
+The @code{lower} attribute has some additional functionality when applied
+to variables.
+
+If @option{-mdata-region=}@{@code{upper,either,none}@} has been passed, or
+the @code{section} attribute is applied to a variable, the compiler
+generates 430X instructions to handle it.  This is because the compiler has
+to assume that the variable could get placed in the upper memory region
+(above address 0xFFFF).  Marking the variable with the @code{lower} attribute
+informs the compiler that the variable is placed in lower memory so it
+is safe to use 430 instructions to handle it.
+In the case of the @code{section} attribute, the section name given
+is used, and the @code{.lower} prefix is not added.
+
+@end table
+
+@anchor{NDS32 Function Attributes}
+@node NDS32 Attributes
+@subsubsection NDS32 Attributes
+
+These attributes are supported by the NDS32 back end:
+
+@table @code
+@atindex @code{exception}, NDS32
+@cindex exception handler functions, NDS32
+@item exception
+This attribute applies to functions.
+
+Use this attribute on the NDS32 target to indicate that the specified function
+is an exception handler.  The compiler will generate corresponding sections
+for use in an exception handler.
+
+@atindex @code{interrupt}, NDS32
+@item interrupt
+This attribute applies to functions.
+
+On NDS32 target, this attribute indicates that the specified function
+is an interrupt handler.  The compiler generates corresponding sections
+for use in an interrupt handler.  You can use the following attributes
+to modify the behavior:
+@table @code
+@atindex @code{nested}, NDS32
+@item nested
+This interrupt service routine is interruptible.
+@atindex @code{not_nested}, NDS32
+@item not_nested
+This interrupt service routine is not interruptible.
+@atindex @code{nested_ready}, NDS32
+@item nested_ready
+This interrupt service routine is interruptible after @code{PSW.GIE}
+(global interrupt enable) is set.  This allows interrupt service routine to
+finish some short critical code before enabling interrupts.
+@atindex @code{save_all}, NDS32
+@item save_all
+The system will help save all registers into stack before entering
+interrupt handler.
+@atindex @code{partial_save}, NDS32
+@item partial_save
+The system will help save caller registers into stack before entering
+interrupt handler.
+@end table
+
+@atindex @code{reset}, NDS32
+@cindex reset handler functions

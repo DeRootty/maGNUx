@@ -1,0 +1,20 @@
+@c GCC 16.1.0 | BLOQUE 0235 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 1742-1757 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@ifclear INTERNALS
+
+So the first alternative for the 68000's logical-or could be written as 
+@code{"+m" (output) : "ir" (input)}.  The second could be @code{"+r" 
+(output): "irm" (input)}.  However, the fact that two memory locations 
+cannot be used in a single instruction prevents simply using @code{"+rm" 
+(output) : "irm" (input)}.  Using multi-alternatives, this might be 
+written as @code{"+m,r" (output) : "ir,irm" (input)}.  This describes
+all the available alternatives to the compiler, allowing it to choose 
+the most efficient one for the current conditions.
+
+There is no way within the template to determine which alternative was 
+chosen.  However you may be able to wrap your @code{asm} statements with 
+builtins such as @code{__builtin_constant_p} to achieve the desired results.
+@end ifclear
+

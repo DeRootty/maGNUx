@@ -1,0 +1,315 @@
+@c GCC 16.1.0 | BLOQUE 0122 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 27842-28152 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item default
+Enable the default instructions, equivalent to @option{-mrecip}.
+
+@item none
+Disable all estimate instructions, equivalent to @option{-mno-recip}.
+
+@item div
+Enable the approximation for scalar division.
+
+@item vec-div
+Enable the approximation for vectorized division.
+
+@item sqrt
+Enable the approximation for scalar square root.
+
+@item vec-sqrt
+Enable the approximation for vectorized square root.
+
+@item rsqrt
+Enable the approximation for scalar reciprocal square root.
+
+@item vec-rsqrt
+Enable the approximation for vectorized reciprocal square root.
+@end table
+
+So, for example, @option{-mrecip=all,!sqrt} enables
+all of the reciprocal approximations, except for scalar square root.
+
+@opindex mfrecipe
+@opindex mno-frecipe
+@item -mfrecipe
+@itemx -mno-frecipe
+Use (do not use) @code{frecipe.@{s/d@}} and @code{frsqrte.@{s/d@}}
+instructions.  When compiling with @option{-march=la664},
+it is enabled by default.  Otherwise the default is @option{-mno-frecipe}.
+
+@opindex mdiv32
+@opindex mno-div32
+@item -mdiv32
+@itemx -mno-div32
+Use (do not use) @code{div.w[u]} and @code{mod.w[u]} instructions with input
+not sign-extended.  When compiling with @option{-march=la664}, it is enabled by
+default.  Otherwise the default is @option{-mno-div32}.
+
+@opindex mlam-bh
+@opindex mno-lam-bh
+@item -mlam-bh
+@itemx -mno-lam-bh
+Use (do not use) @code{am@{swap/add@}[_db].@{b/h@}} instructions.
+When compiling
+with @option{-march=la664}, it is enabled by default.  Otherwise
+the default is @option{-mno-lam-bh}.
+
+@opindex mlamcas
+@opindex mno-lamcas
+@item -mlamcas
+@itemx -mno-lamcas
+Use (do not use) @code{amcas[_db].@{b/h/w/d@}} instructions.
+When compiling with
+@option{-march=la664}, it is enabled by default.  Otherwise the default is
+@option{-mno-lamcas}.
+
+@opindex mld-seq-sa
+@opindex mno-ld-seq-sa
+@item -mld-seq-sa
+@itemx -mno-ld-seq-sa
+Whether a same-address load-load barrier (@code{dbar 0x700}) is needed.  When
+compiling with @option{-march=la664}, it is enabled by default.
+Otherwise the default is
+@option{-mno-ld-seq-sa}, the load-load barrier is needed.
+
+@opindex mscq
+@opindex mno-scq
+@item -mscq
+@item -mno-scq
+Use (do not use) the 16-byte conditional store instruction @code{sc.q}.
+The default is @option{-mscq} if the machine type specified with
+@option{-march=} supports this instruction, @option{-mno-scq} otherwise.
+
+@opindex mtls-dialect
+@item -mtls-dialect=@var{opt}
+This option controls which TLS dialect may be used for general dynamic and
+local dynamic TLS models.  The @var{opt} argument can be one of:
+
+@table @samp
+@item trad
+Use traditional TLS. This is the default.
+
+@item desc
+Use TLS descriptors.
+@end table
+
+@opindex mannotate-tablejump
+@opindex mno-annotate-tablejump
+@item -mannotate-tablejump
+@itemx -mno-annotate-tablejump
+Create an annotation section @code{.discard.tablejump_annotate} to
+correlate the @code{jirl} instruction and the jump table when a jump
+table is used to optimize the @code{switch} statement.  Some external
+tools, for example @file{objtool} of the Linux kernel building system,
+need the annotation to analyze the control flow.  The default is
+@option{-mno-annotate-tablejump}.
+
+@end table
+
+@node LynxOS Options
+@subsection LynxOS Options
+@cindex LynxOS Options
+
+These options are available for LynxOS targets.
+
+@table @gcctabopt
+
+@opindex mshared
+@item -mshared
+Use shared libraries.  The default is to link with static libraries.
+
+@opindex mthreads
+@item -mthreads
+Support multi-threading.
+
+@opindex mlegacy-threads
+@item -mlegacy-threads
+Support legacy multi-threading.
+This option is incompatible with @option{-mthreads}.
+@end table
+
+@node M32C Options
+@subsection M32C Options
+@cindex M32C options
+
+@table @gcctabopt
+@opindex mcpu=
+@item -mcpu=@var{name}
+Select the CPU for which code is generated.  @var{name} may be one of
+@samp{r8c} for the R8C/Tiny series, @samp{m16c} for the M16C (up to
+/60) series, @samp{m32cm} for the M16C/80 series, or @samp{m32c} for
+the M32C/80 series.
+
+@opindex msim
+@opindex mno-sim
+@item -msim
+Specifies that the program will be run on the simulator.  This causes
+an alternate runtime library to be linked in which supports, for
+example, file I/O@.  You must not use this option when generating
+programs that will run on real hardware; you must provide your own
+runtime library for whatever I/O functions are needed.
+
+@opindex memregs=
+@item -memregs=@var{number}
+Specifies the number of memory-based pseudo-registers GCC uses
+during code generation.  These pseudo-registers are used like real
+registers, so there is a tradeoff between GCC's ability to fit the
+code into available registers, and the performance penalty of using
+memory instead of registers.  Note that all modules in a program must
+be compiled with the same value for this option.  Because of that, you
+must not use this option with GCC's default runtime libraries.
+
+@end table
+
+@node M32R/D Options
+@subsection M32R/D Options
+@cindex M32R/D options
+
+These @option{-m} options are defined for Renesas M32R/D architectures:
+
+@table @gcctabopt
+@opindex m32r2
+@item -m32r2
+Generate code for the M32R/2@.
+
+@opindex m32rx
+@item -m32rx
+Generate code for the M32R/X@.
+
+@opindex m32r
+@item -m32r
+Generate code for the M32R@.  This is the default.
+
+@opindex mmodel
+@opindex mmodel=small
+@item -mmodel=small
+Assume all objects live in the lower 16MB of memory (so that their addresses
+can be loaded with the @code{ld24} instruction), and assume all subroutines
+are reachable with the @code{bl} instruction.
+This is the default.
+
+The addressability of a particular object can be set with the
+@code{model} attribute.
+
+@opindex mmodel=medium
+@item -mmodel=medium
+Assume objects may be anywhere in the 32-bit address space (the compiler
+generates @code{seth/add3} instructions to load their addresses), and
+assume all subroutines are reachable with the @code{bl} instruction.
+
+@opindex mmodel=large
+@item -mmodel=large
+Assume objects may be anywhere in the 32-bit address space (the compiler
+generates @code{seth/add3} instructions to load their addresses), and
+assume subroutines may not be reachable with the @code{bl} instruction
+(the compiler generates the much slower @code{seth/add3/jl}
+instruction sequence).
+
+@opindex msdata
+@opindex msdata=none
+@item -msdata=none
+Disable use of the small data area.  Variables are put into
+one of @code{.data}, @code{.bss}, or @code{.rodata} (unless the
+@code{section} attribute has been specified).
+This is the default.
+
+The small data area consists of sections @code{.sdata} and @code{.sbss}.
+Objects may be explicitly put in the small data area with the
+@code{section} attribute using one of these sections.
+
+@opindex msdata=sdata
+@item -msdata=sdata
+Put small global and static data in the small data area, but do not
+generate special code to reference them.
+
+@opindex msdata=use
+@item -msdata=use
+Put small global and static data in the small data area, and generate
+special instructions to reference them.
+
+@opindex G
+@cindex smaller data references
+@item -G @var{num}
+Put global and static objects less than or equal to @var{num} bytes
+into the small data or BSS sections instead of the normal data or BSS
+sections.  The default value of @var{num} is 8.
+The @option{-msdata} option must be set to one of @samp{sdata} or @samp{use}
+for this option to have any effect.
+
+All modules should be compiled with the same @option{-G @var{num}} value.
+Compiling with different values of @var{num} may or may not work; if it
+doesn't the linker gives an error message---incorrect code is not
+generated.
+
+@opindex mdebug
+@item -mdebug
+Makes the M32R-specific code in the compiler display some statistics
+that might help in debugging programs.
+
+@opindex malign-loops
+@opindex mno-align-loops
+@item -malign-loops
+@itemx -mno-align-loops
+Align all loops to a 32-byte boundary.  This option is disabled by default.
+
+@opindex missue-rate
+@item -missue-rate=@var{number}
+Issue @var{number} instructions per cycle.  @var{number} can only be 1
+or 2.
+
+@opindex mbranch-cost
+@item -mbranch-cost=@var{number}
+@var{number} can only be 1 or 2.  If it is 1 then branches are
+preferred over conditional code, if it is 2, then the opposite applies.
+
+@opindex mflush-trap
+@item -mflush-trap=@var{number}
+Specifies the trap number to use to flush the cache.  The default is
+12.  Valid numbers are between 0 and 15 inclusive.
+
+@opindex mno-flush-trap
+@item -mno-flush-trap
+Specifies that the cache cannot be flushed by using a trap.
+
+@opindex mflush-func
+@item -mflush-func=@var{name}
+Specifies the name of the operating system function to call to flush
+the cache.  The default is @samp{_flush_cache}, but a function call
+is only used if a trap is not available.
+
+@opindex mno-flush-func
+@item -mno-flush-func
+Indicates that there is no OS function for flushing the cache.
+
+@end table
+
+@node M680x0 Options
+@subsection M680x0 Options
+@cindex M680x0 options
+
+These are the @samp{-m} options defined for M680x0 and ColdFire processors.
+The default settings depend on which architecture was selected when
+the compiler was configured; the defaults for the most common choices
+are given below.
+
+@table @gcctabopt
+@opindex march
+@item -march=@var{arch}
+Generate code for a specific M680x0 or ColdFire instruction set
+architecture.  Permissible values of @var{arch} for M680x0
+architectures are: @samp{68000}, @samp{68010}, @samp{68020},
+@samp{68030}, @samp{68040}, @samp{68060} and @samp{cpu32}.  ColdFire
+architectures are selected according to Freescale's ISA classification
+and the permissible values are: @samp{isaa}, @samp{isaaplus},
+@samp{isab} and @samp{isac}.
+
+GCC defines a macro @code{__mcf@var{arch}__} whenever it is generating
+code for a ColdFire target.  The @var{arch} in this macro is one of the
+@option{-march} arguments given above.
+
+When used together, @option{-march} and @option{-mtune} select code
+that runs on a family of similar processors but that is optimized
+for a particular microarchitecture.
+
+@opindex mcpu

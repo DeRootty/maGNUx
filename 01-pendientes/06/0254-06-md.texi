@@ -1,0 +1,62 @@
+@c GCC 16.1.0 | BLOQUE 0254 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 4065-4122 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+@item a
+The @code{a} register.
+
+@item b
+The @code{b} register.
+
+@item c
+The @code{c} register.
+
+@item d
+The @code{d} register.
+
+@item S
+The @code{si} register.
+
+@item D
+The @code{di} register.
+
+@item A
+The @code{a} and @code{d} registers.  This class is used for instructions
+that return double word results in the @code{ax:dx} register pair.  Single
+word values will be allocated either in @code{ax} or @code{dx}.
+For example on i386 the following implements @code{rdtsc}:
+
+@smallexample
+unsigned long long rdtsc (void)
+@{
+  unsigned long long tick;
+  __asm__ __volatile__("rdtsc":"=A"(tick));
+  return tick;
+@}
+@end smallexample
+
+This is not correct on x86-64 as it would allocate tick in either @code{ax}
+or @code{dx}.  You have to use the following variant instead:
+
+@smallexample
+unsigned long long rdtsc (void)
+@{
+  unsigned int tickl, tickh;
+  __asm__ __volatile__("rdtsc":"=a"(tickl),"=d"(tickh));
+  return ((unsigned long long)tickh << 32)|tickl;
+@}
+@end smallexample
+
+@item U
+The call-clobbered integer registers.
+
+@item f
+Any 80387 floating-point (stack) register.
+
+@item t
+Top of 80387 floating-point stack (@code{%st(0)}).
+
+@item u
+Second from top of 80387 floating-point stack (@code{%st(1)}).
+

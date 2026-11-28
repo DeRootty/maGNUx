@@ -1,0 +1,294 @@
+@c GCC 16.1.0 | BLOQUE 0203 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 6721-7010 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item l2
+
+This attribute applies to functions and variables.
+
+It specifies that the entity should be placed into L2 SRAM.
+
+Functions with this attribute are put into a specific section named
+@code{.l2.text}.  With @option{-mfdpic}, callers of such functions use
+an inlined PLT.
+
+Variables with @code{l2} attribute are put into the specific section
+named @code{.l2.data}.
+
+@cindex indirect calls, Blackfin
+@atindex @code{longcall}, Blackfin
+@atindex @code{shortcall}, Blackfin
+@item longcall
+@itemx shortcall
+This attribute applies to functions.
+
+The @code{longcall} attribute
+indicates that the function might be far away from the call site and
+require a different (more expensive) calling sequence.  The
+@code{shortcall} attribute indicates that the function is always close
+enough for the shorter calling sequence to be used.  These attributes
+override the @option{-mlongcall} switch.
+
+@atindex @code{nesting}, Blackfin
+@cindex Allow nesting in an interrupt handler on the Blackfin processor
+@item nesting
+This attribute applies to functions.
+
+Use this attribute together with @code{interrupt_handler},
+@code{exception_handler} or @code{nmi_handler} to indicate that the function
+entry code should enable nested interrupts or exceptions.
+
+@atindex @code{nmi_handler}, Blackfin
+@cindex NMI handler functions on the Blackfin processor
+@item nmi_handler
+This attribute applies to functions.
+
+Use this attribute on the Blackfin to indicate that the specified function
+is an NMI handler.  The compiler generates function entry and
+exit sequences suitable for use in an NMI handler when this
+attribute is present.
+
+@atindex @code{saveall}, Blackfin
+@cindex save all registers on the Blackfin
+@item saveall
+This attribute applies to functions.
+
+It indicates that
+all registers except the stack pointer should be saved in the prologue
+regardless of whether they are used or not.
+
+@atindex @code{l1_data}, Blackfin
+@atindex @code{l1_data_A}, Blackfin
+@atindex @code{l1_data_B}, Blackfin
+@item l1_data
+@itemx l1_data_A
+@itemx l1_data_B
+This attribute applies to variable declarations.
+
+Use these attributes on the Blackfin to place the
+variable into L1 Data SRAM.
+Variables with @code{l1_data} attribute are put into the specific section
+named @code{.l1.data}. Those with @code{l1_data_A} attribute are put into
+the specific section named @code{.l1.data.A}. Those with @code{l1_data_B}
+attribute are put into the specific section named @code{.l1.data.B}.
+@end table
+
+@anchor{BPF Function Attributes}
+@anchor{BPF Type Attributes}
+@node BPF Attributes
+@subsubsection BPF Attributes
+
+These attributes are supported by the BPF back end:
+
+@table @code
+@atindex @code{kernel helper}, BPF
+@item kernel_helper
+This attribute applies to functions.
+
+It indicates that the specified function declaration is a
+kernel helper.  The helper function is passed as an argument to the
+attribute.  Example:
+
+@smallexample
+int bpf_probe_read (void *dst, int size, const void *unsafe_ptr)
+  __attribute__ ((kernel_helper (4)));
+@end smallexample
+
+@atindex @code{preserve_access_index}, BPF
+@item preserve_access_index
+This attribute applies to types.
+
+The @code{preserve_access_index} attribute supports
+BPF Compile Once - Run Everywhere (CO-RE) support.
+When attached to a
+@code{struct} or @code{union} type definition, it indicates that CO-RE
+relocation information should be generated for any access to a variable
+of that type. The behavior is equivalent to manually
+wrapping every such access with @code{__builtin_preserve_access_index}.
+@end table
+
+@anchor{C-SKY Function Attributes}
+@node C-SKY Attributes
+@subsubsection C-SKY Attributes
+
+These attributes are supported by the C-SKY back end:
+
+@table @code
+@atindex @code{interrupt}, C-SKY
+@atindex @code{isr}, C-SKY
+@item interrupt
+@itemx isr
+These attributes apply to functions.
+
+Use these attributes to indicate that the specified function
+is an interrupt handler.
+The compiler generates function entry and exit sequences suitable for
+use in an interrupt handler when either of these attributes are present.
+
+Use of these options requires the @option{-mistack} command-line option
+to enable support for the necessary interrupt stack instructions.  They
+are ignored with a warning otherwise.  @xref{C-SKY Options}.
+@end table
+
+
+@anchor{Epiphany Function Attributes}
+@node Epiphany Attributes
+@subsubsection Epiphany Attributes
+
+These attributes are supported by the Epiphany back end:
+
+@table @code
+@atindex @code{disinterrupt}, Epiphany
+@item disinterrupt
+This attribute applies to functions.
+
+It causes the compiler to emit
+instructions to disable interrupts for the duration of the given
+function.
+
+@atindex @code{forwarder_section}, Epiphany
+@item forwarder_section
+This attribute applies to functions.
+
+It modifies the behavior of an interrupt handler.
+The interrupt handler may be in external memory which cannot be
+reached by a branch instruction, so generate a local memory trampoline
+to transfer control.  The single parameter identifies the section where
+the trampoline is placed.
+
+@atindex @code{interrupt}, Epiphany
+@item interrupt
+This attribute applies to functions.
+
+It indicates
+that the specified function is an interrupt handler.  The compiler generates
+function entry and exit sequences suitable for use in an interrupt handler
+when this attribute is present.  It may also generate
+a special section with code to initialize the interrupt vector table.
+
+On Epiphany targets one or more optional parameters can be added like this:
+
+@smallexample
+void __attribute__ ((interrupt ("dma0, dma1"))) universal_dma_handler ();
+@end smallexample
+
+Permissible values for these parameters are: @w{@code{reset}},
+@w{@code{software_exception}}, @w{@code{page_miss}},
+@w{@code{timer0}}, @w{@code{timer1}}, @w{@code{message}},
+@w{@code{dma0}}, @w{@code{dma1}}, @w{@code{wand}} and @w{@code{swi}}.
+Multiple parameters indicate that multiple entries in the interrupt
+vector table should be initialized for this function, i.e.@: for each
+parameter @w{@var{name}}, a jump to the function is emitted in
+the section @w{ivt_entry_@var{name}}.  The parameter(s) may be omitted
+entirely, in which case no interrupt vector table entry is provided.
+
+Note that interrupts are enabled inside the function
+unless the @code{disinterrupt} attribute is also specified.
+
+The following examples are all valid uses of these attributes on
+Epiphany targets:
+@smallexample
+void __attribute__ ((interrupt)) universal_handler ();
+void __attribute__ ((interrupt ("dma1"))) dma1_handler ();
+void __attribute__ ((interrupt ("dma0, dma1"))) 
+  universal_dma_handler ();
+void __attribute__ ((interrupt ("timer0"), disinterrupt))
+  fast_timer_handler ();
+void __attribute__ ((interrupt ("dma0, dma1"), 
+                     forwarder_section ("tramp")))
+  external_dma_handler ();
+@end smallexample
+
+@atindex @code{long_call}, Epiphany
+@atindex @code{short_call}, Epiphany
+@cindex indirect calls, Epiphany
+@item long_call
+@itemx short_call
+These attributes apply to functions.
+
+They specify how the associated function is called.
+These attributes override the
+@option{-mlong-calls} (@pxref{Adapteva Epiphany Options})
+command-line switch and @code{#pragma long_calls} settings.
+@end table
+
+
+@anchor{H8/300 Function Attributes}
+@anchor{H8/300 Variable Attributes}
+@node H8/300 Attributes
+@subsubsection H8/300 Attributes
+
+These attributes are available for H8/300 targets:
+
+@table @code
+@atindex @code{function_vector}, H8/300
+@item function_vector
+This attribute applies to functions.
+
+Use it on the H8/300, H8/300H, and H8S to indicate
+that the specified function should be called through the function vector.
+Calling a function through the function vector reduces code size; however,
+the function vector has a limited size (maximum 128 entries on the H8/300
+and 64 entries on the H8/300H and H8S)
+and shares space with the interrupt vector.
+
+@atindex @code{interrupt_handler}, H8/300
+@item interrupt_handler
+This attribute applies to functions.
+
+Use it on the H8/300, H8/300H, and H8S to
+indicate that the specified function is an interrupt handler.  The compiler
+generates function entry and exit sequences suitable for use in an
+interrupt handler when this attribute is present.
+
+@atindex @code{saveall}, H8/300
+@cindex save all registers on the H8/300, H8/300H, and H8S
+@item saveall
+This attribute applies to functions.
+
+Use it on the H8/300, H8/300H, and H8S to indicate that
+all registers except the stack pointer should be saved in the prologue
+regardless of whether they are used or not.
+
+@atindex @code{monitor}, H8/300
+@item monitor
+This attribute applies to functions.
+
+Use it to indicate a monitor function.  It tells GCC
+to generate entry and exit sequences that disable interrupts during
+execution of the function.
+
+@atindex @code{OS_Task}, H8/300
+@item OS_Task
+This attribute applies to functions.
+
+Use it to disable the normal register and stack save and
+restore sequences on function entry and exit.  The function epilogue
+generated by GCC includes only a return instruction.
+
+@atindex @code{eightbit_data}, H8/300
+@cindex eight-bit data on the H8/300, H8/300H, and H8S
+@item eightbit_data
+This attribute applies to variable declarations.
+
+Use it on the H8/300, H8/300H, and H8S to indicate
+that the specified
+variable should be placed into the eight-bit data section.
+The compiler generates more efficient code for certain operations
+on data in the eight-bit data area.  Note the eight-bit data area is limited to
+256 bytes of data.
+
+@atindex @code{tiny_data}, H8/300
+@cindex tiny data section on the H8/300H and H8S
+@item tiny_data
+This attribute applies to variable declarations.
+
+Use it the H8/300H and H8S to indicate that the specified
+variable should be placed into the tiny data section.
+The compiler generates more efficient code for loads and stores
+on data in the tiny data section.  Note the tiny data area is limited to
+slightly under 32KB of data.
+@end table
+
+@anchor{IA-64 Function Attributes}
+@anchor{IA-64 Variable Attributes}

@@ -1,0 +1,258 @@
+@c GCC 16.1.0 | BLOQUE 0150 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 33706-33959 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -mprefergot
+When generating position-independent code, emit function calls using
+the Global Offset Table instead of the Procedure Linkage Table.
+
+@opindex musermode
+@opindex mno-usermode
+@item -musermode
+@itemx -mno-usermode
+Don't allow (allow) the compiler to generate privileged mode code.  Specifying
+@option{-musermode} also implies @option{-mno-inline-ic_invalidate} if the
+inlined code would not work in user mode.  @option{-musermode} is the default
+when the target is @code{sh*-*-linux*}.  If the target is SH1* or SH2*
+@option{-musermode} has no effect, since there is no user mode.
+
+@opindex multcost=@var{number}
+@item -multcost=@var{number}
+Set the cost to assume for a multiply instruction.
+
+@opindex mdiv=@var{strategy}
+@item -mdiv=@var{strategy}
+Set the division strategy to be used for integer division operations.
+@var{strategy} can be one of:
+
+@table @samp
+
+@item call-div1
+Calls a library function that uses the single-step division instruction
+@code{div1} to perform the operation.  Division by zero calculates an
+unspecified result and does not trap.  This is the default except for SH4,
+SH2A and SHcompact.
+
+@item call-fp
+Calls a library function that performs the operation in double precision
+floating point.  Division by zero causes a floating-point exception.  This is
+the default for SHcompact with FPU.  Specifying this for targets that do not
+have a double-precision FPU defaults to @code{call-div1}.
+
+@item call-table
+Calls a library function that uses a lookup table for small divisors and
+the @code{div1} instruction with case distinction for larger divisors.
+Division by zero calculates an unspecified result and does not trap.
+This is the default
+for SH4.  Specifying this for targets that do not have dynamic shift
+instructions defaults to @code{call-div1}.
+
+@end table
+
+When a division strategy has not been specified, the default strategy is
+selected based on the current target.  For SH2A the default strategy is to
+use the @code{divs} and @code{divu} instructions instead of library function
+calls.
+
+@opindex maccumulate-outgoing-args
+@opindex mno-accumulate-outgoing-args
+@item -maccumulate-outgoing-args
+@item -mno-accumulate-outgoing-args
+Reserve space once for outgoing arguments in the function prologue rather
+than around each call.  This is generally beneficial for performance and
+size, and also needed for unwinding to avoid changing the stack frame
+around conditional code.  @option{-maccumulate-outgoing-args} is
+enabled the default.
+
+@opindex mdivsi3_libfunc=@var{name}
+@item -mdivsi3_libfunc=@var{name}
+Set the name of the library function used for 32-bit signed division to
+@var{name}.
+This only affects the name used in the @samp{call} division strategies,
+and the compiler still expects the same sets of input/output/clobbered
+registers as if this option were not present.
+
+@opindex mfixed-range
+@item -mfixed-range=@var{register-range}
+Generate code treating the given register range as fixed registers.
+A fixed register is one that the register allocator cannot use.  This is
+useful when compiling kernel code.  A register range is specified as
+two registers separated by a dash.  Multiple register ranges can be
+specified separated by a comma.
+
+@opindex mbranch-cost=@var{num}
+@item -mbranch-cost=@var{num}
+Assume @var{num} to be the cost for a branch instruction.  Higher numbers
+make the compiler try to generate more branch-free code if possible.
+If not specified the value is selected depending on the processor type that
+is being compiled for.
+
+@opindex mzdcbranch
+@opindex mno-zdcbranch
+@item -mzdcbranch
+@itemx -mno-zdcbranch
+Assume (do not assume) that zero displacement conditional branch instructions
+@code{bt} and @code{bf} are fast.  If @option{-mzdcbranch} is specified, the
+compiler prefers zero displacement branch code sequences.  This is
+enabled by default when generating code for SH4 and SH4A.
+It can be explicitly disabled by specifying @option{-mno-zdcbranch}.
+
+@opindex mcbranch-force-delay-slot
+@item -mcbranch-force-delay-slot
+Force the usage of delay slots for conditional branches, which stuffs the
+delay slot with a @code{nop} if a suitable instruction cannot be found.
+By default
+this option is disabled.  It can be enabled to work around hardware bugs as
+found in the original SH7055.
+
+@opindex mfsca
+@opindex mno-fsca
+@item -mfsca
+@itemx -mno-fsca
+Allow or disallow the compiler to emit the @code{fsca} instruction for sine
+and cosine approximations.  The option @option{-mfsca} must be used in
+combination with @option{-funsafe-math-optimizations}.
+It is enabled by default when generating code for SH4A.
+Using @option{-mno-fsca} disables sine and cosine
+approximations even if @option{-funsafe-math-optimizations} is in effect.
+
+@opindex mfsrra
+@opindex mno-fsrra
+@item -mfsrra
+@itemx -mno-fsrra
+Allow or disallow the compiler to emit the @code{fsrra} instruction for
+reciprocal square root approximations.  The option @option{-mfsrra}
+must be used in combination with @option{-funsafe-math-optimizations} and
+@option{-ffinite-math-only}.
+It is enabled by default when generating code for SH4A.
+Using @option{-mno-fsrra} disables reciprocal square root approximations
+even if @option{-funsafe-math-optimizations} and @option{-ffinite-math-only}
+are in effect.
+
+@opindex mpretend-cmove
+@opindex mno-pretend-cmove
+@item -mpretend-cmove
+@itemx -mno-pretend-cmove
+Prefer or don't prefer zero-displacement conditional branches for
+conditional move instruction patterns.
+This can result in faster code on the SH4 processor.
+
+@opindex mfdpic
+@opindex mnofdpic
+@item -mfdpic
+@itemx -mno-fdpic
+Generate code using the FDPIC ABI.
+
+@opindex mlra
+@opindex mno-lra
+@item -mlra
+@itemx -mno-lra
+Use the new LRA register allocator.  By default, the old ``reload''
+allocator is used.
+
+@end table
+
+@node Solaris 2 Options
+@subsection Solaris 2 Options
+@cindex Solaris 2 options
+
+These options are supported on Solaris 2:
+
+@table @gcctabopt
+@opindex mclear-hwcap
+@opindex mno-clear-hwcap
+@item -mclear-hwcap
+@itemx -mno-clear-hwcap
+@option{-mclear-hwcap} tells the compiler to remove the hardware
+capabilities generated by the Solaris assembler.  This is only necessary
+when object files use ISA extensions not supported by the current
+machine, but check at runtime whether or not to use them.
+
+@opindex mimpure-text
+@opindex mno-impure-text
+@item -mimpure-text
+@itemx -mno-impure-text
+@option{-mimpure-text}, used in addition to @option{-shared}, tells
+the compiler to not pass @option{-z text} to the linker when linking a
+shared object.  Using this option, you can link position-dependent
+code into a shared object.
+
+@option{-mimpure-text} suppresses the ``relocations remain against
+allocatable but non-writable sections'' linker error message.
+However, the necessary relocations trigger copy-on-write, and the
+shared object is not actually shared across processes.  Instead of
+using @option{-mimpure-text}, you should compile all source code with
+@option{-fpic} or @option{-fPIC}.
+
+@opindex gsctf
+@item -gsctf
+Generate Solaris CTF.  Needs to be used both for compilation and
+linking.  See @command{ctf(7)} for more information.  This is only
+supported since Solaris 11.4 SRU 84 where the necessary toolchain
+support was added.
+@end table
+
+@node SPARC Options
+@subsection SPARC Options
+@cindex SPARC options
+
+These @samp{-m} options are supported on the SPARC:
+
+@table @gcctabopt
+@opindex mno-app-regs
+@opindex mapp-regs
+@item -mno-app-regs
+@itemx -mapp-regs
+Specify @option{-mapp-regs} to generate output using the global registers
+2 through 4, which the SPARC SVR4 ABI reserves for applications.  Like the
+global register 1, each global register 2 through 4 is then treated as an
+allocable register that is clobbered by function calls.  This is the default.
+
+To be fully SVR4 ABI-compliant at the cost of some performance loss,
+specify @option{-mno-app-regs}.  You should compile libraries and system
+software with this option.
+
+@opindex mflat
+@opindex mno-flat
+@item -mflat
+@itemx -mno-flat
+With @option{-mflat}, the compiler does not generate save/restore instructions
+and uses a ``flat'' or single register window model.  This model is compatible
+with the regular register window model.  The local registers and the input
+registers (0--5) are still treated as ``call-saved'' registers and are
+saved on the stack as needed.
+
+With @option{-mno-flat} (the default), the compiler generates save/restore
+instructions (except for leaf functions).  This is the normal operating mode.
+
+@opindex mfpu
+@opindex mhard-float
+@item -mfpu
+@itemx -mhard-float
+Generate output containing floating-point instructions.  This is the
+default.
+
+@opindex mno-fpu
+@opindex msoft-float
+@item -mno-fpu
+@itemx -msoft-float
+Generate output containing library calls for floating point.
+@strong{Warning:} the requisite libraries are not available for all SPARC
+targets.  Normally the facilities of the machine's usual C compiler are
+used, but this cannot be done directly in cross-compilation.  You must make
+your own arrangements to provide suitable library functions for
+cross-compilation.  The embedded targets @samp{sparc-*-aout} and
+@samp{sparclite-*-*} do provide software floating-point support.
+
+@option{-msoft-float} changes the calling convention in the output file;
+therefore, it is only useful if you compile @emph{all} of a program with
+this option.  In particular, you need to compile @file{libgcc.a}, the
+library that comes with GCC, with @option{-msoft-float} in order for
+this to work.
+
+@opindex mhard-quad-float
+@item -mhard-quad-float
+Generate output containing quad-word (long double) floating-point
+instructions.
+
+@opindex msoft-quad-float

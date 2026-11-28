@@ -1,0 +1,251 @@
+@c GCC 16.1.0 | BLOQUE 0328 | 07
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 28097-28343 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpgeu_sc_b (uint32_t, uint8_t)
+Generated assembler @code{cv.cmpgeu.sc.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpgeu_sc_b (uint32_t, uint6_t)
+Generated assembler @code{cv.cmpgeu.sci.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpltu_h (uint32_t, uint32_t)
+Generated assembler @code{cv.cmpltu.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpltu_b (uint32_t, uint32_t)
+Generated assembler @code{cv.cmpltu.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpltu_sc_h (uint32_t, uint16_t)
+Generated assembler @code{cv.cmpltu.sc.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpltu_sc_h (uint32_t, uint6_t)
+Generated assembler @code{cv.cmpltu.sci.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpltu_sc_b (uint32_t, uint8_t)
+Generated assembler @code{cv.cmpltu.sc.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpltu_sc_b (uint32_t, uint6_t)
+Generated assembler @code{cv.cmpltu.sci.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpleu_h (uint32_t, uint32_t)
+Generated assembler @code{cv.cmpleu.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpleu_b (uint32_t, uint32_t)
+Generated assembler @code{cv.cmpleu.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpleu_sc_h (uint32_t, uint16_t)
+Generated assembler @code{cv.cmpleu.sc.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpleu_sc_h (uint32_t, uint6_t)
+Generated assembler @code{cv.cmpleu.sci.h}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpleu_sc_b (uint32_t, uint8_t)
+Generated assembler @code{cv.cmpleu.sc.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cmpleu_sc_b (uint32_t, uint6_t)
+Generated assembler @code{cv.cmpleu.sci.b}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cplxmul_r (uint32_t, uint32_t, uint32_t, uint4_t)
+Generated assembler @code{cv.cplxmul.r}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cplxmul_i (uint32_t, uint32_t, uint32_t, uint4_t)
+Generated assembler @code{cv.cplxmul.i}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cplxmul_r (uint32_t, uint32_t, uint32_t, uint4_t)
+Generated assembler @code{cv.cplxmul.r.div2}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cplxmul_i (uint32_t, uint32_t, uint32_t, uint4_t)
+Generated assembler @code{cv.cplxmul.i.div2}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cplxmul_r (uint32_t, uint32_t, uint32_t, uint4_t)
+Generated assembler @code{cv.cplxmul.r.div4}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cplxmul_i (uint32_t, uint32_t, uint32_t, uint4_t)
+Generated assembler @code{cv.cplxmul.i.div4}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cplxmul_r (uint32_t, uint32_t, uint32_t, uint4_t)
+Generated assembler @code{cv.cplxmul.r.div8}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cplxmul_i (uint32_t, uint32_t, uint32_t, uint4_t)
+Generated assembler @code{cv.cplxmul.i.div8}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_cplxconj (uint32_t)
+Generated assembler @code{cv.cplxconj}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_subrotmj (uint32_t, uint32_t, uint4_t)
+Generated assembler @code{cv.subrotmj}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_subrotmj (uint32_t, uint32_t, uint32_t, uint4_t)
+Generated assembler @code{cv.subrotmj.div2}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_subrotmj (uint32_t, uint32_t, uint32_t, uint4_t)
+Generated assembler @code{cv.subrotmj.div4}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_subrotmj (uint32_t, uint32_t, uint32_t, uint4_t)
+Generated assembler @code{cv.subrotmj.div8}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_add_h (uint32_t, uint32_t, uint32_t, uint4_t)
+Generated assembler @code{cv.add.div2}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_add_h (uint32_t, uint32_t, uint32_t, uint4_t)
+Generated assembler @code{cv.add.div4}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_add_h (uint32_t, uint32_t, uint32_t, uint4_t)
+Generated assembler @code{cv.add.div8}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_sub_h (uint32_t, uint32_t, uint32_t, uint4_t)
+Generated assembler @code{cv.sub.div2}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_sub_h (uint32_t, uint32_t, uint32_t, uint4_t)
+Generated assembler @code{cv.sub.div4}
+@end deftypefn
+
+@deftypefn {Built-in Function} {uint32_t} __builtin_riscv_cv_simd_sub_h (uint32_t, uint32_t, uint32_t, uint4_t)
+Generated assembler @code{cv.sub.div8}
+@end deftypefn
+
+@node RX Built-in Functions
+@subsection RX Built-in Functions
+GCC supports some of the RX instructions which cannot be expressed in
+the C programming language via the use of built-in functions.  The
+following functions are supported:
+
+@defbuiltin{void __builtin_rx_brk (void)}
+Generates the @code{brk} machine instruction.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_rx_clrpsw (int)}
+Generates the @code{clrpsw} machine instruction to clear the specified
+bit in the processor status word.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_rx_int (int)}
+Generates the @code{int} machine instruction to generate an interrupt
+with the specified value.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_rx_machi (int, int)}
+Generates the @code{machi} machine instruction to add the result of
+multiplying the top 16 bits of the two arguments into the
+accumulator.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_rx_maclo (int, int)}
+Generates the @code{maclo} machine instruction to add the result of
+multiplying the bottom 16 bits of the two arguments into the
+accumulator.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_rx_mulhi (int, int)}
+Generates the @code{mulhi} machine instruction to place the result of
+multiplying the top 16 bits of the two arguments into the
+accumulator.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_rx_mullo (int, int)}
+Generates the @code{mullo} machine instruction to place the result of
+multiplying the bottom 16 bits of the two arguments into the
+accumulator.
+@enddefbuiltin
+
+@defbuiltin{int __builtin_rx_mvfachi (void)}
+Generates the @code{mvfachi} machine instruction to read the top
+32 bits of the accumulator.
+@enddefbuiltin
+
+@defbuiltin{int __builtin_rx_mvfacmi (void)}
+Generates the @code{mvfacmi} machine instruction to read the middle
+32 bits of the accumulator.
+@enddefbuiltin
+
+@defbuiltin{int __builtin_rx_mvfc (int)}
+Generates the @code{mvfc} machine instruction which reads the control
+register specified in its argument and returns its value.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_rx_mvtachi (int)}
+Generates the @code{mvtachi} machine instruction to set the top
+32 bits of the accumulator.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_rx_mvtaclo (int)}
+Generates the @code{mvtaclo} machine instruction to set the bottom
+32 bits of the accumulator.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_rx_mvtc (int @var{reg}, int @var{val})}
+Generates the @code{mvtc} machine instruction which sets control
+register number @code{reg} to @code{val}.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_rx_mvtipl (int)}
+Generates the @code{mvtipl} machine instruction set the interrupt
+priority level.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_rx_racw (int)}
+Generates the @code{racw} machine instruction to round the accumulator
+according to the specified mode.
+@enddefbuiltin
+
+@defbuiltin{int __builtin_rx_revw (int)}
+Generates the @code{revw} machine instruction which swaps the bytes in
+the argument so that bits 0--7 now occupy bits 8--15 and vice versa,
+and also bits 16--23 occupy bits 24--31 and vice versa.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_rx_rmpa (void)}
+Generates the @code{rmpa} machine instruction which initiates a
+repeated multiply and accumulate sequence.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_rx_round (float)}
+Generates the @code{round} machine instruction which returns the
+floating-point argument rounded according to the current rounding mode
+set in the floating-point status word register.
+@enddefbuiltin
+
+@defbuiltin{int __builtin_rx_sat (int)}
+Generates the @code{sat} machine instruction which returns the
+saturated value of the argument.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_rx_setpsw (int)}
+Generates the @code{setpsw} machine instruction to set the specified
+bit in the processor status word.
+@enddefbuiltin
+
+@defbuiltin{void __builtin_rx_wait (void)}
+Generates the @code{wait} machine instruction.
+@enddefbuiltin
+

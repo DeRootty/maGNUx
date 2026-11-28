@@ -1,0 +1,226 @@
+@c GCC 16.1.0 | BLOQUE 0050 | 03-11
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 13004-13225 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -fvar-tracking-uninit
+@itemx -fno-var-tracking-uninit
+Perform variable tracking and also mark uninitialized variables in the
+debug information.
+This flag is enabled by default by @option{-fvar-tracking}; it
+also implies @option{-fvar-tracking}.
+To do variable tracking without marking uninitialized variables, use
+@option{-fvar-tracking} @option{-fno-var-tracking-uninit}.
+
+@opindex gsplit-dwarf
+@opindex gno-split-dwarf
+@item -gsplit-dwarf
+If DWARF debugging information is enabled, separate as much debugging
+information as possible into a separate output file with the extension
+@file{.dwo}.  This option allows the build system to avoid linking files with
+debug information.  To be useful, this option requires a debugger capable of
+reading @file{.dwo} files.
+
+@opindex gdwarf32
+@opindex gdwarf64
+@item -gdwarf32
+@itemx -gdwarf64
+If DWARF debugging information is enabled, the @option{-gdwarf32} selects
+the 32-bit DWARF format and the @option{-gdwarf64} selects the 64-bit
+DWARF format.  The default is target specific, on most targets it is
+@option{-gdwarf32} though.  The 32-bit DWARF format is smaller, but
+can't support more than 2GiB of debug information in any of the DWARF
+debug information sections.  The 64-bit DWARF format allows larger debug
+information and might not be well supported by all consumers yet.
+
+@opindex gdescribe-dies
+@opindex gno-describe-dies
+@item -gdescribe-dies
+Add description attributes to some DWARF DIEs that have no name attribute,
+such as artificial variables, external references and call site
+parameter DIEs.
+
+@opindex gpubnames
+@item -gpubnames
+Generate DWARF @code{.debug_pubnames} and @code{.debug_pubtypes} sections.
+
+@opindex ggnu-pubnames
+@item -ggnu-pubnames
+Generate @code{.debug_pubnames} and @code{.debug_pubtypes} sections in a format
+suitable for conversion into a GDB@ index.  This option is only useful
+with a linker that can produce GDB@ index version 7.
+
+@opindex gno-pubnames
+@item -gno-pubnames
+Don't generate DWARF @code{.debug_pubnames} and @code{.debug_pubtypes} sections.
+
+@opindex fdebug-types-section
+@opindex fno-debug-types-section
+@item -fdebug-types-section
+When using DWARF Version 4 or higher, type DIEs can be put into
+their own @code{.debug_types} section instead of making them part of the
+@code{.debug_info} section.  It is more efficient to put them in a separate
+comdat section since the linker can then remove duplicates.
+But not all DWARF consumers support @code{.debug_types} sections yet
+and on some objects @code{.debug_types} produces larger instead of smaller
+debugging information.
+
+@opindex grecord-gcc-switches
+@opindex gno-record-gcc-switches
+@item -grecord-gcc-switches
+@itemx -gno-record-gcc-switches
+This switch causes the command-line options used to invoke the
+compiler that may affect code generation to be appended to the
+DW_AT_producer attribute in DWARF debugging information.  The options
+are concatenated with spaces separating them from each other and from
+the compiler version.
+It is enabled by default.
+See also @option{-frecord-gcc-switches} for another
+way of storing compiler options into the object file.
+
+@opindex gstrict-dwarf
+@opindex gno-strict-dwarf
+@item -gstrict-dwarf
+Disallow using extensions of later DWARF standard version than selected
+with @option{-gdwarf-@var{version}}.  On most targets using non-conflicting
+DWARF extensions from later standard versions is allowed.
+
+@opindex gno-strict-dwarf
+@item -gno-strict-dwarf
+Allow using extensions of later DWARF standard version than selected with
+@option{-gdwarf-@var{version}}.
+
+@opindex gas-loc-support
+@item -gas-loc-support
+Inform the compiler that the assembler supports @code{.loc} directives.
+It may then use them for the assembler to generate DWARF2+ line number
+tables.
+
+This is generally desirable, because assembler-generated line-number
+tables are a lot more compact than those the compiler can generate
+itself.
+
+This option is enabled by default if, at GCC configure time, the
+assembler is found to support such directives.
+
+@opindex gno-as-loc-support
+@item -gno-as-loc-support
+Force GCC to generate DWARF2+ line number tables internally, if DWARF2+
+line number tables are to be generated.
+
+@opindex gas-locview-support
+@item -gas-locview-support
+Inform the compiler that the assembler supports @code{view} assignment
+and reset assertion checking in @code{.loc} directives.
+
+This option is enabled by default if, at GCC configure time, the
+assembler is found to support them.
+
+@opindex gno-as-locview-support
+@item -gno-as-locview-support
+Force GCC to assign view numbers internally, if
+@option{-gvariable-location-views} are explicitly requested.
+
+@opindex gcolumn-info
+@opindex gno-column-info
+@item -gcolumn-info
+@itemx -gno-column-info
+Emit location column information into DWARF debugging information, rather
+than just file and line.
+This option is enabled by default.
+
+@opindex gstatement-frontiers
+@opindex gno-statement-frontiers
+@item -gstatement-frontiers
+@itemx -gno-statement-frontiers
+This option causes GCC to create markers in the internal representation
+at the beginning of statements, and to keep them roughly in place
+throughout compilation, using them to guide the output of @code{is_stmt}
+markers in the line number table.  This is enabled by default when
+compiling with optimization (@option{-Os}, @option{-O1}, @option{-O2},
+@dots{}), and outputting DWARF 2 debug information at the normal level.
+
+@opindex gvariable-location-views
+@opindex gvariable-location-views=incompat5
+@opindex gno-variable-location-views
+@item -gvariable-location-views
+@itemx -gvariable-location-views=incompat5
+@itemx -gno-variable-location-views
+Augment variable location lists with progressive view numbers implied
+from the line number table.  This enables debug information consumers to
+inspect state at certain points of the program, even if no instructions
+associated with the corresponding source locations are present at that
+point.  If the assembler lacks support for view numbers in line number
+tables, this causes the compiler to emit the line number table,
+which generally makes them somewhat less compact.  The augmented line
+number tables and location lists are fully backward-compatible, so they
+can be consumed by debug information consumers that are not aware of
+these augmentations, but they won't derive any benefit from them either.
+
+This is enabled by default when outputting DWARF 2 debug information at
+the normal level, as long as there is assembler support,
+@option{-fvar-tracking-assignments} is enabled and
+@option{-gstrict-dwarf} is not.  When assembler support is not
+available, this may still be enabled, but it forces GCC to output
+internal line number tables, and if
+@option{-ginternal-reset-location-views} is not enabled, that most
+certainly leads to silently mismatching location views.
+
+There is a proposed representation for view numbers that is not backward
+compatible with the location list format introduced in DWARF 5, that can
+be enabled with @option{-gvariable-location-views=incompat5}.  This
+option may be removed in the future, is only provided as a reference
+implementation of the proposed representation.  Debug information
+consumers are not expected to support this extended format, and they
+would be rendered unable to decode location lists using it.
+
+@opindex ginternal-reset-location-views
+@opindex gno-internal-reset-location-views
+@item -ginternal-reset-location-views
+@itemx -gno-internal-reset-location-views
+Attempt to determine location views that can be omitted from location
+view lists.  This requires the compiler to have very accurate instruction
+length estimates, which isn't always the case, and it may cause
+incorrect view lists to be generated silently when using an assembler
+that does not support location view lists.  The GNU assembler flags
+any such error as a @code{view number mismatch}.  This is only enabled
+on ports that define a reliable estimation function.
+
+@opindex ginline-points
+@opindex gno-inline-points
+@item -ginline-points
+@itemx -gno-inline-points
+Generate extended debug information for inlined functions.  Location
+view tracking markers are inserted at inlined entry points, so that
+address and view numbers can be computed and output in debug
+information.  This can be enabled independently of location views, in
+which case the view numbers won't be output, but it can only be enabled
+along with statement frontiers, and it is only enabled by default if
+location views are enabled.
+
+@opindex gz
+@opindex gno-z
+@item -gz@r{[}=@var{type}@r{]}
+Produce compressed debug sections in DWARF format, if that is supported.
+If @var{type} is not given, the default type depends on the capabilities
+of the assembler and linker used.  @var{type} may be one of
+@samp{none} (don't compress debug sections), @samp{zlib} (use zlib
+compression in ELF gABI format), or  @samp{zstd} (use zstd
+compression in ELF gABI format).  If the linker doesn't support writing
+compressed debug sections, the option is rejected.  Otherwise, if the
+assembler does not support them, @option{-gz} is silently ignored when
+producing object files.
+
+@opindex femit-struct-debug-baseonly
+@item -femit-struct-debug-baseonly
+Emit debug information for struct-like types
+only when the base name of the compilation source file
+matches the base name of file in which the struct is defined.
+
+This option substantially reduces the size of debugging information,
+but at significant potential loss in type information to the debugger.
+See @option{-femit-struct-debug-reduced} for a less aggressive option.
+See @option{-femit-struct-debug-detailed} for more detailed control.
+
+This option works only with DWARF debug output.
+
+@opindex femit-struct-debug-reduced

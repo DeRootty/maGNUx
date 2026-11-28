@@ -1,0 +1,305 @@
+@c GCC 16.1.0 | BLOQUE 0209 | 06
+@c Fuente: gcc/doc/extend.texi | blob: 47e0865c676c76377e411543cf44cea5270b6176
+@c Lineas originales: 8339-8639 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@node RISC-V Attributes
+@subsubsection RISC-V Attributes
+
+These attributes are supported by the RISC-V back end:
+
+@table @code
+@atindex @code{interrupt}, RISC-V
+@item interrupt
+This attribute applies to functions.
+
+It indicates that the specified function is an interrupt
+handler.  The compiler generates function entry and exit sequences suitable
+for use in an interrupt handler when this attribute is present.
+
+You can specify the kind of interrupt to be handled by adding an optional
+parameter to the interrupt attribute like this:
+
+@smallexample
+void f (void) __attribute__ ((interrupt ("supervisor")));
+@end smallexample
+
+Permissible values for this parameter are @code{supervisor},
+@code{machine}, and @code{rnmi}.  If there is no parameter, then it
+defaults to @code{machine}.
+
+@atindex @code{riscv_vector_cc}, RISC-V
+@item riscv_vector_cc
+This attribute applies to functions.
+
+Use this attribute to force the function to use the vector calling
+convention variant.
+
+@smallexample
+void foo() __attribute__((riscv_vector_cc));
+[[riscv::vector_cc]] void foo(); // For C++11 and C23
+@end smallexample
+
+@atindex @code{target}, RISC-V
+@item target (@var{options})
+This attribute applies to functions.
+
+As discussed in @ref{Common Attributes}, this attribute
+allows specification of target-specific compilation options.
+
+The following options are available for the
+RISC-V target.  For the most part, these options mirror the behavior of
+similar command-line options (@pxref{RISC-V Options}), but on a
+per-function basis.
+
+@table @samp
+@atindex @code{target("arch=")}, RISC-V
+@item arch=
+Specifies the architecture version and architectural extensions to use
+for this function.  The behavior and permissible arguments are the same as
+for the @option{-march=} command-line option, in addtion, it also support
+extension enablement list, a list of extension name and prefixed with @code{+},
+like @code{arch=+zba} means enable @code{zba} extension.
+Multiple extension can be enabled by separating them with a comma.  For example:
+@code{arch=+zba,+zbb}.
+
+@atindex @code{target("tune=")}, RISC-V
+@item tune=
+Specifies the core for which to tune the performance of this function.
+The behavior and permissible arguments are the same as for the @option{-mtune=}
+command-line option.
+
+@atindex @code{target("cpu=")}, RISC-V
+@item cpu=
+Specifies the core for which to tune the performance of this function and also
+whose architectural features to use.  The behavior and valid arguments are the
+same as for the @option{-mcpu=} command-line option.
+
+@atindex @code{target("max-vectorization")}, RISC-V
+@item max-vectorization
+@itemx no-max-vectorization
+@code{max-vectorization} tells GCC's vectorizer to treat all vector
+loops as being more profitable than the original scalar loops when
+optimizing the current function.  @code{no-max-vectorization} disables
+this behavior.
+This corresponds to the behavior of the command-line options
+@option{-mmax-vectorization} and @option{-mno-max-vectorization}.
+
+@end table
+
+The above target attributes can be specified as follows:
+
+@smallexample
+__attribute__((target("@var{attr-string}")))
+int
+f (int a)
+@{
+  return a + 5;
+@}
+@end smallexample
+
+where @code{@var{attr-string}} is one of the attribute strings specified above.
+
+Multiple target function attributes can be specified by separating them with
+a semicolon.  For example:
+@smallexample
+__attribute__((target("arch=+zba,+zbb;tune=rocket")))
+int
+foo (int a)
+@{
+  return a + 5;
+@}
+@end smallexample
+
+is valid and compiles function @code{foo} with @code{zba}
+and @code{zbb} extensions and tunes it for @code{rocket}.
+
+@end table
+
+@anchor{RL78 Function Attributes}
+@anchor{RL78 Variable Attributes}
+@node RL78 Attributes
+@subsubsection RL78 Attributes
+
+These attributes are supported by the RL78 back end:
+
+@table @code
+@atindex @code{interrupt}, RL78
+@atindex @code{brk_interrupt}, RL78
+@item interrupt
+@itemx brk_interrupt
+These attributes apply to functions.
+
+They indicate
+that the specified function is an interrupt handler.  The compiler generates
+function entry and exit sequences suitable for use in an interrupt handler
+when this attribute is present.
+
+Use @code{brk_interrupt} instead of @code{interrupt} for
+handlers intended to be used with the @code{BRK} opcode (i.e.@: those
+that must end with @code{RETB} instead of @code{RETI}).
+
+@atindex @code{saddr}, RL78
+@item saddr
+This attribute applies to variables.
+
+The RL78 back end supports the @code{saddr} variable attribute.  This
+specifies placement of the corresponding variable in the SADDR area,
+which can be accessed more efficiently than the default memory region.
+
+@end table
+
+@anchor{RX Function Attributes}
+@node RX Attributes
+@subsubsection RX Attributes
+
+These attributes are supported by the RX back end:
+
+@table @code
+@atindex @code{fast_interrupt}, RX
+@item fast_interrupt
+This attribute applies to functions.
+
+Use this attribute on the RX port to indicate that the specified
+function is a fast interrupt handler.  This is just like the
+@code{interrupt} attribute, except that @code{freit} is used to return
+instead of @code{reit}.
+
+@atindex @code{interrupt}, RX
+@item interrupt
+This attribute applies to functions.
+
+It indicates
+that the specified function is an interrupt handler.  The compiler generates
+function entry and exit sequences suitable for use in an interrupt handler
+when this attribute is present.
+
+On RX and RL78 targets, you may specify one or more vector numbers as arguments
+to the attribute, as well as naming an alternate table name.
+Parameters are handled sequentially, so one handler can be assigned to
+multiple entries in multiple tables.  One may also pass the magic
+string @code{"$default"} which causes the function to be used for any
+unfilled slots in the current table.
+
+This example shows a simple assignment of a function to one vector in
+the default table (note that preprocessor macros may be used for
+chip-specific symbolic vector names):
+@smallexample
+void __attribute__ ((interrupt (5))) txd1_handler ();
+@end smallexample
+
+This example assigns a function to two slots in the default table
+(using preprocessor macros defined elsewhere) and makes it the default
+for the @code{dct} table:
+@smallexample
+void __attribute__ ((interrupt (RXD1_VECT,RXD2_VECT,"dct","$default")))
+	txd1_handler ();
+@end smallexample
+
+@atindex @code{vector}, RX
+@item vector
+This attribute applies to functions.
+
+This RX attribute is similar to the @code{interrupt} attribute, including its
+parameters, but does not make the function an interrupt-handler type
+function (i.e.@: it retains the normal C function calling ABI).  See the
+@code{interrupt} attribute for a description of its arguments.
+@end table
+
+@anchor{S/390 Function Attributes}
+@node S/390 Attributes
+@subsubsection S/390 Attributes
+
+These attributes are supported on the S/390:
+
+@table @code
+@atindex @code{hotpatch}, S/390
+@item hotpatch (@var{halfwords-before-function-label},@var{halfwords-after-function-label})
+This attribute applies to functions.
+
+On S/390 System z targets, you can use this attribute to
+make GCC generate a ``hot-patching'' function prologue.  If the
+@option{-mhotpatch=} command-line option is used at the same time,
+the @code{hotpatch} attribute takes precedence.  The first of the
+two arguments specifies the number of halfwords to be added before
+the function label.  A second argument can be used to specify the
+number of halfwords to be added after the function label.  For
+both arguments the maximum allowed value is 1000000.
+
+If both arguments are zero, hotpatching is disabled.
+
+@atindex @code{target}, S/390
+@item target (@var{options})
+This attribute applies to functions.
+
+As discussed in @ref{Common Attributes}, this attribute
+allows specification of target-specific compilation options.
+
+On S/390, the following options are supported:
+
+@table @samp
+@item arch=
+@item tune=
+@item stack-guard=
+@item stack-size=
+@item branch-cost=
+@item warn-framesize=
+@item backchain
+@itemx no-backchain
+@item hard-dfp
+@itemx no-hard-dfp
+@item hard-float
+@itemx soft-float
+@item htm
+@itemx no-htm
+@item vx
+@itemx no-vx
+@item packed-stack
+@itemx no-packed-stack
+@item small-exec
+@itemx no-small-exec
+@item mvcle
+@itemx no-mvcle
+@item warn-dynamicstack
+@itemx no-warn-dynamicstack
+@end table
+
+The options work exactly like the S/390 specific command line
+options (without the prefix @option{-m}) except that they do not
+change any feature macros.  For example,
+
+@smallexample
+@code{target("no-vx")}
+@end smallexample
+
+@noindent
+does not undefine the @code{__VEC__} macro.
+@end table
+
+@anchor{SH Function Attributes}
+@node SH Attributes
+@subsubsection SH Attributes
+
+These attributes are supported on the SH family of processors:
+
+@table @code
+@atindex @code{function_vector}, SH
+@cindex calling functions through the function vector on SH2A
+@item function_vector
+This attribute applies to functions.
+
+On SH2A targets, this attribute declares a function to be called using the
+TBR relative addressing mode.  The argument to this attribute is the entry
+number of the same function in a vector table containing all the TBR
+relative addressable functions.  For correct operation the TBR must be setup
+accordingly to point to the start of the vector table before any functions with
+this attribute are invoked.  Usually a good place to do the initialization is
+the startup routine.  The TBR relative vector table can have at max 256 function
+entries.  The jumps to these functions are generated using a SH2A specific,
+non delayed branch instruction JSR/N @@(disp8,TBR).
+
+In an application, for a function being called once, this attribute
+saves at least 8 bytes of code; and if other successive calls are being
+made to the same function, it saves 2 bytes of code per each of these
+calls.
+
+@atindex @code{interrupt_handler}, SH

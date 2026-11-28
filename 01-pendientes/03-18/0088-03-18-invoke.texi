@@ -1,0 +1,84 @@
+@c GCC 16.1.0 | BLOQUE 0088 | 03-18
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 19634-19713 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -fstrict-volatile-bitfields
+This option should be used if accesses to volatile bit-fields (or other
+structure fields, although the compiler usually honors those types
+anyway) should use a single access of the width of the
+field's type, aligned to a natural alignment if possible.  For
+example, targets with memory-mapped peripheral registers might require
+all such accesses to be 16 bits wide; with this flag you can
+declare all peripheral bit-fields as @code{unsigned short} (assuming short
+is 16 bits on these targets) to force GCC to use 16-bit accesses
+instead of, perhaps, a more efficient 32-bit access.
+
+If this option is disabled, the compiler uses the most efficient
+instruction.  In the previous example, that might be a 32-bit load
+instruction, even though that accesses bytes that do not contain
+any portion of the bit-field, or memory-mapped registers unrelated to
+the one being updated.
+
+In some cases, such as when the @code{packed} attribute is applied to a
+structure field, it may not be possible to access the field with a single
+read or write that is correctly aligned for the target machine.  In this
+case GCC falls back to generating multiple accesses rather than code that
+will fault or truncate the result at run time.
+
+Note:  Due to restrictions of the C/C++11 memory model, write accesses are
+not allowed to touch non bit-field members.  It is therefore recommended
+to define all bits of the field's type as bit-field members.
+
+The default value of this option is determined by the application binary
+interface for the target processor.
+
+@opindex fsync-libcalls
+@opindex fno-sync-libcalls
+@item -fsync-libcalls
+This option controls whether any out-of-line instance of the @code{__sync}
+family of functions may be used to implement the C++11 @code{__atomic}
+family of functions.
+
+The default value of this option is enabled, thus the only useful form
+of the option is @option{-fno-sync-libcalls}.  This option is used in
+the implementation of the @file{libatomic} runtime library.
+
+@opindex fzero-init-padding-bits=@var{value}
+@item -fzero-init-padding-bits=@var{value}
+Guarantee zero initialization of padding bits in automatic variable
+initializers.
+Certain languages guarantee zero initialization of padding bits in
+certain cases, e.g. C23 when using empty initializers (@code{@{@}}),
+or C++ when using zero-initialization or C guarantees that fields
+not specified in an initializer have their padding bits zero initialized.
+This option allows to change when padding bits in initializers are
+guaranteed to be zero initialized.
+The default is @code{-fzero-init-padding-bits=standard}, which makes
+no further guarantees than the corresponding standard.  E.g.@:
+
+@smallexample
+  struct A @{ char a; unsigned long long b; char c; @};
+  union B @{ char a; unsigned long long b; @};
+  struct A a = @{@}; // C23 guarantees padding bits are zero.
+  struct A b = @{ 1, 2, 3 @}; // No guarantees.
+  union B c = @{@}; // C23 guarantees padding bits are zero.
+  union B d = @{ 1 @}; // No guarantees.
+@end smallexample
+
+@code{-fzero-init-padding-bits=unions} guarantees zero initialization
+of padding bits in unions on top of what the standards guarantee,
+if the initializer of an union is empty (then all bits of the union
+are zero initialized) or if the initialized member of the union is
+smaller than the size of the union (in that case guarantees padding
+bits outside of the initialized member to be zero initialized).
+This was the GCC behavior before GCC 15 and in the above example guarantees
+zero initialization of last @code{sizeof (unsigned long long) - 1}
+bytes in the union.
+
+@code{-fzero-init-padding-bits=all} guarantees additionally
+zero initialization of padding bits of other aggregates, so
+the padding in between @code{b.a} and @code{b.b} (if any) and
+tail padding in the structure (if any).
+
+@end table
+

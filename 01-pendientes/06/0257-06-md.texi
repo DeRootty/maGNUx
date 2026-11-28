@@ -1,0 +1,24 @@
+@c GCC 16.1.0 | BLOQUE 0257 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 4213-4232 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+@item I
+Integer constant in the range 0 @dots{} 31, for 32-bit shifts.
+
+@item J
+Integer constant in the range 0 @dots{} 63, for 64-bit shifts.
+
+@item K
+Signed 8-bit integer constant.
+
+@item L
+@code{0xFF} or @code{0xFFFF}, for andsi as a zero-extending move.
+
+@item M
+0, 1, 2, or 3 (shifts for the @code{lea} instruction).
+
+@item N
+Unsigned 8-bit integer constant (for @code{in} and @code{out}
+instructions).
+

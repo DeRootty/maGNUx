@@ -1,0 +1,54 @@
+@c GCC 16.1.0 | BLOQUE 0253 | 06
+@c Fuente: gcc/doc/md.texi | blob: 6af646e3e01e369c7e1fe13a0d183e854f225000
+@c Lineas originales: 4010-4059 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+@item l
+General register, but not @code{r29}, @code{r30} and @code{r31}
+
+@item t
+Register @code{r1}
+
+@item u
+Register @code{r2}
+
+@item v
+Register @code{r3}
+
+@item G
+Floating-point constant 0.0
+
+@item J
+Integer constant in the range 0 .. 65535 (16-bit immediate)
+
+@item K
+Integer constant in the range 1 .. 31 (5-bit immediate)
+
+@item L
+Integer constant in the range @minus{}65535 .. @minus{}1 (16-bit negative immediate)
+
+@item M
+Integer constant @minus{}1
+
+@item O
+Integer constant 0
+
+@item P
+Integer constant 32
+@end table
+
+@item x86 family---@file{config/i386/constraints.md}
+@table @code
+@item R
+Legacy register---the eight integer registers available on all
+i386 processors (@code{a}, @code{b}, @code{c}, @code{d},
+@code{si}, @code{di}, @code{bp}, @code{sp}).
+
+@item q
+Any register accessible as @code{@var{r}l}.  In 32-bit mode, @code{a},
+@code{b}, @code{c}, and @code{d}; in 64-bit mode, any integer register.
+
+@item Q
+Any register accessible as @code{@var{r}h}: @code{a}, @code{b},
+@code{c}, and @code{d}.
+

@@ -1,0 +1,248 @@
+@c GCC 16.1.0 | BLOQUE 0057 | 03-12
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 14553-14796 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+@item -fipa-ra
+Use caller save registers for allocation if those registers are not used by
+any called function.  In that case it is not necessary to save and restore
+them around calls.  This is only possible if called functions are part of
+same compilation unit as current function and they are compiled before it.
+
+Enabled at levels @option{-O2}, @option{-O3}, @option{-Os}, however the option
+is disabled if generated code will be instrumented for profiling
+(@option{-p}, or @option{-pg}) or if callee's register usage cannot be known
+exactly (this happens on targets that do not expose prologues
+and epilogues in RTL).
+
+@opindex fconserve-stack
+@opindex fno-conserve-stack
+@item -fconserve-stack
+Attempt to minimize stack usage.  The compiler attempts to use less
+stack space, even if that makes the program slower.  This option
+implies setting the @option{large-stack-frame} parameter to 100
+and the @option{large-stack-frame-growth} parameter to 400.
+
+@opindex ftree-reassoc
+@opindex fno-tree-reassoc
+@item -ftree-reassoc
+Perform reassociation on trees.  This flag is enabled by default
+at @option{-O1} and higher.
+
+@opindex fcode-hoisting
+@opindex fno-code-hoisting
+@item -fcode-hoisting
+Perform code hoisting.  Code hoisting tries to move the
+evaluation of expressions executed on all paths to the function exit
+as early as possible.  This is especially useful as a code size
+optimization, but it often helps for code speed as well.
+This flag is enabled by default at @option{-O2} and higher.
+
+@opindex ftree-pre
+@opindex fno-tree-pre
+@item -ftree-pre
+Perform partial redundancy elimination (PRE) on trees.  This flag is
+enabled by default at @option{-O2} and @option{-O3}.
+
+@opindex ftree-partial-pre
+@opindex fno-tree-partial-pre
+@item -ftree-partial-pre
+Make partial redundancy elimination (PRE) more aggressive.  This flag is
+enabled by default at @option{-O3}.
+
+@opindex ftree-forwprop
+@opindex fno-tree-forwprop
+@item -ftree-forwprop
+Perform forward propagation on trees.  This flag is enabled by default
+at @option{-O1} and higher.
+
+@opindex ftree-fre
+@opindex fno-tree-fre
+@item -ftree-fre
+Perform full redundancy elimination (FRE) on trees.  The difference
+between FRE and PRE is that FRE only considers expressions
+that are computed on all paths leading to the redundant computation.
+This analysis is faster than PRE, though it exposes fewer redundancies.
+This flag is enabled by default at @option{-O1} and higher.
+
+@opindex ftree-phiprop
+@opindex fno-tree-phiprop
+@item -ftree-phiprop
+Perform hoisting of loads from conditional pointers on trees.  This
+pass is enabled by default at @option{-O1} and higher.
+
+@opindex fhoist-adjacent-loads
+@opindex fno-hoist-adjacent-loads
+@item -fhoist-adjacent-loads
+Speculatively hoist loads from both branches of an if-then-else if the
+loads are from adjacent locations in the same structure and the target
+architecture has a conditional move instruction.  This flag is enabled
+by default at @option{-O2} and higher.
+
+@opindex ftree-copy-prop
+@opindex fno-tree-copy-prop
+@item -ftree-copy-prop
+Perform copy propagation on trees.  This pass eliminates unnecessary
+copy operations.  This flag is enabled by default at @option{-O1} and
+higher.
+
+@opindex fipa-pure-const
+@opindex fno-ipa-pure-const
+@item -fipa-pure-const
+Discover which functions are pure or constant.
+Enabled by default at @option{-O1} and higher.
+
+@opindex fipa-reference
+@opindex fno-ipa-reference
+@item -fipa-reference
+Discover which static variables do not escape the
+compilation unit.
+Enabled by default at @option{-O1} and higher.
+
+@opindex fipa-reference-addressable
+@opindex fno-ipa-reference-addressable
+@item -fipa-reference-addressable
+Discover read-only, write-only and non-addressable static variables.
+Enabled by default at @option{-O1} and higher.
+
+@opindex fipa-reorder-for-locality
+@opindex fno-ipa-reorder-for-locality
+@item -fipa-reorder-for-locality
+Group call chains close together in the binary layout to improve code
+locality and minimize jump distances between frequently called functions.
+Unlike @option{-freorder-functions} this pass considers the call
+chains between functions and groups them together, rather than grouping all
+hot/normal/cold/never-executed functions into separate sections.
+Unlike @option{-fprofile-reorder-functions} it aims to improve code locality
+throughout the runtime of the program rather than focusing on program startup.
+This option is incompatible with an explicit
+@option{-flto-partition=} option since it enforces a custom partitioning
+scheme.
+If using this option it is recommended to also use profile feedback, but this
+option is not enabled by default otherwise.
+
+@opindex fipa-stack-alignment
+@opindex fno-ipa-stack-alignment
+@item -fipa-stack-alignment
+Reduce stack alignment on call sites if possible.
+Enabled by default.
+
+@opindex fipa-pta
+@opindex fno-ipa-pta
+@item -fipa-pta
+Perform interprocedural pointer analysis and interprocedural modification
+and reference analysis.  This option can cause excessive memory and
+compile-time usage on large compilation units.  It is not enabled by
+default at any optimization level.
+
+@opindex fipa-profile
+@opindex fno-ipa-profile
+@item -fipa-profile
+Perform interprocedural profile propagation.  The functions called only from
+cold functions are marked as cold. Also functions executed once (such as
+@code{cold}, @code{noreturn}, static constructors or destructors) are
+identified. Cold functions and loop less parts of functions executed once are
+then optimized for size.
+Enabled by default at @option{-O1} and higher.
+
+@opindex fipa-modref
+@opindex fno-ipa-modref
+@item -fipa-modref
+Perform interprocedural mod/ref analysis.  This optimization analyzes the side
+effects of functions (memory locations that are modified or referenced) and
+enables better optimization across the function call boundary.  This flag is
+enabled by default at @option{-O1} and higher.
+
+@opindex fipa-cp
+@opindex fno-ipa-cp
+@item -fipa-cp
+Perform interprocedural constant propagation.
+This optimization analyzes the program to determine when values passed
+to functions are constants and then optimizes accordingly.
+This optimization can substantially increase performance
+if the application has constants passed to functions.
+This flag is enabled by default at @option{-O2}, @option{-Os} and @option{-O3}.
+It is also enabled by @option{-fprofile-use} and @option{-fauto-profile}.
+
+@opindex fipa-cp-clone
+@opindex fno-ipa-cp-clone
+@item -fipa-cp-clone
+Perform function cloning to make interprocedural constant propagation stronger.
+When enabled, interprocedural constant propagation performs function cloning
+when externally visible function can be called with constant arguments.
+Because this optimization can create multiple copies of functions,
+it may significantly increase code size.
+This flag is enabled by default at @option{-O3}.
+It is also enabled by @option{-fprofile-use} and @option{-fauto-profile}.
+
+@opindex fipa-bit-cp
+@opindex fno-ipa-bit-cp
+@item -fipa-bit-cp
+When enabled, perform interprocedural bitwise constant
+propagation. This flag is enabled by default at @option{-O2} and
+by @option{-fprofile-use} and @option{-fauto-profile}.
+It requires that @option{-fipa-cp} is enabled.
+
+@opindex fipa-vrp
+@opindex fno-ipa-vrp
+@item -fipa-vrp
+When enabled, perform interprocedural propagation of value
+ranges. This flag is enabled by default at @option{-O2}. It requires
+that @option{-fipa-cp} is enabled.
+
+@opindex fipa-icf
+@opindex fipa-icf-functions
+@opindex fipa-icf-variables
+@opindex fno-ipa-icf
+@opindex fno-ipa-icf-functions
+@opindex fno-ipa-icf-variables
+@item -fipa-icf-functions
+@itemx -fipa-icf-variables
+@itemx -fipa-icf
+Perform Identical Code Folding for functions (@option{-fipa-icf-functions}),
+read-only variables (@option{-fipa-icf-variables}), or both
+(@option{-fipa-icf}).
+The optimization reduces code size and may disturb unwind stacks by replacing
+a function by an equivalent one with a different name. The optimization works
+more effectively with link-time optimization enabled.
+
+Although the behavior is similar to the Gold Linker's ICF optimization, GCC ICF
+works on different levels and thus the optimizations are not same - there are
+equivalences that are found only by GCC and equivalences found only by Gold.
+
+@option{-fipa-icf} is enabled by default at @option{-O2} and @option{-Os}.
+
+@opindex flate-combine-instructions
+@opindex fno-late-combine-instructions
+@item -flate-combine-instructions
+Enable two instruction combination passes that run relatively late in the
+compilation process.  One of the passes runs before register allocation and
+the other after register allocation.  The main aim of the passes is to
+substitute definitions into all uses.
+
+Most targets enable this flag by default at @option{-O2} and @option{-Os}.
+
+@opindex flive-patching
+@item -flive-patching=@var{level}
+Control GCC's optimizations to produce output suitable for live-patching.
+
+If the compiler's optimization uses a function's body or information extracted
+from its body to optimize/change another function, the latter is called an
+impacted function of the former.  If a function is patched, its impacted
+functions should be patched too.
+
+The impacted functions are determined by the compiler's interprocedural
+optimizations.  For example, a caller is impacted when inlining a function
+into its caller,
+cloning a function and changing its caller to call this new clone,
+or extracting a function's pureness/constness information to optimize
+its direct or indirect callers, etc.
+
+Usually, the more IPA optimizations enabled, the larger the number of
+impacted functions for each function.  In order to control the number of
+impacted functions and more easily compute the list of impacted function,
+IPA optimizations can be partially enabled at two different levels.
+
+The @var{level} argument should be one of the following:
+
+@table @samp
+

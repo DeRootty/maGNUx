@@ -1,0 +1,258 @@
+@c GCC 16.1.0 | BLOQUE 0140 | 03-20
+@c Fuente: gcc/doc/invoke.texi | blob: 9207a021e64224b74d5019719c3d7e39a2663807
+@c Lineas originales: 31191-31444 (inclusive)
+@c Fragmento de trabajo; conservar comandos Texinfo. GFDL 1.3+; ver 00-referencia.
+
+When @option{-mtune=} is not specified, GCC uses the setting from
+@option{-mcpu}.  The default is @samp{generic} if neither is specified.
+
+The @samp{size} choice is not intended for use by end-users.  This is used
+when @option{-Os} is specified.  It overrides the instruction cost info
+provided by @option{-mtune=}, but does not override the pipeline info.  This
+helps reduce code size while still giving good performance.
+
+@opindex mpreferred-stack-boundary
+@item -mpreferred-stack-boundary=@var{num}
+Attempt to keep the stack boundary aligned to a 2 raised to @var{num}
+byte boundary.  If @option{-mpreferred-stack-boundary} is not specified,
+the default is 4 (16 bytes or 128-bits).
+
+@strong{Warning:} If you use this switch, then you must build all modules with
+the same value, including any libraries.  This includes the system libraries
+and startup modules.
+
+@opindex msmall-data-limit
+@item -msmall-data-limit=@var{n}
+Put global and static data smaller than @var{n} bytes into a special section
+(on some targets).
+
+@opindex msave-restore
+@opindex mno-save-restore
+@item -msave-restore
+@itemx -mno-save-restore
+Do or don't use smaller but slower prologue and epilogue code that uses
+library function calls.  The default is to use fast inline prologues and
+epilogues.
+
+@opindex mmovcc
+@opindex mno-movcc
+@item -mmovcc
+@itemx -mno-movcc
+Do or don't produce branchless conditional-move code sequences even with
+targets that do not have specific instructions for conditional operations.
+If enabled, sequences of ALU operations are produced using base integer
+ISA instructions where profitable.
+
+@opindex minline-atomics
+@opindex mno-inline-atomics
+@item -minline-atomics
+@itemx -mno-inline-atomics
+Do or don't use smaller but slower subword atomic emulation code that uses
+libatomic function calls.  The default is to use fast inline subword atomics
+that do not require libatomic.
+
+@opindex minline-strlen
+@opindex mno-inline-strlen
+@item -minline-strlen
+@itemx -mno-inline-strlen
+Do or do not attempt to inline @code{strlen} calls if possible.
+Inlining can only be done if the string is properly aligned
+and instructions for accelerated processing are available.
+The default is to inline @code{strlen} calls.
+
+@opindex minline-strcmp
+@opindex mno-inline-strcmp
+@item -minline-strcmp
+@itemx -mno-inline-strcmp
+Do or do not attempt to inline @code{strcmp} calls if possible.
+Inlining can only be done if the strings are properly aligned
+and instructions for accelerated processing are available.
+The default is to inline @code{strcmp} calls.
+
+@opindex minline-strncmp
+@opindex mno-inline-strncmp
+@item -minline-strncmp
+@itemx -mno-inline-strncmp
+Do or do not attempt to inline @code{strncmp} calls if possible.
+Inlining can only be done if the strings are properly aligned
+and instructions for accelerated processing are available.
+The default is to inline @code{strncmp} calls.
+
+@opindex mstringop-strategy
+@item -mstringop-strategy=@var{strategy}
+Specify a particular strategy for inlining string and memory operations.
+@var{strategy} may be one of @samp{auto}, @samp{libcall}, @samp{scalar},
+or @samp{vector}.
+
+@opindex mshorten-memrefs
+@opindex mno-shorten-memrefs
+@item -mshorten-memrefs
+@itemx -mno-shorten-memrefs
+Do or do not attempt to make more use of compressed load/store instructions by
+replacing a load/store of 'base register + large offset' with a new load/store
+of 'new base + small offset'.  If the new base gets stored in a compressed
+register, then the new load/store can be compressed.  Currently targets 32-bit
+integer load/stores only.
+
+@opindex mstrict-align
+@opindex mno-strict-align
+@item -mstrict-align
+@itemx -mno-strict-align
+Do not or do generate unaligned memory accesses.  The default is set depending
+on whether the processor we are optimizing for supports fast unaligned access
+or not.
+
+@opindex mscalar-strict-align
+@opindex mno-scalar-strict-align
+@item -mscalar-strict-align
+@itemx -mno-scalar-strict-align
+Do not or do generate unaligned memory accesses.  The default is set depending
+on whether the processor we are optimizing for supports fast unaligned access
+or not.  This is an alias for @option{-mstrict-align}.
+
+@opindex mvector-strict-align
+@opindex mno-vector-strict-align
+@item -mvector-strict-align
+@itemx -mno-vector-strict-align
+Do not or do generate unaligned vector memory accesses.  The default is set
+to off unless the processor we are optimizing for explicitly supports
+element-misaligned vector memory access.
+
+@opindex mmax-vectorization
+@opindex mno-max-vectorization
+@item -mmax-vectorization
+@itemx -mno-max-vectorization
+Enable or disable an override to vectorizer cost model making vectorization
+always appear profitable.  Unlike @option{-fno-vect-cost-model} or
+@option{-fvect-cost-model=unlimited} this option does not turn off cost
+comparison between different vector modes.
+
+@opindex mcmodel=
+@opindex mcmodel=medlow
+@item -mcmodel=medlow
+Generate code for the medium-low code model. The program and its statically
+defined symbols must lie within a single 2 GiB address range and must lie
+between absolute addresses @minus{}2 GiB and +2 GiB. Programs can be statically
+or dynamically linked. This is the default code model unless GCC has been
+configured with @option{--with-cmodel=} specifying a different default code
+model.
+
+@opindex mcmodel=medany
+@item -mcmodel=medany
+Generate code for the medium-any code model. The program and its statically
+defined symbols must be within any single 2 GiB address range. Programs can be
+statically or dynamically linked.
+
+The code generated by the medium-any code model is position-independent, but is
+not guaranteed to function correctly when linked into position-independent
+executables or libraries.
+
+@opindex mcmodel=large
+@item -mcmodel=large
+Generate code for a large code model, which has no restrictions on size or
+placement of symbols.
+
+@opindex mexplicit-relocs
+@opindex mno-explicit-relocs
+@item -mexplicit-relocs
+@itemx -mno-explicit-relocs
+Use or do not use assembler relocation operators when dealing with symbolic
+addresses.  The alternative is to use assembler macros instead, which may
+limit optimization.
+
+@opindex mrelax
+@opindex mno-relax
+@item -mrelax
+@itemx -mno-relax
+Take advantage of linker relaxations to reduce the number of instructions
+required to materialize symbol addresses. The default is to take advantage of
+linker relaxations.
+
+@opindex mriscv-attribute
+@opindex mno-riscv-attribute
+@item -mriscv-attribute
+@itemx -mno-riscv-attribute
+Emit (do not emit) RISC-V attribute to record extra information into ELF
+objects.  This feature requires at least binutils 2.32.
+
+@opindex mcsr-check
+@opindex mno-csr-check
+@item -mcsr-check
+@itemx -mno-csr-check
+Enables or disables the CSR checking.
+
+@opindex momit-leaf-frame-pointer
+@opindex mno-omit-leaf-frame-pointer
+@item -momit-leaf-frame-pointer
+Don't keep the frame pointer in a register for leaf functions.  This
+avoids the instructions to save, set up and restore frame pointers and
+makes an extra register available in leaf functions.
+
+@opindex malign-data
+@item -malign-data=@var{type}
+Control how GCC aligns variables and constants of array, structure, or union
+types.  Supported values for @var{type} are @samp{xlen} which uses x register
+width as the alignment value, and @samp{natural} which uses natural alignment.
+@samp{xlen} is the default.
+
+@opindex mbig-endian
+@item -mbig-endian
+Generate big-endian code.  This is the default when GCC is configured for a
+@samp{riscv64be-*-*} or @samp{riscv32be-*-*} target.
+Support for RISC-V big-endian is experimental.  The ABI is not yet stable
+and could change in incompatible ways in future releases.
+
+@opindex mlittle-endian
+@item -mlittle-endian
+Generate little-endian code.  This is the default when GCC is configured for a
+@samp{riscv64-*-*} or @samp{riscv32-*-*} but not a @samp{riscv64be-*-*} or
+@samp{riscv32be-*-*} target.
+
+@opindex mstack-protector-guard
+@opindex mstack-protector-guard-reg
+@opindex mstack-protector-guard-offset
+@item -mstack-protector-guard=@var{guard}
+@itemx -mstack-protector-guard-reg=@var{reg}
+@itemx -mstack-protector-guard-offset=@var{offset}
+Generate stack protection code using canary at @var{guard}.  Supported
+locations are @samp{global} for a global canary or @samp{tls} for per-thread
+canary in the TLS block.
+
+With the latter choice the options
+@option{-mstack-protector-guard-reg=@var{reg}} and
+@option{-mstack-protector-guard-offset=@var{offset}} furthermore specify
+which register to use as base register for reading the canary,
+and from what offset from that base register. There is no default
+register or offset as this is entirely for use within the Linux
+kernel.
+
+@opindex mtls-dialect=desc
+@item -mtls-dialect=desc
+Use TLS descriptors as the thread-local storage mechanism for dynamic accesses
+of TLS variables.
+
+@opindex mtls-dialect=trad
+@item -mtls-dialect=trad
+Use traditional TLS as the thread-local storage mechanism for dynamic accesses
+of TLS variables.  This is the default.
+
+@opindex mrvv-vector-bits
+@item -mrvv-vector-bits=@var{value}
+Specify how the number of bits for an RVV vector register, as taken from
+the @option{-march=} option, is interpreted.
+The @var{value} parameter is specified as a string keyword and may be one of
+@samp{scalable} or @samp{zvl}.  The default is @samp{scalable}, which tells
+GCC to interpret the number as a minimum, while @samp{zvl} tells GCC to use
+exactly the number of bits specified.
+
+@opindex mrvv-max-lmul
+@item -mrvv-max-lmul=@var{value}
+This option allows explicit control over the maximum length multiplier (LMUL)
+used when generating code for the RISC-V Vector Extensions (RVV).
+The @var{value} parameter is specified as a string keyword and may be
+one of @samp{m1}, @samp{m2}, @samp{m4}, @samp{m8}, or @samp{dynamic}.  The
+default is @samp{m1} for compatibility with existing hardware that does not
+support the other options.
+
+@opindex madjust-lmul-cost
+@opindex mno-adjust-lmul-cost
