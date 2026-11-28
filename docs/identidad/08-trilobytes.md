@@ -287,6 +287,8 @@ La especificación preliminar de contratos, estados y pruebas está en [03 — T
 
 La [hipótesis helicoidal](../manifesto/04-helice-alfa-continuidad.md) distingue el RAW revelado por Trilobytes de la imagen interpretada por **Alfa**. Este puede adquirir roles contextuales y participar en la gestión de recursos sin convertir a Trilobytes en una nueva soberanía. La [identidad Alfa y los terminales der*tty](12-usuario-alfa.md) desarrollan la antesala de login de usuarios normales; la [especificación de observabilidad](../propuesta-tecnica/04-alfa-observabilidad-spec.md) define cómo diferenciar telemetría medida de inferencias.
 
+La [revisión del horizonte de identidad](../manifesto/05-horizonte-identidad-temporal.md) precisa Alfa y Trilobytes como dos expresiones funcionales de la misma identidad transversal: revelado constitutivo (3/$) y mediación interpretativa (α/$). Ausencia, desactivación o fallo de la IPU hipotética no debe impedir el modo Trilobytes; Alfa puede ensayarse excepcionalmente con recursos compartidos y presupuesto explícito. No se modifican las tres delegaciones para intermediación ni se fusiona la identidad humana con la de Alfa.
+
 ## Criterio de aceptación conceptual
 
 Trilobytes existe correctamente si permite responder:

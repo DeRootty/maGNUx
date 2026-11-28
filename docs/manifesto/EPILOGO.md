@@ -4,7 +4,7 @@
 > [⬆ Subir a sección](README.md) · [📚 Índice docs](../README.md) · [🏠 Inicio](../../README.md) · [Manifiesto](01-manifiesto.md)
 
 **Autor del manifiesto:** Derootty  
-**Fecha de revisión:** 27 de noviembre de 2026 (cuarta revisión; asignación semiótica y homeostasis computacional)  
+**Fecha de revisión:** 28 de noviembre de 2026 (quinta revisión; horizonte de conmutación e identidad temporal)  
 **Estado:** documento abierto, provisional y sujeto a futuras revisiones.
 
 ---
@@ -141,6 +141,16 @@ El autor asigna a Alfa la función de diagnosticar si la versión compilada, con
 **Aportación asistida.** Se distingue direccionamiento material de semiótico, administración de infraestructura de actividad consumidora, y gestión material de sockets de su atribución funcional. Se precisan los límites de los recursos compartidos y la falta de correspondencia unívoca entre socket y aplicación. Se introduce el concepto de **homeostasis computacional** como extensión de la hélice de continuidad, diferenciándolo de una superioridad ya demostrada frente a EDR/XDR.
 
 **Deriva.** La segmentación de memoria que motivó las primeras exploraciones de maGNUx adquiere una justificación semiótico-contractual. Alfa podría orientar el diagnóstico hacia la autoridad y actividad competentes, distinguiendo amenazas, desequilibrios, fallos operativos e insuficiencias arquitectónicas. El direccionamiento semiótico, el revelado del RAW y la evidencia de continuidad se articulan como un programa de investigación común, sin conferir a Alfa soberanía ni sustituir controles independientes. Quedan abiertas la gramática de referencias, la atribución de recursos compartidos y su validación comparativa. Véanse [Dernel](../identidad/09-dernel.md), [Hélice y Alfa](04-helice-alfa-continuidad.md) y [la especificación de observabilidad](../propuesta-tecnica/04-alfa-observabilidad-spec.md).
+
+### 28 de noviembre de 2026 — Conmutación comunitaria, Teseo y procesamiento identitario
+
+**Evidencia: C para los postulados y formalizaciones del diálogo; D para esta incorporación.**
+
+**Postulados del autor.** Se incorpora LFS como referencia de personalización y compilación del kernel, diferenciada de los tres laboratorios distributivos. La meta es que las comunidades contribuyan a un único xGNUpeD capaz de conmutar filosofía en caliente desde sesión ordinaria mediante COMM, sin invocar ADMIN para ese cambio y verificando continuidad. El autor relaciona esta meta con Teseo, con la autointerpretación de Alfa a lo largo de la hélice y con una arquitectura de procesamiento de identidad del hardware soberano. Precisa Alfa y Trilobytes como dos caras de una misma moneda y admite Alfa excepcional sin soporte especializado, con coste de recursos. Exige una ventana testigo temporal, entrenamiento, patrones estadísticos y tolerancias de deriva para detectar degradación. Reafirma que Zalty es la materialización que debe justificar o refutar la constitución maGNUx.
+
+**Aportación asistida.** Se propone IPU como denominación provisional, se distingue inferencia de acreditación y se formulan tres referencias temporales, controles independientes, ensayos comparativos y una separación entre autoconocimiento funcional y conciencia subjetiva. Se explicita que la conmutación no equivale a mezclar gestores de paquetes ni a modificar CONFIG_* en caliente. La expansión interpretativa no cambia por sí misma el radio teórico de la hélice.
+
+**Deriva.** El [horizonte de identidad en transformación](05-horizonte-identidad-temporal.md) convierte estas intuiciones en programa falsable, manteniendo el horizonte de vida artificial y autonomía remota como especulativo. Se crean las portadas LFS y aula general de Gentoo; no se acreditan resultados experimentales. La revisión de modos Alfa/Trilobytes reemplaza explícitamente la condición histórica centrada en NPU, sin alterar las competencias ROOT, COMM, ADMIN ni la triple delegación de intermediación.
 
 ## 3. Sentido orgánico de la evolución
 

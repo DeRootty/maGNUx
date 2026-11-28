@@ -116,7 +116,7 @@ En la **antesala ordinaria** solo se admite login de identidades humanas de usua
 
 En un contexto especializado —**derootty** para ROOT, **deradmintty** para ADMIN y, provisionalmente, **dercommtty** para COMM—, Alfa adquiere el **mismo rol excepcional** solicitado y autorizado para ese contexto. No se limita a aconsejar con permisos ordinarios: puede ejercer competencias efectivas. Aun así, humano y Alfa son sujetos distintos; sus acciones deben ser atribuibles, registradas y revocables según contrato. Compartir rol no convierte a Alfa en soberano sobre el titular ni legitima un veto arbitrario.
 
-Alfa está **activo por defecto cuando se satisfacen los requisitos de hardware y sistema**. Si no hay NPU permanece **caído por defecto**; solo una orden de nivel Dernel/ADMIN permite su invocación excepcional. Una orden ADMIN no transforma por sí misma a Alfa en ADMIN permanente.
+La [revisión de horizonte](05-horizonte-identidad-temporal.md) distingue Alfa nativa con IPU hipotética y Alfa excepcional sobre recursos compartidos, frente a Trilobytes sin mediación IA. Sustituye la regla previa centrada en NPU: la activación ordinaria futura requiere soporte identitario especializado, inferencia, dominio, contrato y política soberana conformes. Sin IPU utilizable o habilitada se conserva Trilobytes; una orden Dernel/ADMIN puede autorizar Alfa excepcional si hay presupuesto suficiente. No transforma por sí misma a Alfa en ADMIN permanente.
 
 El modo ROOT puro de recuperación sigue siendo una ruta excepcional, distinta del login ordinario y no sometida a la jurisdicción de Dernel.
 
@@ -132,7 +132,7 @@ La arquitectura objetivo en estaciones de trabajo distingue funciones:
 | NPU | Inferencia neuronal principal de Alfa |
 | Dominio basado en seL4 | Aislamiento, capacidades y comunicación de la parte de control de Alfa |
 
-**Alfa emerge de la dinámica del sistema; GPU y NPU no crean por sí solas esa propiedad, sino que proporcionan soporte computacional.** No se exige todavía esta combinación a todo sistema maGNUx: constituye una **configuración objetivo Alfa completa**, a contrastar. Exigir GPU dedicada como condición general de Alfa cambiaría la regla original de activación por NPU y necesitaría una decisión de especificación independiente.
+**Alfa emerge de la dinámica del sistema; GPU y NPU no crean por sí solas esa propiedad, sino que proporcionan soporte computacional.** No se exige todavía esta combinación a todo sistema maGNUx: constituye una **configuración objetivo Alfa completa**, a contrastar. La NPU permanece especializada en inferencia. La IPU propuesta separa la acreditación temporal de la interpretación inteligente. No se presume que la GPU dedicada sea obligatoria ni que una IPU exista actualmente.
 
 Se propone **preconstituir** el dominio seL4 en RAM reservada antes del arranque ordinario de Linux y que Linux lo descubra por un **contrato de dispositivo lógico**. Esto no convierte al micronúcleo en hardware físico: seL4 necesita ejecutar instrucciones sobre un procesador compatible, mientras la NPU realiza los cálculos neuronales. La reserva de memoria, la titularidad de dispositivos, el control de DMA, el aislamiento y el mecanismo de arranque todavía no están demostrados para una plataforma concreta. Véase [arquitectura de Alfa](../arquitectura/07-dominio-alfa.md).
 
@@ -172,6 +172,10 @@ Para DevOps/SRE esto genera una conexión practicable con observabilidad, gesti�
 - **Qué autorización existe:** propietario/mandato, retención, redacción y destino de logs.
 
 **Registrar localmente no equivale a publicar en Internet.** Exportar evidencias a GitHub o a ingenieros requiere autorización, minimización de datos, eliminación de secretos y política de conservación. Una supuesta anomalía puede resolverse sin actualización; **demostrar suficiencia de la versión vigente también es un resultado valioso**.
+
+## Ventana testigo de Alfa y continuidad temporal
+
+La [ampliación de horizonte](05-horizonte-identidad-temporal.md) desarrolla tres referencias temporales: constitutiva protegida, evolutiva validada e inmediata. La deriva se interpreta por contexto, patrón estadístico y tolerancias previamente calibradas, distinguiendo adaptación, variación transitoria, degradación funcional y pérdida de correspondencia identitaria. No se actualiza unilateralmente la referencia ante anomalías no resueltas. Alfa puede solicitar suspensión; el testigo y los mecanismos de revocación independientes deben poder contrastarla. La expansión interpretativa de la hélice no implica cambiar su radio teórico ni demostrar conciencia subjetiva.
 
 ## Criterios para refutar o validar la hipótesis
 

@@ -18,6 +18,7 @@ La documentación nueva funciona como columna vertebral. Los conceptos del corpu
 | 5 | Manifiesto | [Hipótesis central](manifesto/02-hipotesis-central.md) | Declara la soberanía sistémica como problema de arranque. |
 | 6 | Manifiesto | [Horizonte tecnológico — Arquetipar sistemas operativos](manifesto/horizonte-arquetipado.md) | Organiza las siete dimensiones, la maqueta y su continuidad por convolución. |
 | 6 ter | Manifiesto | [Hélice, Alfa y evidencia evolutiva](manifesto/04-helice-alfa-continuidad.md) | Continúa la séptima dimensión: vórtice, suficiencia y realimentación. |
+| 6 quater | Manifiesto | [Identidad en transformación e IPU](manifesto/05-horizonte-identidad-temporal.md) | Horizonte experimental: conmutación, ventana testigo y continuidad Alfa/Trilobytes. |
 | 6 bis | Manifiesto | [Artículo de soberanía contributiva](manifesto/03-reciprocidad-economica-computacional.md) | Presenta la hipótesis de financiación verificable de contribuciones libres, IA, contratos y gobernanza comunitaria. |
 | 7 | Arquitectura | [Estratos](arquitectura/03-estratos.md) | Ordena ROOT, COMM y ADMIN. |
 | 8 | Arquitectura | [Inicio del sistema](arquitectura/04-inicio-sistema.md) | Describe la transición desde metal hacia sistema. |
@@ -38,7 +39,7 @@ La documentación nueva funciona como columna vertebral. Los conceptos del corpu
 | 21 | Implementación | [Initramfs de Zalty](../zalty/initramfs/README.md) | Sitúa el laboratorio de arranque temprano. |
 | 22 | Implementación | [Prototipo HostID v0.1](../zalty/initramfs/prototipo-hostid-v0.1/README.md) | Primer ensayo técnico de identidad temprana. |
 | 23 | Herramientas GNU | [GCC ES Técnico](gcc/README.md) · [Índice](gcc/docs/README.md) | Documentación técnica en español sobre GCC, compilación y cadena de herramientas. |
-| 23 bis | Laboratorios | [Índice de laboratorios](laboratorios/README.md) | Gentoo en desarrollo; Slackware y Arch Linux en construcción. |
+| 23 bis | Laboratorios | [Índice de laboratorios](laboratorios/README.md) | Gentoo en desarrollo; Slackware, Arch Linux y LFS en construcción. |
 | 24 | Manifiesto | [Epílogo y notas](manifesto/EPILOGO.md) | Genealogía, aportaciones y derivas; documento abierto. |
 
 ## Secciones principales
@@ -52,7 +53,7 @@ La documentación nueva funciona como columna vertebral. Los conceptos del corpu
 | [Identidad](identidad/README.md) | Autoridad, identidad y dominios orgánicos/técnicos. |
 | [Filosofía](filosofia/README.md) | Marco cultural, hardware y maduración. |
 | [GCC ES Técnico](gcc/README.md) | Traducción técnica y guía documental de GCC en español. |
-| [Laboratorios de investigación](laboratorios/README.md) | Gentoo, Slackware y Arch Linux. |
+| [Laboratorios de investigación](laboratorios/README.md) | Gentoo, Slackware, Arch Linux y LFS (kernel). |
 | [Corpus absorbido](legacy/README.md) | Mapa de documentos históricos absorbidos por la lectura principal. |
 
 ## Base constitutiva de la Commonwealth del silicio

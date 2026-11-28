@@ -185,6 +185,10 @@ Los informes no deben transferir secretos, identificadores personales, contenido
 
 Las pruebas deben diseñarse para permitir **refutar la hipótesis**, no confirmar por construcción una mejora.
 
+## Extensión propuesta: testigo temporal y retorno a Trilobytes
+
+El [horizonte de identidad temporal](../manifesto/05-horizonte-identidad-temporal.md) propone calibrar patrones y tolerancias con datos separados temporalmente y por contexto, referencias constitutivas protegidas, evolutivas validadas e inmediatas. Medir falsas alarmas, detección, latencia, coste, deriva normalizada indebidamente y concordancia causal. Registrar fuente, versión, secuencia, reloj, carga, contrato, modelo y ausencia de datos. Probar suspensión solicitada por Alfa y revocación independiente, preservación de la evidencia, y reactivación tras revalidación. No se presume existencia de IPU: comparar primero instrumentación sin IA y Alfa sobre recursos compartidos. Una alarma estadística no es una prueba automática de error; una violación contractual no se promedia. Los experimentos Z-H04–Z-H07 son propuestas, no resultados ni pruebas de conciencia.
+
 ## Relación con Zalty y pasos inmediatos
 
 La primera implementación no requiere todavía NPU ni seL4 real: puede utilizarse una **maqueta simulada** del contrato de evidencia, con datos sintéticos y sistemas Linux convencionales, etiquetando explícitamente la ausencia de Alfa real. Después podrían ensayarse detectores de regresión, ejecución por roles y una interfaz de intercambio con un dominio acelerador.

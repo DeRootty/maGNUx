@@ -254,6 +254,10 @@ Para el subconjunto técnicamente definido, véase la [especificación HostID](.
 
 ---
 
+## Horizonte de conmutación comunitaria
+
+La meta experimental es una única implementación de xGNUpeD que reconozca Gentoo, Slackware y Arch Linux y permita a un usuario autenticado invocar COMM temporalmente para conmutar de filosofía distributiva, preservando la identidad constitutiva y la continuidad de Adminland y Userland. No se requiere invocar ADMIN para la selección distributiva; las operaciones que afecten competencias ajenas necesitan autorización y ejecutores conformes. No se confunde seleccionar un entorno con sustituir todo el userland. Los [cuatro laboratorios](../laboratorios/README.md) preparan el contraste, y el [horizonte de identidad en transformación](../manifesto/05-horizonte-identidad-temporal.md) formula criterios y límites. No es una capacidad implementada.
+
 ## Relación con systemd
 
 systemd resuelve problemas reales: orden de arranque, servicios, cgroups, sesiones, logs, dependencias, activación de unidades y estado del sistema.

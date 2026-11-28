@@ -186,6 +186,10 @@ La arquitectura de estratos es una respuesta propuesta a esas preguntas. [Zalty]
 
 ---
 
+## Del arquetipo a la conmutación y al procesamiento identitario
+
+El [horizonte de identidad en transformación](05-horizonte-identidad-temporal.md) prolonga las siete dimensiones mediante objetivos experimentales: conmutación comunitaria bajo COMM, continuidad entre Trilobytes y Alfa, ventana testigo temporal e hipótesis de procesamiento identitario especializado (IPU). La expansión interpretativa no cambia el radio de referencia aquí establecido. La cuestión de la conciencia se mantiene como horizonte especulativo, no como resultado de la arquitectura. Los [laboratorios](../laboratorios/README.md) preparan el conocimiento; Zalty debe contrastar las hipótesis.
+
 ## Qué puede contrastarse y qué sigue abierto
 
 La utilidad disciplinaria del arquetipo depende de no confundir una geometría convincente con una demostración técnica.

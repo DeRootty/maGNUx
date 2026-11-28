@@ -70,22 +70,22 @@ Para intercambio entre GPU y presentación de la iGPU existen técnicas de compa
 ## Modelo de estados
 
 ~~~text
-AUSENTE_NPU
-    └─ Alfa CAÍDO POR DEFECTO
-       └─ ADMIN puede invocarlo excepcionalmente con recursos alternativos explícitos
+IPU AUSENTE / DESHABILITADA / NO CONFORME
+    └─ TRILOBYTES
+       └─ ADMIN puede invocar Alfa excepcionalmente con recursos alternativos explícitos
 
-NPU_PRESENTE
+IPU UTILIZABLE + INFERENCIA SUFICIENTE
     └─ DOMINIO_PREPARADO
-       ├─ contrato + recursos válidos → ALFA_ACTIVO
+       ├─ contrato + recursos válidos + política habilitada → ALFA_ACTIVO
        ├─ fallos recuperables → ALFA_DEGRADADO
-       └─ ausencia de garantías → ALFA_CAÍDO
+       └─ ausencia de garantías → TRILOBYTES / RECUPERACIÓN
 
 ALFA_ACTIVO
     └─ puede adquirir rol ROOT / COMM / ADMIN
        solamente desde contextos humanos autorizados
 ~~~
 
-La GPU dedicada y la APU con iGPU conforman **una configuración objetivo Alfa completa**, sin cambiar tácitamente la regla de activación por NPU. Si se decide hacer obligatoria la GPU para Alfa, habrá que publicar una revisión contractual de requisitos, capacidades y rutas degradadas.
+La GPU dedicada y la APU con iGPU siguen siendo una configuración candidata, no requisitos universales. La [revisión de horizonte IPU](../manifesto/05-horizonte-identidad-temporal.md) modifica expresamente la regla previa centrada en NPU: la activación ordinaria futura dependerá además del soporte identitario especializado y su habilitación soberana. La NPU sigue siendo un recurso de inferencia, no una IPU. La ejecución excepcional sobre recursos compartidos permite experimentar antes de disponer de silicio específico. El testigo temporal y el ejecutor de suspensión deben ofrecer independencia efectiva de Alfa; queda por validar cómo conseguirla en hardware convencional y especializado.
 
 ## La secuencia de arranque no altera la soberanía
 

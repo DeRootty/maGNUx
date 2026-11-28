@@ -10,6 +10,10 @@
 - Manual de estudio: [Aula de integración: GCC 16.1.0 en español](aula-gcc/README.md), traducción directa en curso y adaptación experimental. [Material comentado anterior](../../gcc/README.md). La versión instalada en Gentoo se registrará con `gcc -v`; no se presupone que coincida con el manual.
 - La primera prueba de concepto se realizó fuera de Gentoo, con GCC 14.2.0 (Debian). No se ha compilado Linux 6.18.65 en esta revisión.
 
+## Aula general
+
+[Entrar al aula general: kernel vanilla y USB de arranque en bruto](aula-general/README.md). Aprendizaje práctico inicial de compilación y arranque, separado de la trazabilidad específica de la distribución. El [laboratorio LFS](../lfs/README.md) profundizará exclusivamente en el fundamento del kernel. Esta portada no implica que la imagen arrancable esté ya construida.
+
 ## Aula de integración
 
 [Entrar al aula: GCC en español, adaptación especial para propósito experimental en Gentoo](aula-gcc/README.md). El objeto de estudio es Linux 6.18.65 LTS. Se distinguen traducción directa y adaptación experimental; el manual completo es un objetivo pendiente, no una publicación terminada.

@@ -24,6 +24,7 @@ La lectura principal del repositorio empieza aquí y continúa en `docs/`:
 3. [Manifiesto](docs/manifesto/01-manifiesto.md)
 4. [Horizonte tecnológico — Arquetipar sistemas operativos](docs/manifesto/horizonte-arquetipado.md)
 4 bis. [Hélice, Alfa y evidencia del sistema vivo](docs/manifesto/04-helice-alfa-continuidad.md)
+4 ter. [Horizonte tecnológico — Identidad en transformación e IPU](docs/manifesto/05-horizonte-identidad-temporal.md)
 5. [Estratos de arquitectura](docs/arquitectura/03-estratos.md)
 6. [Inicio del sistema](docs/arquitectura/04-inicio-sistema.md)
 7. [xGNUpeD](docs/identidad/07-xgnuped.md)
@@ -37,7 +38,7 @@ La lectura principal del repositorio empieza aquí y continúa en `docs/`:
 12. [Initramfs de Zalty](zalty/initramfs/README.md)
 13. [Prototipo HostID v0.1](zalty/initramfs/prototipo-hostid-v0.1/README.md)
 14. [GCC ES Técnico](docs/gcc/README.md) — [Índice de unidades disponibles](docs/gcc/docs/README.md)
-14 bis. [Laboratorios de investigación](docs/laboratorios/README.md) — Gentoo, Slackware y Arch Linux.
+14 bis. [Laboratorios de investigación](docs/laboratorios/README.md) — Gentoo, Slackware, Arch Linux y LFS (fundamento del kernel).
 15. [Epílogo y notas](docs/manifesto/EPILOGO.md) — evolución orgánica, autoría y cuestiones abiertas.
 
 ## Nueva base constitutiva: Commonwealth del silicio
@@ -62,7 +63,7 @@ La [continuidad helicoidal](docs/manifesto/horizonte-arquetipado.md) conduce aho
 | Zalty | [zalty/](zalty/readme.md) | Implementación experimental GNU/Linux de maGNUx. |
 | Initramfs | [zalty/initramfs/](zalty/initramfs/README.md) | Laboratorio de arranque temprano. |
 | GCC ES Técnico | [docs/gcc/](docs/gcc/README.md) | Traducción y documentación técnica en español sobre GCC. |
-| Laboratorios | [Índice de laboratorios](docs/laboratorios/README.md) | Gentoo en desarrollo; Slackware y Arch Linux en construcción. |
+| Laboratorios | [Índice de laboratorios](docs/laboratorios/README.md) | Gentoo en desarrollo; Slackware, Arch Linux y LFS en construcción. |
 | Corpus integrado | [docs/legacy/](docs/legacy/README.md) | Documentos históricos ya enlazados desde la navegación principal. |
 
 ## Regla de separación

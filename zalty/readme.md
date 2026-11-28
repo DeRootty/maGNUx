@@ -34,6 +34,10 @@ Zalty
 → distribución GNU/Linux experimental
 ```
 
+## Programa experimental del horizonte
+
+La [identidad en transformación](../docs/manifesto/05-horizonte-identidad-temporal.md) define objetivos de contraste, no capacidades ya disponibles: cambio de filosofía Gentoo/Slackware/Arch bajo COMM desde sesión ordinaria, continuidad Alfa/Trilobytes, ventana testigo temporal y evaluación de una posible IPU. Los [cuatro laboratorios](../docs/laboratorios/README.md) preparan el conocimiento. Zalty es el banco de pruebas y puede refutar los postulados de maGNUx; conservar evidencia negativa es parte de su cometido. El prototipo HostID actual no implementa estas transiciones.
+
 ## Principio operativo
 
 Zalty debe demostrar primero lo posible sin modificar el kernel Linux: initramfs, `/boot/metal/`, `/run/maGNUx`, políticas de arranque y contratos declarativos.

@@ -14,6 +14,7 @@ El manifiesto no es todavía una implementación. Es la declaración de por qué
 | 2 | [02 — Hipótesis central](02-hipotesis-central.md) | Absorbe la soberanía sistémica, las entidades sistematizadas, el contrato OS y el problema de legitimidad del arranque. |
 | 3 | [Horizonte tecnológico — Arquetipar sistemas operativos](horizonte-arquetipado.md) | Desarrolla las siete dimensiones, el arquetipo como maqueta, su proyección material y la continuidad helicoidal. |
 | 3 bis | [04 — Hélice, Alfa y evidencia del sistema vivo](04-helice-alfa-continuidad.md) | Continúa la dimensión de continuidad con el vórtice Alfa, la fuente viva, suficiencia y realimentación DevOps. |
+| 3 ter | [05 — Identidad en transformación y procesamiento identitario](05-horizonte-identidad-temporal.md) | Conmutación distributiva, modos Alfa/Trilobytes, IPU y ventana testigo; programa falsable de Zalty. |
 | 4 | [03 — Soberanía contributiva y reciprocidad económica](03-reciprocidad-economica-computacional.md) | Artículo académico: trazabilidad de aportaciones, valoración asistida por IA, gobernanza y sostenibilidad del software libre. |
 | 5 | [Epílogo y notas](EPILOGO.md) | Genealogía cronológica, aportaciones del autor y del diálogo asistido; documento abierto. |
 

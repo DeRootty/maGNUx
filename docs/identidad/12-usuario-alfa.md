@@ -30,16 +30,18 @@ La autorización persistente **hasta revocación voluntaria** no equivale necesa
 
 ## Alfa por defecto y Alfa excepcional
 
-Alfa es una identidad computacional prevista en la constitución del sistema. Su **presencia operativa ordinaria** requiere que todos los requisitos del equipo y del contrato se cumplan; entre ellos, la disponibilidad de **NPU**.
+Alfa es la expresión inteligente de la identidad transversal que Trilobytes revela sin mediación IA. La [revisión del horizonte](../manifesto/05-horizonte-identidad-temporal.md) sustituye la regla histórica de activación por NPU como condición suficiente: se plantea una IPU especializada como soporte identitario del modo ordinario futuro, además de inferencia, dominio preparado y contrato conforme. Mientras no exista IPU, Alfa se puede ensayar excepcionalmente sobre recursos compartidos.
 
 ~~~text
-NPU utilizable + contrato conforme + dominio preparado
-    → Alfa activo por defecto
+IPU utilizable + inferencia suficiente + contrato conforme + dominio preparado
+    → Alfa activo si la política soberana lo habilita
 
-Sin NPU
-    → Alfa caído por defecto
-    → invocación excepcional exclusivamente ADMIN/Dernel
-    → estado y coste de ejecución alternativos expresos
+Sin IPU, deshabilitada o insuficiente
+    → Trilobytes por defecto
+    → invocación excepcional de Alfa vía ADMIN/Dernel, si es viable
+    → presupuesto, alcance y coste alternativos expresos
+
+Degradación o revocación → limitar o suspender Alfa → Trilobytes / recuperación
 ~~~
 
 Una orden administrativa de activación excepcional no concede automáticamente a Alfa el rol ADMIN ni garantiza capacidad de inferencia equivalente a una NPU física. Tampoco implica que una instancia de seL4 pueda ejecutarse sobre cualquier NPU.
@@ -109,7 +111,7 @@ Este fragmento expresa intención contractual. No son nombres definitivos de cam
 3. Un rol y la operación concreta permitida se evalúan separadamente.
 4. Alfa adquiere efectivamente el rol del contexto, pero sus operaciones quedan atribuibles a su identidad diferenciada.
 5. La revocación y los fallos detienen acciones no autorizadas incluso con servicios ya abiertos.
-6. Sin NPU Alfa queda caído por defecto, y su invocación excepcional exige ADMIN.
+6. Sin IPU utilizable o autorizada se conserva Trilobytes; la activación excepcional de Alfa exige ADMIN y presupuesto suficiente. Se verifica la transición reversible y la preservación o declaración de incertidumbre de la evidencia temporal.
 7. La triple delegación de Trilobytes no se confunde con la compartición de rol de Alfa.
 8. Se preserva un arranque ROOT puro de recuperación sin delegar ROOT a Dernel.
 
