@@ -48,7 +48,7 @@ El [glosario anterior](../../../gcc/docs/90-glosario-tecnico.md) se conserva com
 
 ## Próxima unidad pendiente
 
-Las secciones 3.1 y 3.2 se han traducido en una segunda incorporación, incluida la entrada `@file` procedente de `libiberty/at-file.texi` (blob `080d1951d62df67643aaffa7a5acabf5d756864e`). La siguiente sección en orden es 3.4; quedan pendientes 3.4–3.14 y 3.16 en adelante, además de los capítulos 4–18 y anexos. El alcance es toda la obra, incluidos los lenguajes, objetivos de compilación, herramientas y apéndices que no sean relevantes para Gentoo. No se anuncia un porcentaje de cobertura basado en el número de archivos ni se da por terminada una sección por haberla resumido.
+Las secciones 3.1 y 3.2 se han traducido en una segunda incorporación, incluida la entrada `@file` procedente de `libiberty/at-file.texi` (blob `080d1951d62df67643aaffa7a5acabf5d756864e`). La sección 3.4 está iniciada con el bloque 0001 (líneas 2448–2727); continúa en `0002-03-04-invoke.texi`, línea 2728. Véase el [registro de entregas](manual/registro-bloques.md). Quedan pendientes el resto de 3.4, 3.5–3.14 y 3.16 en adelante, además de los capítulos 4–18 y anexos. El alcance es toda la obra, incluidos los lenguajes, objetivos de compilación, herramientas y apéndices que no sean relevantes para Gentoo. No se anuncia un porcentaje de cobertura basado en el número de archivos ni se da por terminada una sección por haberla resumido.
 
 ## Automatización por lotes
 
