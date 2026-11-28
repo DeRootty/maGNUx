@@ -2,8 +2,8 @@
 
 > [Índice del manual](README.md) · [Aula de integración](../README.md) · [Edición y licencia](00-edicion-y-licencia.md)
 
-**Estado:** traducción parcial; bloques 0001–0002 de 3, pendiente de revisión humana.  
-**Original:** [gcc/doc/invoke.texi, líneas 2448–2945](https://github.com/gcc-mirror/gcc/blob/releases/gcc-16.1.0/gcc/doc/invoke.texi#L2448-L2945) · GCC 16.1.0 · blob `9207a021e64224b74d5019719c3d7e39a2663807`.  
+**Estado:** texto completo de la sección según los tres bloques 0001–0003; traducción no oficial asistida por IA, pendiente de revisión humana y cotejo con el HTML oficial.  
+**Original:** [gcc/doc/invoke.texi, líneas 2448–2989](https://github.com/gcc-mirror/gcc/blob/releases/gcc-16.1.0/gcc/doc/invoke.texi#L2448-L2989) · GCC 16.1.0 · blob `9207a021e64224b74d5019719c3d7e39a2663807`.  
 Copyright © 1988–2026 Free Software Foundation, Inc. GFDL 1.3 o posterior; véase [avisos y licencia](00-edicion-y-licencia.md).
 
 <!-- @node C Dialect Options
@@ -366,10 +366,39 @@ El tipo `char` es siempre un tipo distinto tanto de `signed char` como de `unsig
 @opindex fstrict-flex-arrays=@var{level}
 -->
 
+### -fstrict-flex-arrays (solo C y C++)
+### -fstrict-flex-arrays=level (solo C y C++)
+
+Controla cuándo se trata el array situado al final de una estructura como un miembro de array flexible a efectos de acceder a los elementos de dicho array. El valor de *level* controla el grado de restricción.
+
+`-fstrict-flex-arrays` equivale a `-fstrict-flex-arrays=3`, que es el nivel más restrictivo; un array situado al final de una estructura se trata como un miembro de array flexible únicamente cuando se declara como tal conforme al estándar C99 o posterior.
+
+La forma negativa `-fno-strict-flex-arrays` equivale a `-fstrict-flex-arrays=0`, que es el nivel menos restrictivo. En este caso, todos los arrays situados al final de estructuras se tratan como miembros de array flexible.
+
+Hay otros dos niveles entre 0 y 3, que se proporcionan para admitir código antiguo que utiliza la extensión de GCC de arrays de longitud cero (`[0]`) o arrays de un elemento (`[1]`) como miembros de array flexible. Cuando *level* es 1, el array final se trata como un miembro de array flexible si se declara como `[]`, `[0]` o `[1]`. Cuando *level* es 2, el array final se trata como un miembro de array flexible si se declara como `[]` o `[0]`.
+
+Puede controlar este comportamiento para un campo concreto de tipo array situado al final de una estructura utilizando el atributo de variable `strict_flex_array` (véase «Common Attributes» en el [manual original](https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/)).
+
+<!-- @pxref{Common Attributes}. -->
+
+La opción `-fstrict_flex_arrays` interactúa con la opción `-Wstrict-flex-arrays`. Véase «Warning Options» en el [manual original](https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/Warning-Options.html) para más información.
+
+<!-- @xref{Warning Options}.
+@opindex fsso-struct
+-->
+
+### -fsso-struct=endianness
+
+Establece el orden predeterminado de almacenamiento de los escalares en estructuras y uniones según el orden de bytes (*endianness*) especificado. Los valores aceptados son `big-endian`, `little-endian` y `native` para el orden de bytes nativo del objetivo (el valor predeterminado). Esta opción no se admite en C++.
+
+**Advertencia:** el indicador `-fsso-struct` hace que GCC genere código que no es compatible a nivel binario con el código generado sin él si el orden de bytes especificado no es el orden nativo del objetivo.
+
+<!-- @end table -->
+
 ---
 
-**Nota editorial (fuera de la traducción):** en la entrada `gnu2y` se conserva la referencia a `gnu2x` del original, sin corregirla silenciosamente. Las marcas de índice originales se conservan como comentarios Markdown para la futura reconstrucción del apéndice. La tabla exterior de opciones continúa en el bloque 0003.
+**Nota editorial (fuera de la traducción):** en la entrada `gnu2y` se conserva la referencia a `gnu2x` del original, sin corregirla silenciosamente. Las marcas de índice originales se conservan como comentarios Markdown para la futura reconstrucción del apéndice. En el bloque 0003 se conserva la grafía `-fstrict_flex_arrays` de la referencia cruzada del original, aunque las entradas de la opción usan guiones (`-fstrict-flex-arrays`). No se ha corregido silenciosamente esta discrepancia. La tabla exterior de opciones queda cerrada.
 
-**Punto de continuación:** bloque `0003-03-04-invoke.texi`, líneas 2946–2989, comenzando por `@item -fstrict-flex-arrays`. No se ha traducido todavía esa descripción.
+**Punto de continuación:** sección 3.5, bloque `0004-03-05-invoke.texi`, líneas 2990–3219, comenzando por `@node C++ Dialect Options`.
 
 [Anterior: 3.3](03-03-compilar-cpp.md) · [Índice](README.md) · 3.5 pendiente.

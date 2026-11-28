@@ -16,4 +16,4 @@ Cuando compile programas C++, puede especificar muchas de las mismas opciones de
 
 ---
 
-[3.2](03-02-tipo-salida.md) · [Índice](README.md) · [Siguiente: 3.4 (parcial)](03-04-dialecto-c.md)
+[3.2](03-02-tipo-salida.md) · [Índice](README.md) · [Siguiente: 3.4](03-04-dialecto-c.md)

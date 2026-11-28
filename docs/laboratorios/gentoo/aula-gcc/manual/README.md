@@ -46,7 +46,7 @@
 | 3.1 — [Resumen de opciones](03-01-resumen-opciones.md) | Sección completa, incluidas todas las arquitecturas; revisión pendiente |
 | 3.2 — [Control del tipo de salida](03-02-tipo-salida.md) | Texto completo de la sección, incluida la entrada @file; revisión pendiente |
 | 3.3 — [Compilación de programas C++](03-03-compilar-cpp.md) | Texto completo de la sección; revisión pendiente |
-| 3.4 — [Dialectos C](03-04-dialecto-c.md) | Parcial: bloques 0001–0002, desde -ansi hasta -funsigned-char; revisión pendiente |
+| 3.4 — [Dialecto C](03-04-dialecto-c.md) | Texto completo de la sección (bloques 0001–0003); revisión pendiente |
 | 3.5 — Dialecto C++ | Pendiente |
 | 3.6 — Dialectos Objective-C y Objective-C++ | Pendiente |
 | 3.7 — OpenMP y OpenACC | Pendiente |
@@ -67,6 +67,6 @@
 | 3.22 — Cabeceras precompiladas | Pendiente |
 | 3.23 — Módulos de C++ | Pendiente |
 
-**Continuación de la cola Texinfo:** bloque `0003-03-04-invoke.texi`. Véase el [registro de entregas](registro-bloques.md).
+**Continuación de la cola Texinfo:** bloque `0004-03-05-invoke.texi`. Véase el [registro de entregas](registro-bloques.md).
 
 Los títulos pendientes no enlazan a archivos ficticios. El [índice original completo](https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/) conserva el acceso a las subdivisiones de cada capítulo. Los ejercicios y las referencias a Kbuild/Portage se encuentran en la [adaptación experimental](../integracion-gentoo.md).
