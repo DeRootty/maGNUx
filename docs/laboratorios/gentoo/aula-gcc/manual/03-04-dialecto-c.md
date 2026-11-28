@@ -2,8 +2,8 @@
 
 > [Índice del manual](README.md) · [Aula de integración](../README.md) · [Edición y licencia](00-edicion-y-licencia.md)
 
-**Estado:** traducción parcial; bloque 0001 de 3, pendiente de revisión humana.  
-**Original:** [gcc/doc/invoke.texi, líneas 2448–2727](https://github.com/gcc-mirror/gcc/blob/releases/gcc-16.1.0/gcc/doc/invoke.texi#L2448-L2727) · GCC 16.1.0 · blob `9207a021e64224b74d5019719c3d7e39a2663807`.  
+**Estado:** traducción parcial; bloques 0001–0002 de 3, pendiente de revisión humana.  
+**Original:** [gcc/doc/invoke.texi, líneas 2448–2945](https://github.com/gcc-mirror/gcc/blob/releases/gcc-16.1.0/gcc/doc/invoke.texi#L2448-L2945) · GCC 16.1.0 · blob `9207a021e64224b74d5019719c3d7e39a2663807`.  
 Copyright © 1988–2026 Free Software Foundation, Inc. GFDL 1.3 o posterior; véase [avisos y licencia](00-edicion-y-licencia.md).
 
 <!-- @node C Dialect Options
@@ -186,10 +186,190 @@ Con la opción `-fno-builtin-function` solo se desactiva la función incorporada
 @opindex fno-cond-mismatch
 -->
 
+### -fcond-mismatch
+
+Permite expresiones condicionales con tipos incompatibles en el segundo y el tercer argumento. El valor de dicha expresión es de tipo `void`. Esta opción no se admite en C++.
+
+<!-- @opindex ffreestanding
+@opindex fno-freestanding
+@cindex hosted environment
+-->
+
+### -ffreestanding
+
+Declara que la compilación tiene como objetivo un entorno independiente (*freestanding*). Esto implica `-fno-builtin`. Un entorno independiente es aquel en el que la biblioteca estándar puede no existir y en el que el inicio del programa no tiene por qué producirse en `main`. El ejemplo más evidente es el kernel de un sistema operativo. Equivale a `-fno-hosted`.
+
+Véase [Estándares de lenguajes admitidos por GCC](02-estandares.md) para conocer los detalles de los entornos independientes y alojados.
+
+<!-- @opindex fgimple
+@opindex fno-gimple
+-->
+
+### -fgimple
+
+Habilita el análisis sintáctico de las definiciones de funciones marcadas con `__GIMPLE`. Es una característica experimental que permite realizar pruebas unitarias de las pasadas de GIMPLE.
+
+<!-- @opindex fgnu-tm
+@opindex fno-gnu-tm
+-->
+
+### -fgnu-tm
+
+Cuando se especifica la opción `-fgnu-tm`, el compilador genera código para la variante de Linux del documento de especificación vigente de la ABI de memoria transaccional de Intel (revisión 1.1, 6 de mayo de 2009). Se trata de una característica experimental cuya interfaz puede cambiar en futuras versiones de GCC a medida que cambie la especificación oficial. Tenga en cuenta que esta característica no se admite en todas las arquitecturas.
+
+Para obtener más información sobre la compatibilidad de GCC con la memoria transaccional, véase la sección «The GNU Transactional Memory Library» del manual [GNU Transactional Memory Library](https://gcc.gnu.org/onlinedocs/libitm/).
+
+<!-- @xref{Enabling libitm,,The GNU Transactional Memory Library,libitm,GNU Transactional Memory Library}. -->
+
+Tenga en cuenta que la característica de memoria transaccional no se admite con excepciones que no proceden de llamadas a funciones (`-fnon-call-exceptions`).
+
+<!-- @opindex fgnu89-inline
+@opindex fno-gnu89-inline
+-->
+
+### -fgnu89-inline
+
+La opción `-fgnu89-inline` indica a GCC que utilice la semántica GNU tradicional para las funciones `inline` cuando se encuentra en modo C99. Véase «Una función inline es tan rápida como una macro» ([Inline, manual original](https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/Inline.html)). Utilizar esta opción equivale aproximadamente a añadir el atributo de función `gnu_inline` a todas las funciones inline (véase «Common Attributes» en el [manual original](https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/)).
+
+<!-- @xref{Inline,,An Inline Function is As Fast As a Macro}.
+@pxref{Common Attributes}.
+-->
+
+La opción `-fno-gnu89-inline` indica explícitamente a GCC que utilice la semántica de C99 para `inline` cuando se encuentra en modo C99 o gnu99 (es decir, especifica el comportamiento predeterminado). Esta opción no se admite en los modos `-std=c90` o `-std=gnu90`.
+
+Las macros del preprocesador `__GNUC_GNU_INLINE__` y `__GNUC_STDC_INLINE__` pueden utilizarse para comprobar qué semántica está en vigor para las funciones `inline`. Véase «Common Predefined Macros» en el manual [The C Preprocessor](https://gcc.gnu.org/onlinedocs/cpp/).
+
+<!-- @xref{Common Predefined Macros,,,cpp,The C Preprocessor}. -->
+
+<!-- @opindex fhosted
+@opindex fno-hosted
+@cindex hosted environment
+-->
+
+### -fhosted
+
+Declara que la compilación tiene como objetivo un entorno alojado (*hosted*). Esto implica `-fbuiltin`. Un entorno alojado es aquel en el que está disponible toda la biblioteca estándar y en el que `main` tiene un tipo de retorno `int`. Entre los ejemplos se encuentra prácticamente todo excepto un kernel. Equivale a `-fno-freestanding`.
+
+<!-- @opindex flax-vector-conversions
+@opindex fno-lax-vector-conversions
+-->
+
+### -flax-vector-conversions
+
+Permite conversiones implícitas entre vectores con distinto número de elementos o con tipos de elementos incompatibles, o ambas cosas. Esta opción no debería utilizarse para código nuevo.
+
+<!-- @opindex fms-extensions
+@opindex fno-ms-extensions
+-->
+
+### -fms-extensions
+
+Acepta algunas construcciones no estándar utilizadas en los archivos de cabecera de Microsoft.
+
+En código C++, permite que los nombres de miembros de estructuras sean similares a declaraciones de tipos anteriores.
+
+~~~cpp
+typedef int UOW;
+struct ABC {
+  UOW UOW;
+};
+~~~
+
+Algunos casos de campos sin nombre en estructuras y uniones solo se aceptan con esta opción. Para más detalles, véase «Campos struct/union sin nombre dentro de estructuras/uniones» ([Unnamed Fields, manual original](https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/Unnamed-Fields.html)).
+
+<!-- @xref{Unnamed Fields,,Unnamed struct/union fields within structs/unions}. -->
+
+Tenga en cuenta que esta opción está desactivada para todos los objetivos excepto los objetivos x86 que utilizan ms-abi.
+
+<!-- @opindex fpermitted-flt-eval-methods
+@opindex fpermitted-flt-eval-methods=c11
+@opindex fpermitted-flt-eval-methods=ts-18661-3
+-->
+
+### -fpermitted-flt-eval-methods=style
+
+ISO/IEC TS 18661-3 define nuevos valores permitidos para `FLT_EVAL_METHOD` que indican que las operaciones y constantes cuyo tipo semántico es un formato de intercambio o extendido deben evaluarse con la precisión y el rango de dicho tipo. Estos nuevos valores constituyen un superconjunto de los permitidos por C99/C11, que no especifica el significado de otros valores positivos de `FLT_EVAL_METHOD`. Por ello, es posible que el código conforme a C11 no se haya escrito teniendo en cuenta la posibilidad de los nuevos valores.
+
+`-fpermitted-flt-eval-methods` especifica si el compilador debe permitir únicamente los valores de `FLT_EVAL_METHOD` especificados en C99/C11, o el conjunto ampliado de valores especificados en ISO/IEC TS 18661-3.
+
+*style* es `c11` o `ts-18661-3`, según corresponda.
+
+El valor predeterminado en un modo conforme al estándar (`-std=c11` o similar) es `-fpermitted-flt-eval-methods=c11`. El valor predeterminado en un dialecto GNU (`-std=gnu11` o similar) es `-fpermitted-flt-eval-methods=ts-18661-3`.
+
+<!-- @opindex fdeps- -->
+
+Las opciones `-fdeps-*` se utilizan para extraer información estructurada de dependencias de un archivo fuente. Esto implica determinar qué recursos proporcionados por otros archivos fuente serán necesarios para compilar el fuente, así como qué recursos proporciona este. Esta información puede utilizarse para añadir las dependencias necesarias entre las reglas de compilación de los fuentes dependientes en función de su contenido, en lugar de exigir que dicha información también quede reflejada en las herramientas de construcción.
+
+<!-- @opindex fdeps-file -->
+
+### -fdeps-file=file
+
+Lugar donde escribir la información estructurada de dependencias.
+
+<!-- @opindex fdeps-format -->
+
+### -fdeps-format=format
+
+Formato que se utilizará para la información estructurada de dependencias. `p1689r5` es el único formato admitido actualmente. Tenga en cuenta que, cuando se especifica este argumento, se elimina parte de la información de la salida de `-MF` (concretamente, los módulos de C++), de modo que no utilice sintaxis extendida de makefile que la mayoría de las herramientas no entienden.
+
+<!-- @opindex fdeps-target -->
+
+### -fdeps-target=file
+
+Análogo a `-MT`, pero para la información estructurada de dependencias. Indica el objetivo que, en última instancia, necesitará los recursos requeridos y proporcionará los recursos extraídos del fuente que puedan necesitar otros fuentes.
+
+<!-- @opindex fplan9-extensions
+@opindex fno-plan9-extensions
+-->
+
+### -fplan9-extensions
+
+Acepta algunas construcciones no estándar utilizadas en el código de Plan 9.
+
+Esto habilita `-fms-extensions`, permite pasar punteros a estructuras con campos anónimos a funciones que esperan punteros a elementos del tipo del campo y permite hacer referencia a campos anónimos declarados mediante un typedef. Para más detalles, véase «Campos struct/union sin nombre dentro de estructuras/uniones» ([Unnamed Fields, manual original](https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/Unnamed-Fields.html)). Solo se admite en C, no en C++.
+
+<!-- @xref{Unnamed Fields,,Unnamed struct/union fields within structs/unions}. -->
+
+<!-- @opindex fsigned-bitfields
+@opindex funsigned-bitfields
+@opindex fno-signed-bitfields
+@opindex fno-unsigned-bitfields
+-->
+
+### -fsigned-bitfields, -funsigned-bitfields, -fno-signed-bitfields, -fno-unsigned-bitfields
+
+Estas opciones controlan si un campo de bits tiene signo o no cuando la declaración no utiliza `signed` ni `unsigned`. De manera predeterminada, dicho campo de bits tiene signo, porque esto es coherente: los tipos enteros básicos, como `int`, son tipos con signo.
+
+<!-- @anchor{@code{char} type signedness}
+@cindex @code{char} type signedness
+@cindex signedness of @code{char} type
+@opindex fsigned-char
+@opindex fno-signed-char
+@opindex funsigned-char
+@opindex fno-unsigned-char
+-->
+
+### -fsigned-char, -funsigned-char
+
+`-fsigned-char` hace que el tipo `char` tenga signo, como `signed char`, mientras que `-funsigned-char` hace que el tipo `char` no tenga signo, como `unsigned char`.
+
+Tenga en cuenta que `-fsigned-char` equivale a `-fno-unsigned-char`, que es la forma negativa de `-funsigned-char`. Del mismo modo, la opción `-fno-signed-char` equivale a `-funsigned-char`.
+
+Cada objetivo admitido por GCC tiene un valor predeterminado para lo que debe ser `char`, que normalmente se especifica en el documento de la ABI específica del procesador para ese objetivo. De manera predeterminada, es como `unsigned char` o como `signed char`.
+
+Idealmente, un programa portable debería utilizar siempre `signed char` o `unsigned char` cuando dependa de si un objeto tiene signo o no. Sin embargo, muchos programas se han escrito utilizando simplemente `char` y esperando que tenga signo, o que no tenga signo, según las máquinas para las que se escribieron. Estas opciones permiten hacer que tal programa funcione con el valor predeterminado opuesto.
+
+El tipo `char` es siempre un tipo distinto tanto de `signed char` como de `unsigned char`, aunque su comportamiento sea siempre igual al de uno de esos dos.
+
+<!-- @opindex fstrict-flex-arrays
+@opindex fno-strict-flex-arrays
+@opindex fstrict-flex-arrays=@var{level}
+-->
+
 ---
 
-**Nota editorial (fuera de la traducción):** en la entrada `gnu2y` se conserva la referencia a `gnu2x` del original, sin corregirla silenciosamente. Las marcas de índice originales se conservan como comentarios Markdown para la futura reconstrucción del apéndice. La tabla exterior de opciones continúa en el bloque 0002.
+**Nota editorial (fuera de la traducción):** en la entrada `gnu2y` se conserva la referencia a `gnu2x` del original, sin corregirla silenciosamente. Las marcas de índice originales se conservan como comentarios Markdown para la futura reconstrucción del apéndice. La tabla exterior de opciones continúa en el bloque 0003.
 
-**Punto de continuación:** bloque `0002-03-04-invoke.texi`, líneas 2728–2945, comenzando por `@item -fcond-mismatch`. No se ha traducido todavía esa descripción.
+**Punto de continuación:** bloque `0003-03-04-invoke.texi`, líneas 2946–2989, comenzando por `@item -fstrict-flex-arrays`. No se ha traducido todavía esa descripción.
 
 [Anterior: 3.3](03-03-compilar-cpp.md) · [Índice](README.md) · 3.5 pendiente.
